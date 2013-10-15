@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+"""Print the metrical pattern of given text."""
+
 import re
 import sys
 
@@ -11,39 +13,37 @@ long_vowel = '[AIUeo]'
 vowel = short_vowel.strip(']') + long_vowel.strip('[')
 
 
-def MassageHK(line):
+def MassageHK(text):
   """Replace multiple characters with a single one, etc."""
   # Two-letter vowels like ai and au
-  line = re.sub('lR', 'R', line)
-  line = re.sub('lRR', 'RR', line)
-  line = re.sub('RR', 'e', line)
-  line = re.sub('a[iu]', 'e', line)
+  text = re.sub('lR', 'R', text)
+  text = re.sub('lRR', 'RR', text)
+  text = re.sub('RR', 'e', text)
+  text = re.sub('a[iu]', 'e', text)
   # Two-letter consonants: replace 'kh' by 'k', etc.
-  line = re.sub('(' + alpaprana + ')' + 'h', r'\g<1>', line)
-  return line
+  text = re.sub('(' + alpaprana + ')' + 'h', r'\g<1>', text)
+  return text
 
 
-def MetricalPattern(line):
-  # Consonants at beginning of line can be ignored
-  line = re.sub('^' + consonant + '+', '', line)
+def MetricalPattern(text):
+  # Consonants at beginning of text can be ignored
+  text = re.sub('^' + consonant + '+', '', text)
   # A long vowel followed by any number of consonants is a guru
-  line = re.sub(long_vowel + consonant + '*', '- ', line)
+  text = re.sub(long_vowel + consonant + '*', '- ', text)
   # A short vowel followed by multiple (>=2) consonants is a guru
-  line = re.sub(short_vowel + consonant + '{2,}', '- ', line)
+  text = re.sub(short_vowel + consonant + '{2,}', '- ', text)
   # A short vowel followed by a consonant is a laghu
-  line = re.sub(short_vowel + consonant + '*', 'u ', line)
-  return line
+  text = re.sub(short_vowel + consonant + '*', 'u ', text)
+  return text
 
 for line in sys.stdin:
-  if line.strip() == '':
-    print
-    continue
+  line = line.strip()
+  if not line: continue
   orig_line = line
   line = MassageHK(line)
 
   # Remove spaces, digits, avagraha, punctuation
-  line = line.translate(None, " '$&%{}")
-  line = line.translate(None, '0123456789./')
+  line = line.translate(None, " 0123456789'./$&%{}")
 
   line = MetricalPattern(line)
 
