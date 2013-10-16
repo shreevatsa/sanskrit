@@ -4,6 +4,7 @@
 
 import re
 import sys
+import string
 
 # A regular-expression "character class" for each type
 consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
@@ -36,6 +37,7 @@ def MetricalPattern(text):
   text = re.sub(short_vowel + consonant + '*', 'u ', text)
   return text
 
+print 'GGGGLLLLLGGLGGLGG'
 for line in sys.stdin:
   line = line.strip()
   if not line: continue
@@ -46,12 +48,14 @@ for line in sys.stdin:
   line = line.translate(None, " 0123456789'./$&%{}")
 
   line = MetricalPattern(line)
+  line = line.translate(string.maketrans('u-', 'LG'))
+  line = line.replace(' ', '')
 
   # Remove trailing spaces
   line = line.strip()
 
   # Currently using a text in Mandakranta (Meghaduta) as testcase
-  if line not in ['- - - - u u u u u - - u - - u - -',
-                  '- - - - u u u u u - - u - - u - u']:
+  if line not in ['GGGGLLLLLGGLGGLGG',
+                  'GGGGLLLLLGGLGGLGL']:
     print '%s \t \t \t (%s)' % (line.strip(), orig_line.strip())
 
