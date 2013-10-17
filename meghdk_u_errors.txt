@@ -37,4 +37,5 @@ caṭulaśaphorodvartana -> caṭulaśapharodvartana
 tasyāḥ kiṃcit karadhṛtam iva prāptvāīraśākhaṃ  $<BR> (1.44)
 prāptvāīraśākhaṃ -> prāptavānīraśākhaṃ
 
-
+vakṣyasy adhvaśramavinayena tasya śṛṅge niṣaṇṇaḥ  %<BR> (1.55)
+adhvaśramavinayena -> adhvaśramavinayane
