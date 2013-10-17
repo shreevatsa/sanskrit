@@ -1,0 +1,168 @@
+--- Dokumentauszeichungen ---
+	BODY		{ background-color: #FFFFFF }
+			  
+			  A:link		{ color:#163776;
+						  font-weight: bold;	
+						  text-decoration:none }
+			  A:visited    	{ color:#cc0000;
+						  font-weight:bold; 
+						  text-decoration:none}
+			  A:hover		{ color:#CC0000;
+						  text-decoration:underline;}
+	
+		
+	.fuss		{ color: black;
+			  font-weight: normal;
+		  	  font-size: 12px;
+	  	  	  font-family: arial, helvetica, sans-serif;
+			  text-align: center}
+	
+	.help		{ color: black;
+			  font-weight: normal;
+		  	  font-size: 12px;
+	  	  	  font-family: arial, helvetica, sans-serif;
+			  text-align: center}
+
+	
+--- Überschriften ---
+	
+	--- Ueberschriften ---
+	
+	H3		{ color: black;
+			  font-weight: normal;
+			  font-size: 14pt;
+			  font-family: arial, helvetica, sans-serif }
+	
+
+	--- Ueberschriften im Text (mit Dreieck) ---
+	
+	H4		{ color: black;
+			  font-weight: bold;
+		  	  font-size: 10pt;
+	  	  	  font-family: arial, helvetica, sans-serif }
+	
+	--- Unterueberschriften der alten Version ---
+
+	.unter		{ color: black;
+		  	  font-size: 11pt;
+	  	  	  font-family: arial, helvetica, sans-serif }
+
+
+--- Listen (Kuller) ---
+	LI		{ list-style-type: circle } 
+	uebersicht	{ color: black;
+			  font-weight: normal;
+			  font-size: 10pt;
+			  font-family: arial, helvetica, sans-serif }
+
+
+--- Navigation ---
+	.zurueck	{ font-weight: normal;
+			  font-size: 12px;
+		  	  font-family: arial, helvetica, sans-serif;
+			  text-align: center}
+
+
+--- Absätze ---
+	.text		{ color: black;
+			  font-weight: normal;
+			  font-size: 10pt;
+		  	  font-family: arial, helvetica, sans-serif;
+			  line-height: 14pt }
+
+
+--- Zeichen ---
+	
+
+	--- Kleine Schrift ----
+
+	--- Schriftart: fett ---
+
+	.small		{ color: black;
+			  font-weight: bold;
+			  font-size: 8pt;
+		  	  font-family: arial, helvetica, sans-serif }
+	
+	--- Schriftart: normal ---
+
+	.small2	{ color: black;
+			  font-weight: normal;
+			  font-size: 8pt;
+		  	  font-family: arial, helvetica, sans-serif }
+
+
+	--- Buchstaben sind weiter auseinander ---
+
+	.gesperrt	{ letter-spacing: 0.2em }
+
+	--- nur Grossbuchstaben ---
+	
+	.kapital	{ text-transform: capitalize }
+
+	--- Schreibmaschinenschrift ---
+
+	TT		{ color: black;
+			  font-weight: normal;
+			  font-size: 10pt;
+		  	  font-family: courier new, courier, monospace }
+	
+	
+	--- kursiv ---
+
+
+	I		{ color: black;
+			  font-weight: normal;
+			  font-size: 10pt;
+		  	  font-family: arial, helvetica, sans-serif;
+			  line-height: 14pt; 
+			  font-style=italic }
+			  
+	--- fett ---
+
+
+	B		{ color: black;
+			  font-weight: bold;
+			  font-size: 10pt;
+		  	  font-family: arial, helvetica, sans-serif;
+			  line-height: 14pt }
+			
+
+--- Tabellen ---
+
+	--- Schriftart: fett ---
+
+	.t0		{ color: black;
+			  font-weight: bold;
+			  font-size: 14pt;
+		  	  font-family: arial, helvetica, sans-serif }
+
+
+	--- Schriftart: fett ---
+
+	.t1		{ color: black;
+			  font-weight: bold;
+			  font-size: 10pt;
+		  	  font-family: arial, helvetica, sans-serif }
+	
+	--- Schriftart: normal ---
+
+	.t2		{ color: black;
+			  font-weight: normal;
+			  font-size: 10pt;
+		  	  font-family: arial, helvetica, sans-serif }
+
+	--- Schriftart: kursiv ---
+
+	.t3		{ color: black;
+			  font-weight: italic;
+			  font-size: 10pt;
+		  	  font-family: arial, helvetica, sans-serif }
+
+- Elektronische Lehrbuchsammlung Psychologie --
+
+	.lehrbuch 	{ font-weight: normal;
+			  font-size: 10px;
+		  	  font-family: arial, helvetica, sans-serif;
+			  text-align: center}
+
+	
