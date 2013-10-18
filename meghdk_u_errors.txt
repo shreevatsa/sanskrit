@@ -29,7 +29,7 @@ mandāyante na khalu suhṛdāmabhyupatārthakṛtyāḥ  // 1.41 //<BR>
 abhyupatārtha -> abhyupetārtha
 
 prāleyāstraṃ kamalavadanāt so.api hartuṃ nalinyāḥ  %<BR> (1.42)
-so.api -> so 'pi (Not really an error, but would fit the metre better)
+so.api -> so 'pi (Not really an error, but more conventional)
 
 moghīkartuṃ caṭulaśaphorodvartanaprekṣitāni  // 1.43 //<BR>
 caṭulaśaphorodvartana -> caṭulaśapharodvartana
@@ -71,5 +71,6 @@ savyāpāram -> savyāpārām
 pādān indoramṛtaśiśirāñjalamārgapraviṣṭān  $<BR> (2.30)
 jalamārga -> jālamārga
 
-
+sābhre.ahnīva sthalakamalinī na prabhuddhāṃ na suptām  // 2.30 //<BR>
+sābhre.ahnīva -> sābhre 'hnīva (not an error, but more conventional)
 
