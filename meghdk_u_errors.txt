@@ -45,3 +45,8 @@ vidhunvantaṃ -> vidyunvantaṃ
 
 nityajyotsnāḥ prahitatamovṛttiramyāḥ pradoṣāḥ  // 2.3 //<BR>
 prahita -> pratihata
+
+saṃkrīḍante maṇibhiramaraprārthitayā yatra kanyāḥ  // 2.6 //<BR>
+prārthitayā -> prārthitā
+
+
