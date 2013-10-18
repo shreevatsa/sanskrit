@@ -55,3 +55,9 @@ occhvāsita -> occhvasita
 
 vaibhrājākhyaṃ vibudhavanitāvāramukhyasahāyā  %<BR> (2.10)
 mukhyasahāyā -> mukhyāsahāyā
+
+tanvī śyāmā śikharīdaśanā pakvabimbādharauṣṭhī  $<BR> (2.22)
+śikharīdaśanā -> śikharadaśanā
+
+yā tatra syād yuvatīviṣaye sṛṣṭir ādyaiva dhātuḥ  // 2.22 //<BR>
+yuvatīviṣaye -> yuvativiṣaye
