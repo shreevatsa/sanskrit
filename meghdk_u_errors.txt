@@ -52,3 +52,6 @@ prārthitayā -> prārthitā
 
 nīvībandhocchvāsitaśithilaṃ yatra bimbādharāṇāṃ  $<BR> (2.7)
 occhvāsita -> occhvasita
+
+vaibhrājākhyaṃ vibudhavanitāvāramukhyasahāyā  %<BR> (2.10)
+mukhyasahāyā -> mukhyāsahāyā

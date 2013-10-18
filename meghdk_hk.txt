@@ -382,7 +382,7 @@ vyAlumpanti sphuTajalalavasyandinaz candrakAntAH // 2.9 //
 
 akSayyAntarbhavananidhayaH pratyahaM raktakaNThair $
 udgAyadbhir dhanapatiyazaH kiMnarair yatra sArdham &
-vaibhrAjAkhyaM vibudhavanitAvAramukhyasahAyA %
+vaibhrAjAkhyaM vibudhavanitAvAramukhyAsahAyA %
 baddhAlApA bahirupavanaM kAmino nirvizanti // 2.10 //
 
 gatyutkampAd alakapatitair yatra mandArapuSpaiH $
