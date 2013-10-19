@@ -41,6 +41,13 @@ def MetricalPattern(text):
   text = text.translate(string.maketrans('-+', 'LG'))
   return text
 
+def IdentitfyPattern(pattern):
+  # Currently using a text in Mandakranta (Meghaduta) as testcase
+  if line not in ['GGGGLLLLLGGLGGLGG',
+                  'GGGGLLLLLGGLGGLGL']:
+    print '%s \t \t \t (%s)' % (line.strip(), orig_line.strip())
+  
+
 print 'GGGGLLLLLGGLGGLGG'
 for line in sys.stdin:
   line = line.strip()
@@ -52,12 +59,4 @@ for line in sys.stdin:
   line = line.translate(None, " 0123456789'./$&%{}")
 
   line = MetricalPattern(line)
-
-  # Remove trailing spaces
-  line = line.strip()
-
-  # Currently using a text in Mandakranta (Meghaduta) as testcase
-  if line not in ['GGGGLLLLLGGLGGLGG',
-                  'GGGGLLLLLGGLGGLGL']:
-    print '%s \t \t \t (%s)' % (line.strip(), orig_line.strip())
-
+  IdentitfyPattern(line)
