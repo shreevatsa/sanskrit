@@ -27,14 +27,18 @@ def MassageHK(text):
 
 
 def MetricalPattern(text):
+  if not re.match('^[aAiIuUReoMHkgGcjJTDNtdnpbmyrlvzSsh]*$', text):
+    print 'Invalid characters in %s' % text
+    return None
   # Consonants at beginning of text can be ignored
   text = re.sub('^' + consonant + '+', '', text)
   # A long vowel followed by any number of consonants is a guru
-  text = re.sub(long_vowel + consonant + '*', '- ', text)
+  text = re.sub(long_vowel + consonant + '*', '+', text)
   # A short vowel followed by multiple (>=2) consonants is a guru
-  text = re.sub(short_vowel + consonant + '{2,}', '- ', text)
+  text = re.sub(short_vowel + consonant + '{2,}', '+', text)
   # A short vowel followed by a consonant is a laghu
-  text = re.sub(short_vowel + consonant + '*', 'u ', text)
+  text = re.sub(short_vowel + consonant + '*', '-', text)
+  text = text.translate(string.maketrans('-+', 'LG'))
   return text
 
 print 'GGGGLLLLLGGLGGLGG'
@@ -48,8 +52,6 @@ for line in sys.stdin:
   line = line.translate(None, " 0123456789'./$&%{}")
 
   line = MetricalPattern(line)
-  line = line.translate(string.maketrans('u-', 'LG'))
-  line = line.replace(' ', '')
 
   # Remove trailing spaces
   line = line.strip()
