@@ -3,8 +3,8 @@
 """Print the metrical pattern of given text."""
 
 import re
-import sys
 import string
+import sys
 
 # A regular-expression "character class" for each type
 consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
@@ -15,7 +15,7 @@ vowel = short_vowel.strip(']') + long_vowel.strip('[')
 
 
 def MassageHK(text):
-  """Replace multiple characters with a single one, etc."""
+  """Rewrite keeping metre intact (multiple characters -> single char)."""
   # Two-letter vowels like ai and au
   text = re.sub('lR', 'R', text)
   text = re.sub('lRR', 'RR', text)
