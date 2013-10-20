@@ -13,6 +13,7 @@ alpaprana = '[kgcjTDtdpb]'
 short_vowel = '[aiuR]'
 long_vowel = '[AIUeo]'
 vowel = short_vowel.strip(']') + long_vowel.strip('[')
+valid_hk = 'aAiIuUReoMHkgGcjJTDNtdnpbmyrlvzSsh'
 
 
 def MassageHK(text):
@@ -28,9 +29,15 @@ def MassageHK(text):
 
 
 def MetricalPattern(text):
-  if not re.match('^[aAiIuUReoMHkgGcjJTDNtdnpbmyrlvzSsh]*$', text):
-    print 'Invalid characters in %s' % text
-    return None
+  """Given text in HK, print its metrical pattern (string of 'L's and 'G's)."""
+  if True:                      # For scoping
+    bad_match = re.search('[^%s]' % valid_hk, text)
+    if bad_match:
+      first_index = bad_match.start()
+      print 'Found non-HK character in text:'
+      print text
+      print ' ' * first_index + '^'
+      assert False              # TODO(shreevatsa): Change to exception
   # Consonants at beginning of text can be ignored
   text = re.sub('^' + consonant + '+', '', text)
   # A long vowel followed by any number of consonants is a guru
@@ -43,10 +50,12 @@ def MetricalPattern(text):
   return text
 
 known_metres = {
-  'GGGGLLLLLGGLGGLG.': 'mandākrāntā'
-  }
+    'GGGGLLLLLGGLGGLG.': 'mandākrāntā'
+}
+
 
 def IdentitfyPattern(pattern):
+  """Given metrical pattern (string of L's and G's), identify metre."""
   if not re.match('^[LG]*$', pattern):
     print '%s is not a pattern (must have only L and G)' % pattern
   metre = None
