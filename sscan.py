@@ -54,8 +54,12 @@ def MetricalPattern(text):
   text = text.translate(string.maketrans('-+', 'LG'))
   return text
 
+known_patterns = {
+    'GGGGLLLLLGGLGGLGL': 'mandākrāntā_pāda',
+    'GGGGLLLLLGGLGGLGG': 'mandākrāntā_pāda'
+}
 known_metres = {
-    'GGGGLLLLLGGLGGLG.': 'mandākrāntā'
+    'GGGGLLLLLGGLGGLG.' * 4: 'mandākrāntā'
 }
 
 
@@ -63,13 +67,25 @@ def IdentitfyPattern(pattern):
   """Given metrical pattern (string of L's and G's), identify metre."""
   if not re.match('^[LG]*$', pattern):
     print '%s is not a pattern (must have only L and G)' % pattern
-  metre = None
+  return known_patterns.get(pattern)
+
+
+def IdentifyMetre(verse):
+  """Give metrical pattern of entire verse, identify metre."""
+  full_verse = ''.join(verse)
+  print 'The input has %d syllables' % len(full_verse)
+
+  print 'Trying as a whole: '
   for known_pattern, known_metre in known_metres.iteritems():
-    if re.match('^' + known_pattern + '$', pattern):
-      metre = known_metre
-      continue
-  if not metre:
-    print '%s \t \t \t (%s)' % (line.strip(), orig_line.strip())
+    if re.match('^' + known_pattern + '$', full_verse):
+      print 'Identified as %s' % known_metre
+      return known_metre
+
+  if len(verse) == 4:
+    print 'Trying by lines: '
+    for i in range(4):
+      line_i = verse[i]
+      print 'Line %d: pattern %s is %s' % (i, line_i, IdentitfyPattern(line_i))
 
 
 for line in sys.stdin:
@@ -82,4 +98,7 @@ for line in sys.stdin:
   line = line.translate(None, " 0123456789'./$&%{}")
 
   line = MetricalPattern(line)
-  IdentitfyPattern(line)
+  pAda = IdentitfyPattern(line)
+  if not pAda:
+    print 'Unknown pattern %s \t \t \t (%s)' % (line, orig_line)
+
