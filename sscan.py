@@ -78,27 +78,31 @@ def IdentifyMetre(verse):
   print 'Trying as a whole: '
   for known_pattern, known_metre in known_metres.iteritems():
     if re.match('^' + known_pattern + '$', full_verse):
-      print 'Identified as %s' % known_metre
+      print '  Identified as %s' % known_metre
       return known_metre
+  print '  No metre found.'
 
   if len(verse) == 4:
     print 'Trying by lines: '
     for i in range(4):
-      line_i = verse[i]
-      print 'Line %d: pattern %s is %s' % (i, line_i, IdentitfyPattern(line_i))
+      line = verse[i]
+      print '  Line %d: pattern %s is %s' % (i, line, IdentitfyPattern(line))
 
 
-for line in sys.stdin:
-  line = line.strip()
-  if not line: continue
-  orig_line = line
-  line = MassageHK(line)
+if __name__ == '__main__':
+  lines = sys.stdin.readlines()
+  pattern_lines = []
+  for line in lines:
+    line = line.strip()
+    if not line: continue
+    orig_line = line
+    line = MassageHK(line)
 
-  # Remove spaces, digits, avagraha, punctuation
-  line = line.translate(None, " 0123456789'./$&%{}")
+    # Remove spaces, digits, avagraha, punctuation
+    line = line.translate(None, " 0123456789'./$&%{}")
 
-  line = MetricalPattern(line)
-  pAda = IdentitfyPattern(line)
-  if not pAda:
-    print 'Unknown pattern %s \t \t \t (%s)' % (line, orig_line)
+    pattern_lines.append(MetricalPattern(line))
+
+  print IdentifyMetre(pattern_lines)
+
 
