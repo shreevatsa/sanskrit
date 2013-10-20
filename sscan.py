@@ -28,16 +28,21 @@ def MassageHK(text):
   return text
 
 
+def CheckHK(text):
+  """Check that a block of text contains only HK characters."""
+  bad_match = re.search('[^%s]' % valid_hk, text)
+  if bad_match:
+    first_index = bad_match.start()
+    print 'Found non-HK character in text:'
+    print text
+    print ' ' * first_index + '^'
+    return False
+  return True
+
+
 def MetricalPattern(text):
   """Given text in HK, print its metrical pattern (string of 'L's and 'G's)."""
-  if True:                      # For scoping
-    bad_match = re.search('[^%s]' % valid_hk, text)
-    if bad_match:
-      first_index = bad_match.start()
-      print 'Found non-HK character in text:'
-      print text
-      print ' ' * first_index + '^'
-      assert False              # TODO(shreevatsa): Change to exception
+  assert CheckHK(text)
   # Consonants at beginning of text can be ignored
   text = re.sub('^' + consonant + '+', '', text)
   # A long vowel followed by any number of consonants is a guru
