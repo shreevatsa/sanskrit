@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 """Print the metrical pattern of given text."""
 
@@ -41,14 +42,22 @@ def MetricalPattern(text):
   text = text.translate(string.maketrans('-+', 'LG'))
   return text
 
-def IdentitfyPattern(pattern):
-  # Currently using a text in Mandakranta (Meghaduta) as testcase
-  if line not in ['GGGGLLLLLGGLGGLGG',
-                  'GGGGLLLLLGGLGGLGL']:
-    print '%s \t \t \t (%s)' % (line.strip(), orig_line.strip())
-  
+known_metres = {
+  'GGGGLLLLLGGLGGLG.': 'mandākrāntā'
+  }
 
-print 'GGGGLLLLLGGLGGLGG'
+def IdentitfyPattern(pattern):
+  if not re.match('^[LG]*$', pattern):
+    print '%s is not a pattern (must have only L and G)' % pattern
+  metre = None
+  for known_pattern, known_metre in known_metres.iteritems():
+    if re.match('^' + known_pattern + '$', pattern):
+      metre = known_metre
+      continue
+  if not metre:
+    print '%s \t \t \t (%s)' % (line.strip(), orig_line.strip())
+
+
 for line in sys.stdin:
   line = line.strip()
   if not line: continue
