@@ -99,7 +99,10 @@ def IdentifyMetre(verse):
 
 
 if __name__ == '__main__':
-  AddSamavrtta('mandākrāntā', 'GGGGLLLLLGGLGGLG.')
+  AddSamavrtta('Mandākrāntā', 'GGGGLLLLLGGLGGLG.')
+  AddSamavrtta('Upajāti', '.GLGGLLGLGG')
+  AddSamavrtta('Vaṃśastha', 'L G L G G L L G L G L G')
+
   lines = sys.stdin.readlines()
   pattern_lines = []
   for line in lines:
