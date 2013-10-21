@@ -60,7 +60,10 @@ def MetricalPattern(text):
   text = re.sub(short_vowel + consonant + '$', '+', text)
   # A short vowel followed by a consonant is a laghu
   text = re.sub(short_vowel + consonant + '*', '-', text)
-  text = text.translate(string.maketrans('-+', 'LG'))
+  assert re.match('^[+-]*$', text)
+  text = text.replace('-', 'L')
+  text = text.replace('+', 'G')
+  assert re.match('^[LG]*$', text)
   return text
 
 # TODO(shreevatsa): Make this pattern -> list, not pattern -> specific pāda type
@@ -78,8 +81,15 @@ def OptionsExpand(pattern):
       yield y
 
 
+def RemoveChars(input_string, chars):
+  """Wrapper function because string.translate != unicode.translate."""
+  for char in chars:
+    input_string = input_string.replace(char, '')
+  return input_string
+
+
 def CleanUpPatternString(pattern):
-  return pattern.translate(None, ' —–')
+  return RemoveChars(pattern, ' —–')
 
 
 def AddVrtta(metre_name, verse_pattern):
@@ -211,7 +221,7 @@ def IdentifyFromLines(input_lines):
     if not line: continue
     line = MassageHK(line)
     # Remove spaces, digits, avagraha, punctuation
-    line = line.translate(None, " 0123456789'./$&%{}")
+    line = RemoveChars(line, " 0123456789'./$&%{}")
     pattern_lines.append(MetricalPattern(line))
   return IdentifyMetre(pattern_lines)
 
