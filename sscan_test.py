@@ -1,5 +1,4 @@
 import itertools
-import subprocess
 import sys
 
 import sscan
@@ -15,6 +14,3 @@ for key, group in itertools.groupby(lines, bool):
 
   sscan.InitializeData()
   sscan.IdentifyFromLines(verse_lines)
-  
-  
-  

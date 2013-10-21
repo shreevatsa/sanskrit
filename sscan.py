@@ -11,7 +11,6 @@ Known issues:
 """
 
 import re
-import string
 import sys
 
 
