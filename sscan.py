@@ -58,9 +58,7 @@ known_metres = {}
 
 
 def OptionsExpand(pattern):
-  print 'Called OptionsExpand on %s' % pattern
   if pattern.find('.') == -1:
-    print 'Yielding it'
     yield pattern
     return
   where = pattern.find('.')
@@ -69,9 +67,14 @@ def OptionsExpand(pattern):
       yield y
 
 
-def AddSamavrtta(metre_name, each_line_pattern):
+def AddSamavrtta(metre_name, each_line_pattern_orig):
+  each_line_pattern = each_line_pattern_orig.translate(None, ' —')
+  assert re.match(r'^[LG.]*$', each_line_pattern)
   known_metres[each_line_pattern * 4] = metre_name
+  print 'Added %s, with pattern %s' % (metre_name, each_line_pattern * 4)
   for fully_specified_pattern in OptionsExpand(each_line_pattern):
+    print 'Added %s as a line pattern for %s' % (fully_specified_pattern,
+                                                 metre_name)
     known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
 
 
@@ -99,9 +102,22 @@ def IdentifyMetre(verse):
 
 
 if __name__ == '__main__':
+  AddSamavrtta('Upajāti', '. G L G G L L G L G G')
+  AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
+  AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
+  AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
+  AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
+  AddSamavrtta('Drutavilambitam', 'L L L G L L G L L G L G')
+  AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
+  AddSamavrtta('Śālinī', 'G G G G — G L G G L G G')
+  AddSamavrtta('Praharṣiṇī', 'G G G L L L L G L G L G G')
+  AddSamavrtta('Bhujañgaprayātam', 'L G G L G G L G G L G G')
+  AddSamavrtta('Toṭakam', 'L L G L L G L L G L L G')
+  AddSamavrtta('Sragviṇī', 'G L G G L G G L G G L G')
+  AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L G')
+  AddSamavrtta('Vasantatilakā', 'G G L G L L L G L L G L G G')
+  AddSamavrtta('Mālinī', 'L L L L L L G G — G L G G L G G')
   AddSamavrtta('Mandākrāntā', 'GGGGLLLLLGGLGGLG.')
-  AddSamavrtta('Upajāti', '.GLGGLLGLGG')
-  AddSamavrtta('Vaṃśastha', 'L G L G G L L G L G L G')
 
   lines = sys.stdin.readlines()
   pattern_lines = []
