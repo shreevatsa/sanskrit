@@ -88,7 +88,7 @@ def AddVrtta(metre_name, verse_pattern):
 
 def AddSamavrtta(metre_name, each_line_pattern):
   each_line_pattern = CleanUpPatternString(each_line_pattern)
-  assert re.match(r'^[LG.]*G$', each_line_pattern), each_line_pattern
+  assert re.match(r'^[LG.]*$', each_line_pattern), each_line_pattern
   AddVrtta(metre_name, each_line_pattern * 4)
   for fully_specified_pattern in OptionsExpand(each_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
@@ -100,7 +100,7 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
   # Odd _pāda_s in Anuṣṭup don't have to end with a guru
   assert re.match(r'^[LG.]*$', odd_line_pattern)
   even_line_pattern = CleanUpPatternString(even_line_pattern)
-  assert re.match(r'^[LG.]*G$', even_line_pattern)
+  assert re.match(r'^[LG.]*$', even_line_pattern)
   AddVrtta(metre_name, (odd_line_pattern + even_line_pattern) * 2)
   for fully_specified_pattern in OptionsExpand(odd_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda_odd' % (metre_name)
