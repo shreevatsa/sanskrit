@@ -81,7 +81,6 @@ def CleanUpPatternString(pattern):
 
 def AddVrtta(metre_name, verse_pattern):
   known_metres[verse_pattern] = metre_name
-  print 'Added %s, with pattern %s' % (metre_name, verse_pattern)
 
 
 def AddSamavrtta(metre_name, each_line_pattern):
@@ -90,8 +89,6 @@ def AddSamavrtta(metre_name, each_line_pattern):
   AddVrtta(metre_name, each_line_pattern * 4)
   for fully_specified_pattern in OptionsExpand(each_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
-    print 'Added %s as a line pattern for %s' % (fully_specified_pattern,
-                                                 metre_name)
 
 
 def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
@@ -104,12 +101,8 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
   AddVrtta(metre_name, (odd_line_pattern + even_line_pattern) * 2)
   for fully_specified_pattern in OptionsExpand(odd_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda_odd' % (metre_name)
-    print 'Added %s as an odd line pattern for %s' % (fully_specified_pattern,
-                                                      metre_name)
   for fully_specified_pattern in OptionsExpand(even_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda_even' % (metre_name)
-    print 'Added %s as an even line pattern for %s' % (fully_specified_pattern,
-                                                       metre_name)
 
 
 def AddVishamavrtta(metre_name, line_patterns):
@@ -124,8 +117,6 @@ def AddVishamavrtta(metre_name, line_patterns):
     verse_pattern += line_pattern
     for fully_specified_pattern in OptionsExpand(line_pattern):
       known_patterns[fully_specified_pattern] = '%s_pāda_%d' % (metre_name, i)
-      print 'Added %s as pattern %d for %s' % (fully_specified_pattern, i,
-                                               metre_name)
   AddVrtta(metre_name, verse_pattern)
 
 
