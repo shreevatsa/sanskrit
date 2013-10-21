@@ -149,56 +149,56 @@ def IdentifyMetre(verse):
 
 
 if __name__ == '__main__':
-  AddArdhasamavrtta('Anuṣṭup', '. . . . L G G .', '. . . . L G L G')
+  AddArdhasamavrtta('Anuṣṭup', '. . . . L G G .', '. . . . L G L .')
   # AddMatravrtta('Āryā', '12 + 18 + 12 + 15')
-  AddSamavrtta('Upajāti', '. G L G G L L G L G G')
-  AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
-  AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
-  AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
-  AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
-  AddSamavrtta('Drutavilambitam', 'L L L G L L G L L G L G')
-  AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
-  AddSamavrtta('Śālinī', 'G G G G — G L G G L G G')
-  AddSamavrtta('Praharṣiṇī', 'G G G L L L L G L G L G G')
-  AddSamavrtta('Bhujañgaprayātam', 'L G G L G G L G G L G G')
-  AddSamavrtta('Toṭakam', 'L L G L L G L L G L L G')
-  AddSamavrtta('Sragviṇī', 'G L G G L G G L G G L G')
-  AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L G')
-  AddSamavrtta('Vasantatilakā', 'G G L G L L L G L L G L G G')
-  AddSamavrtta('Mālinī', 'L L L L L L G G — G L G G L G G')
-  AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L G')
-  AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
-  AddSamavrtta('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G')
-  AddSamavrtta('Śikhariṇī', 'L G G G G G – L L L L L G G — L L L G')
-  AddSamavrtta('Hariṇī', 'L L L L L G — G G G G — L G L L G L G')
-  AddSamavrtta('Pṛthvī', 'L G L L L G L G—L L L G L G G L G')
-  AddSamavrtta('Kokilalam (Nardaṭakam)', 'L L L L G L G L L L G — L L G L L G')
+  AddSamavrtta('Upajāti', '. G L G G L L G L G .')
+  AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L .')
+  AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L .')
+  AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L .')
+  AddSamavrtta('Svāgatā', 'G L G L L L G L L G .')
+  AddSamavrtta('Drutavilambitam', 'L L L G L L G L L G L .')
+  AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L .')
+  AddSamavrtta('Śālinī', 'G G G G — G L G G L G .')
+  AddSamavrtta('Praharṣiṇī', 'G G G L L L L G L G L G .')
+  AddSamavrtta('Bhujañgaprayātam', 'L G G L G G L G G L G .')
+  AddSamavrtta('Toṭakam', 'L L G L L G L L G L L .')
+  AddSamavrtta('Sragviṇī', 'G L G G L G G L G G L .')
+  AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L .')
+  AddSamavrtta('Vasantatilakā', 'G G L G L L L G L L G L G .')
+  AddSamavrtta('Mālinī', 'L L L L L L G G — G L G G L G .')
+  AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L .')
+  AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L .')
+  AddSamavrtta('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G .')
+  AddSamavrtta('Śikhariṇī', 'L G G G G G – L L L L L G G — L L L .')
+  AddSamavrtta('Hariṇī', 'L L L L L G — G G G G — L G L L G L .')
+  AddSamavrtta('Pṛthvī', 'L G L L L G L G—L L L G L G G L .')
+  AddSamavrtta('Kokilalam (Nardaṭakam)', 'L L L L G L G L L L G — L L G L L .')
   AddSamavrtta('Mallikāmālā (Matta-kokilā)',
-               'G L G L L G L G L L G L G L L G L G')
-  AddSamavrtta('Śārdūlavikrīḍitam', 'G G G L L G L G L L L G — G G L G G L G')
-  AddSamavrtta('Sragdharā', 'G G G G L G G — L L L L L L G — G L G G L G G')
-  AddArdhasamavrtta('Viyoginī', 'L L G   L L G L G L G',
-                    'L L G G L L G L G L G')
+               'G L G L L G L G L L G L G L L G L .')
+  AddSamavrtta('Śārdūlavikrīḍitam', 'G G G L L G L G L L L G — G G L G G L .')
+  AddSamavrtta('Sragdharā', 'G G G G L G G — L L L L L L G — G L G G L G .')
+  AddArdhasamavrtta('Viyoginī', 'L L G   L L G L G L .',
+                    'L L G G L L G L G L .')
   AddArdhasamavrtta('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
-                    'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
+                    'L L G   L L G L G L G .', 'L L G G L L G L G L G .')
   AddArdhasamavrtta('Aparavaktrā',
-                    'L L L L L L G — L G L G', 'L L L L G — L L G L G L G')
+                    'L L L L L L G — L G L .', 'L L L L G — L L G L G L .')
   AddArdhasamavrtta('Puṣpitāgrā',
-                    'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
+                    'L L L L L L G L G L G .', 'L L L L G L L G L G L G .')
   AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
-                              'L L L L L  G  L  G  L G',   # TODO(shreevatsa): ā
-                              ' G  L L L L L L  G  L L G',
-                              'L L  G  L  G  L L L  G  L G L G'])
+                              'L L L L L  G  L  G  L .',   # TODO(shreevatsa): ā
+                              ' G  L L L L L L  G  L L .',
+                              'L L  G  L  G  L L L  G  L G L .'])
   AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
-               'G G L G L L L – G G L G L L L – G G L G L L L G')
+               'G G L G L L L – G G L G L L L – G G L G L L L .')
   AddSamavrtta('Śivatāṇḍava',
-               'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G')
-  AddSamavrtta('Dodhakam', 'G L L G L L G L L G G')
+               'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L .')
+  AddSamavrtta('Dodhakam', 'G L L G L L G L L G .')
   # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
-  AddSamavrtta('Mālatī', 'L L L L G L L G L G L G')
-  AddSamavrtta('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G')
-  AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G G')
-  AddSamavrtta('Vidyunmālā', 'G G G G G G G G')
+  AddSamavrtta('Mālatī', 'L L L L G L L G L G L .')
+  AddSamavrtta('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  .')
+  AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G .')
+  AddSamavrtta('Vidyunmālā', 'G G G G G G G .')
 
   lines = sys.stdin.readlines()
   pattern_lines = []
