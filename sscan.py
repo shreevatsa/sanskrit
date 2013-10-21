@@ -117,6 +117,9 @@ if __name__ == '__main__':
   AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L G')
   AddSamavrtta('Vasantatilakā', 'G G L G L L L G L L G L G G')
   AddSamavrtta('Mālinī', 'L L L L L L G G — G L G G L G G')
+  AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L G')
+  AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
+  AddSamavrtta('
   AddSamavrtta('Mandākrāntā', 'GGGGLLLLLGGLGGLG.')
 
   lines = sys.stdin.readlines()
