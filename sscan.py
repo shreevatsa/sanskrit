@@ -45,13 +45,14 @@ def CheckHK(text):
     print 'Found non-HK character in text:'
     print text
     print ' ' * first_index + '^'
-    return False
-  return True
+    print 'Ignoring all non-HK characters.'
+  text = re.sub('[^%s]' % valid_hk, text)
+  return text
 
 
 def MetricalPattern(text):
   """Given text in HK, return its metrical pattern (string of 'L's and 'G's)."""
-  CheckHK(text)
+  text = CheckHK(text)
   # A regular-expression "character class" for each type
   consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
   short_vowel = '[aiuR]'
@@ -229,7 +230,7 @@ def IdentifyFromLines(input_lines):
     if not line: continue
     line = MassageHK(line)
     # Remove spaces, digits, avagraha, punctuation
-    line = RemoveChars(line, " 0123456789'./$&%{}|")
+    line = RemoveChars(line, " 0123456789'./$&%{}")
     pattern_lines.append(MetricalPattern(line))
   return IdentifyMetre(pattern_lines)
 
