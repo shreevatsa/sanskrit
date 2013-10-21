@@ -119,8 +119,7 @@ if __name__ == '__main__':
   AddSamavrtta('Mālinī', 'L L L L L L G G — G L G G L G G')
   AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L G')
   AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
-  AddSamavrtta('
-  AddSamavrtta('Mandākrāntā', 'GGGGLLLLLGGLGGLG.')
+  AddSamavrtta('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G')
 
   lines = sys.stdin.readlines()
   pattern_lines = []
