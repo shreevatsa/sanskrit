@@ -46,7 +46,7 @@ def CheckHK(text):
     print text
     print ' ' * first_index + '^'
     print 'Ignoring all non-HK characters.'
-  text = re.sub('[^%s]' % valid_hk, text)
+    text = re.sub('[^%s]' % valid_hk, '', text)
   return text
 
 
@@ -230,7 +230,7 @@ def IdentifyFromLines(input_lines):
     if not line: continue
     line = MassageHK(line)
     # Remove spaces, digits, avagraha, punctuation
-    line = RemoveChars(line, " 0123456789'./$&%{}")
+    line = RemoveChars(line, " 0123456789'./$&%{}|")
     pattern_lines.append(MetricalPattern(line))
   return IdentifyMetre(pattern_lines)
 
