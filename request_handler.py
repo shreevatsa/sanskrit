@@ -12,14 +12,20 @@ MAIN_PAGE_HTML = """\
 <html>
   <body>
     <p>
-      Type a Sanskrit verse into the box below, and click the button.
+      Type a Sanskrit verse into the box below
+      (in Harvard-Kyoto format: can use e.g.
+      <a href="http://learnsanskrit.org/tools/sanscript">this</a> or
+      <a href="http://shreevatsa.appspot.com/sanskrit/transliterate.html">this</a>
+      to transliterate), and click the button.
     <form action="/identify" method="post">
       <div><textarea name="input_verse" rows="6" cols="80"></textarea></div>
       <div><input type="submit" value="Identify verse"></div>
     </form>
     <p>
     This is all very raw. Work in progress.
-    Source code at <a href="https://github.com/shreevatsa/sanskrit/tree/metrical-scan">https://github.com/shreevatsa/sanskrit/tree/metrical-scan</a>
+    Source code at
+    <a href="https://github.com/shreevatsa/sanskrit/tree/metrical-scan"><!--
+    -->https://github.com/shreevatsa/sanskrit/tree/metrical-scan</a>
     </p>
 
   </body>
