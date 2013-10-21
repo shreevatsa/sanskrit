@@ -148,7 +148,9 @@ def IdentifyMetre(verse):
     print '  Line %d: pattern %s is %s' % (i, line_i, IdentitfyPattern(line_i))
 
 
-if __name__ == '__main__':
+def InitializeData():
+  """Add all known metres to the data structures."""
+  # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
   AddArdhasamavrtta('Anuṣṭup', '. . . . L G G .', '. . . . L G L .')
   # AddMatravrtta('Āryā', '12 + 18 + 12 + 15')
   AddSamavrtta('Upajāti', '. G L G G L L G L G .')
@@ -200,19 +202,21 @@ if __name__ == '__main__':
   AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G .')
   AddSamavrtta('Vidyunmālā', 'G G G G G G G .')
 
-  lines = sys.stdin.readlines()
+
+def IdentifyFromLines(input_lines):
+  """Take a bunch of verse lines (in HK) as input, and identify metre."""
   pattern_lines = []
-  for line in lines:
+  for line in input_lines:
     line = line.strip()
     if not line: continue
-    orig_line = line
     line = MassageHK(line)
-
     # Remove spaces, digits, avagraha, punctuation
     line = line.translate(None, " 0123456789'./$&%{}")
-
     pattern_lines.append(MetricalPattern(line))
+  return IdentifyMetre(pattern_lines)
 
-  identified_metre = IdentifyMetre(pattern_lines)
 
-
+if __name__ == '__main__':
+  InitializeData()
+  lines = sys.stdin.readlines()
+  IdentifyFromLines(lines)
