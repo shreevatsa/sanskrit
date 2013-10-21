@@ -1,7 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-"""Print the metrical pattern of given text."""
+"""Print the metrical pattern of given text.
+
+Known issues:
+     (1) Needs better treatment of pādānta-guru / pādānta-yati.
+     (2) Needs a lot more data (metres).
+     (3) Can improve description of metres.
+     (4) When analyzing line-by-line, would be nice to show all resolutions.
+"""
 
 import re
 import string
@@ -53,6 +60,7 @@ def MetricalPattern(text):
   text = text.translate(string.maketrans('-+', 'LG'))
   return text
 
+# TODO(shreevatsa): Make this pattern -> list, not pattern -> specific pāda type
 known_patterns = {}
 known_metres = {}
 
@@ -67,14 +75,18 @@ def OptionsExpand(pattern):
       yield y
 
 
+def CleanUpPatternString(pattern):
+  return pattern.translate(None, ' —–')
+
+
 def AddVrtta(metre_name, verse_pattern):
   known_metres[verse_pattern] = metre_name
   print 'Added %s, with pattern %s' % (metre_name, verse_pattern)
 
 
 def AddSamavrtta(metre_name, each_line_pattern):
-  each_line_pattern = each_line_pattern.translate(None, ' —')
-  assert re.match(r'^[LG.]*$', each_line_pattern)
+  each_line_pattern = CleanUpPatternString(each_line_pattern)
+  assert re.match(r'^[LG.]*G$', each_line_pattern), each_line_pattern
   AddVrtta(metre_name, each_line_pattern * 4)
   for fully_specified_pattern in OptionsExpand(each_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
@@ -84,10 +96,11 @@ def AddSamavrtta(metre_name, each_line_pattern):
 
 def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
   """Given an ardha-sama-vṛtta metre, add it to the data structures."""
-  odd_line_pattern = odd_line_pattern.translate(None, ' —')
+  odd_line_pattern = CleanUpPatternString(odd_line_pattern)
+  # Odd _pāda_s in Anuṣṭup don't have to end with a guru
   assert re.match(r'^[LG.]*$', odd_line_pattern)
-  even_line_pattern = even_line_pattern.translate(None, ' —')
-  assert re.match(r'^[LG.]*$', even_line_pattern)
+  even_line_pattern = CleanUpPatternString(even_line_pattern)
+  assert re.match(r'^[LG.]*G$', even_line_pattern)
   AddVrtta(metre_name, (odd_line_pattern + even_line_pattern) * 2)
   for fully_specified_pattern in OptionsExpand(odd_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda_odd' % (metre_name)
@@ -97,6 +110,23 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda_even' % (metre_name)
     print 'Added %s as an even line pattern for %s' % (fully_specified_pattern,
                                                        metre_name)
+
+
+def AddVishamavrtta(metre_name, line_patterns):
+  """Given a viṣama-vṛtta metre, add it to the data structures."""
+  assert len(line_patterns) == 4
+  verse_pattern = ''
+  for i in range(4):
+    line_pattern = line_patterns[i]
+    line_pattern = CleanUpPatternString(line_pattern)
+    # Doesn't have to end in guru; consider pāda 1 of Udgatā
+    assert re.match(r'^[LG.]*$', line_pattern)
+    verse_pattern += line_pattern
+    for fully_specified_pattern in OptionsExpand(line_pattern):
+      known_patterns[fully_specified_pattern] = '%s_pāda_%d' % (metre_name, i)
+      print 'Added %s as pattern %d for %s' % (fully_specified_pattern, i,
+                                               metre_name)
+  AddVrtta(metre_name, verse_pattern)
 
 
 def IdentitfyPattern(pattern):
@@ -109,11 +139,12 @@ def IdentitfyPattern(pattern):
 def IdentifyMetre(verse):
   """Give metrical pattern of entire verse, identify metre."""
   full_verse = ''.join(verse)
-  print 'The input has %d syllables' % len(full_verse)
+  print 'The input has %d syllables.' % len(full_verse)
 
   for known_pattern, known_metre in known_metres.iteritems():
     if re.match('^' + known_pattern + '$', full_verse):
-      print 'Identified as %s' % known_metre
+      print 'Identified as %s, which has pattern:\n    "%s"' % (known_metre,
+                                                                known_pattern)
       return known_metre
 
   print 'Metre unknown, trying by lines: '
@@ -123,7 +154,8 @@ def IdentifyMetre(verse):
 
 
 if __name__ == '__main__':
-  AddArdhasamavrtta('Anuṣṭup', '. . . . L G G G', '. . . . L G L G')
+  AddArdhasamavrtta('Anuṣṭup', '. . . . L G G .', '. . . . L G L G')
+  # AddMatravrtta('Āryā', '12 + 18 + 12 + 15')
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
   AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
@@ -142,7 +174,36 @@ if __name__ == '__main__':
   AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L G')
   AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
   AddSamavrtta('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G')
-  # AddSamavrtta('
+  AddSamavrtta('Śikhariṇī', 'L G G G G G – L L L L L G G — L L L G')
+  AddSamavrtta('Hariṇī', 'L L L L L G — G G G G — L G L L G L G')
+  AddSamavrtta('Pṛthvī', 'L G L L L G L G—L L L G L G G L G')
+  AddSamavrtta('Kokilalam (Nardaṭakam)', 'L L L L G L G L L L G — L L G L L G')
+  AddSamavrtta('Mallikāmālā (Matta-kokilā)',
+               'G L G L L G L G L L G L G L L G L G')
+  AddSamavrtta('Śārdūlavikrīḍitam', 'G G G L L G L G L L L G — G G L G G L G')
+  AddSamavrtta('Sragdharā', 'G G G G L G G — L L L L L L G — G L G G L G G')
+  AddArdhasamavrtta('Viyoginī', 'L L G   L L G L G L G',
+                    'L L G G L L G L G L G')
+  AddArdhasamavrtta('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
+                    'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
+  AddArdhasamavrtta('Aparavaktrā',
+                    'L L L L L L G — L G L G', 'L L L L G — L L G L G L G')
+  AddArdhasamavrtta('Puṣpitāgrā',
+                    'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
+  AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
+                              'L L L L L  G  L  G  L G',   # TODO(shreevatsa): ā
+                              ' G  L L L L L L  G  L L G',
+                              'L L  G  L  G  L L L  G  L G L G'])
+  AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
+               'G G L G L L L – G G L G L L L – G G L G L L L G')
+  AddSamavrtta('Śivatāṇḍava',
+               'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G')
+  AddSamavrtta('Dodhakam', 'G L L G L L G L L G G')
+  # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
+  AddSamavrtta('Mālatī', 'L L L L G L L G L G L G')
+  AddSamavrtta('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G')
+  AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G G')
+  AddSamavrtta('Vidyunmālā', 'G G G G G G G G')
 
   lines = sys.stdin.readlines()
   pattern_lines = []
