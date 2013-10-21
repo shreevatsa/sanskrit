@@ -41,7 +41,7 @@ def MetricalPattern(text):
   consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
   short_vowel = '[aiuR]'
   long_vowel = '[AIUeo]'
-  vowel = short_vowel.strip(']') + long_vowel.strip('[')
+  # vowel = short_vowel.strip(']') + long_vowel.strip('[')
   # Consonants at beginning of text can be ignored
   text = re.sub('^' + consonant + '+', '', text)
   # A long vowel followed by any number of consonants is a guru
@@ -81,8 +81,8 @@ def IdentifyMetre(verse):
 
   print 'Metre unknown, trying by lines: '
   for i in range(len(verse)):
-    line = verse[i]
-    print '  Line %d: pattern %s is %s' % (i, line, IdentitfyPattern(line))
+    line_i = verse[i]
+    print '  Line %d: pattern %s is %s' % (i, line_i, IdentitfyPattern(line_i))
 
 
 if __name__ == '__main__':
