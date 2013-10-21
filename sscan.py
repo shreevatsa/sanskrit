@@ -3,10 +3,19 @@
 
 """Print the metrical pattern of given text.
 
+Usage:
+     python sscan.py
+     [input verse]
+     Ctrl-D
+
+     or
+
+     python sscan.py < input_file
+
 Known issues:
      (1) Needs better treatment of pādānta-guru / pādānta-yati.
      (2) Needs a lot more data (metres).
-     (3) Can improve description of metres.
+     (3) Missing in output: description of metres.
      (4) When analyzing line-by-line, would be nice to show all resolutions.
 """
 
