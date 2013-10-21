@@ -24,7 +24,8 @@ class InputPage(webapp2.RequestHandler):
 class IdentifyPage(webapp2.RequestHandler):
   def post(self):
     self.response.write('<html><body>You wrote:<pre>')
-    self.response.write(cgi.escape(self.request.get('input_verse')))
+    input_verse = self.request.get('input_verse')
+    self.response.write(cgi.escape(input_verse))
     # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
     sscan.InitializeData()
     metre = sscan.IdentifyFromLines(input_verse.split('\n'))
