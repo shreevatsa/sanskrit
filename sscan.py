@@ -47,6 +47,7 @@ def CheckHK(text):
     print ' ' * first_index + '^'
     print 'Ignoring all non-HK characters.'
     text = re.sub('[^%s]' % valid_hk, '', text)
+  assert not re.search('[^%s]' % valid_hk, text), text
   return text
 
 
