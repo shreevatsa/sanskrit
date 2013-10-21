@@ -50,7 +50,7 @@ def CheckHK(text):
 
 
 def MetricalPattern(text):
-  """Given text in HK, print its metrical pattern (string of 'L's and 'G's)."""
+  """Given text in HK, return its metrical pattern (string of 'L's and 'G's)."""
   assert CheckHK(text)
   # A regular-expression "character class" for each type
   consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
