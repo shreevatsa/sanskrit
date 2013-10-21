@@ -67,15 +67,36 @@ def OptionsExpand(pattern):
       yield y
 
 
-def AddSamavrtta(metre_name, each_line_pattern_orig):
-  each_line_pattern = each_line_pattern_orig.translate(None, ' —')
+def AddVrtta(metre_name, verse_pattern):
+  known_metres[verse_pattern] = metre_name
+  print 'Added %s, with pattern %s' % (metre_name, verse_pattern)
+
+
+def AddSamavrtta(metre_name, each_line_pattern):
+  each_line_pattern = each_line_pattern.translate(None, ' —')
   assert re.match(r'^[LG.]*$', each_line_pattern)
-  known_metres[each_line_pattern * 4] = metre_name
-  print 'Added %s, with pattern %s' % (metre_name, each_line_pattern * 4)
+  AddVrtta(metre_name, each_line_pattern * 4)
   for fully_specified_pattern in OptionsExpand(each_line_pattern):
+    known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
     print 'Added %s as a line pattern for %s' % (fully_specified_pattern,
                                                  metre_name)
-    known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
+
+
+def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
+  """Given an ardha-sama-vṛtta metre, add it to the data structures."""
+  odd_line_pattern = odd_line_pattern.translate(None, ' —')
+  assert re.match(r'^[LG.]*$', odd_line_pattern)
+  even_line_pattern = even_line_pattern.translate(None, ' —')
+  assert re.match(r'^[LG.]*$', even_line_pattern)
+  AddVrtta(metre_name, (odd_line_pattern + even_line_pattern) * 2)
+  for fully_specified_pattern in OptionsExpand(odd_line_pattern):
+    known_patterns[fully_specified_pattern] = '%s_pāda_odd' % (metre_name)
+    print 'Added %s as an odd line pattern for %s' % (fully_specified_pattern,
+                                                      metre_name)
+  for fully_specified_pattern in OptionsExpand(even_line_pattern):
+    known_patterns[fully_specified_pattern] = '%s_pāda_even' % (metre_name)
+    print 'Added %s as an even line pattern for %s' % (fully_specified_pattern,
+                                                       metre_name)
 
 
 def IdentitfyPattern(pattern):
@@ -102,6 +123,7 @@ def IdentifyMetre(verse):
 
 
 if __name__ == '__main__':
+  AddArdhasamavrtta('Anuṣṭup', '. . . . L G G G', '. . . . L G L G')
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
   AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
@@ -120,6 +142,7 @@ if __name__ == '__main__':
   AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L G')
   AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
   AddSamavrtta('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G')
+  # AddSamavrtta('
 
   lines = sys.stdin.readlines()
   pattern_lines = []
