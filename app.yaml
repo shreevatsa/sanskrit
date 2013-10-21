@@ -1,0 +1,13 @@
+application: verse-handler
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+libraries:
+- name: webapp2
+  version: latest
+
+handlers:
+- url: /.*
+  script: request_handler.application
