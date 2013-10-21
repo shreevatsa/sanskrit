@@ -169,7 +169,7 @@ def IdentifyMetre(verse):
 def InitializeData():
   """Add all known metres to the data structures."""
   # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
-  AddArdhasamavrtta('Anuṣṭup', '. . . . L G G .', '. . . . L G L .')
+  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L .')
   # AddMatravrtta('Āryā', '12 + 18 + 12 + 15')
   AddSamavrtta('Upajāti', '. G L G G L L G L G .')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L .')
