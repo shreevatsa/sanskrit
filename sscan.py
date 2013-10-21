@@ -55,6 +55,9 @@ def MetricalPattern(text):
   text = re.sub(long_vowel + consonant + '*', '+', text)
   # A short vowel followed by multiple (>=2) consonants is a guru
   text = re.sub(short_vowel + consonant + '{2,}', '+', text)
+  # If the line ends in a consonant, the last syllable is a guru
+  # TODO(shreevatsa): This requires refinement
+  text = re.sub(short_vowel + consonant + '$', '+', text)
   # A short vowel followed by a consonant is a laghu
   text = re.sub(short_vowel + consonant + '*', '-', text)
   text = text.translate(string.maketrans('-+', 'LG'))
