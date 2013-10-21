@@ -53,13 +53,26 @@ def MetricalPattern(text):
   text = text.translate(string.maketrans('-+', 'LG'))
   return text
 
-known_patterns = {
-    'GGGGLLLLLGGLGGLGL': 'mandākrāntā_pāda',
-    'GGGGLLLLLGGLGGLGG': 'mandākrāntā_pāda'
-}
-known_metres = {
-    'GGGGLLLLLGGLGGLG.' * 4: 'mandākrāntā'
-}
+known_patterns = {}
+known_metres = {}
+
+
+def OptionsExpand(pattern):
+  print 'Called OptionsExpand on %s' % pattern
+  if pattern.find('.') == -1:
+    print 'Yielding it'
+    yield pattern
+    return
+  where = pattern.find('.')
+  for fix in ['L', 'G']:
+    for y in OptionsExpand(pattern[:where] + fix + pattern[where + 1:]):
+      yield y
+
+
+def AddSamavrtta(metre_name, each_line_pattern):
+  known_metres[each_line_pattern * 4] = metre_name
+  for fully_specified_pattern in OptionsExpand(each_line_pattern):
+    known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
 
 
 def IdentitfyPattern(pattern):
@@ -86,6 +99,7 @@ def IdentifyMetre(verse):
 
 
 if __name__ == '__main__':
+  AddSamavrtta('mandākrāntā', 'GGGGLLLLLGGLGGLG.')
   lines = sys.stdin.readlines()
   pattern_lines = []
   for line in lines:
