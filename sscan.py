@@ -68,7 +68,7 @@ def MetricalPattern(text):
   # If the line ends in a consonant, the last syllable is a guru
   # TODO(shreevatsa): This requires refinement
   text = re.sub(short_vowel + consonant + '$', '+', text)
-  # A short vowel followed by a consonant is a laghu
+  # Any short vowel still left is a laghu; remove it and following consonant
   text = re.sub(short_vowel + consonant + '*', '-', text)
   assert re.match('^[+-]*$', text)
   text = text.replace('-', 'L')
