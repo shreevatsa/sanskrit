@@ -3,6 +3,11 @@
 import cgi
 import StringIO
 import sys
+# The two lines below are a hack to get around errors like:
+# 'ascii' codec can't decode byte 0xc4 in position 4: ordinal not in range(128)
+# But there should be something better!
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 import webapp2
 
