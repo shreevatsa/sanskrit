@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 """Print the metrical pattern of given text.
 
 Usage:
@@ -19,6 +18,7 @@ Known issues:
      (4) When analyzing line-by-line, would be nice to show all resolutions.
 """
 
+from __future__ import unicode_literals
 import re
 import sys
 
