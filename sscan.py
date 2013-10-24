@@ -39,13 +39,13 @@ def MassageHK(text):
 def CheckHK(text):
   """Check that a block of text contains only HK characters."""
   valid_hk = 'aAiIuUReoMHkgGcjJTDNtdnpbmyrlvzSsh'
-  bad_match = re.search('[^%s]' % valid_hk, text)
-  if bad_match:
-    first_index = bad_match.start()
-    print 'Found non-HK character in text:'
+  bad_indices = set()
+  for bad_match in re.finditer('[^%s]' % valid_hk, text):
+    bad_indices.add(bad_match.start())
+  if bad_indices:
+    print 'Non-HK characters are ignored:'
     print text
-    print ' ' * first_index + '^'
-    print 'Ignoring all non-HK characters.'
+    print ''.join('^' if i in bad_indices else ' ' for i in range(len(text)))
     text = re.sub('[^%s]' % valid_hk, '', text)
   assert not re.search('[^%s]' % valid_hk, text), text
   return text
