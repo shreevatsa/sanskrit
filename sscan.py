@@ -39,9 +39,8 @@ def MassageHK(text):
 def CheckHK(text):
   """Check that a block of text contains only HK characters."""
   valid_hk = 'aAiIuUReoMHkgGcjJTDNtdnpbmyrlvzSsh'
-  bad_indices = set()
-  for bad_match in re.finditer('[^%s]' % valid_hk, text):
-    bad_indices.add(bad_match.start())
+  bad_indices = set(bad_match.start() for bad_match in
+                    re.finditer('[^%s]' % valid_hk, text))
   if bad_indices:
     print 'Non-HK characters are ignored:'
     print text
@@ -153,7 +152,7 @@ def IdentitfyPattern(pattern):
 def IdentifyMetre(verse):
   """Give metrical pattern of entire verse, identify metre."""
   full_verse = ''.join(verse)
-  print 'The input has %d syllables.' % len(full_verse)
+  print 'There are %d syllables in the input (%s).' % (len(full_verse), full_verse)
 
   for known_pattern, known_metre in known_metres.iteritems():
     if re.match('^' + known_pattern + '$', full_verse):
