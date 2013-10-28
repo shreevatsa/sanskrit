@@ -22,40 +22,13 @@ from __future__ import unicode_literals
 import re
 import sys
 
+import handle_input
 import metrical_data
 import simple_utils
 
 
-def MassageHK(text):
-  """Rewrite keeping metre intact (multiple characters -> single char)."""
-  # Two-letter vowels like ai and au
-  text = re.sub('lR', 'R', text)
-  text = re.sub('lRR', 'RR', text)
-  text = re.sub('RR', 'e', text)
-  text = re.sub('a[iu]', 'e', text)
-  # Two-letter consonants: replace 'kh' by 'k', etc.
-  alpaprana = '[kgcjTDtdpb]'
-  text = re.sub('(' + alpaprana + ')' + 'h', r'\g<1>', text)
-  return text
-
-
-def CheckHK(text):
-  """Check that a block of text contains only HK characters."""
-  valid_hk = 'aAiIuUReoMHkgGcjJTDNtdnpbmyrlvzSsh'
-  bad_indices = set(bad_match.start() for bad_match in
-                    re.finditer('[^%s]' % valid_hk, text))
-  if bad_indices:
-    print 'Non-HK characters are ignored:'
-    print text
-    print ''.join('^' if i in bad_indices else ' ' for i in range(len(text)))
-    text = re.sub('[^%s]' % valid_hk, '', text)
-  assert not re.search('[^%s]' % valid_hk, text), text
-  return text
-
-
 def MetricalPattern(text):
   """Given text in HK, return its metrical pattern (string of 'L's and 'G's)."""
-  text = CheckHK(text)
   # A regular-expression "character class" for each type
   consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
   short_vowel = '[aiuR]'
@@ -111,15 +84,17 @@ def IdentifyFromLines(input_lines):
   for line in input_lines:
     line = line.strip()
     if not line: continue
-    line = MassageHK(line)
+    line = handle_input.MassageHK(line)
     # Remove spaces, digits, avagraha, punctuation
     line = simple_utils.RemoveChars(line, " 0123456789'./$&%{}|")
+    line = handle_input.CleanHK(line)
     pattern_lines.append(MetricalPattern(line))
   return IdentifyMetre(pattern_lines)
 
 
 def InitializeData():
-  metrical_data.InitializeData()
+  if not metrical_data.known_metres:
+    metrical_data.InitializeData()
 
 
 if __name__ == '__main__':
