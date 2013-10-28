@@ -22,7 +22,7 @@ def CleanHK(text):
   bad_indices = set(bad_match.start() for bad_match in
                     re.finditer('[^%s]' % valid_hk, text))
   if bad_indices:
-    print 'Non-HK characters are ignored:'
+    print 'Unknown non-HK characters are ignored:'
     print text
     print ''.join('^' if i in bad_indices else ' ' for i in range(len(text)))
     text = re.sub('[^%s]' % valid_hk, '', text)
