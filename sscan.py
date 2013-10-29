@@ -27,15 +27,16 @@ import metrical_data
 import simple_utils
 
 
-def MoveConsonants(lines):
+def MoveConsonants(verse_lines):
   consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
-  for i in xrange(1, len(lines)):
-    text = lines[i]
+  for i in xrange(1, len(verse_lines)):
+    text = verse_lines[i]
     m = re.match(consonant + '+', text)
     if m:
-      lines[i - 1] += m.group()
-      lines[i] = lines[i][len(m.group()):]
-  return lines
+      verse_lines[i - 1] += m.group()
+      verse_lines[i] = verse_lines[i][len(m.group()):]
+  return verse_lines
+
 
 def MetricalPattern(text):
   """Given text in HK, return its metrical pattern (string of 'L's and 'G's)."""
