@@ -39,6 +39,7 @@ def MoveConsonants(lines):
 
 def MetricalPattern(text):
   """Given text in HK, return its metrical pattern (string of 'L's and 'G's)."""
+  orig_text = text
   # A regular-expression "character class" for each type
   consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
   short_vowel = '[aiuR]'
@@ -50,12 +51,9 @@ def MetricalPattern(text):
   text = re.sub(long_vowel + consonant + '*', '+', text)
   # A short vowel followed by multiple (>=2) consonants is a guru
   text = re.sub(short_vowel + consonant + '{2,}', '+', text)
-  # If the line ends in a consonant, the last syllable is a guru
-  # TODO(shreevatsa): This requires refinement
-  text = re.sub(short_vowel + consonant + '$', '+', text)
   # Any short vowel still left is a laghu; remove it and following consonant
-  text = re.sub(short_vowel + consonant + '*', '-', text)
-  assert re.match('^[+-]*$', text)
+  text = re.sub(short_vowel + consonant + '?', '-', text)
+  assert re.match('^[+-]*$', text), (orig_text, text)
   text = text.replace('-', 'L')
   text = text.replace('+', 'G')
   assert re.match('^[LG]*$', text)
@@ -100,7 +98,13 @@ def IdentifyFromLines(input_lines):
     line = handle_input.CleanHK(line)
     cleaned_lines.append(line)
   cleaned_lines = MoveConsonants(cleaned_lines)
-  pattern_lines = [MetricalPattern(line) for line in cleaned_lines]
+  pattern_lines = []
+  for i in range(len(cleaned_lines)):
+    line = MetricalPattern(cleaned_lines[i])
+    if i % 2 and line.endswith('L'):
+      print 'Promoting last laghu of line %d to guru' % i
+      line = line[:-1] + 'G'
+    pattern_lines.append(line)
   return IdentifyMetre(pattern_lines)
 
 
