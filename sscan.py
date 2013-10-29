@@ -27,6 +27,16 @@ import metrical_data
 import simple_utils
 
 
+def MoveConsonants(lines):
+  consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
+  for i in xrange(1, len(lines)):
+    text = lines[i]
+    m = re.match(consonant + '+', text)
+    if m:
+      lines[i - 1] += m.group()
+      lines[i] = lines[i][len(m.group()):]
+  return lines
+
 def MetricalPattern(text):
   """Given text in HK, return its metrical pattern (string of 'L's and 'G's)."""
   # A regular-expression "character class" for each type
@@ -80,7 +90,7 @@ def IdentifyMetre(verse):
 
 def IdentifyFromLines(input_lines):
   """Take a bunch of verse lines (in HK) as input, and identify metre."""
-  pattern_lines = []
+  cleaned_lines = []
   for line in input_lines:
     line = line.strip()
     if not line: continue
@@ -88,7 +98,9 @@ def IdentifyFromLines(input_lines):
     # Remove spaces, digits, avagraha, punctuation
     line = simple_utils.RemoveChars(line, " 0123456789'./$&%{}|")
     line = handle_input.CleanHK(line)
-    pattern_lines.append(MetricalPattern(line))
+    cleaned_lines.append(line)
+  cleaned_lines = MoveConsonants(cleaned_lines)
+  pattern_lines = [MetricalPattern(line) for line in cleaned_lines]
   return IdentifyMetre(pattern_lines)
 
 
