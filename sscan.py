@@ -52,6 +52,7 @@ def MetricalPattern(text):
   # A short vowel followed by multiple (>=2) consonants is a guru
   text = re.sub(short_vowel + consonant + '{2,}', '+', text)
   # Any short vowel still left is a laghu; remove it and following consonant
+  # TODO(shreevatsa): Should short_vowel + visarga be special-cased to guru?
   text = re.sub(short_vowel + consonant + '?', '-', text)
   assert re.match('^[+-]*$', text), (orig_text, text)
   text = text.replace('-', 'L')
@@ -101,7 +102,7 @@ def IdentifyFromLines(input_lines):
   for i in range(len(cleaned_lines)):
     line = MetricalPattern(cleaned_lines[i])
     if i % 2 and line.endswith('L'):
-      print 'Promoting last laghu of line %d to guru' % i
+      print 'Promoting last laghu of line %d to guru' % (i + 1)
       line = line[:-1] + 'G'
     pattern_lines.append(line)
   return IdentifyMetre(pattern_lines)

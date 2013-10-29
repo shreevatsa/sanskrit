@@ -9,12 +9,13 @@ for key, group in itertools.groupby(lines, bool):
   if not key:
     continue
   counter += 1
-  print 'Verse %d: ' % counter
   verse_lines = list(group)
   if verse_lines == ['{UttarameghaH}']:
     continue
   assert len(verse_lines) == 4, verse_lines
 
+  print 'Verse %d: ' % counter
+  print '\n\t\t\t\t\t\t'.join([''] + verse_lines)
   sscan.InitializeData()
   sscan.IdentifyFromLines(verse_lines)
   print
