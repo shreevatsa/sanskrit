@@ -24,7 +24,6 @@ import sys
 
 import handle_input
 import metrical_data
-import simple_utils
 
 
 def MoveConsonants(verse_lines):
@@ -95,8 +94,6 @@ def IdentifyFromLines(input_lines):
     line = line.strip()
     if not line: continue
     line = handle_input.MassageHK(line)
-    # Remove spaces, digits, avagraha, punctuation
-    line = simple_utils.RemoveChars(line, " 0123456789'./$&%{}|")
     line = handle_input.CleanHK(line)
     cleaned_lines.append(line)
   cleaned_lines = MoveConsonants(cleaned_lines)

@@ -2,6 +2,8 @@
 
 import re
 
+import simple_utils
+
 
 def MassageHK(text):
   """Rewrite keeping metre intact (multiple characters -> single char)."""
@@ -18,6 +20,8 @@ def MassageHK(text):
 
 def CleanHK(text):
   """Remove non-HK characters from a block of text."""
+  # Remove spaces, digits, avagraha, punctuation
+  text = simple_utils.RemoveChars(text, " 0123456789'./$&%{}|-!")
   valid_hk = 'aAiIuUReoMHkgGcjJTDNtdnpbmyrlvzSsh'
   bad_indices = set(bad_match.start() for bad_match in
                     re.finditer('[^%s]' % valid_hk, text))
