@@ -142,8 +142,6 @@ def TransliterateDevanagari(text):
                        devanagari.Mangle(text))
 
 
-print MakeStateMachine(HKToSLP1Table())
-print MakeStateMachine(IASTToSLP1Table())
 blah = devanagari.Mangle('कगुद')
 print blah, [ch for ch in blah]
 print TransliterateDevanagari('कगुद')

@@ -17,6 +17,9 @@ def NonAVowels():
   return 'आइईउऊऋॠऌॡएऐओऔ'
 
 
+def VowelSigns():
+  return ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ']
+
 def Virama():
   return '्'
 
@@ -30,15 +33,15 @@ def Alphabet():
 
 
 def Mangle(text):
-  """Normalise text in Devanāgari."""
+  """Normalises text in Devanāgari."""
+  orig_text = text
   consonants = '[' + Consonants() + ']'
-  vowel_signs = ''.join(
-      ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ'])
+  vowel_signs = ''.join(VowelSigns())
   vowels = NonAVowels()
   signs_to_vowels = dict(zip(vowel_signs, vowels))
   virama = Virama()
 
-  # consonant + vowel sign -> consonant + virāma + vowel sign
+  # consonant + vowel sign -> consonant + virāma + vowel
   def Replacer(match):
     return match.group(1) + virama + signs_to_vowels[match.group(2)]
   text = re.sub('(' + consonants + ')([' + vowel_signs + '])', Replacer, text)
@@ -55,4 +58,19 @@ def Mangle(text):
   for c in re.finditer(consonants, text):
     assert text[c.start() + 1] == virama
 
+  assert orig_text == UnMangle(text), (orig_text, text, UnMangle(text))
+  return text
+
+
+def UnMangle(text):
+  """Converts normalized Devanagari to standard Devanagari."""
+  # consonant + virāma + vowel -> consonant + vowel sign
+  consonant = '[' + Consonants() + ']'
+  vowels = 'अ' + NonAVowels()
+  vowel_signs = [''] + VowelSigns()
+  vowels_to_signs = dict(zip(vowels, vowel_signs))
+  def Replacer(match):
+    return match.group(1) + vowels_to_signs[match.group(2)]
+  text = re.sub('(' + consonant + ')' + Virama() + '([' + vowels + '])',
+                Replacer, text)
   return text
