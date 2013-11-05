@@ -5,34 +5,24 @@ from __future__ import unicode_literals
 import re
 
 import simple_utils
-
-
-def MassageHK(text):
-  """Rewrite keeping metre intact (multiple characters -> single char)."""
-  # Two-letter vowels like ai and au
-  text = re.sub('lR', 'R', text)
-  text = re.sub('lRR', 'RR', text)
-  text = re.sub('RR', 'e', text)
-  text = re.sub('a[iu]', 'e', text)
-  # Two-letter consonants: replace 'kh' by 'k', etc.
-  alpaprana = '[kgcjTDtdpb]'
-  text = re.sub('(' + alpaprana + ')' + 'h', r'\g<1>', text)
-  return text
+import slp1
+import transliterate
 
 
 def CleanHK(text):
-  """Remove non-HK characters from a block of text."""
-  # Remove spaces, digits, avagraha, punctuation
-  text = simple_utils.RemoveChars(text, " 0123456789'./$&%{}|-!")
-  valid_hk = 'aAiIuUReoMHkgGcjJTDNtdnpbmyrlvzSsh'
-  bad_indices = set(bad_match.start() for bad_match in
-                    re.finditer('[^%s]' % valid_hk, text))
-  if bad_indices:
-    print 'Unknown non-HK characters are ignored:'
-    print text
-    print ''.join('^' if i in bad_indices else ' ' for i in range(len(text)))
-    text = re.sub('[^%s]' % valid_hk, '', text)
-  assert not re.search('[^%s]' % valid_hk, text), text
+  """Transliterates text to SLP1, removing all other characters."""
+  orig_text = text
+  known_chars = " 0123456789'./$&%{}|-!"
+  (text, rejects) = transliterate.Transliterate(
+      transliterate.MakeStateMachine(transliterate.HKToSLP1Table()),
+      text, pass_through=known_chars)
+  if rejects:
+    print 'Unknown characters are ignored:'
+    print orig_text
+    print ''.join('^' if i in rejects else ' ' for i in range(len(orig_text)))
+  text = simple_utils.RemoveChars(text, known_chars)
+  valid = slp1.VALID
+  assert not re.search('[^%s]' % valid, text), text
   return text
 
 

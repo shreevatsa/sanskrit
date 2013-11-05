@@ -63,7 +63,7 @@ def FirstLongestMatch(state_machine, text):
   return (num_matched, replacement)
 
 
-def Transliterate(state_machine, text, pass_through="-' "):
+def Transliterate(state_machine, text, pass_through=None):
   """Transliterates text using the state machine."""
   transliterated = ''
   unparsed_positions = set()
@@ -72,7 +72,7 @@ def Transliterate(state_machine, text, pass_through="-' "):
     (num_matched, replacement) = FirstLongestMatch(state_machine,
                                                    text[num_parsed:])
     if num_matched == 0:
-      if text[num_parsed] in pass_through:
+      if pass_through and text[num_parsed] in pass_through:
         transliterated += text[num_parsed]
       else:
         unparsed_positions.add(num_parsed)
@@ -142,6 +142,11 @@ def TransliterateDevanagari(text):
                        devanagari.Mangle(text))
 
 
+def TransliterateHK(text, pass_through=None):
+  return Transliterate(MakeStateMachine(HKToSLP1Table()), text, pass_through)
+
+
 blah = devanagari.Mangle('कगुद')
-print blah, [ch for ch in blah]
+print blah.encode('utf8')
+print [ch for ch in blah]
 print TransliterateDevanagari('कगुद')

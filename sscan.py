@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Print the metrical pattern of given text.
+"""Prints the metrical pattern of given text.
 
 Usage:
      python sscan.py
@@ -24,10 +24,11 @@ import sys
 
 import handle_input
 import metrical_data
+import slp1
 
 
 def MoveConsonants(verse_lines):
-  consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
+  consonant = slp1.CONSONANT
   for i in xrange(1, len(verse_lines)):
     text = verse_lines[i]
     m = re.match(consonant + '+', text)
@@ -38,13 +39,12 @@ def MoveConsonants(verse_lines):
 
 
 def MetricalPattern(text):
-  """Given text in HK, return its metrical pattern (string of 'L's and 'G's)."""
+  """Given SLP1 text, returns its metrical pattern (string of 'L's and 'G's)."""
   orig_text = text
   # A regular-expression "character class" for each type
-  consonant = '[MHkgGcjJTDNtdnpbmyrlvzSsh]'
-  short_vowel = '[aiuR]'
-  long_vowel = '[AIUeo]'
-  # vowel = short_vowel.strip(']') + long_vowel.strip('[')
+  consonant = slp1.CONSONANT
+  short_vowel = slp1.SHORT_VOWEL
+  long_vowel = slp1.LONG_VOWEL
   # Consonants at beginning of text can be ignored
   text = re.sub('^' + consonant + '+', '', text)
   # A long vowel followed by any number of consonants is a guru
@@ -93,7 +93,6 @@ def IdentifyFromLines(input_lines):
   for line in input_lines:
     line = line.strip()
     if not line: continue
-    line = handle_input.MassageHK(line)
     line = handle_input.CleanHK(line)
     cleaned_lines.append(line)
   cleaned_lines = MoveConsonants(cleaned_lines)
