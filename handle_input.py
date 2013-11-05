@@ -20,7 +20,7 @@ def TransliterateAndClean(text):
     print orig_text
     print ''.join('^' if i in rejects else ' ' for i in range(len(orig_text)))
   text = simple_utils.RemoveChars(text, known_chars)
-  valid = slp1.VALID
+  valid = slp1.ALPHABET
   assert not re.search('[^%s]' % valid, text), text
   return text
 

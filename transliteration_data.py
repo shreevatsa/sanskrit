@@ -5,24 +5,27 @@
 from __future__ import unicode_literals
 
 import devanagari
+import slp1
 import transliterate
 
 
 def AlphabetToSLP1(alphabet):
   """Table, given a transliteration convention's alphabet in standard order."""
-  return dict(zip(alphabet,
-                  'aAiIuUfFxXeEoOMHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh'))
+  return dict(zip(alphabet, slp1.ALPHABET))
+
+
+HK_ALPHABET = (list('aAiIuUR') + ['RR', 'lR', 'lRR', 'e', 'ai', 'o', 'au'] +
+               ['M', 'H',
+                'k', 'kh', 'g', 'gh', 'G',
+                'c', 'ch', 'j', 'jh', 'J',
+                'T', 'Th', 'D', 'Dh', 'N',
+                't', 'th', 'd', 'dh', 'n',
+                'p', 'ph', 'b', 'bh', 'm'] +
+               list('yrlvzSsh'))
 
 
 def HKToSLP1Table():
-  return AlphabetToSLP1(list('aAiIuUR') +
-                        ['RR', 'lR', 'lRR', 'e', 'ai', 'o', 'au', 'M', 'H',
-                         'k', 'kh', 'g', 'gh', 'G',
-                         'c', 'ch', 'j', 'jh', 'J',
-                         'T', 'Th', 'D', 'Dh', 'N',
-                         't', 'th', 'd', 'dh', 'n',
-                         'p', 'ph', 'b', 'bh', 'm'] +
-                        list('yrlvzSsh'))
+  return AlphabetToSLP1(HK_ALPHABET)
 
 
 def IASTToSLP1Table():
