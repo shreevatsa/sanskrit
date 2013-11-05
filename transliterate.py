@@ -33,9 +33,6 @@ seeing that character, which state to go to, and how many characters to consume.
 
 from __future__ import unicode_literals
 
-import devanagari
-import transliteration_data
-
 
 def MakeStateMachine(table):
   """Makes SM from a dict like {'a':'अ', 'A':'आ', 'ai':'ऐ', 'au':'औ'}."""
@@ -84,18 +81,3 @@ def Transliterate(state_machine, text, pass_through=None):
   return (transliterated, unparsed_positions)
 
 
-def TransliterateDevanagari(text):
-  return Transliterate(MakeStateMachine(
-      transliteration_data.MangledDevanagariToSLP1Table()),
-                       devanagari.Mangle(text))
-
-
-def TransliterateHK(text, pass_through=None):
-  return Transliterate(MakeStateMachine(transliteration_data.HKToSLP1Table()),
-                       text, pass_through)
-
-
-blah = devanagari.Mangle('कगुद')
-print blah.encode('utf8')
-print [ch for ch in blah]
-print TransliterateDevanagari('कगुद')

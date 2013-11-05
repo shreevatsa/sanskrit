@@ -5,6 +5,7 @@
 from __future__ import unicode_literals
 
 import devanagari
+import transliterate
 
 
 def AlphabetToSLP1(alphabet):
@@ -61,3 +62,17 @@ def MangledDevanagariToSLP1Table():
   return AlphabetToSLP1(devanagari.Alphabet())
 
 
+def TransliterateDevanagari(text):
+  return transliterate.Transliterate(transliterate.MakeStateMachine(
+      MangledDevanagariToSLP1Table()), devanagari.Mangle(text))
+
+
+def TransliterateHK(text, pass_through=None):
+  return transliterate.Transliterate(transliterate.MakeStateMachine(
+      HKToSLP1Table()), text, pass_through)
+
+
+blah = devanagari.Mangle('कगुद')
+print blah.encode('utf8')
+print [ch for ch in blah]
+print TransliterateDevanagari('कगुद')
