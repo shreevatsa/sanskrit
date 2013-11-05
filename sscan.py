@@ -63,14 +63,14 @@ def MetricalPattern(text):
 
 
 def IdentitfyPattern(pattern):
-  """Given metrical pattern (string of L's and G's), identify metre."""
+  """Given metrical pattern (string of L's and G's), identifies metre."""
   if not re.match('^[LG]*$', pattern):
     print '%s is not a pattern (must have only L and G)' % pattern
   return metrical_data.known_patterns.get(pattern, 'unknown')
 
 
 def IdentifyMetre(verse):
-  """Give metrical pattern of entire verse, identify metre."""
+  """Given metrical pattern of entire verse, identifies metre."""
   full_verse = ''.join(verse)
   print 'There are %d syllables in the input.' % len(full_verse)
 
@@ -88,7 +88,7 @@ def IdentifyMetre(verse):
 
 
 def IdentifyFromLines(input_lines):
-  """Take a bunch of verse lines (in HK) as input, and identify metre."""
+  """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
   input_lines = handle_input.CleanLines(input_lines)
   cleaned_lines = []
   for line in input_lines:
