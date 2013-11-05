@@ -179,10 +179,19 @@ def NormaliseDevanagari(text):
 
 def NormalisedDevanagariToSLP1Table():
   vowels = DevanagariNonAVowels()
-  return AlphabetToSLP1(list('अ' + vowels + 'ंः'))
+  return AlphabetToSLP1(list('अ' + vowels + 'ंः') +
+                        [s + DevanagariVirama() for s in DevanagariConsonants()]
+                       )
+
+
+def TransliterateDevanagari(text):
+  text = NormaliseDevanagari(text)
+  return Transliterate(MakeStateMachine(NormalisedDevanagariToSLP1Table()),
+                       text)
 
 
 print MakeStateMachine(HKToSLP1Table())
 print MakeStateMachine(IASTToSLP1Table())
 blah = NormaliseDevanagari('कगुद')
 print blah, [ch for ch in blah]
+print TransliterateDevanagari('कगुद')
