@@ -159,9 +159,9 @@ def NormaliseDevanagari(text):
 
   # consonant + [not virama] -> consonant + virama + 'a'
   text = re.sub('(' + consonants + ')([^' + DevanagariVirama() + '])',
-                '\g<1>' + DevanagariVirama() + 'अ' + '\g<2>', text)
+                r'\g<1>' + DevanagariVirama() + 'अ' + r'\g<2>', text)
   text = re.sub('(' + consonants + ')$',
-                '\g<1>' + DevanagariVirama() + 'अ', text)
+                r'\g<1>' + DevanagariVirama() + 'अ', text)
   # Check that no more consonants exist that are not followed by space
   for c in re.finditer(consonants, text):
     assert text[c.start() + 1] == DevanagariVirama()
