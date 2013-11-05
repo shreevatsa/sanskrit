@@ -20,6 +20,7 @@ def NonAVowels():
 def VowelSigns():
   return ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ']
 
+
 def Virama():
   return '्'
 
