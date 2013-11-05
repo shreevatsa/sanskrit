@@ -9,13 +9,11 @@ import slp1
 import transliterate
 
 
-def CleanHK(text):
+def TransliterateAndClean(text):
   """Transliterates text to SLP1, removing all other characters."""
   orig_text = text
   known_chars = " 0123456789'./$&%{}|-!"
-  (text, rejects) = transliterate.Transliterate(
-      transliterate.MakeStateMachine(transliterate.HKToSLP1Table()),
-      text, pass_through=known_chars)
+  (text, rejects) = transliterate.TransliterateHK(text, pass_through=known_chars)
   if rejects:
     print 'Unknown characters are ignored:'
     print orig_text
@@ -31,6 +29,6 @@ def CleanLines(lines):
   for line in lines:
     line = line.strip()
     if not line: continue
-    line = CleanHK(line)
+    line = TransliterateAndClean(line)
     cleaned_lines.append(line)
   return cleaned_lines
