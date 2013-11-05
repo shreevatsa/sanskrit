@@ -138,8 +138,8 @@ def MangledDevanagariToSLP1Table():
 
 
 def TransliterateDevanagari(text):
-  text = devanagari.Mangle(text)
-  return Transliterate(MakeStateMachine(MangledDevanagariToSLP1Table()), text)
+  return Transliterate(MakeStateMachine(MangledDevanagariToSLP1Table()),
+                       devanagari.Mangle(text))
 
 
 print MakeStateMachine(HKToSLP1Table())
