@@ -24,8 +24,8 @@ HK_ALPHABET = (list('aAiIuUR') + ['RR', 'lR', 'lRR', 'e', 'ai', 'o', 'au'] +
                list('yrlvzSsh'))
 
 
-def HKToSLP1Table():
-  return AlphabetToSLP1(HK_ALPHABET)
+def HKToSLP1StateMachine():
+  return transliterate.MakeStateMachine(AlphabetToSLP1(HK_ALPHABET))
 
 
 def IASTToSLP1Table():
@@ -62,18 +62,17 @@ def ITRANSToSLP1Table():
   return AlphabetToSLP1(ITRANS_ALPHABET)
 
 
-def MangledDevanagariToSLP1Table():
-  return AlphabetToSLP1(devanagari.Alphabet())
+def MangledDevanagariToSLP1StateMachine():
+  return transliterate.MakeStateMachine(AlphabetToSLP1(devanagari.Alphabet()))
 
 
 def TransliterateDevanagari(text):
-  return transliterate.Transliterate(transliterate.MakeStateMachine(
-      MangledDevanagariToSLP1Table()), devanagari.Mangle(text))
+  return transliterate.Transliterate(MangledDevanagariToSLP1StateMachine(),
+                                     devanagari.Mangle(text))
 
 
 def TransliterateHK(text, pass_through=None):
-  return transliterate.Transliterate(transliterate.MakeStateMachine(
-      HKToSLP1Table()), text, pass_through)
+  return transliterate.Transliterate(HKToSLP1StateMachine(), text, pass_through)
 
 
 IASTToSLP1Table()
