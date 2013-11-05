@@ -45,20 +45,21 @@ def IASTToSLP1Table():
                           'P', 'Ph', 'B', 'Bh', 'M',
                           'Y', 'R', 'L', 'V', 'Ś', 'Ṣ', 'S', 'H'])
   lower.update(upper)
-  upper.update(lower)
-  assert lower == upper
   return lower
 
 
+ITRANS_ALPHABET = (['a', 'aa', 'i', 'ii', 'u', 'uu', 'Ri', 'RI',
+                    'Li', 'LI', 'e', 'ai', 'o', 'au', 'M', 'H',
+                    'k', 'kh', 'g', 'gh', '~N',
+                    'ch', 'Ch', 'j', 'jh', '~n',
+                    'T', 'Th', 'D', 'Dh', 'N',
+                    't', 'th', 'd', 'dh', 'n',
+                    'p', 'ph', 'b', 'bh', 'm',
+                    'y', 'r', 'l', 'v', 'sh', 'Sh', 's', 'h'])
+
+
 def ITRANSToSLP1Table():
-  return AlphabetToSLP1(['a', 'aa', 'i', 'ii', 'u', 'uu', 'Ri', 'RI',
-                         'Li', 'LI', 'e', 'ai', 'o', 'au', 'M', 'H',
-                         'k', 'kh', 'g', 'gh', '~N',
-                         'ch', 'Ch', 'j', 'jh', '~n',
-                         'T', 'Th', 'D', 'Dh', 'N',
-                         't', 'th', 'd', 'dh', 'n',
-                         'p', 'ph', 'b', 'bh', 'm',
-                         'y', 'r', 'l', 'v', 'sh', 'Sh', 's', 'h'])
+  return AlphabetToSLP1(ITRANS_ALPHABET)
 
 
 def MangledDevanagariToSLP1Table():
@@ -75,6 +76,7 @@ def TransliterateHK(text, pass_through=None):
       HKToSLP1Table()), text, pass_through)
 
 
+IASTToSLP1Table()
 blah = devanagari.Mangle('कगुद')
 print blah.encode('utf8')
 print [ch for ch in blah]
