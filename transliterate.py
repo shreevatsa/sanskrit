@@ -134,23 +134,32 @@ def ITRANSToSLP1Table():
                          'y', 'r', 'l', 'v', 'sh', 'Sh', 's', 'h'])
 
 
+def DevanagariNonAVowels():
+  return 'आइईउऊऋॠऌॡएऐओऔ'
+
+
 def DevanagariVirama():
   return '्'
+
+
+def DevanagariConsonants():
+  return 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'
 
 
 def NormaliseDevanagari(text):
   """Normalise text in Devanāgari."""
   # The wrinkle here is that Unicode Devanāgari stores 'ki' as 'ka+vowel sign i'
   # and 'k' as 'ka + virāma' etc.
-  consonants = '[कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह]'
+  consonants = '[' + DevanagariConsonants() + ']'
   vowel_signs = ''.join(
       ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ'])
-  vowels = 'आइईउऊऋॠऌॡएऐओऔ'
+  vowels = DevanagariNonAVowels()
   signs_to_vowels = dict(zip(vowel_signs, vowels))
+  virama = DevanagariVirama()
 
   # consonant + vowel sign -> consonant + virāma + vowel sign
   def Replacer(match):
-    return match.group(1) + DevanagariVirama() + signs_to_vowels[match.group(2)]
+    return match.group(1) + virama + signs_to_vowels[match.group(2)]
   text = re.sub('(' + consonants + ')([' + vowel_signs + '])', Replacer, text)
   # Check that no more vowel signs exist
   if re.search(vowel_signs, text):
@@ -158,15 +167,19 @@ def NormaliseDevanagari(text):
     return None
 
   # consonant + [not virama] -> consonant + virama + 'a'
-  text = re.sub('(' + consonants + ')([^' + DevanagariVirama() + '])',
-                r'\g<1>' + DevanagariVirama() + 'अ' + r'\g<2>', text)
-  text = re.sub('(' + consonants + ')$',
-                r'\g<1>' + DevanagariVirama() + 'अ', text)
+  text = re.sub('(' + consonants + ')([^' + virama + '])',
+                r'\g<1>' + virama + 'अ' + r'\g<2>', text)
+  text = re.sub('(' + consonants + ')$', r'\g<1>' + virama + 'अ', text)
   # Check that no more consonants exist that are not followed by space
   for c in re.finditer(consonants, text):
-    assert text[c.start() + 1] == DevanagariVirama()
+    assert text[c.start() + 1] == virama
 
   return text
+
+
+def NormalisedDevanagariToSLP1Table():
+  vowels = DevanagariNonAVowels()
+  return AlphabetToSLP1(list('अ' + vowels + 'ंः'))
 
 
 print MakeStateMachine(HKToSLP1Table())
