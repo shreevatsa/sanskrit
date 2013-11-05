@@ -33,8 +33,7 @@ seeing that character, which state to go to, and how many characters to consume.
 
 from __future__ import unicode_literals
 
-import logging
-import re
+import devanagari
 
 
 def MakeStateMachine(table):
@@ -134,64 +133,18 @@ def ITRANSToSLP1Table():
                          'y', 'r', 'l', 'v', 'sh', 'Sh', 's', 'h'])
 
 
-def DevanagariNonAVowels():
-  return 'आइईउऊऋॠऌॡएऐओऔ'
-
-
-def DevanagariVirama():
-  return '्'
-
-
-def DevanagariConsonants():
-  return 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'
-
-
-def NormaliseDevanagari(text):
-  """Normalise text in Devanāgari."""
-  # The wrinkle here is that Unicode Devanāgari stores 'ki' as 'ka+vowel sign i'
-  # and 'k' as 'ka + virāma' etc.
-  consonants = '[' + DevanagariConsonants() + ']'
-  vowel_signs = ''.join(
-      ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ'])
-  vowels = DevanagariNonAVowels()
-  signs_to_vowels = dict(zip(vowel_signs, vowels))
-  virama = DevanagariVirama()
-
-  # consonant + vowel sign -> consonant + virāma + vowel sign
-  def Replacer(match):
-    return match.group(1) + virama + signs_to_vowels[match.group(2)]
-  text = re.sub('(' + consonants + ')([' + vowel_signs + '])', Replacer, text)
-  # Check that no more vowel signs exist
-  if re.search(vowel_signs, text):
-    logging.error('Error in Devanāgari text: Stray vowel signs.')
-    return None
-
-  # consonant + [not virama] -> consonant + virama + 'a'
-  text = re.sub('(' + consonants + ')([^' + virama + '])',
-                r'\g<1>' + virama + 'अ' + r'\g<2>', text)
-  text = re.sub('(' + consonants + ')$', r'\g<1>' + virama + 'अ', text)
-  # Check that no more consonants exist that are not followed by space
-  for c in re.finditer(consonants, text):
-    assert text[c.start() + 1] == virama
-
-  return text
-
-
 def NormalisedDevanagariToSLP1Table():
-  vowels = DevanagariNonAVowels()
-  return AlphabetToSLP1(list('अ' + vowels + 'ंः') +
-                        [s + DevanagariVirama() for s in DevanagariConsonants()]
-                       )
+  return AlphabetToSLP1(devanagari.Alphabet())
 
 
 def TransliterateDevanagari(text):
-  text = NormaliseDevanagari(text)
+  text = devanagari.Normalise(text)
   return Transliterate(MakeStateMachine(NormalisedDevanagariToSLP1Table()),
                        text)
 
 
 print MakeStateMachine(HKToSLP1Table())
 print MakeStateMachine(IASTToSLP1Table())
-blah = NormaliseDevanagari('कगुद')
+blah = devanagari.Normalise('कगुद')
 print blah, [ch for ch in blah]
 print TransliterateDevanagari('कगुद')
