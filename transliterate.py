@@ -33,6 +33,8 @@ seeing that character, which state to go to, and how many characters to consume.
 
 from __future__ import unicode_literals
 
+import re
+
 
 def MakeStateMachine(table):
   """Makes SM from a dict like {'a':'अ', 'A':'आ', 'ai':'ऐ', 'au':'औ'}."""
@@ -61,7 +63,7 @@ def FirstLongestMatch(state_machine, text):
   return (num_matched, replacement)
 
 
-def Transliterate(state_machine, text, pass_through=set("-' ")):
+def Transliterate(state_machine, text, pass_through="-' "):
   """Transliterates text using the state machine."""
   transliterated = ''
   unparsed_positions = set()
@@ -120,5 +122,29 @@ def IASTToSLP1Table():
   return lower
 
 
+def DevanagariVirama():
+  return '्'
+
+
+def DevanagariToSLP1(text):
+  """Transliterate Devanagari to SLP1."""
+  # The wrinkle here is that Unicode Devanāgari stores 'ki' as 'ka+vowel sign i'
+  # and 'k' as 'ka + virāma' etc.
+  consonants = 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'
+  vowel_signs = ''.join(
+      ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ'])
+  vowels = 'आइईउऊऋॠऌॡएऐओऔ'
+  signs_to_vowels = dict(zip(vowel_signs, vowels))
+
+  # consonant + vowel sign -> consonant + virāma + vowel sign
+  def Replacer(match):
+    return match.group(1) + DevanagariVirama() + signs_to_vowels[match.group(2)]
+  text = re.sub('([' + consonants + '])([' + vowel_signs + '])',
+                Replacer, text)
+  return text
+
+
 print MakeStateMachine(HKToSLP1Table())
 print MakeStateMachine(IASTToSLP1Table())
+blah = DevanagariToSLP1('कगुद')
+print blah, [ch for ch in blah]
