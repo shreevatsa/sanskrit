@@ -51,8 +51,8 @@ def MetricalPattern(text):
   text = re.sub(long_vowel + consonant + '*', '+', text)
   # A short vowel followed by multiple (>=2) consonants is a guru
   text = re.sub(short_vowel + consonant + '{2,}', '+', text)
-  # TODO(shreevatsa): Should short_vowel + visarga be special-cased to guru?
-  text = re.sub(short_vowel + 'H$', '+', text)
+  # # TODO(shreevatsa): Should short_vowel + visarga be special-cased to guru?
+  # text = re.sub(short_vowel + 'H$', '+', text)
   # Any short vowel still left is a laghu; remove it and following consonant
   text = re.sub(short_vowel + consonant + '?', '-', text)
   assert re.match('^[+-]*$', text), (orig_text, text)
