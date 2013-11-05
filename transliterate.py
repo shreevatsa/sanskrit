@@ -25,7 +25,7 @@ when you see 'k', go into a state where
   consumed both characters)
 
 - if the next character is anything else, output 'k', and go to the default
-  state *without* consuming the character.
+  state (having consumed only the 'k').
 
 So each "state" is a dict containing two values for every "key" (character): on
 seeing that character, which state to go to, and how many characters to consume.
