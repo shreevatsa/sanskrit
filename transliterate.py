@@ -61,7 +61,7 @@ def FirstLongestMatch(state_machine, text):
   return (num_matched, replacement)
 
 
-def Transliterate(state_machine, text, pass_through=None):
+def Transliterate(state_machine, text):
   """Transliterates text using the state machine."""
   transliterated = ''
   unparsed_positions = set()
@@ -70,10 +70,7 @@ def Transliterate(state_machine, text, pass_through=None):
     (num_matched, replacement) = FirstLongestMatch(state_machine,
                                                    text[num_parsed:])
     if num_matched == 0:
-      if pass_through and text[num_parsed] in pass_through:
-        transliterated += text[num_parsed]
-      else:
-        unparsed_positions.add(num_parsed)
+      unparsed_positions.add(num_parsed)
       num_parsed += 1
     else:
       transliterated += replacement

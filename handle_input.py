@@ -13,15 +13,21 @@ def TransliterateAndClean(text):
   """Transliterates text to SLP1, removing all other characters."""
   orig_text = text
   known_chars = " 0123456789'./$&%{}|-!"
-  (text, rejects) = transliteration_data.TransliterateHK(
-      text, pass_through=known_chars)
+  (text, rejects) = transliteration_data.DetectAndTransliterate(text)
+
+  underline = ''
   if rejects:
+    for i in range(len(orig_text)):
+      if i in rejects and orig_text[i] not in known_chars:
+        underline += '^'
+      else:
+        underline += ' '
+  if underline.strip():
     print 'Unknown characters are ignored:'
     print orig_text
-    print ''.join('^' if i in rejects else ' ' for i in range(len(orig_text)))
-  text = simple_utils.RemoveChars(text, known_chars)
-  valid = slp1.ALPHABET
-  assert not re.search('[^%s]' % valid, text), text
+    print underline
+
+  assert not re.search('[^%s]' % slp1.ALPHABET, text), text
   return text
 
 
