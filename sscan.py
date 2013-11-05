@@ -89,6 +89,7 @@ def IdentifyMetre(verse):
 
 def IdentifyFromLines(input_lines):
   """Take a bunch of verse lines (in HK) as input, and identify metre."""
+  input_lines = handle_input.CleanLines(input_lines)
   cleaned_lines = []
   for line in input_lines:
     line = line.strip()
@@ -114,5 +115,4 @@ def InitializeData():
 if __name__ == '__main__':
   InitializeData()
   lines = sys.stdin.readlines()
-  lines = handle_input.CleanLines(lines)
   IdentifyFromLines(lines)
