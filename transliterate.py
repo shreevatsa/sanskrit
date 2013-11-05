@@ -133,18 +133,17 @@ def ITRANSToSLP1Table():
                          'y', 'r', 'l', 'v', 'sh', 'Sh', 's', 'h'])
 
 
-def NormalisedDevanagariToSLP1Table():
+def MangledDevanagariToSLP1Table():
   return AlphabetToSLP1(devanagari.Alphabet())
 
 
 def TransliterateDevanagari(text):
-  text = devanagari.Normalise(text)
-  return Transliterate(MakeStateMachine(NormalisedDevanagariToSLP1Table()),
-                       text)
+  text = devanagari.Mangle(text)
+  return Transliterate(MakeStateMachine(MangledDevanagariToSLP1Table()), text)
 
 
 print MakeStateMachine(HKToSLP1Table())
 print MakeStateMachine(IASTToSLP1Table())
-blah = devanagari.Normalise('कगुद')
+blah = devanagari.Mangle('कगुद')
 print blah, [ch for ch in blah]
 print TransliterateDevanagari('कगुद')

@@ -29,7 +29,7 @@ def Alphabet():
   return list('अ' + NonAVowels() + 'ंः') + [s + Virama() for s in Consonants()]
 
 
-def Normalise(text):
+def Mangle(text):
   """Normalise text in Devanāgari."""
   consonants = '[' + Consonants() + ']'
   vowel_signs = ''.join(
