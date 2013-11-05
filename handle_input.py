@@ -27,4 +27,10 @@ def CleanHK(text):
 
 
 def CleanLines(lines):
-  return lines
+  cleaned_lines = []
+  for line in lines:
+    line = line.strip()
+    if not line: continue
+    line = CleanHK(line)
+    cleaned_lines.append(line)
+  return cleaned_lines
