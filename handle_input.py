@@ -1,5 +1,7 @@
 """Utils to clean up input."""
 
+from __future__ import unicode_literals
+
 import re
 
 import simple_utils

@@ -31,6 +31,8 @@ So each "state" is a dict containing two values for every "key" (character): on
 seeing that character, which state to go to, and how many characters to consume.
 """
 
+from __future__ import unicode_literals
+
 
 def MakeStateMachine(table):
   """Makes SM from a dict like {'a':'अ', 'A':'आ', 'ai':'ऐ', 'au':'औ'}."""
@@ -59,7 +61,7 @@ def FirstLongestMatch(state_machine, text):
   return (num_matched, replacement)
 
 
-def Transliterate(state_machine, text, pass_through = set("-' ")):
+def Transliterate(state_machine, text, pass_through=set("-' ")):
   """Transliterates text using the state machine."""
   transliterated = ''
   unparsed_positions = set()
@@ -81,7 +83,8 @@ def Transliterate(state_machine, text, pass_through = set("-' ")):
 
 def AlphabetToSLP1(alphabet):
   """Table, given a transliteration convention's alphabet in standard order."""
-  return dict(zip(alphabet, 'aAiIuUfFxXeEoOMHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh'))
+  return dict(zip(alphabet,
+                  'aAiIuUfFxXeEoOMHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh'))
 
 
 def HKToSLP1Table():
@@ -92,7 +95,30 @@ def HKToSLP1Table():
                          'T', 'Th', 'D', 'Dh', 'N',
                          't', 'th', 'd', 'dh', 'n',
                          'p', 'ph', 'b', 'bh', 'm'] +
-                         list('yrlvzSsh'))
+                        list('yrlvzSsh'))
+
+
+def IASTToSLP1Table():
+  """Transliteration table from IAST to SLP1."""
+  lower = AlphabetToSLP1(list('aāiīuūṛṝḷḹe') + ['ai', 'o', 'au', 'ṃ', 'ḥ'] +
+                         ['k', 'kh', 'g', 'gh', 'ṅ',
+                          'c', 'ch', 'j', 'jh', 'ñ',
+                          'ṭ', 'ṭh', 'ḍ', 'ḍh', 'ṇ',
+                          't', 'th', 'd', 'dh', 'n',
+                          'p', 'ph', 'b', 'bh', 'm',
+                          'y', 'r', 'l', 'v', 'ś', 'ṣ', 's', 'h'])
+  upper = AlphabetToSLP1(list('AĀIĪUŪṚṜḶḸE') + ['AI', 'O', 'AU', 'Ṃ', 'Ḥ'] +
+                         ['K', 'Kh', 'G', 'Gh', 'Ṅ',
+                          'C', 'Ch', 'J', 'Jh', 'Ñ',
+                          'Ṭ', 'Ṭh', 'Ḍ', 'Ḍh', 'Ṇ',
+                          'T', 'Th', 'D', 'Dh', 'N',
+                          'P', 'Ph', 'B', 'Bh', 'M',
+                          'Y', 'R', 'L', 'V', 'Ś', 'Ṣ', 'S', 'H'])
+  lower.update(upper)
+  upper.update(lower)
+  assert lower == upper
+  return lower
 
 
 print MakeStateMachine(HKToSLP1Table())
+print MakeStateMachine(IASTToSLP1Table())
