@@ -114,4 +114,5 @@ def InitializeData():
 if __name__ == '__main__':
   InitializeData()
   lines = sys.stdin.readlines()
+  lines = handle_input.CleanLines(lines)
   IdentifyFromLines(lines)

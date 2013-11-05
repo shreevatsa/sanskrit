@@ -26,3 +26,5 @@ def CleanHK(text):
   return text
 
 
+def CleanLines(lines):
+  return lines
