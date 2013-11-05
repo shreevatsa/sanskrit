@@ -79,78 +79,20 @@ def Transliterate(state_machine, text, pass_through = set("-' ")):
   return (transliterated, unparsed_positions)
 
 
-def TableToSLP1FromAlphabet(alphabet):
+def AlphabetToSLP1(alphabet):
   """Table, given a transliteration convention's alphabet in standard order."""
   return dict(zip(alphabet, 'aAiIuUfFxXeEoOMHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh'))
 
 
-def HKToSLP1TableNew():
-  return TableToSLP1FromAlphabet(list('aAiIuUR') +
-                                 ['RR', 'lR', 'lRR', 'e',
-                                  'ai', 'o', 'au', 'M', 'H',
-                                  'k', 'kh', 'g', 'gh', 'G',
-                                  'c', 'ch', 'j', 'jh', 'J',
-                                  'T', 'Th', 'D', 'Dh', 'N',
-                                  't', 'th', 'd', 'dh', 'n',
-                                  'p', 'ph', 'b', 'bh', 'm'] +
-                                  list('yrlvzSsh'))
-
-
 def HKToSLP1Table():
-  return {
-      'a': 'a',
-      'A': 'A',
-      'i': 'i',
-      'I': 'I',
-      'u': 'u',
-      'U': 'U',
-      'R': 'f',
-      'RR': 'F',
-      'lR': 'x',
-      'lRR': 'X',
-      'e': 'e',
-      'ai': 'E',
-      'o': 'o',
-      'au': 'O',
-      'M': 'M',
-      'H': 'H',
-      'k': 'k',
-      'kh': 'K',
-      'g': 'g',
-      'gh': 'G',
-      'G': 'N',
-      'c': 'c',
-      'ch': 'C',
-      'j': 'j',
-      'jh': 'J',
-      'J': 'Y',
-      'T': 'w',
-      'Th': 'W',
-      'D': 'q',
-      'Dh': 'Q',
-      'N': 'R',
-      't': 't',
-      'th': 'T',
-      'd': 'd',
-      'dh': 'D',
-      'n': 'n',
-      'p': 'p',
-      'ph': 'P',
-      'b': 'b',
-      'bh': 'B',
-      'm': 'm',
-      'y': 'y',
-      'r': 'r',
-      'l': 'l',
-      'v': 'v',
-      'z': 'S',
-      'S': 'z',
-      's': 's',
-      'h': 'h',
-  }
+  return AlphabetToSLP1(list('aAiIuUR') +
+                        ['RR', 'lR', 'lRR', 'e', 'ai', 'o', 'au', 'M', 'H',
+                         'k', 'kh', 'g', 'gh', 'G',
+                         'c', 'ch', 'j', 'jh', 'J',
+                         'T', 'Th', 'D', 'Dh', 'N',
+                         't', 'th', 'd', 'dh', 'n',
+                         'p', 'ph', 'b', 'bh', 'm'] +
+                         list('yrlvzSsh'))
 
 
-print HKToSLP1Table()
-print HKToSLP1TableNew()
-assert HKToSLP1Table() == HKToSLP1TableNew()
 print MakeStateMachine(HKToSLP1Table())
