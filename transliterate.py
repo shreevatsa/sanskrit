@@ -33,6 +33,7 @@ seeing that character, which state to go to, and how many characters to consume.
 
 from __future__ import unicode_literals
 
+import logging
 import re
 
 
@@ -122,15 +123,26 @@ def IASTToSLP1Table():
   return lower
 
 
+def ITRANSToSLP1Table():
+  return AlphabetToSLP1(['a', 'aa', 'i', 'ii', 'u', 'uu', 'Ri', 'RI',
+                         'Li', 'LI', 'e', 'ai', 'o', 'au', 'M', 'H',
+                         'k', 'kh', 'g', 'gh', '~N',
+                         'ch', 'Ch', 'j', 'jh', '~n',
+                         'T', 'Th', 'D', 'Dh', 'N',
+                         't', 'th', 'd', 'dh', 'n',
+                         'p', 'ph', 'b', 'bh', 'm',
+                         'y', 'r', 'l', 'v', 'sh', 'Sh', 's', 'h'])
+
+
 def DevanagariVirama():
   return '्'
 
 
-def DevanagariToSLP1(text):
-  """Transliterate Devanagari to SLP1."""
+def NormaliseDevanagari(text):
+  """Normalise text in Devanāgari."""
   # The wrinkle here is that Unicode Devanāgari stores 'ki' as 'ka+vowel sign i'
   # and 'k' as 'ka + virāma' etc.
-  consonants = 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'
+  consonants = '[कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह]'
   vowel_signs = ''.join(
       ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ'])
   vowels = 'आइईउऊऋॠऌॡएऐओऔ'
@@ -139,12 +151,25 @@ def DevanagariToSLP1(text):
   # consonant + vowel sign -> consonant + virāma + vowel sign
   def Replacer(match):
     return match.group(1) + DevanagariVirama() + signs_to_vowels[match.group(2)]
-  text = re.sub('([' + consonants + '])([' + vowel_signs + '])',
-                Replacer, text)
+  text = re.sub('(' + consonants + ')([' + vowel_signs + '])', Replacer, text)
+  # Check that no more vowel signs exist
+  if re.search(vowel_signs, text):
+    logging.error('Error in Devanāgari text: Stray vowel signs.')
+    return None
+
+  # consonant + [not virama] -> consonant + virama + 'a'
+  text = re.sub('(' + consonants + ')([^' + DevanagariVirama() + '])',
+                '\g<1>' + DevanagariVirama() + 'अ' + '\g<2>', text)
+  text = re.sub('(' + consonants + ')$',
+                '\g<1>' + DevanagariVirama() + 'अ', text)
+  # Check that no more consonants exist that are not followed by space
+  for c in re.finditer(consonants, text):
+    assert text[c.start() + 1] == DevanagariVirama()
+
   return text
 
 
 print MakeStateMachine(HKToSLP1Table())
 print MakeStateMachine(IASTToSLP1Table())
-blah = DevanagariToSLP1('कगुद')
+blah = NormaliseDevanagari('कगुद')
 print blah, [ch for ch in blah]
