@@ -48,8 +48,8 @@ def IASTToSLP1Table():
   return lower
 
 
-ITRANS_ALPHABET = (['a', 'aa', 'i', 'ii', 'u', 'uu', 'Ri', 'RI',
-                    'Li', 'LI', 'e', 'ai', 'o', 'au', 'M', 'H',
+ITRANS_ALPHABET = (['a', 'aa', 'i', 'ii', 'u', 'uu', 'RRi', 'RRI',
+                    'LLi', 'LLI', 'e', 'ai', 'o', 'au', 'M', 'H',
                     'k', 'kh', 'g', 'gh', '~N',
                     'ch', 'Ch', 'j', 'jh', '~n',
                     'T', 'Th', 'D', 'Dh', 'N',
@@ -59,7 +59,13 @@ ITRANS_ALPHABET = (['a', 'aa', 'i', 'ii', 'u', 'uu', 'Ri', 'RI',
 
 
 def ITRANSToSLP1Table():
-  return AlphabetToSLP1(ITRANS_ALPHABET)
+  table = AlphabetToSLP1(ITRANS_ALPHABET)
+  alternatives = [('aa', 'A'), ('ii', 'I'), ('uu', 'U'), ('RRi', 'R^i'),
+                  ('RRI', 'R^I'), ('LLi', 'L^i'), ('LLI', 'L^I'),
+                  ('~N', 'N^'), ('~n', 'JN'), ('v', 'w')]
+  for (letter, alternative) in alternatives:
+    table[alternative] = table[letter]
+  return table
 
 
 def MangledDevanagariToSLP1StateMachine():
@@ -75,7 +81,8 @@ def TransliterateHK(text, pass_through=None):
   return transliterate.Transliterate(HKToSLP1StateMachine(), text, pass_through)
 
 
-IASTToSLP1Table()
+print IASTToSLP1Table()
+print ITRANSToSLP1Table()
 blah = devanagari.Mangle('कगुद')
 print blah.encode('utf8')
 print [ch for ch in blah]
