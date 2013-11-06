@@ -33,6 +33,8 @@ seeing that character, which state to go to, and how many characters to consume.
 
 from __future__ import unicode_literals
 
+import logging
+
 
 def MakeStateMachine(table):
   """Makes SM from a dict like {'a':'अ', 'A':'आ', 'ai':'ऐ', 'au':'औ'}."""
