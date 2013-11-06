@@ -77,7 +77,7 @@ def IdentifyMetre(verse):
 
   for known_pattern, known_metre in metrical_data.known_metres.iteritems():
     if re.match('^' + known_pattern + '$', full_verse):
-      print ('Identified as %s.' % known_metre)
+      print 'Identified as %s.' % known_metre
       return known_metre
 
   print 'Metre unknown, trying by lines: '

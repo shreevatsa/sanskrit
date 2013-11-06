@@ -1,3 +1,5 @@
+"""Reads from a GRETIL UTF-8 encoded HTML file."""
+
 from __future__ import unicode_literals
 
 import re
@@ -6,18 +8,19 @@ import sys
 import handle_input
 import sscan
 
+
 def RemoveHTML(text):
   return re.sub('<BR>', '', text)
 
 
 def RemoveVerseNumber(text):
-  return re.subn('[/|]{2}[ \d.a-zA-z}_*]*[/|]{2}$', '', text)
+  return re.subn(r'[/|]{2}[ \d.a-zA-z}_*]*[/|]{2}$', '', text)
 
 
 if __name__ == '__main__':
   lines = []
   seen_separators = 0
-  for l in sys.stdin.readlines():
+  for l in sys.stdin:
     l = l.decode('utf8')
     l = RemoveHTML(l)
     l = l.strip()
