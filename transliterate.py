@@ -75,9 +75,8 @@ def Transliterate(state_machine, text, ignore=None):
       if ignore and text[num_parsed] in ignore:
         pass
       else:
-        logging.debug('Could not parse (%s) %s (%s)', (text[:num_parsed],
-                                                       text[num_parsed],
-                                                       text[num_parsed + 1:]))
+        logging.debug('Could not parse (%s) %s (%s)', text[:num_parsed],
+                      text[num_parsed], text[num_parsed + 1:])
         unparsed_positions.add(num_parsed)
       num_parsed += 1
     else:
