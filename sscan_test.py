@@ -17,10 +17,10 @@ def BreakIntoVerses(input_lines):
 lines = [l.strip() for l in sys.stdin.readlines()]
 counter = 0
 for verse_lines in BreakIntoVerses(lines):
-  counter += 1
   if verse_lines == ['{UttarameghaH}']:
     continue
   assert len(verse_lines) == 4, verse_lines
+  counter += 1
 
   print 'Verse %d: ' % counter
   print '\n\t\t\t\t\t\t'.join([''] + verse_lines)
