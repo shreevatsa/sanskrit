@@ -14,12 +14,12 @@ MAIN_PAGE_HTML = """\
 <html>
   <body>
     <p>
-      Type a Sanskrit verse into the box below
-      (in Harvard-Kyoto format: can use e.g.
-      <a href="http://learnsanskrit.org/tools/sanscript">this</a> or
-      <a href=
-      "http://shreevatsa.appspot.com/sanskrit/transliterate.html">this</a>
-      to transliterate), and click the button.
+      Type a Sanskrit verse into the box below and click the button.
+      <br/>
+      (The input can be in either Devanagari, IAST, Harvard-Kyoto, or
+      ITRANS format.)
+    </p>
+
     <form action="/identify" method="post">
       <div><textarea name="input_verse" rows="6" cols="80"></textarea></div>
       <div><input type="submit" value="Identify verse"></div>
