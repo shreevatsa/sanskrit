@@ -72,7 +72,7 @@ def IdentitfyPattern(pattern):
 def IdentifyMetre(verse):
   """Given metrical pattern of entire verse, identifies metre."""
   full_verse = ''.join(verse)
-  print 'There are %d ( = %s) syllables.' % (
+  print 'There are %d (%s) syllables.' % (
       len(full_verse), ' + '.join(str(len(line)) for line in verse))
 
   for known_pattern, known_metre in metrical_data.known_metres.iteritems():

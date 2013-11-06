@@ -4,10 +4,20 @@
 
 from __future__ import unicode_literals
 
+import itertools
 import re
 
 import slp1
 import transliteration_data
+
+
+def BreakIntoVerses(input_lines):
+  verses = []
+  for key, group in itertools.groupby(input_lines, bool):
+    if not key:
+      continue
+    verses.append(list(group))
+  return verses
 
 
 def TransliterateAndClean(text):
