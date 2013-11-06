@@ -5,13 +5,19 @@ import sys
 
 import sscan
 
+
+def BreakIntoVerses(input_lines):
+  verses = []
+  for key, group in itertools.groupby(input_lines, bool):
+    if not key:
+      continue
+    verses.append(list(group))
+  return verses
+
 lines = [l.strip() for l in sys.stdin.readlines()]
 counter = 0
-for key, group in itertools.groupby(lines, bool):
-  if not key:
-    continue
+for verse_lines in BreakIntoVerses(lines):
   counter += 1
-  verse_lines = list(group)
   if verse_lines == ['{UttarameghaH}']:
     continue
   assert len(verse_lines) == 4, verse_lines
