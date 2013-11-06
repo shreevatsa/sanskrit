@@ -36,7 +36,7 @@ def Alphabet():
 def Mangle(text):
   """Normalises text in Devanāgari."""
   orig_text = text
-  consonants = '[' + Consonants() + ']'
+  consonant = '[' + Consonants() + ']'
   vowel_signs = ''.join(VowelSigns())
   vowels = NonAVowels()
   signs_to_vowels = dict(zip(vowel_signs, vowels))
@@ -45,19 +45,17 @@ def Mangle(text):
   # consonant + vowel sign -> consonant + virāma + vowel
   def Replacer(match):
     return match.group(1) + virama + signs_to_vowels[match.group(2)]
-  text = re.sub('(' + consonants + ')([' + vowel_signs + '])', Replacer, text)
+  text = re.sub('(' + consonant + ')([' + vowel_signs + '])', Replacer, text)
   # Check that no more vowel signs exist
   if re.search(vowel_signs, text):
     logging.error('Error in Devanāgari text: Stray vowel signs.')
     return None
 
   # consonant + [not virama] -> consonant + virama + 'a'
-  text = re.sub('(' + consonants + ')([^' + virama + '])',
-                r'\g<1>' + virama + 'अ' + r'\g<2>', text)
-  text = re.sub('(' + consonants + ')$', r'\g<1>' + virama + 'अ', text)
+  text = re.sub('(%s)(?!%s)' % (consonant, virama), r'\g<1>%sअ' % virama, text)
   # Check that no more consonants exist that are not followed by space
-  for c in re.finditer(consonants, text):
-    assert text[c.start() + 1] == virama
+  for c in re.finditer(consonant, text):
+    assert text[c.start() + 1] == virama, (text, c.start())
 
   assert orig_text == UnMangle(text), (orig_text, text, UnMangle(text))
   return text
