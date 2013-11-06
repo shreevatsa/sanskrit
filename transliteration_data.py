@@ -75,28 +75,24 @@ def MangledDevanagariToSLP1StateMachine():
   return transliterate.MakeStateMachine(AlphabetToSLP1(devanagari.Alphabet()))
 
 
-def TransliterateDevanagari(text):
+def TransliterateDevanagari(text, ignore=None):
   return transliterate.Transliterate(MangledDevanagariToSLP1StateMachine(),
-                                     devanagari.Mangle(text))
+                                     devanagari.Mangle(text), ignore)
 
 
-def TransliterateHK(text):
-  return transliterate.Transliterate(HKToSLP1StateMachine(), text)
-
-
-def DetectAndTransliterate(text):
+def DetectAndTransliterate(text, ignore=None):
   """Transliterates text to SLP1, after guessing what script it is."""
   characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
   characteristic_iast = '[āīūṛṝḷḹṅñṭḍṇśṣ]'
   characteristic_itrans = 'aa|ii|uu|R^|~N|~n|N^'
   if re.search(characteristic_devanagari, text):
     logging.info('Reading as Devanāgari.')
-    return TransliterateDevanagari(text)
+    return TransliterateDevanagari(text, ignore)
   if re.search(characteristic_iast, text):
     logging.info('Reading as IAST.')
-    return transliterate.Transliterate(IASTToSLP1StateMachine(), text)
+    return transliterate.Transliterate(IASTToSLP1StateMachine(), text, ignore)
   if re.search(characteristic_itrans, text):
     logging.info('Reading as ITRANS.')
-    return transliterate.Transliterate(ITRANSToSLP1StateMachine(), text)
+    return transliterate.Transliterate(ITRANSToSLP1StateMachine(), text, ignore)
   logging.info('Reading as Harvard-Kyoto.')
-  return transliterate.Transliterate(HKToSLP1StateMachine(), text)
+  return transliterate.Transliterate(HKToSLP1StateMachine(), text, ignore)

@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
+
 """Utils to clean up input."""
 
 from __future__ import unicode_literals
 
 import re
 
-import simple_utils
 import slp1
 import transliteration_data
 
@@ -12,18 +13,20 @@ import transliteration_data
 def TransliterateAndClean(text):
   """Transliterates text to SLP1, removing all other characters."""
   orig_text = text
-  known_chars = " 0123456789'./$&%{}|-!"
-  (text, rejects) = transliteration_data.DetectAndTransliterate(text)
+  ignore = """ 0123456789'"./$&%{}|-!""" + 'ऽ।॥०१२३४५६७८९'
+  (text, rejects) = transliteration_data.DetectAndTransliterate(text, ignore)
 
   underline = ''
+  bad_chars = []
   if rejects:
     for i in range(len(orig_text)):
-      if i in rejects and orig_text[i] not in known_chars:
+      if i in rejects and orig_text[i] not in ignore:
         underline += '^'
+        bad_chars.append(orig_text[i])
       else:
         underline += ' '
   if underline.strip():
-    print 'Unknown characters are ignored:'
+    print 'Unknown characters are ignored: %s' % (' '.join(bad_chars))
     print orig_text
     print underline
 

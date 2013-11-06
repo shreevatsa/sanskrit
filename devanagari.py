@@ -58,6 +58,7 @@ def Mangle(text):
     assert text[c.start() + 1] == virama, (text, c.start())
 
   assert orig_text == UnMangle(text), (orig_text, text, UnMangle(text))
+  logging.debug('Mangled to: %s', text)
   return text
 
 
