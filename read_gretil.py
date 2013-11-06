@@ -23,7 +23,7 @@ if __name__ == '__main__':
     l = l.strip()
     if seen_separators < 2 and re.search('<![-]{50,}->', l):
       seen_separators += 1
-    elif seen_separators == 2:
+    elif seen_separators == 2 and not l.startswith('<'):
       lines.append(l)
 
   verses = handle_input.BreakIntoVerses(lines)
