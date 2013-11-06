@@ -35,6 +35,7 @@ def Alphabet():
 
 def Mangle(text):
   """Normalises text in Devanāgari."""
+  text = re.sub('ळ', 'ल', text)
   orig_text = text
   consonant = '[' + Consonants() + ']'
   vowel_signs = ''.join(VowelSigns())

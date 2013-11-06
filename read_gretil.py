@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
   verses = handle_input.BreakIntoVerses(lines)
   for verse in verses:
-    print '\n\t\t\t\t\t\t'.join([''] + verse)
+    print '\n\t\t\t\t\t\t'.join([''] + verse).encode('utf8')
     verse = [RemoveVerseNumber(l).strip() for l in verse]
     sscan.IdentifyFromLines(verse)
     print
