@@ -108,5 +108,5 @@ def InitializeData():
 
 if __name__ == '__main__':
   InitializeData()
-  lines = sys.stdin.readlines()
+  lines = [l.decode('utf8') for l in sys.stdin]
   IdentifyFromLines(lines)
