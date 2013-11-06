@@ -15,6 +15,5 @@ for verse_lines in handle_input.BreakIntoVerses(lines):
 
   print 'Verse %d: ' % counter
   print '\n\t\t\t\t\t\t'.join([''] + verse_lines)
-  sscan.InitializeData()
   sscan.IdentifyFromLines(verse_lines)
   print
