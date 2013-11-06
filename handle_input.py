@@ -13,7 +13,7 @@ import transliteration_data
 def TransliterateAndClean(text):
   """Transliterates text to SLP1, removing all other characters."""
   orig_text = text
-  ignore = """ 0123456789'"./$&%{}|-!""" + 'ऽ।॥०१२३४५६७८९'
+  ignore = r""" 0123456789'".\/$&%{}|-!""" + 'ऽ।॥०१२३४५६७८९'
   (text, rejects) = transliteration_data.DetectAndTransliterate(text, ignore)
 
   underline = ''
