@@ -7,13 +7,14 @@ import sscan
 
 lines = [l.strip() for l in sys.stdin.readlines()]
 counter = 0
-for verse_lines in handle_input.BreakIntoVerses(lines):
-  if verse_lines == ['{UttarameghaH}']:
+verses = handle_input.BreakIntoVerses(lines)
+for verse in verses:
+  if verse == ['{UttarameghaH}']:
     continue
-  assert len(verse_lines) == 4, verse_lines
+  assert len(verse) == 4, verse
   counter += 1
 
   print 'Verse %d: ' % counter
-  print '\n\t\t\t\t\t\t'.join([''] + verse_lines)
-  sscan.IdentifyFromLines(verse_lines)
+  print '\n\t\t\t\t\t\t'.join([''] + verse)
+  sscan.IdentifyFromLines(verse)
   print
