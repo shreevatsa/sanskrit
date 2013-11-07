@@ -17,7 +17,7 @@ def RemoveHTML(text):
 
 def RemoveVerseNumber(text):
   # return re.subn(r'[/|]{2}[ \d.a-zA-z}_*\-]*[/|]{2}$', '', text)
-  return re.subn(r'([/|।])\1.*', '', text)
+  return re.subn(r'(॥|([|।/])\2).*', '', text)
 
 
 def BreakIntoVerses(input_lines):
