@@ -46,6 +46,9 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda_odd' % (metre_name)
   for fully_specified_pattern in OptionsExpand(even_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda_even' % (metre_name)
+  for fully_specified_pattern in OptionsExpand(
+      odd_line_pattern + even_line_pattern):
+    known_patterns[fully_specified_pattern] = '%s_half' % metre_name
 
 
 def AddVishamavrtta(metre_name, line_patterns):
