@@ -16,7 +16,8 @@ def RemoveHTML(text):
 
 
 def RemoveVerseNumber(text):
-  return re.subn(r'[/|]{2}[ \d.a-zA-z}_*\-]*[/|]{2}$', '', text)
+  # return re.subn(r'[/|]{2}[ \d.a-zA-z}_*\-]*[/|]{2}$', '', text)
+  return re.subn(r'([/|])\1.*', '', text)
 
 
 def BreakIntoVerses(input_lines):
@@ -57,6 +58,10 @@ def CleanLines(lines):
   for line in lines:
     line = line.strip()
     if not line: continue
+    line = RemoveHTML(line).strip()
+    (line, n) = RemoveVerseNumber(line)
     line = TransliterateAndClean(line)
     cleaned_lines.append(line)
+    if n:
+      cleaned_lines.append('')
   return cleaned_lines
