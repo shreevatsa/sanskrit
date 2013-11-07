@@ -69,21 +69,31 @@ def IdentitfyPattern(pattern):
   return metrical_data.known_patterns.get(pattern, 'unknown')
 
 
+def MatraCount(pattern):
+  assert re.match('^[LG]*$', pattern)
+  return sum(2 if c == 'G' else 1 for c in pattern)
+
+
 def IdentifyMetre(verse):
   """Given metrical pattern of entire verse, identifies metre."""
   full_verse = ''.join(verse)
-  print 'There are %d (%s) syllables.' % (
-      len(full_verse), ' + '.join(str(len(line)) for line in verse))
 
   for known_pattern, known_metre in metrical_data.known_metres.iteritems():
     if re.match('^' + known_pattern + '$', full_verse):
       print 'Identified as %s.' % known_metre
       return known_metre
 
-  print 'Metre unknown, trying by lines: '
+  morae = [MatraCount(line) for line in verse]
+  if repr(morae) in metrical_data.known_morae:
+    known_metre = metrical_data.known_morae[repr(morae)]
+    print 'Identified as %s.' % known_metre
+    return known_metre
+  print 'Metre unknown. There are %d (%s) syllables (%d mātra units).' % (
+      len(full_verse), ' + '.join(str(len(line)) for line in verse), sum(morae))
   for i in range(len(verse)):
     line = verse[i]
-    print '  Line %d: pattern %s is %s' % (i + 1, line, IdentitfyPattern(line))
+    print '  Line %d: pattern %s (%d) is %s' % (i + 1, line, morae[i],
+                                                IdentitfyPattern(line))
 
 
 def IdentifyFromLines(input_lines):
@@ -95,7 +105,7 @@ def IdentifyFromLines(input_lines):
   for i in range(len(cleaned_lines)):
     line = MetricalPattern(cleaned_lines[i])
     if i % 2 and line.endswith('L'):
-      print 'Promoting last laghu of line %d to guru' % (i + 1)
+      # print 'Promoting last laghu of line %d to guru' % (i + 1)
       line = line[:-1] + 'G'
     pattern_lines.append(line)
   return IdentifyMetre(pattern_lines)

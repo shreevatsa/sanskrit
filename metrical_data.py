@@ -10,6 +10,7 @@ import simple_utils
 # TODO(shreevatsa): Make this pattern -> list, not pattern -> specific pāda type
 known_patterns = {}
 known_metres = {}
+known_morae = {}
 
 
 def OptionsExpand(pattern):
@@ -70,11 +71,14 @@ def AddVishamavrtta(metre_name, line_patterns):
   AddVrtta(metre_name, verse_pattern)
 
 
+def AddMatravrtta(metre_name, line_morae):
+  known_morae[repr(line_morae)] = metre_name
+
 def InitializeData():
   """Add all known metres to the data structures."""
   # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
   AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L .')
-  # AddMatravrtta('Āryā', '12 + 18 + 12 + 15')
+  AddMatravrtta('Āryā', [12, 18, 12, 15])
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
   AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
