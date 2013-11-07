@@ -84,7 +84,7 @@ def DetectAndTransliterate(text, ignore=None):
   """Transliterates text to SLP1, after guessing what script it is."""
   characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
   characteristic_iast = '[āīūṛṝḷḹṅñṭḍṇśṣ]'
-  characteristic_itrans = r'aa|ii|uu|[RrLl]\^[Ii]|~N|~n|N\^'
+  characteristic_itrans = r'aa|ii|uu|[RrLl]\^[Ii]|~N|~n|N\^|Sh'
   if re.search(characteristic_devanagari, text):
     logging.info('Reading as Devanāgari.')
     return TransliterateDevanagari(text, ignore)
