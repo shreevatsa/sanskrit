@@ -33,7 +33,9 @@ def AddSamavrtta(metre_name, each_line_pattern):
                                                    each_line_pattern)) * 2
   AddVrtta(metre_name, full_verse_pattern)
   for fully_specified_pattern in OptionsExpand(each_line_pattern):
-    known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
+    known_patterns[fully_specified_pattern] = '%s_pāda' % metre_name
+  for fully_specified_pattern in OptionsExpand(each_line_pattern * 2):
+    known_patterns[fully_specified_pattern] = '%s_half' % metre_name
 
 
 def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
