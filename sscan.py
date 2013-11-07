@@ -99,8 +99,11 @@ def IdentifyMetre(verse):
 def IdentifyFromLines(input_lines):
   """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
   InitializeData()
-  input_lines = handle_input.CleanLines(input_lines)
-  cleaned_lines = MoveConsonants(input_lines)
+  cleaned_lines = handle_input.CleanLines(input_lines)
+  print 'Cleaned up to: '
+  print '\n'.join(cleaned_lines)
+  cleaned_lines = MoveConsonants(cleaned_lines)
+
   pattern_lines = []
   for i in range(len(cleaned_lines)):
     line = MetricalPattern(cleaned_lines[i])
