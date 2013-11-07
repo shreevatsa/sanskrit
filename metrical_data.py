@@ -73,6 +73,11 @@ def AddVishamavrtta(metre_name, line_patterns):
 
 def AddMatravrtta(metre_name, line_morae):
   known_morae[repr(line_morae)] = metre_name
+  if len(line_morae) == 4:
+    # Not ideal (lossy), but input is often like this.
+    known_morae[repr([line_morae[0] + line_morae[1],
+                      line_morae[2] + line_morae[3]])] = metre_name
+
 
 def InitializeData():
   """Add all known metres to the data structures."""
