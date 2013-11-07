@@ -54,7 +54,7 @@ def TransliterateAndClean(text):
 
 
 def CleanLines(lines):
-  """Clean up the input lines (strip junk, transliterate, etc.)"""
+  """Clean up the input lines (strip junk, transliterate, break verses)."""
   cleaned_lines = []
   for line in lines:
     line = line.strip()
