@@ -54,7 +54,7 @@ class IdentifyPage(webapp2.RequestHandler):
     sys.stdout = stdout_new
     # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy)
     sscan.InitializeData()
-    sscan.IdentifyFromLines(input_verse.split('\n'))
+    metre = sscan.IdentifyFromLines(input_verse.split('\n'))
     output = stdout_new.getvalue()
     self.response.write(output)
     sys.stdout = stdout_original
