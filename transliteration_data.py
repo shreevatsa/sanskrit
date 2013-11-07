@@ -13,8 +13,12 @@ import transliterate
 
 
 def AlphabetToSLP1(alphabet):
-  """Table, given a transliteration convention's alphabet in standard order."""
+  """Table to SLP1, given a transliteration's alphabet in standard order."""
   return dict(zip(alphabet, slp1.ALPHABET))
+
+
+def SLP1ToAlphabet(alphabet):
+  return dict(zip(slp1.ALPHABET, alphabet))
 
 
 HK_ALPHABET = (list('aAiIuUR') + ['RR', 'lR', 'lRR', 'e', 'ai', 'o', 'au'] +
@@ -31,24 +35,32 @@ def HKToSLP1StateMachine():
   return transliterate.MakeStateMachine(AlphabetToSLP1(HK_ALPHABET))
 
 
+IAST_ALPHABET_LOWER = (list('aāiīuūṛṝḷḹe') + ['ai', 'o', 'au', 'ṃ', 'ḥ'] +
+                       ['k', 'kh', 'g', 'gh', 'ṅ',
+                        'c', 'ch', 'j', 'jh', 'ñ',
+                        'ṭ', 'ṭh', 'ḍ', 'ḍh', 'ṇ',
+                        't', 'th', 'd', 'dh', 'n',
+                        'p', 'ph', 'b', 'bh', 'm',
+                        'y', 'r', 'l', 'v', 'ś', 'ṣ', 's', 'h'])
+IAST_ALPHABET_UPPER = (list('AĀIĪUŪṚṜḶḸE') + ['AI', 'O', 'AU', 'Ṃ', 'Ḥ'] +
+                       ['K', 'Kh', 'G', 'Gh', 'Ṅ',
+                        'C', 'Ch', 'J', 'Jh', 'Ñ',
+                        'Ṭ', 'Ṭh', 'Ḍ', 'Ḍh', 'Ṇ',
+                        'T', 'Th', 'D', 'Dh', 'N',
+                        'P', 'Ph', 'B', 'Bh', 'M',
+                        'Y', 'R', 'L', 'V', 'Ś', 'Ṣ', 'S', 'H'])
+
+
 def IASTToSLP1StateMachine():
   """Transliteration table from IAST to SLP1."""
-  lower = AlphabetToSLP1(list('aāiīuūṛṝḷḹe') + ['ai', 'o', 'au', 'ṃ', 'ḥ'] +
-                         ['k', 'kh', 'g', 'gh', 'ṅ',
-                          'c', 'ch', 'j', 'jh', 'ñ',
-                          'ṭ', 'ṭh', 'ḍ', 'ḍh', 'ṇ',
-                          't', 'th', 'd', 'dh', 'n',
-                          'p', 'ph', 'b', 'bh', 'm',
-                          'y', 'r', 'l', 'v', 'ś', 'ṣ', 's', 'h'])
-  upper = AlphabetToSLP1(list('AĀIĪUŪṚṜḶḸE') + ['AI', 'O', 'AU', 'Ṃ', 'Ḥ'] +
-                         ['K', 'Kh', 'G', 'Gh', 'Ṅ',
-                          'C', 'Ch', 'J', 'Jh', 'Ñ',
-                          'Ṭ', 'Ṭh', 'Ḍ', 'Ḍh', 'Ṇ',
-                          'T', 'Th', 'D', 'Dh', 'N',
-                          'P', 'Ph', 'B', 'Bh', 'M',
-                          'Y', 'R', 'L', 'V', 'Ś', 'Ṣ', 'S', 'H'])
+  lower = AlphabetToSLP1(IAST_ALPHABET_LOWER)
+  upper = AlphabetToSLP1(IAST_ALPHABET_UPPER)
   lower.update(upper)
   return transliterate.MakeStateMachine(lower)
+
+
+def SLP1ToIASTStateMachine():
+  return transliterate.MakeStateMachine(SLP1ToAlphabet(IAST_ALPHABET_LOWER))
 
 
 ITRANS_ALPHABET = (['a', 'aa', 'i', 'ii', 'u', 'uu', 'RRi', 'RRI',
@@ -96,3 +108,7 @@ def DetectAndTransliterate(text, ignore=None):
     return transliterate.Transliterate(ITRANSToSLP1StateMachine(), text, ignore)
   logging.info('Reading as Harvard-Kyoto.')
   return transliterate.Transliterate(HKToSLP1StateMachine(), text, ignore)
+
+
+def TransliterateForOutput(text):
+  return transliterate.Transliterate(SLP1ToIASTStateMachine(), text)

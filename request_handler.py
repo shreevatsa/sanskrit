@@ -69,9 +69,7 @@ class IdentifyPage(webapp2.RequestHandler):
       self.response.write('<hr/>')
       self.response.write('<p><i>Debugging output:</i></p>')
 
-    self.response.write('You wrote:<pre>')
-    self.response.write(cgi.escape(input_verse))
-    self.response.write('\n\n\n')
+    self.response.write('<pre>')
     self.response.write(output)
     self.response.write('</pre></body></html>')
 

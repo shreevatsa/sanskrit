@@ -100,8 +100,6 @@ def IdentifyFromLines(input_lines):
   """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
   InitializeData()
   cleaned_lines = handle_input.CleanLines(input_lines)
-  print 'Cleaned up to: '
-  print '\n'.join(cleaned_lines)
   cleaned_lines = MoveConsonants(cleaned_lines)
 
   pattern_lines = []
