@@ -57,6 +57,13 @@ class IdentifyPage(webapp2.RequestHandler):
     sys.stdout = stdout_original
 
     self.response.write('<html><body>')
+    self.response.write("""
+    <form action="/identify" method="post">
+      <div><textarea name="input_verse" rows="6" cols="80">%s</textarea></div>
+      <div><input type="submit" value="Identify verse"></div>
+    </form>
+    <p>""" % cgi.escape(input_verse))
+
     if metre:
       self.response.write('<p>The metre is <font size="+2">%s</font>' % metre)
       self.response.write('<hr/>')
