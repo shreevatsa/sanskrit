@@ -29,7 +29,9 @@ def AddVrtta(metre_name, verse_pattern):
 def AddSamavrtta(metre_name, each_line_pattern):
   each_line_pattern = CleanUpPatternString(each_line_pattern)
   assert re.match(r'^[LG.]*$', each_line_pattern), each_line_pattern
-  AddVrtta(metre_name, each_line_pattern * 4)
+  full_verse_pattern = (each_line_pattern + re.sub('G$', '.',
+                                                   each_line_pattern)) * 2
+  AddVrtta(metre_name, full_verse_pattern)
   for fully_specified_pattern in OptionsExpand(each_line_pattern):
     known_patterns[fully_specified_pattern] = '%s_pāda' % (metre_name)
 
