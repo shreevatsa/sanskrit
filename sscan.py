@@ -82,8 +82,8 @@ def IdentifyMetre(verse):
 
   print 'Metre unknown, trying by lines: '
   for i in range(len(verse)):
-    line_i = verse[i]
-    print '  Line %d: pattern %s is %s' % (i, line_i, IdentitfyPattern(line_i))
+    line = verse[i]
+    print '  Line %d: pattern %s is %s' % (i + 1, line, IdentitfyPattern(line))
 
 
 def IdentifyFromLines(input_lines):
