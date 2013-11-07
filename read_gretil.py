@@ -9,25 +9,17 @@ import handle_input
 import sscan
 
 
-def RemoveHTML(text):
-  return re.sub('<BR>', '', text)
-
-
-def RemoveVerseNumber(text):
-  return re.subn(r'[/|]{2}[ \d.a-zA-z}_*]*[/|]{2}$', '', text)
-
-
 if __name__ == '__main__':
   lines = []
   seen_separators = 0
   for l in sys.stdin:
     l = l.decode('utf8')
-    l = RemoveHTML(l)
+    l = handle_input.RemoveHTML(l)
     l = l.strip()
     if seen_separators < 2 and re.search('<![-]{50,}->', l):
       seen_separators += 1
     elif seen_separators == 2 and not l.startswith('<'):
-      (l, n) = RemoveVerseNumber(l)
+      (l, n) = handle_input.RemoveVerseNumber(l)
       lines.append(l)
       if n:
         lines.append('')

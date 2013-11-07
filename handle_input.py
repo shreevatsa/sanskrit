@@ -11,6 +11,14 @@ import slp1
 import transliteration_data
 
 
+def RemoveHTML(text):
+  return re.sub('<BR>', '', text)
+
+
+def RemoveVerseNumber(text):
+  return re.subn(r'[/|]{2}[ \d.a-zA-z}_*]*[/|]{2}$', '', text)
+
+
 def BreakIntoVerses(input_lines):
   verses = []
   for key, group in itertools.groupby(input_lines, bool):

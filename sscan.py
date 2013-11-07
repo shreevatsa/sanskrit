@@ -108,5 +108,11 @@ def InitializeData():
 
 if __name__ == '__main__':
   InitializeData()
-  lines = [l.decode('utf8') for l in sys.stdin]
+  lines = []
+  for l in sys.stdin:
+    l = handle_input.RemoveHTML(l.decode('utf8'))
+    (l, n) = handle_input.RemoveVerseNumber(l)
+    lines.append(l)
+    if n:
+      lines.append('')
   IdentifyFromLines(lines)
