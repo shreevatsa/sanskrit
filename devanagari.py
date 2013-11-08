@@ -21,7 +21,7 @@ def VowelSigns():
   return ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ']
 
 
-def Virama():
+def Virama(): 
   return '्'
 
 
