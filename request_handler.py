@@ -1,4 +1,4 @@
-"""The class that actually handles the input verse."""
+"""The web interface."""
 
 from __future__ import unicode_literals
 
@@ -10,6 +10,15 @@ import webapp2
 
 import sscan
 
+def InputForm(default=''):
+  return """
+    <form action="/identify" method="post">
+      <div><textarea name="input_verse" rows="6" cols="80">%s</textarea></div>
+      <div><input type="submit" value="Identify verse"></div>
+    </form>
+    <p>""" % cgi.escape(default)
+
+
 MAIN_PAGE_HTML = """\
 <html>
   <body>
@@ -20,10 +29,8 @@ MAIN_PAGE_HTML = """\
       ITRANS format.)
     </p>
 
-    <form action="/identify" method="post">
-      <div><textarea name="input_verse" rows="6" cols="80"></textarea></div>
-      <div><input type="submit" value="Identify verse"></div>
-    </form>
+    %s
+
     <p>
     This is all very raw. Work in progress.
     Source code at
@@ -33,7 +40,7 @@ MAIN_PAGE_HTML = """\
 
   </body>
 </html>
-"""
+""" % InputForm()
 
 
 class InputPage(webapp2.RequestHandler):
@@ -57,12 +64,7 @@ class IdentifyPage(webapp2.RequestHandler):
     sys.stdout = stdout_original
 
     self.response.write('<html><body>')
-    self.response.write("""
-    <form action="/identify" method="post">
-      <div><textarea name="input_verse" rows="6" cols="80">%s</textarea></div>
-      <div><input type="submit" value="Identify verse"></div>
-    </form>
-    <p>""" % cgi.escape(input_verse))
+    self.response.write(InputForm(input_verse))
 
     if metre:
       self.response.write('<p>The metre is <font size="+2">%s</font>' % metre)
