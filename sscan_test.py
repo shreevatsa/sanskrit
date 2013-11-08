@@ -1,3 +1,5 @@
+"""Tests the metre identifier by running it on a text."""
+
 from __future__ import unicode_literals
 
 import sys

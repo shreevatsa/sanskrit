@@ -42,7 +42,8 @@ def MakeStateMachine(table):
   for (key, value) in table.iteritems():
     # Follow characters of 'key' down the table
     where = root
-    for c in key: where = where.setdefault(c, {})
+    for c in key:
+      where = where.setdefault(c, {})
     where[''] = value
   return root
 
@@ -56,7 +57,8 @@ def FirstLongestMatch(state_machine, text):
   for c in text:
     num_seen += 1
     where = where.get(c)
-    if not where: return (num_matched, replacement)
+    if not where:
+      return (num_matched, replacement)
     if where.has_key(''):
       num_matched = num_seen
       replacement = where['']

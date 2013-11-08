@@ -58,7 +58,8 @@ def CleanLines(lines):
   cleaned_lines = []
   for line in lines:
     line = line.strip()
-    if not line: continue
+    if not line:
+      continue
     line = RemoveHTML(line).strip()
     (line, n) = RemoveVerseNumber(line)
     line = TransliterateAndClean(line)

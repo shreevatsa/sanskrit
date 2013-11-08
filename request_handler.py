@@ -10,6 +10,7 @@ import webapp2
 
 import sscan
 
+
 def InputForm(default=''):
   return """
     <form action="/identify" method="post">
