@@ -49,6 +49,9 @@ class InputPage(webapp2.RequestHandler):
 
 
 class IdentifyPage(webapp2.RequestHandler):
+  def get(self):
+    self.response.write(MAIN_PAGE_HTML)
+
   def post(self):
     """What to do with the posted input string (verse)."""
     input_verse = self.request.get('input_verse')
