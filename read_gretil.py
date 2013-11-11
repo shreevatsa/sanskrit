@@ -2,6 +2,9 @@
 
 """Reads from a GRETIL UTF-8 encoded HTML file."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 from __future__ import unicode_literals
 
 import re
@@ -28,8 +31,8 @@ if __name__ == '__main__':
 
   verses = handle_input.BreakIntoVerses(lines)
   for verse in verses:
-    print '\n\t\t\t\t\t\t'.join([''] + verse).encode('utf8')
+    print('\n\t\t\t\t\t\t'.join([''] + verse).encode('utf8'))
     verse = [l.strip() for l in verse]
     identifier = sscan.Identifier()
     identifier.IdentifyFromLines(verse)
-    print
+    print()

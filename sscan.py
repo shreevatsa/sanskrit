@@ -23,6 +23,9 @@ Known issues:
      (4) When analyzing line-by-line, would be nice to show all resolutions.
 """
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 from __future__ import unicode_literals
 import re
 import sys
@@ -53,13 +56,13 @@ class Identifier(object):
       known_metre = metrical_data.known_morae[repr(morae)]
       self.latest_identified_metre = known_metre
       return known_metre
-    print 'Metre unknown. There are %d (%s) syllables (%d mātra units).' % (
+    print('Metre unknown. There are %d (%s) syllables (%d mātra units).' % (
         len(full_verse), ' + '.join(str(len(line)) for line in verse),
-        sum(morae))
+        sum(morae)))
     for i in range(len(verse)):
       line = verse[i]
-      print '  Line %d: pattern %s (%d) is %s' % (i + 1, line, morae[i],
-                                                  IdentitfyPattern(line))
+      print('  Line %d: pattern %s (%d) is %s' % (i + 1, line, morae[i],
+                                                  IdentitfyPattern(line)))
 
   def IdentifyFromLines(self, input_lines):
     """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
@@ -76,7 +79,7 @@ class Identifier(object):
       pattern_lines.append(line)
     metre = self.IdentifyMetre(pattern_lines)
     if metre:
-      print 'Identified as %s.' % metre
+      print('Identified as %s.' % metre)
     return metre
 
 
@@ -118,7 +121,7 @@ def MetricalPattern(text):
 def IdentitfyPattern(pattern):
   """Given metrical pattern (string of L's and G's), identifies metre."""
   if not re.match('^[LG]*$', pattern):
-    print '%s is not a pattern (must have only L and G)' % pattern
+    print('%s is not a pattern (must have only L and G)' % pattern)
   return metrical_data.known_patterns.get(pattern, 'unknown')
 
 

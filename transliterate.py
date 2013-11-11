@@ -31,6 +31,9 @@ So each "state" is a dict containing two values for every "key" (character): on
 seeing that character, which state to go to, and how many characters to consume.
 """
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 from __future__ import unicode_literals
 
 import logging
@@ -59,7 +62,7 @@ def FirstLongestMatch(state_machine, text):
     where = where.get(c)
     if not where:
       return (num_matched, replacement)
-    if where.has_key(''):
+    if '' in where:
       num_matched = num_seen
       replacement = where['']
   return (num_matched, replacement)

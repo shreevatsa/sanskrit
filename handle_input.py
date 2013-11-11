@@ -2,6 +2,9 @@
 
 """Utils to clean up input."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 from __future__ import unicode_literals
 
 import itertools
@@ -45,9 +48,9 @@ def TransliterateAndClean(text):
       else:
         underline += ' '
   if underline.strip():
-    print 'Unknown characters are ignored: %s' % (' '.join(bad_chars))
-    print orig_text
-    print underline
+    print('Unknown characters are ignored: %s' % (' '.join(bad_chars)))
+    print(orig_text)
+    print(underline)
 
   assert not re.search('[^%s]' % slp1.ALPHABET, text), text
   return text
@@ -69,9 +72,9 @@ def CleanLines(lines):
   while cleaned_lines and not cleaned_lines[-1]:
     cleaned_lines = cleaned_lines[:-1]
 
-  print 'Cleaned up to: '
+  print('Cleaned up to: ')
   for (number, line) in enumerate(cleaned_lines):
-    print 'Line %d: %s' % (number + 1,
-                           transliteration_data.TransliterateForOutput(line)[0])
-  print
+    transliterated = transliteration_data.TransliterateForOutput(line)[0]
+    print('Line %d: %s' % (number + 1, transliterated))
+  print()
   return cleaned_lines
