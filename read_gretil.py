@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 """Reads from a GRETIL UTF-8 encoded HTML file."""
 
 from __future__ import unicode_literals
