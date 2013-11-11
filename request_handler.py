@@ -62,7 +62,8 @@ class IdentifyPage(webapp2.RequestHandler):
     stdout_new = StringIO.StringIO()
     sys.stdout = stdout_new
 
-    metre = sscan.IdentifyFromLines(input_verse.split('\n'))
+    identifier = sscan.Identifier()
+    metre = identifier.IdentifyFromLines(input_verse.split('\n'))
 
     output = stdout_new.getvalue()
     sys.stdout = stdout_original

@@ -32,6 +32,26 @@ import metrical_data
 import slp1
 
 
+class Identifier(object):
+  def __init__(self):
+    InitializeData()
+
+  def IdentifyFromLines(self, input_lines):
+    """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
+    InitializeData()
+    cleaned_lines = handle_input.CleanLines(input_lines)
+    cleaned_lines = MoveConsonants(cleaned_lines)
+
+    pattern_lines = []
+    for i in range(len(cleaned_lines)):
+      line = MetricalPattern(cleaned_lines[i])
+      if i % 2 and line.endswith('L'):
+        # print 'Promoting last laghu of line %d to guru' % (i + 1)
+        line = line[:-1] + 'G'
+      pattern_lines.append(line)
+    return IdentifyMetre(pattern_lines)
+
+
 def MoveConsonants(verse_lines):
   consonant = slp1.CONSONANT
   for i in xrange(1, len(verse_lines)):
@@ -101,22 +121,6 @@ def IdentifyMetre(verse):
                                                 IdentitfyPattern(line))
 
 
-def IdentifyFromLines(input_lines):
-  """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
-  InitializeData()
-  cleaned_lines = handle_input.CleanLines(input_lines)
-  cleaned_lines = MoveConsonants(cleaned_lines)
-
-  pattern_lines = []
-  for i in range(len(cleaned_lines)):
-    line = MetricalPattern(cleaned_lines[i])
-    if i % 2 and line.endswith('L'):
-      # print 'Promoting last laghu of line %d to guru' % (i + 1)
-      line = line[:-1] + 'G'
-    pattern_lines.append(line)
-  return IdentifyMetre(pattern_lines)
-
-
 def InitializeData():
   if not metrical_data.known_metres:
     metrical_data.InitializeData()
@@ -124,4 +128,5 @@ def InitializeData():
 
 if __name__ == '__main__':
   lines = [l.decode('utf8') for l in sys.stdin]
-  IdentifyFromLines(lines)
+  identifier = Identifier()
+  identifier.IdentifyFromLines(lines)

@@ -18,5 +18,6 @@ for verse in verses:
 
   print 'Verse %d: ' % counter
   print '\n\t\t\t\t\t\t'.join([''] + verse)
-  sscan.IdentifyFromLines(verse)
+  identifier = sscan.Identifier()
+  identifier.IdentifyFromLines(verse)
   print

@@ -30,5 +30,6 @@ if __name__ == '__main__':
   for verse in verses:
     print '\n\t\t\t\t\t\t'.join([''] + verse).encode('utf8')
     verse = [l.strip() for l in verse]
-    sscan.IdentifyFromLines(verse)
+    identifier = sscan.Identifier()
+    identifier.IdentifyFromLines(verse)
     print
