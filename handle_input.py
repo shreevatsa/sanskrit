@@ -66,7 +66,12 @@ def CleanLines(lines):
     cleaned_lines.append(line)
     if n:
       cleaned_lines.append('')
+  while cleaned_lines and not cleaned_lines[-1]:
+    cleaned_lines = cleaned_lines[:-1]
+
   print 'Cleaned up to: '
-  print '\n'.join(transliteration_data.TransliterateForOutput(line)[0]
-                  for line in cleaned_lines) + '\n'
+  for (number, line) in enumerate(cleaned_lines):
+    print 'Line %d: %s' % (number,
+                           transliteration_data.TransliterateForOutput(line)[0])
+  print
   return cleaned_lines
