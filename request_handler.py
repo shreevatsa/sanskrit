@@ -6,8 +6,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import cgi
-import io
-import sys
 
 import webapp2
 
@@ -60,16 +58,8 @@ class IdentifyPage(webapp2.RequestHandler):
     """What to do with the posted input string (verse)."""
     input_verse = self.request.get('input_verse')
 
-    # TODO(shreevatsa): Get rid of this hack for capturing stdout.
-    stdout_original = sys.stdout
-    stdout_new = io.StringIO()
-    sys.stdout = stdout_new
-
     identifier = sscan.Identifier()
     metre = identifier.IdentifyFromLines(input_verse.split('\n'))
-
-    output = stdout_new.getvalue()
-    sys.stdout = stdout_original
 
     self.response.write('<html><body>')
     self.response.write(InputForm(input_verse))
@@ -77,10 +67,10 @@ class IdentifyPage(webapp2.RequestHandler):
     if metre:
       self.response.write('<p>The metre is <font size="+2">%s</font>' % metre)
       self.response.write('<hr/>')
-      self.response.write('<p><i>Debugging output:</i></p>')
 
+    self.response.write('<p><i>Debugging output:</i></p>')
     self.response.write('<pre>')
-    self.response.write(output)
+    self.response.write('\n'.join(identifier.output))
     self.response.write('</pre></body></html>')
 
 
