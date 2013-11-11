@@ -35,6 +35,7 @@ import slp1
 class Identifier(object):
   def __init__(self):
     InitializeData()
+    self.latest_identified_metre = None
 
   def IdentifyFromLines(self, input_lines):
     """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
@@ -49,7 +50,8 @@ class Identifier(object):
         # print 'Promoting last laghu of line %d to guru' % (i + 1)
         line = line[:-1] + 'G'
       pattern_lines.append(line)
-    return IdentifyMetre(pattern_lines)
+    self.identified_metre = IdentifyMetre(pattern_lines)
+    return self.latest_identified_metre
 
 
 def MoveConsonants(verse_lines):
