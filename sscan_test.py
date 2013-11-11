@@ -23,4 +23,5 @@ for verse in verses:
   print('\n\t\t\t\t\t\t'.join([''] + verse))
   identifier = sscan.Identifier()
   identifier.IdentifyFromLines(verse)
+  print('\n'.join(identifier.output))
   print()

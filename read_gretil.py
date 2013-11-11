@@ -35,4 +35,5 @@ if __name__ == '__main__':
     verse = [l.strip() for l in verse]
     identifier = sscan.Identifier()
     identifier.IdentifyFromLines(verse)
-    print()
+    print('\n'.join(identifier.output))
+    print('')

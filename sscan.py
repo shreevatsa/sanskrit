@@ -14,7 +14,9 @@ Usage from commandline:
 Usage from Python code:
      import sscan
      verse_lines = ['line 1 of verse', 'line 2 of verse', ...]
-     sscan.IdentifyFromLines(verse_lines)
+     identifier = sscan.Identifier()
+     identifier.IdentifyFromLines(verse)
+     print('\n'.join(identifier.output))
 
 Known issues:
      (1) Needs better treatment of pādānta-guru / pādānta-yati.
@@ -39,11 +41,18 @@ class Identifier(object):
   """An object used to make a single metre-identification call."""
 
   def __init__(self):
-    InitializeData()
-    self.latest_identified_metre = None
+    self.output = []
+    if not metrical_data.known_metres:
+      metrical_data.InitializeData()
 
-  def IdentifyMetre(self, verse):
+  def IdentifyMetreFromPattern(self, verse):
     """Given metrical pattern of entire verse, identifies metre."""
+    for pattern in verse:
+      if not re.match('^[LG]*$', pattern):
+        self.output.append('%s is not a pattern (must have only L and G)'
+                           % pattern)
+        return None
+
     full_verse = ''.join(verse)
 
     for known_pattern, known_metre in metrical_data.known_metres.iteritems():
@@ -56,18 +65,19 @@ class Identifier(object):
       known_metre = metrical_data.known_morae[repr(morae)]
       self.latest_identified_metre = known_metre
       return known_metre
-    print('Metre unknown. There are %d (%s) syllables (%d mātra units).' % (
-        len(full_verse), ' + '.join(str(len(line)) for line in verse),
-        sum(morae)))
-    for i in range(len(verse)):
-      line = verse[i]
-      print('  Line %d: pattern %s (%d) is %s' % (i + 1, line, morae[i],
-                                                  IdentitfyPattern(line)))
+    self.output.append(
+        'Metre unknown. There are %d (%s) syllables (%d mātra units).' %
+        (len(full_verse), ' + '.join(str(len(line)) for line in verse),
+         sum(morae)))
+    for (i, line) in enumerate(verse):
+      self.output.append('  Line %d: pattern %s (%d) is %s' %
+                         (i + 1, line, morae[i], IdentitfyPattern(line)))
 
   def IdentifyFromLines(self, input_lines):
-    """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
-    InitializeData()
-    cleaned_lines = handle_input.CleanLines(input_lines)
+    """Takes a bunch of verse lines as input, and identifies metre."""
+    cleaner = handle_input.InputHandler()
+    cleaned_lines = cleaner.CleanLines(input_lines)
+    self.clean_input = cleaner.output
     cleaned_lines = MoveConsonants(cleaned_lines)
 
     pattern_lines = []
@@ -77,9 +87,9 @@ class Identifier(object):
         # print 'Promoting last laghu of line %d to guru' % (i + 1)
         line = line[:-1] + 'G'
       pattern_lines.append(line)
-    metre = self.IdentifyMetre(pattern_lines)
+    metre = self.IdentifyMetreFromPattern(pattern_lines)
     if metre:
-      print('Identified as %s.' % metre)
+      self.output.append('Identified as %s.' % metre)
     return metre
 
 
@@ -120,8 +130,7 @@ def MetricalPattern(text):
 
 def IdentitfyPattern(pattern):
   """Given metrical pattern (string of L's and G's), identifies metre."""
-  if not re.match('^[LG]*$', pattern):
-    print('%s is not a pattern (must have only L and G)' % pattern)
+  assert re.match('^[LG]*$', pattern)
   return metrical_data.known_patterns.get(pattern, 'unknown')
 
 
@@ -130,12 +139,8 @@ def MatraCount(pattern):
   return sum(2 if c == 'G' else 1 for c in pattern)
 
 
-def InitializeData():
-  if not metrical_data.known_metres:
-    metrical_data.InitializeData()
-
-
 if __name__ == '__main__':
   lines = [l.decode('utf8') for l in sys.stdin]
   identifier = Identifier()
   identifier.IdentifyFromLines(lines)
+  print('\n'.join(identifier.output))

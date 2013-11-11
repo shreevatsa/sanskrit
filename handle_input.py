@@ -56,25 +56,30 @@ def TransliterateAndClean(text):
   return text
 
 
-def CleanLines(lines):
-  """Clean up the input lines (strip junk, transliterate, break verses)."""
-  cleaned_lines = []
-  for line in lines:
-    line = line.strip()
-    if not line:
-      continue
-    line = RemoveHTML(line).strip()
-    (line, n) = RemoveVerseNumber(line)
-    line = TransliterateAndClean(line)
-    cleaned_lines.append(line)
-    if n:
-      cleaned_lines.append('')
-  while cleaned_lines and not cleaned_lines[-1]:
-    cleaned_lines = cleaned_lines[:-1]
+class InputHandler(object):
+  """Class that takes arbitrary input and returns list of clean lines."""
 
-  print('Cleaned up to: ')
-  for (number, line) in enumerate(cleaned_lines):
-    transliterated = transliteration_data.TransliterateForOutput(line)[0]
-    print('Line %d: %s' % (number + 1, transliterated))
-  print('')
-  return cleaned_lines
+  def __init__(self):
+    self.output = []
+
+  def CleanLines(self, lines):
+    """Clean up the input lines (strip junk, transliterate, break verses)."""
+    cleaned_lines = []
+    for line in lines:
+      line = RemoveHTML(line).strip()
+      if not line:
+        continue
+      (line, n) = RemoveVerseNumber(line)
+      line = TransliterateAndClean(line)
+      cleaned_lines.append(line)
+      # If verse number was removed, can separate from next verse by blank line.
+      if n:
+        cleaned_lines.append('')
+    while cleaned_lines and not cleaned_lines[-1]:
+      cleaned_lines = cleaned_lines[:-1]
+
+    for (number, line) in enumerate(cleaned_lines):
+      transliterated = transliteration_data.TransliterateForOutput(line)[0]
+      self.output.append('Line %d: %s' % (number + 1, transliterated))
+    self.output.append('')
+    return cleaned_lines
