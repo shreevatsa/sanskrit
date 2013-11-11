@@ -33,9 +33,33 @@ import slp1
 
 
 class Identifier(object):
+  """An object used to make a single metre-identification call."""
+
   def __init__(self):
     InitializeData()
     self.latest_identified_metre = None
+
+  def IdentifyMetre(self, verse):
+    """Given metrical pattern of entire verse, identifies metre."""
+    full_verse = ''.join(verse)
+
+    for known_pattern, known_metre in metrical_data.known_metres.iteritems():
+      if re.match('^' + known_pattern + '$', full_verse):
+        self.latest_identified_metre = known_metre
+        return known_metre
+
+    morae = [MatraCount(line) for line in verse]
+    if repr(morae) in metrical_data.known_morae:
+      known_metre = metrical_data.known_morae[repr(morae)]
+      self.latest_identified_metre = known_metre
+      return known_metre
+    print 'Metre unknown. There are %d (%s) syllables (%d mātra units).' % (
+        len(full_verse), ' + '.join(str(len(line)) for line in verse),
+        sum(morae))
+    for i in range(len(verse)):
+      line = verse[i]
+      print '  Line %d: pattern %s (%d) is %s' % (i + 1, line, morae[i],
+                                                  IdentitfyPattern(line))
 
   def IdentifyFromLines(self, input_lines):
     """Takes a bunch of verse lines (in HK) as input, and identifies metre."""
@@ -50,8 +74,10 @@ class Identifier(object):
         # print 'Promoting last laghu of line %d to guru' % (i + 1)
         line = line[:-1] + 'G'
       pattern_lines.append(line)
-    self.identified_metre = IdentifyMetre(pattern_lines)
-    return self.latest_identified_metre
+    metre = self.IdentifyMetre(pattern_lines)
+    if metre:
+      print 'Identified as %s.' % metre
+    return metre
 
 
 def MoveConsonants(verse_lines):
@@ -99,28 +125,6 @@ def IdentitfyPattern(pattern):
 def MatraCount(pattern):
   assert re.match('^[LG]*$', pattern)
   return sum(2 if c == 'G' else 1 for c in pattern)
-
-
-def IdentifyMetre(verse):
-  """Given metrical pattern of entire verse, identifies metre."""
-  full_verse = ''.join(verse)
-
-  for known_pattern, known_metre in metrical_data.known_metres.iteritems():
-    if re.match('^' + known_pattern + '$', full_verse):
-      print 'Identified as %s.' % known_metre
-      return known_metre
-
-  morae = [MatraCount(line) for line in verse]
-  if repr(morae) in metrical_data.known_morae:
-    known_metre = metrical_data.known_morae[repr(morae)]
-    print 'Identified as %s.' % known_metre
-    return known_metre
-  print 'Metre unknown. There are %d (%s) syllables (%d mātra units).' % (
-      len(full_verse), ' + '.join(str(len(line)) for line in verse), sum(morae))
-  for i in range(len(verse)):
-    line = verse[i]
-    print '  Line %d: pattern %s (%d) is %s' % (i + 1, line, morae[i],
-                                                IdentitfyPattern(line))
 
 
 def InitializeData():

@@ -71,7 +71,7 @@ def CleanLines(lines):
 
   print 'Cleaned up to: '
   for (number, line) in enumerate(cleaned_lines):
-    print 'Line %d: %s' % (number,
+    print 'Line %d: %s' % (number + 1,
                            transliteration_data.TransliterateForOutput(line)[0])
   print
   return cleaned_lines
