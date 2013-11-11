@@ -6,7 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import cgi
-import StringIO
+import io
 import sys
 
 import webapp2
@@ -62,7 +62,7 @@ class IdentifyPage(webapp2.RequestHandler):
 
     # TODO(shreevatsa): Get rid of this hack for capturing stdout.
     stdout_original = sys.stdout
-    stdout_new = StringIO.StringIO()
+    stdout_new = io.StringIO()
     sys.stdout = stdout_new
 
     identifier = sscan.Identifier()
