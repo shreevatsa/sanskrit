@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Prints the metrical pattern of given text.
 
-Usage:
+Usage from commandline:
      python sscan.py
      [input verse]
      Ctrl-D
@@ -10,6 +10,11 @@ Usage:
      or
 
      python sscan.py < input_file
+
+Usage from Python code:
+     import sscan
+     verse_lines = ['line 1 of verse', 'line 2 of verse', ...]
+     sscan.IdentifyFromLines(verse_lines)
 
 Known issues:
      (1) Needs better treatment of pādānta-guru / pādānta-yati.
