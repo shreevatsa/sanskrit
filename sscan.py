@@ -29,6 +29,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
+
+import logging
 import re
 import sys
 
@@ -75,6 +77,7 @@ class Identifier(object):
 
   def IdentifyFromLines(self, input_lines):
     """Takes a bunch of verse lines as input, and identifies metre."""
+    logging.info('Got input:\n%s', '\n'.join(input_lines))
     cleaner = handle_input.InputHandler()
     cleaned_lines = cleaner.CleanLines(input_lines)
     self.output.extend(cleaner.error_output)
@@ -84,7 +87,7 @@ class Identifier(object):
     for i in range(len(cleaned_lines)):
       line = MetricalPattern(cleaned_lines[i])
       if i % 2 and line.endswith('L'):
-        # print 'Promoting last laghu of line %d to guru' % (i + 1)
+        logging.info('Promoting last laghu of line %d to guru', i + 1)
         line = line[:-1] + 'G'
       pattern_lines.append(line)
     metre = self.IdentifyMetreFromPattern(pattern_lines)
