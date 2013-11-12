@@ -36,7 +36,8 @@ class InputHandler(object):
   """Class that takes arbitrary input and returns list of clean lines."""
 
   def __init__(self):
-    self.output = []
+    self.error_output = []
+    self.clean_output = []
 
   def TransliterateAndClean(self, text):
     """Transliterates text to SLP1, removing all other characters."""
@@ -54,10 +55,10 @@ class InputHandler(object):
         else:
           underline += ' '
     if underline.strip():
-      self.output.append('Unknown characters are ignored: %s' %
-                         (' '.join(bad_chars)))
-      self.output.append(orig_text)
-      self.output.append(underline)
+      self.error_output.append('Unknown characters are ignored: %s' %
+                               (' '.join(bad_chars)))
+      self.error_output.append(orig_text)
+      self.error_output.append(underline)
 
     assert not re.search('[^%s]' % slp1.ALPHABET, text), text
     return text
@@ -78,9 +79,9 @@ class InputHandler(object):
     while cleaned_lines and not cleaned_lines[-1]:
       cleaned_lines = cleaned_lines[:-1]
 
-    self.output.append('Cleaned up to:')
+    self.clean_output.append('Input read as:')
     for (number, line) in enumerate(cleaned_lines):
       transliterated = transliteration_data.TransliterateForOutput(line)[0]
-      self.output.append('Line %d: %s' % (number + 1, transliterated))
-    self.output.append('')
+      self.clean_output.append('Line %d: %s' % (number + 1, transliterated))
+    self.clean_output.append('')
     return cleaned_lines
