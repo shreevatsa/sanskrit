@@ -32,35 +32,35 @@ def BreakIntoVerses(input_lines):
   return verses
 
 
-def TransliterateAndClean(text):
-  """Transliterates text to SLP1, removing all other characters."""
-  orig_text = text
-  ignore = r""" 0123456789'".\/$&%{}|-!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-  (text, rejects) = transliteration_data.DetectAndTransliterate(text, ignore)
-
-  underline = ''
-  bad_chars = []
-  if rejects:
-    for i in range(len(orig_text)):
-      if i in rejects and orig_text[i] not in ignore:
-        underline += '^'
-        bad_chars.append(orig_text[i])
-      else:
-        underline += ' '
-  if underline.strip():
-    print('Unknown characters are ignored: %s' % (' '.join(bad_chars)))
-    print(orig_text)
-    print(underline)
-
-  assert not re.search('[^%s]' % slp1.ALPHABET, text), text
-  return text
-
-
 class InputHandler(object):
   """Class that takes arbitrary input and returns list of clean lines."""
 
   def __init__(self):
     self.output = []
+
+  def TransliterateAndClean(self, text):
+    """Transliterates text to SLP1, removing all other characters."""
+    orig_text = text
+    ignore = r""" 0123456789'".\/$&%{}|-!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
+    (text, rejects) = transliteration_data.DetectAndTransliterate(text, ignore)
+
+    underline = ''
+    bad_chars = []
+    if rejects:
+      for (i, c) in enumerate(orig_text):
+        if i in rejects and c not in ignore:
+          underline += '^'
+          bad_chars.append(c)
+        else:
+          underline += ' '
+    if underline.strip():
+      self.output.append('Unknown characters are ignored: %s' %
+                         (' '.join(bad_chars)))
+      self.output.append(orig_text)
+      self.output.append(underline)
+
+    assert not re.search('[^%s]' % slp1.ALPHABET, text), text
+    return text
 
   def CleanLines(self, lines):
     """Clean up the input lines (strip junk, transliterate, break verses)."""
@@ -70,7 +70,7 @@ class InputHandler(object):
       if not line:
         continue
       (line, n) = RemoveVerseNumber(line)
-      line = TransliterateAndClean(line)
+      line = self.TransliterateAndClean(line)
       cleaned_lines.append(line)
       # If verse number was removed, can separate from next verse by blank line.
       if n:
@@ -78,6 +78,7 @@ class InputHandler(object):
     while cleaned_lines and not cleaned_lines[-1]:
       cleaned_lines = cleaned_lines[:-1]
 
+    self.output.append('Cleaned up to:')
     for (number, line) in enumerate(cleaned_lines):
       transliterated = transliteration_data.TransliterateForOutput(line)[0]
       self.output.append('Line %d: %s' % (number + 1, transliterated))

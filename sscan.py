@@ -77,7 +77,8 @@ class Identifier(object):
     """Takes a bunch of verse lines as input, and identifies metre."""
     cleaner = handle_input.InputHandler()
     cleaned_lines = cleaner.CleanLines(input_lines)
-    self.clean_input = cleaner.output
+    self.cleaner_output = cleaner.output
+    self.output.extend(cleaner.output)
     cleaned_lines = MoveConsonants(cleaned_lines)
 
     pattern_lines = []
