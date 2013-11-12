@@ -16,6 +16,10 @@ import logging
 import re
 
 
+def A():
+  return 'अ'
+
+
 def NonAVowels():
   return 'आइईउऊऋॠऌॡएऐओऔ'
 
@@ -33,7 +37,7 @@ def Consonants():
 
 
 def Alphabet():
-  return list('अ' + NonAVowels() + 'ंः') + [s + Virama() for s in Consonants()]
+  return list(A() + NonAVowels() + 'ंः') + [s + Virama() for s in Consonants()]
 
 
 def Mangle(text):
@@ -56,7 +60,8 @@ def Mangle(text):
     return None
 
   # consonant + [not virama] -> consonant + virama + 'a'
-  text = re.sub('(%s)(?!%s)' % (consonant, virama), r'\g<1>%sअ' % virama, text)
+  text = re.sub('(%s)(?!%s)' % (consonant, virama),
+                r'\g<1>%s%s' % (virama, A()), text)
   # Check that no more consonants exist that are not followed by space
   for c in re.finditer(consonant, text):
     assert text[c.start() + 1] == virama, (text, c.start())
@@ -70,7 +75,7 @@ def UnMangle(text):
   """Converts normalized Devanagari to standard Devanagari."""
   # consonant + virāma + vowel -> consonant + vowel sign
   consonant = '[' + Consonants() + ']'
-  vowels = 'अ' + NonAVowels()
+  vowels = A() + NonAVowels()
   vowel_signs = [''] + VowelSigns()
   vowels_to_signs = dict(zip(vowels, vowel_signs))
   def Replacer(match):
