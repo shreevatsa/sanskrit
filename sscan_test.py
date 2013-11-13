@@ -14,6 +14,7 @@ lines = [l.strip() for l in sys.stdin.readlines()]
 counter = 0
 verses = handle_input.BreakIntoVerses(lines)
 for verse in verses:
+  assert verse
   if verse == ['{UttarameghaH}']:
     continue
   assert len(verse) == 4, verse
