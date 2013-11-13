@@ -16,7 +16,7 @@ Usage from Python code:
      verse_lines = ['line 1 of verse', 'line 2 of verse', ...]
      identifier = sscan.Identifier()
      identifier.IdentifyFromLines(verse)
-     print('\n'.join(identifier.output))
+     print(identifier.AllDebugOutput())
 
 Known issues:
      (1) Needs better treatment of pādānta-guru / pādānta-yati.
@@ -46,6 +46,9 @@ class Identifier(object):
     self.output = []
     if not metrical_data.known_metres:
       metrical_data.InitializeData()
+
+  def AllDebugOutput(self):
+    return '\n'.join(self.output)
 
   def IdentifyMetreFromPattern(self, verse):
     """Given metrical pattern of entire verse, identifies metre."""
@@ -81,6 +84,7 @@ class Identifier(object):
     cleaner = handle_input.InputHandler()
     cleaned_lines = cleaner.CleanLines(input_lines)
     self.output.extend(cleaner.error_output)
+    self.cleaned_output = cleaner.clean_output
     cleaned_lines = MoveConsonants(cleaned_lines)
 
     pattern_lines = []
@@ -148,4 +152,4 @@ if __name__ == '__main__':
   lines = [l.decode('utf8') for l in sys.stdin]
   identifier = Identifier()
   identifier.IdentifyFromLines(lines)
-  print('\n'.join(identifier.output))
+  print(identifier.AllDebugOutput().encode('utf8'))

@@ -19,9 +19,10 @@ for verse in verses:
   assert len(verse) == 4, verse
   counter += 1
 
-  print('Verse %d: ' % counter)
-  print('\n\t\t\t\t\t\t'.join([''] + verse))
   identifier = sscan.Identifier()
-  identifier.IdentifyFromLines(verse)
-  print('\n'.join(identifier.output).encode('utf8'))
-  print()
+  metre = identifier.IdentifyFromLines(verse)
+  if not metre:
+    print('Verse %d: ' % counter)
+    print('\n\t\t\t\t\t\t'.join([''] + verse))
+    print(identifier.AllDebugOutput().encode('utf8'))
+    print()
