@@ -30,8 +30,9 @@ if __name__ == '__main__':
         lines.append('')
 
   verses = handle_input.BreakIntoVerses(lines)
-  for verse in verses:
-    print('\n\t\t\t\t\t\t'.join([''] + verse).encode('utf8'))
+  for (verse_number, verse) in enumerate(verses):
+    print('\n\t\t\t\t\t\t'.join(
+        ['Verse %d:' % verse_number] + verse).encode('utf8'))
     verse = [l.strip() for l in verse]
     identifier = sscan.Identifier()
     identifier.IdentifyFromLines(verse)
