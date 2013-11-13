@@ -70,6 +70,7 @@ class IdentifyPage(webapp2.RequestHandler):
 
     self.response.write('<p><i>Debugging output:</i></p>')
     self.response.write('<pre>')
+    self.response.write('\n'.join(identifier.cleaned_output))
     self.response.write(identifier.AllDebugOutput())
     self.response.write('</pre></body></html>')
 
