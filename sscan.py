@@ -88,11 +88,15 @@ class Identifier(object):
     cleaned_lines = MoveConsonants(cleaned_lines)
 
     pattern_lines = []
-    for i in range(len(cleaned_lines)):
-      line = MetricalPattern(cleaned_lines[i])
-      if i % 2 and line.endswith('L'):
-        logging.info('Promoting last laghu of line %d to guru', i + 1)
-        line = line[:-1] + 'G'
+    for (i, line) in enumerate(cleaned_lines):
+      line = MetricalPattern(line)
+      if line.endswith('L'):
+        if len(cleaned_lines) == 4 and i % 2:
+          logging.info('Promoting last laghu of pāda %d to guru', i + 1)
+          line = line[:-1] + 'G'
+        elif len(cleaned_lines) == 2:
+          logging.info('Promoting last laghu of ardha %d to guru', i + 1)
+          line = line[:-1] + 'G'
       pattern_lines.append(line)
     metre = self.IdentifyMetreFromPattern(pattern_lines)
     if metre:
