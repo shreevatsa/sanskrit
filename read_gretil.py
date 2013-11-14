@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 """Reads from a GRETIL UTF-8 encoded HTML file."""
 
@@ -30,11 +31,16 @@ if __name__ == '__main__':
         lines.append('')
 
   verses = handle_input.BreakIntoVerses(lines)
+  verses = [verse for verse in verses if verse != ['{ūttarameghaḥ}']]
+
   for (verse_number, verse) in enumerate(verses):
-    print('\n\t\t\t\t\t\t'.join(
-        ['Verse %d:' % verse_number] + verse).encode('utf8'))
     verse = [l.strip() for l in verse]
     identifier = sscan.Identifier()
-    identifier.IdentifyFromLines(verse)
-    print(identifier.AllDebugOutput().encode('utf8'))
+    metre = identifier.IdentifyFromLines(verse)
+    if metre:
+      print(('Verse %d is in %s' % (verse_number + 1, metre)).encode('utf8'))
+    else:
+      print('\n\t\t\t\t\t\t'.join(
+          ['Verse %d:' % (verse_number + 1)] + verse).encode('utf8'))
+      print(identifier.AllDebugOutput().encode('utf8'))
     print('')

@@ -21,9 +21,11 @@ for verse in verses:
   counter += 1
 
   identifier = sscan.Identifier()
+  print('Verse %d: ' % counter)
   metre = identifier.IdentifyFromLines(verse)
-  if not metre:
-    print('Verse %d: ' % counter)
+  if metre:
+    print(metre.encode('utf8'))
+  else:
     print('\n\t\t\t\t\t\t'.join([''] + verse))
     print(identifier.AllDebugOutput().encode('utf8'))
     print()
