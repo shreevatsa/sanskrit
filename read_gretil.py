@@ -8,6 +8,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import logging
 import re
 import sys
 
@@ -16,6 +17,13 @@ import sscan
 
 
 if __name__ == '__main__':
+  logger = logging.getLogger()
+  handler = logging.FileHandler('/var/tmp/read_gretil.log')
+  handler.setFormatter(
+      logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+  logger.addHandler(handler)
+  logger.setLevel(logging.DEBUG)
+
   lines = []
   seen_separators = 0
   for l in sys.stdin:
