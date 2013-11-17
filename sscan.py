@@ -46,6 +46,8 @@ class Identifier(object):
     self.output = []
     if not metrical_data.known_metres:
       metrical_data.InitializeData()
+    logging.info('Done initializing. There are %s known_metres',
+                 len(metrical_data.known_metres))
 
   def AllDebugOutput(self):
     return '\n'.join(self.output)
