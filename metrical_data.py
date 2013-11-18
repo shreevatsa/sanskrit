@@ -6,6 +6,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
+
+import itertools
+import logging
 import re
 
 import simple_utils
@@ -16,47 +19,114 @@ known_metres = {}
 known_morae = {}
 
 
+def LooseEnding(pattern):
+  assert pattern.endswith('G')
+  return pattern[:-1] + '.'
+
+
+def LaghuEnding(pattern):
+  assert pattern.endswith('G'), pattern
+  return pattern[:-1] + 'L'
+
+
 def OptionsExpand(pattern):
-  if pattern.find('.') == -1:
+  """Given pattern with n '.'s, returns all 2^n patterns with L and G only."""
+  where = pattern.find('.')
+  if where == -1:
     yield pattern
     return
-  where = pattern.find('.')
-  for fix in ['L', 'G']:
-    for y in OptionsExpand(pattern[:where] + fix + pattern[where + 1:]):
-      yield y
+  prefix = pattern[:where]
+  for suffix in OptionsExpand(pattern[where + 1:]):
+    for fix in ['L', 'G']:
+      yield prefix + fix + suffix
+
+
+def MaybeAddPada(metre_name, pattern):
+  assert re.match(r'^[LG]*$', pattern)
+  if pattern in known_patterns:
+    logging.warning('Not adding %s for %s', pattern, metre_name)
+  else:
+    AddPada(metre_name, pattern)
+
+
+def AddPada(metre_name, pattern):
+  assert re.match(r'^[LG]*$', pattern)
+  if pattern in known_patterns:
+    logging.warning('Pattern %s, being added for %s, is already known as %s',
+                    pattern, metre_name, known_patterns[pattern])
+    known_patterns[pattern] += ' or one pāda of %s' % metre_name
+    if pattern.endswith('G'):
+      MaybeAddPada(metre_name + ' (with viṣama-pādānta-laghu)',
+                   LaghuEnding(pattern))
+  else:
+    known_patterns[pattern] = 'One pāda of %s' % metre_name
+    if pattern.endswith('G'):
+      MaybeAddPada(metre_name + ' (with viṣama-pādānta-laghu)',
+                   LaghuEnding(pattern))
+
+
+def AddArdha(metre_name, pattern_odd, pattern_even):
+  assert re.match(r'^[LG.]*$', pattern_odd)
+  assert re.match(r'^[LG.]*$', pattern_even)
+  odds = OptionsExpand(pattern_odd)
+  evens = OptionsExpand(pattern_even)
+  for (o, e) in itertools.product(odds, evens):
+    known_patterns[o + e] = '%s_half' % metre_name
 
 
 def AddVrtta(metre_name, verse_pattern):
+  assert verse_pattern not in known_metres, (verse_pattern,
+                                             known_metres[verse_pattern])
+  logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
   known_metres[verse_pattern] = metre_name
 
 
 def AddSamavrtta(metre_name, each_line_pattern):
-  each_line_pattern = CleanUpPatternString(each_line_pattern)
-  assert re.match(r'^[LG.]*$', each_line_pattern), each_line_pattern
-  full_verse_pattern = (each_line_pattern + re.sub('G$', '.',
-                                                   each_line_pattern)) * 2
-  AddVrtta(metre_name, full_verse_pattern)
-  for fully_specified_pattern in OptionsExpand(each_line_pattern):
-    known_patterns[fully_specified_pattern] = '%s_pāda' % metre_name
-  for fully_specified_pattern in OptionsExpand(each_line_pattern * 2):
-    known_patterns[fully_specified_pattern] = '%s_half' % metre_name
+  """Given a sama-vṛtta metre, add it to the data structures."""
+  clean = CleanUpPatternString(each_line_pattern)
+  assert re.match(r'^[LG.]*$', clean)
+  assert clean.endswith('G'), (clean, metre_name)
+  # if clean.endswith('.'):
+  #   # This is the easy case. The pattern itself is already liberal.
+  #   AddVrtta(metre_name, clean * 4)
+  #   AddArdha(metre_name, clean, clean)
+  #   for explicit_pattern in OptionsExpand(clean):
+  #     AddPada(metre_name, explicit_pattern)
+  if clean.endswith('G'):
+    loose = LooseEnding(clean)
+    laghu = LaghuEnding(clean)
+    full_verse_pattern = (clean + loose) * 2
+    AddVrtta(metre_name, full_verse_pattern)
+    AddArdha(metre_name, clean, clean)
+    for verse_pattern in [clean + loose + laghu + loose,
+                          laghu + loose + clean + loose,
+                          laghu + loose + laghu + loose]:
+      AddVrtta(metre_name + ' (with viṣama-pādānta-laghu)', verse_pattern)
+    for explicit_pattern in OptionsExpand(clean):
+      AddPada(metre_name, explicit_pattern)
 
 
 def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
   """Given an ardha-sama-vṛtta metre, add it to the data structures."""
-  odd_line_pattern = CleanUpPatternString(odd_line_pattern)
-  # Odd _pāda_s in Anuṣṭup don't have to end with a guru
-  assert re.match(r'^[LG.]*$', odd_line_pattern)
-  even_line_pattern = CleanUpPatternString(even_line_pattern)
-  assert re.match(r'^[LG.]*$', even_line_pattern)
-  AddVrtta(metre_name, (odd_line_pattern + even_line_pattern) * 2)
-  for fully_specified_pattern in OptionsExpand(odd_line_pattern):
-    known_patterns[fully_specified_pattern] = '%s_pāda_odd' % (metre_name)
-  for fully_specified_pattern in OptionsExpand(even_line_pattern):
-    known_patterns[fully_specified_pattern] = '%s_pāda_even' % (metre_name)
-  for fully_specified_pattern in OptionsExpand(
-      odd_line_pattern + even_line_pattern):
-    known_patterns[fully_specified_pattern] = '%s_half' % metre_name
+  clean_odd = CleanUpPatternString(odd_line_pattern)
+  assert re.match(r'^[LG.]*$', clean_odd)
+  laghu_odd = LaghuEnding(clean_odd)
+
+  clean_even = CleanUpPatternString(even_line_pattern)
+  assert re.match(r'^[LG.]*$', clean_even)
+  loose_even = LooseEnding(clean_even)
+
+  full_verse_pattern = (clean_odd + loose_even) * 2
+  AddVrtta(metre_name, full_verse_pattern)
+  for verse_pattern in [clean_odd + loose_even + laghu_odd + loose_even,
+                        laghu_odd + loose_even + clean_odd + loose_even,
+                        laghu_odd + loose_even + laghu_odd + loose_even]:
+    AddVrtta(metre_name + ' (with viṣama-pādānta-laghu)', verse_pattern)
+  AddArdha(metre_name, clean_odd, clean_even)
+  for explicit_pattern in OptionsExpand(clean_odd):
+    AddPada(metre_name + ' (odd pāda)', explicit_pattern)
+  for explicit_pattern in OptionsExpand(clean_even):
+    AddPada(metre_name + ' (even pāda)', explicit_pattern)
 
 
 def AddVishamavrtta(metre_name, line_patterns):
@@ -64,8 +134,7 @@ def AddVishamavrtta(metre_name, line_patterns):
   assert len(line_patterns) == 4
   verse_pattern = ''
   for i in range(4):
-    line_pattern = line_patterns[i]
-    line_pattern = CleanUpPatternString(line_pattern)
+    line_pattern = CleanUpPatternString(line_patterns[i])
     # Doesn't have to end in guru; consider pāda 1 of Udgatā
     assert re.match(r'^[LG.]*$', line_pattern)
     verse_pattern += line_pattern
@@ -85,7 +154,7 @@ def AddMatravrtta(metre_name, line_morae):
 def InitializeData():
   """Add all known metres to the data structures."""
   # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
-  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L .')
+  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G G', '. . . . L G L G')
   AddMatravrtta('Āryā', [12, 18, 12, 15])
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
@@ -138,6 +207,6 @@ def InitializeData():
 
 
 def CleanUpPatternString(pattern):
-  return simple_utils.RemoveChars(pattern, ' —–')
-
-
+  pattern = simple_utils.RemoveChars(pattern, ' —–')
+  assert re.match(r'^[LG.]*$', pattern), pattern
+  return pattern
