@@ -59,13 +59,10 @@ def AddPada(metre_name, pattern):
     logging.warning('Pattern %s, being added for %s, is already known as %s',
                     pattern, metre_name, known_patterns[pattern])
     known_patterns[pattern] += ' or one pāda of %s' % metre_name
-    if pattern.endswith('G'):
-      MaybeAddPada(metre_name + ' (with pādānta-laghu)', LaghuEnding(pattern))
   else:
     known_patterns[pattern] = 'One pāda of %s' % metre_name
-    if pattern.endswith('G'):
-      MaybeAddPada(metre_name + ' (with pādānta-laghu)',
-                   LaghuEnding(pattern))
+  if pattern.endswith('G'):
+    MaybeAddPada(metre_name + ' (with pādānta-laghu)', LaghuEnding(pattern))
 
 
 def AddArdha(metre_name, pattern_odd, pattern_even):
@@ -122,7 +119,7 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
     # This is the easy case. The pattern itself is already liberal.
     full_verse_pattern = (clean_odd + loose_even) * 2
     AddVrtta(metre_name, full_verse_pattern)
-    AddArdha(metre_name, clean_odd, clean_even)
+    AddArdha(metre_name, clean_odd, loose_even)
     for explicit_pattern in OptionsExpand(clean_odd):
       AddPada(metre_name + ' (odd pāda)', explicit_pattern)
     for explicit_pattern in OptionsExpand(clean_even):
@@ -168,7 +165,7 @@ def AddMatravrtta(metre_name, line_morae):
 def InitializeData():
   """Add all known metres to the data structures."""
   # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
-  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L .')
+  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
 
   # AddMatravrtta('Āryā', [12, 18, 12, 15])
   # From Bhartrhari (BharSt_1.3)
