@@ -170,8 +170,8 @@ def InitializeData():
   # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
   AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
   # "jayanti te sukṛtino..."
-  AddVishamavrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
-                  ['LGLGLLLG', '....LGLG', '....LGG.', '....LGLG'])
+  AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
+                ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'])
 
   # AddMatravrtta('Āryā', [12, 18, 12, 15])
   # From Bhartrhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
@@ -194,6 +194,11 @@ def InitializeData():
                 ['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'])
   AddExactVrtta('Āryā',
                 ['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLL.'])
+  # From Bhartrhari (BharSt_1.87, chinno 'pi rohati taruḥ...)
+  AddExactVrtta('Āryā (with final laghu)',
+                ['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'])
+  AddExactVrtta('Āryā',
+                ['GGLGLLLG', 'GGLLGLGLGG.', 'LLLLGGGG', 'GGGGLGG.'])
 
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
