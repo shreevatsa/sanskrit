@@ -154,7 +154,7 @@ def AddVishamavrtta(metre_name, line_patterns):
     line = CleanUpPatternString(line)
     assert re.match(r'^[LG.]*$', line)
     for pattern in OptionsExpand(line):
-      AddPada(metre_name + ' (pada %d)' % (i + 1), pattern)
+      AddPada(metre_name + ' (pāda %d)' % (i + 1), pattern)
 
 
 def AddMatravrtta(metre_name, line_morae):
@@ -169,13 +169,31 @@ def InitializeData():
   """Add all known metres to the data structures."""
   # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
   AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
+  # "jayanti te sukṛtino..."
+  AddVishamavrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
+                  ['LGLGLLLG', '....LGLG', '....LGG.', '....LGLG'])
 
   # AddMatravrtta('Āryā', [12, 18, 12, 15])
-  # From Bhartrhari (BharSt_1.3)
-  AddExactVrtta('Āryā', ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLG'])
-  # Should we have this?
+  # From Bhartrhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
   AddExactVrtta('Āryā (with final laghu)',
                 ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
+  AddExactVrtta('Āryā',
+                ['GGLLGGG', 'LLLLGGLGLGG.', 'GLLLGLGG', 'GGLLGLGLL.'])
+  # From Bhartrhari (BharSt_1.37, siṃhaḥ śiśur api nipatati...)
+  AddExactVrtta('Āryā (with final laghu)',
+                ['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'])
+  AddExactVrtta('Āryā',
+                ['GGLLLLLLLL', 'LLLLLLGLGLLLG.', 'LLLLGGLLG', 'LLLLGGLGG.'])
+  # From Bhartrhari (BharSt_1.43, dānaṃ bhogo nāśas...)
+  AddExactVrtta('Āryā (with final laghu)',
+                ['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'])
+  AddExactVrtta('Āryā',
+                ['GGGGGG', 'GGLLGLGLGG.', 'GLLGLLGG', 'GLLGGLGLL.'])
+  # From Bhartrhari (BharSt_1.61, mṛga-mīna-sajjanānāṃ...)
+  AddExactVrtta('Āryā (with final laghu)',
+                ['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'])
+  AddExactVrtta('Āryā',
+                ['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLL.'])
 
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
