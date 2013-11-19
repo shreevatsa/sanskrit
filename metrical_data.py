@@ -60,8 +60,7 @@ def AddPada(metre_name, pattern):
                     pattern, metre_name, known_patterns[pattern])
     known_patterns[pattern] += ' or one pāda of %s' % metre_name
     if pattern.endswith('G'):
-      MaybeAddPada(metre_name + ' (with viṣama-pādānta-laghu)',
-                   LaghuEnding(pattern))
+      MaybeAddPada(metre_name + ' (with pādānta-laghu)', LaghuEnding(pattern))
   else:
     known_patterns[pattern] = 'One pāda of %s' % metre_name
     if pattern.endswith('G'):
@@ -171,6 +170,13 @@ def InitializeData():
   # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
   AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L .')
   AddMatravrtta('Āryā', [12, 18, 12, 15])
+
+  # From Bhartrhari (BharSt_1.3)
+  AddVishamavrtta('Āryā', ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLG'])
+  # Should we have this?
+  AddVishamavrtta('Āryā (with final laghu)',
+                  ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
+
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
   AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
