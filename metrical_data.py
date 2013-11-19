@@ -20,15 +20,12 @@ known_morae = {}
 
 
 def LooseEnding(pattern):
-  if pattern.endswith('.'):
-    logging.warning('Pattern %s is already liberal.', pattern)
-  else:
-    assert pattern.endswith('G')
+  assert pattern.endswith('.') or pattern.endswith('G'), pattern
   return pattern[:-1] + '.'
 
 
 def LaghuEnding(pattern):
-  assert pattern.endswith('G'), pattern
+  assert pattern.endswith('.') or pattern.endswith('G'), pattern
   return pattern[:-1] + 'L'
 
 
@@ -88,23 +85,48 @@ def AddVrtta(metre_name, verse_pattern):
   known_metres[verse_pattern] = metre_name
 
 
+def AddExactVrtta(metre_name, line_patterns):
+  """Given the four lines of a vṛtta, add it to the data structures exactly."""
+  assert len(line_patterns) == 4, (metre_name, line_patterns)
+  for pattern in line_patterns:
+    assert pattern == CleanUpPatternString(pattern)
+  AddVrtta(metre_name, ''.join(line_patterns))
+
+
+def AddFourLineVrtta(metre_name, line_patterns):
+  """Given the four lines of a vṛtta, add it to the data structures."""
+  assert len(line_patterns) == 4, (metre_name, line_patterns)
+  clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
+  for pattern in clean:
+    assert re.match(r'^[LG.]*$', pattern)
+  loose = [None, LooseEnding(clean[1]), None, LooseEnding(clean[3])]
+  assert clean[1].endswith('G')
+  assert clean[3].endswith('G')
+  full_verse_pattern = clean[0] + loose[1] + clean[2] + loose[3]
+  AddVrtta(metre_name, full_verse_pattern)
+
+  tolerable = []
+  if clean[2].endswith('G'):
+    tolerable.append(clean[0] + loose[1] + LaghuEnding(clean[2]) + loose[3])
+  if clean[0].endswith('G'):
+    laghu0 = LaghuEnding(clean[0])
+    tolerable.append(laghu0 + loose[1] + clean[2] + loose[3])
+    if clean[2].endswith('G'):
+      tolerable.append(laghu0 + loose[1] + LaghuEnding(clean[2]) + loose[3])
+  for verse_pattern in tolerable:
+    AddVrtta(metre_name + ' (with viṣama-pādānta-laghu)', verse_pattern)
+
+
 def AddSamavrtta(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre, add it to the data structures."""
   clean = CleanUpPatternString(each_line_pattern)
   assert re.match(r'^[LG.]*$', clean)
   assert clean.endswith('G'), (clean, metre_name)
-  if clean.endswith('G'):
-    loose = LooseEnding(clean)
-    laghu = LaghuEnding(clean)
-    full_verse_pattern = (clean + loose) * 2
-    AddVrtta(metre_name, full_verse_pattern)
-    AddArdha(metre_name, clean, loose)
-    for verse_pattern in [clean + loose + laghu + loose,
-                          laghu + loose + clean + loose,
-                          laghu + loose + laghu + loose]:
-      AddVrtta(metre_name + ' (with viṣama-pādānta-laghu)', verse_pattern)
-    for explicit_pattern in OptionsExpand(clean):
-      AddPada(metre_name, explicit_pattern)
+  loose = LooseEnding(clean)
+  AddFourLineVrtta(metre_name, [clean] * 4)
+  AddArdha(metre_name, clean, loose)
+  for explicit_pattern in OptionsExpand(clean):
+    AddPada(metre_name, explicit_pattern)
 
 
 def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
@@ -114,44 +136,25 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
   clean_even = CleanUpPatternString(even_line_pattern)
   assert re.match(r'^[LG.]*$', clean_even)
 
-  loose_even = LooseEnding(clean_even)
-  if clean_odd.endswith('.'):
-    # This is the easy case. The pattern itself is already liberal.
-    full_verse_pattern = (clean_odd + loose_even) * 2
-    AddVrtta(metre_name, full_verse_pattern)
-    AddArdha(metre_name, clean_odd, loose_even)
-    for explicit_pattern in OptionsExpand(clean_odd):
-      AddPada(metre_name + ' (odd pāda)', explicit_pattern)
-    for explicit_pattern in OptionsExpand(clean_even):
-      AddPada(metre_name + ' (even pāda)', explicit_pattern)
-  else:
-    assert clean_odd.endswith('G')
-    laghu_odd = LaghuEnding(clean_odd)
-    full_verse_pattern = (clean_odd + loose_even) * 2
-    AddVrtta(metre_name, full_verse_pattern)
-    for verse_pattern in [clean_odd + loose_even + laghu_odd + loose_even,
-                          laghu_odd + loose_even + clean_odd + loose_even,
-                          laghu_odd + loose_even + laghu_odd + loose_even]:
-      AddVrtta(metre_name + ' (with viṣama-pādānta-laghu)', verse_pattern)
-    AddArdha(metre_name, clean_odd, loose_even)
-    for explicit_pattern in OptionsExpand(clean_odd):
-      AddPada(metre_name + ' (odd pāda)', explicit_pattern)
-    for explicit_pattern in OptionsExpand(clean_even):
-      AddPada(metre_name + ' (even pāda)', explicit_pattern)
+  AddFourLineVrtta(metre_name, [clean_odd, clean_even] * 2)
+  AddArdha(metre_name, clean_odd, LooseEnding(clean_even))
+  for explicit_pattern in OptionsExpand(clean_odd):
+    AddPada(metre_name + ' (odd pāda)', explicit_pattern)
+  for explicit_pattern in OptionsExpand(clean_even):
+    AddPada(metre_name + ' (even pāda)', explicit_pattern)
 
 
 def AddVishamavrtta(metre_name, line_patterns):
   """Given a viṣama-vṛtta metre, add it to the data structures."""
-  assert len(line_patterns) == 4
-  verse_pattern = ''
-  for i in range(4):
-    line_pattern = CleanUpPatternString(line_patterns[i])
-    # Doesn't have to end in guru; consider pāda 1 of Udgatā
-    assert re.match(r'^[LG.]*$', line_pattern)
-    verse_pattern += line_pattern
-    for fully_specified_pattern in OptionsExpand(line_pattern):
-      known_patterns[fully_specified_pattern] = '%s_pāda_%d' % (metre_name, i)
-  AddVrtta(metre_name, verse_pattern)
+  AddFourLineVrtta(metre_name, line_patterns)
+  clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
+  AddArdha('First ' + metre_name, clean[0], LooseEnding(clean[1]))
+  AddArdha('Second ' + metre_name, clean[2], LooseEnding(clean[3]))
+  for (i, line) in enumerate(line_patterns):
+    line = CleanUpPatternString(line)
+    assert re.match(r'^[LG.]*$', line)
+    for pattern in OptionsExpand(line):
+      AddPada(metre_name + ' (pada %d)' % (i + 1), pattern)
 
 
 def AddMatravrtta(metre_name, line_morae):
@@ -169,10 +172,10 @@ def InitializeData():
 
   # AddMatravrtta('Āryā', [12, 18, 12, 15])
   # From Bhartrhari (BharSt_1.3)
-  AddVishamavrtta('Āryā', ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLG'])
+  AddExactVrtta('Āryā', ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLG'])
   # Should we have this?
-  AddVishamavrtta('Āryā (with final laghu)',
-                  ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
+  AddExactVrtta('Āryā (with final laghu)',
+                ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
 
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
@@ -209,7 +212,7 @@ def InitializeData():
   AddArdhasamavrtta('Puṣpitāgrā',
                     'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
   AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
-                              'L L L L L  G  L  G  L G',   # TODO(shreevatsa): ā
+                              'L L L L L  G  L  G  L G',
                               ' G  L L L L L L  G  L L G',
                               'L L  G  L  G  L L L  G  L G L G'])
   AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
