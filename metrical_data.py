@@ -169,8 +169,8 @@ def InitializeData():
   """Add all known metres to the data structures."""
   # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
   AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L .')
-  AddMatravrtta('Āryā', [12, 18, 12, 15])
 
+  # AddMatravrtta('Āryā', [12, 18, 12, 15])
   # From Bhartrhari (BharSt_1.3)
   AddVishamavrtta('Āryā', ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLG'])
   # Should we have this?
