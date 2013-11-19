@@ -165,15 +165,8 @@ def AddMatravrtta(metre_name, line_morae):
                       line_morae[2] + line_morae[3]])] = metre_name
 
 
-def InitializeData():
-  """Add all known metres to the data structures."""
-  # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
-  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
-  # "jayanti te sukṛtino..."
-  AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
-                ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'])
-
-  # AddMatravrtta('Āryā', [12, 18, 12, 15])
+def AddAryaExamples():
+  """Add collected examples of the Āryā metre."""
   # From Bhartrhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
   AddExactVrtta('Āryā (with final laghu)',
                 ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
@@ -199,6 +192,21 @@ def InitializeData():
                 ['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'])
   AddExactVrtta('Āryā',
                 ['GGLGLLLG', 'GGLLGLGLGG.', 'LLLLGGGG', 'GGGGLGG.'])
+  # From Bhartrhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
+  AddExactVrtta('Āryā',
+                ['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
+
+
+def InitializeData():
+  """Add all known metres to the data structures."""
+  # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
+  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
+  # "jayanti te sukṛtino..."
+  AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
+                ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'])
+
+  # AddMatravrtta('Āryā', [12, 18, 12, 15])
+  AddAryaExamples()
 
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
