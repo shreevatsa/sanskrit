@@ -149,7 +149,7 @@ def MatraCount(pattern):
 
 
 if __name__ == '__main__':
-  logging.getLogger().setLevel(logging.DEBUG)
+  logging.getLogger().setLevel(logging.WARNING)
   lines = [l.decode('utf8') for l in sys.stdin]
   identifier = Identifier()
   identifier.IdentifyFromLines(lines)
