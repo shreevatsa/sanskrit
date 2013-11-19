@@ -46,8 +46,9 @@ class Identifier(object):
     self.output = []
     if not metrical_data.known_metres:
       metrical_data.InitializeData()
-    logging.info('Done initializing. There are %s known_metres',
-                 len(metrical_data.known_metres))
+    logging.info('Done initializing. There are %d known_metres'
+                 ' and %d known_patterns', len(metrical_data.known_metres),
+                 len(metrical_data.known_patterns))
 
   def AllDebugOutput(self):
     return '\n'.join(self.output)
@@ -148,6 +149,7 @@ def MatraCount(pattern):
 
 
 if __name__ == '__main__':
+  logging.getLogger().setLevel(logging.DEBUG)
   lines = [l.decode('utf8') for l in sys.stdin]
   identifier = Identifier()
   identifier.IdentifyFromLines(lines)

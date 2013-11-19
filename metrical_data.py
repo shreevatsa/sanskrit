@@ -47,7 +47,8 @@ def OptionsExpand(pattern):
 def MaybeAddPada(metre_name, pattern):
   assert re.match(r'^[LG]*$', pattern)
   if pattern in known_patterns:
-    logging.warning('Not adding %s for %s', pattern, metre_name)
+    logging.warning('Not adding %s for %s. It is known as %s', pattern,
+                    metre_name, known_patterns[pattern])
   else:
     AddPada(metre_name, pattern)
 
@@ -71,10 +72,17 @@ def AddPada(metre_name, pattern):
 def AddArdha(metre_name, pattern_odd, pattern_even):
   assert re.match(r'^[LG.]*$', pattern_odd)
   assert re.match(r'^[LG.]*$', pattern_even)
+  assert pattern_even.endswith('.')
   odds = OptionsExpand(pattern_odd)
-  evens = OptionsExpand(pattern_even)
+  # Making this a list as we use it twice.
+  evens = list(OptionsExpand(pattern_even))
   for (o, e) in itertools.product(odds, evens):
-    known_patterns[o + e] = '%s_half' % metre_name
+    known_patterns[o + e] = 'Half of %s' % metre_name
+  if pattern_odd.endswith('G'):
+    odds = OptionsExpand(LaghuEnding(pattern_odd))
+    for (o, e) in itertools.product(odds, evens):
+      known_patterns[o + e] = (
+          'Half of %s (with viṣama-pādānta-laghu)' % metre_name)
 
 
 def AddVrtta(metre_name, verse_pattern):
@@ -89,18 +97,12 @@ def AddSamavrtta(metre_name, each_line_pattern):
   clean = CleanUpPatternString(each_line_pattern)
   assert re.match(r'^[LG.]*$', clean)
   assert clean.endswith('G'), (clean, metre_name)
-  # if clean.endswith('.'):
-  #   # This is the easy case. The pattern itself is already liberal.
-  #   AddVrtta(metre_name, clean * 4)
-  #   AddArdha(metre_name, clean, clean)
-  #   for explicit_pattern in OptionsExpand(clean):
-  #     AddPada(metre_name, explicit_pattern)
   if clean.endswith('G'):
     loose = LooseEnding(clean)
     laghu = LaghuEnding(clean)
     full_verse_pattern = (clean + loose) * 2
     AddVrtta(metre_name, full_verse_pattern)
-    AddArdha(metre_name, clean, clean)
+    AddArdha(metre_name, clean, loose)
     for verse_pattern in [clean + loose + laghu + loose,
                           laghu + loose + clean + loose,
                           laghu + loose + laghu + loose]:
@@ -135,7 +137,7 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
                           laghu_odd + loose_even + clean_odd + loose_even,
                           laghu_odd + loose_even + laghu_odd + loose_even]:
       AddVrtta(metre_name + ' (with viṣama-pādānta-laghu)', verse_pattern)
-    AddArdha(metre_name, clean_odd, clean_even)
+    AddArdha(metre_name, clean_odd, loose_even)
     for explicit_pattern in OptionsExpand(clean_odd):
       AddPada(metre_name + ' (odd pāda)', explicit_pattern)
     for explicit_pattern in OptionsExpand(clean_even):
