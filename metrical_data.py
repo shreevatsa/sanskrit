@@ -167,95 +167,109 @@ def AddMatravrtta(metre_name, line_morae):
 
 def AddAryaExamples():
   """Add collected examples of the Āryā metre."""
-  # From Bhartrhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
+  # From Bhartṛhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
   AddExactVrtta('Āryā (with final laghu)',
                 ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
   AddExactVrtta('Āryā',
                 ['GGLLGGG', 'LLLLGGLGLGG.', 'GLLLGLGG', 'GGLLGLGLL.'])
-  # From Bhartrhari (BharSt_1.37, siṃhaḥ śiśur api nipatati...)
+  # From Bhartṛhari (BharSt_1.37, siṃhaḥ śiśur api nipatati...)
   AddExactVrtta('Āryā (with final laghu)',
                 ['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'])
   AddExactVrtta('Āryā',
                 ['GGLLLLLLLL', 'LLLLLLGLGLLLG.', 'LLLLGGLLG', 'LLLLGGLGG.'])
-  # From Bhartrhari (BharSt_1.43, dānaṃ bhogo nāśas...)
+  # From Bhartṛhari (BharSt_1.43, dānaṃ bhogo nāśas...)
   AddExactVrtta('Āryā (with final laghu)',
                 ['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'])
   AddExactVrtta('Āryā',
                 ['GGGGGG', 'GGLLGLGLGG.', 'GLLGLLGG', 'GLLGGLGLL.'])
-  # From Bhartrhari (BharSt_1.61, mṛga-mīna-sajjanānāṃ...)
+  # From Bhartṛhari (BharSt_1.61, mṛga-mīna-sajjanānāṃ...)
   AddExactVrtta('Āryā (with final laghu)',
                 ['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'])
   AddExactVrtta('Āryā',
                 ['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLL.'])
-  # From Bhartrhari (BharSt_1.87, chinno 'pi rohati taruḥ...)
+  # From Bhartṛhari (BharSt_1.87, chinno 'pi rohati taruḥ...)
   AddExactVrtta('Āryā (with final laghu)',
                 ['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'])
   AddExactVrtta('Āryā',
                 ['GGLGLLLG', 'GGLLGLGLGG.', 'LLLLGGGG', 'GGGGLGG.'])
-  # From Bhartrhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
+  # From Bhartṛhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
   AddExactVrtta('Āryā',
                 ['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
 
 
 def InitializeData():
   """Add all known metres to the data structures."""
-  # TODO(shreevatsa): Ridiculous that this runs each time; needs fixing (easy).
   AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
   # "jayanti te sukṛtino..."
   AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
                 ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'])
 
   # AddMatravrtta('Āryā', [12, 18, 12, 15])
+  # Bhartṛhari
   AddAryaExamples()
 
+  # Bhartṛhari
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
+  # Bhartṛhari
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
-  AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
-  AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
-  AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
+  # AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
+  # AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
+  # AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
+  # Bhartṛhari
   AddSamavrtta('Drutavilambitam', 'L L L G L L G L L G L G')
-  AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
+  # AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
+  # Bhartṛhari
   AddSamavrtta('Śālinī', 'G G G G — G L G G L G G')
-  AddSamavrtta('Praharṣiṇī', 'G G G L L L L G L G L G G')
-  AddSamavrtta('Bhujañgaprayātam', 'L G G L G G L G G L G G')
-  AddSamavrtta('Toṭakam', 'L L G L L G L L G L L G')
-  AddSamavrtta('Sragviṇī', 'G L G G L G G L G G L G')
-  AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L G')
+  # AddSamavrtta('Praharṣiṇī', 'G G G L L L L G L G L G G')
+  # AddSamavrtta('Bhujañgaprayātam', 'L G G L G G L G G L G G')
+  # AddSamavrtta('Toṭakam', 'L L G L L G L L G L L G')
+  # AddSamavrtta('Sragviṇī', 'G L G G L G G L G G L G')
+  # AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L G')
+  # Bhartṛhari
   AddSamavrtta('Vasantatilakā', 'G G L G L L L G L L G L G G')
+  # Bhartṛhari
   AddSamavrtta('Mālinī', 'L L L L L L G G — G L G G L G G')
-  AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L G')
-  AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
+  # AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L G')
+  # AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
+  # Meghadūta
   AddSamavrtta('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G')
+  # Bhartṛhari
   AddSamavrtta('Śikhariṇī', 'L G G G G G – L L L L L G G — L L L G')
+  # Bhartṛhari
   AddSamavrtta('Hariṇī', 'L L L L L G — G G G G — L G L L G L G')
+  # Bhartṛhari
   AddSamavrtta('Pṛthvī', 'L G L L L G L G—L L L G L G G L G')
-  AddSamavrtta('Kokilalam (Nardaṭakam)', 'L L L L G L G L L L G — L L G L L G')
-  AddSamavrtta('Mallikāmālā (Matta-kokilā)',
-               'G L G L L G L G L L G L G L L G L G')
+  # AddSamavrtta('Kokilalam (Nardaṭakam)',
+  #              'L L L L G L G L L L G — L L G L L G')
+  # AddSamavrtta('Mallikāmālā (Matta-kokilā)',
+  #              'G L G L L G L G L L G L G L L G L G')
+  # Bhartṛhari
   AddSamavrtta('Śārdūlavikrīḍitam', 'G G G L L G L G L L L G — G G L G G L G')
+  # Bhartṛhari
   AddSamavrtta('Sragdharā', 'G G G G L G G — L L L L L L G — G L G G L G G')
-  AddArdhasamavrtta('Viyoginī', 'L L G   L L G L G L G',
-                    'L L G G L L G L G L G')
-  AddArdhasamavrtta('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
-                    'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
-  AddArdhasamavrtta('Aparavaktrā',
-                    'L L L L L L G — L G L G', 'L L L L G — L L G L G L G')
-  AddArdhasamavrtta('Puṣpitāgrā',
-                    'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
-  AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
-                              'L L L L L  G  L  G  L G',
-                              ' G  L L L L L L  G  L L G',
-                              'L L  G  L  G  L L L  G  L G L G'])
-  AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
-               'G G L G L L L – G G L G L L L – G G L G L L L G')
-  AddSamavrtta('Śivatāṇḍava',
-               'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G')
+  # AddArdhasamavrtta('Viyoginī', 'L L G   L L G L G L G',
+  #                   'L L G G L L G L G L G')
+  # AddArdhasamavrtta('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
+  #                   'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
+  # AddArdhasamavrtta('Aparavaktrā',
+  #                   'L L L L L L G — L G L G', 'L L L L G — L L G L G L G')
+  # AddArdhasamavrtta('Puṣpitāgrā',
+  #                   'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
+  # AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
+  #                             'L L L L L  G  L  G  L G',
+  #                             ' G  L L L L L L  G  L L G',
+  #                             'L L  G  L  G  L L L  G  L G L G'])
+  # AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
+  #              'G G L G L L L – G G L G L L L – G G L G L L L G')
+  # AddSamavrtta('Śivatāṇḍava',
+  #              'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G')
+  # Bhartṛhari
   AddSamavrtta('Dodhakam', 'G L L G L L G L L G G')
-  # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
-  AddSamavrtta('Mālatī', 'L L L L G L L G L G L G')
-  AddSamavrtta('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G')
-  AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G G')
-  AddSamavrtta('Vidyunmālā', 'G G G G G G G G')
+  # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
+  # AddSamavrtta('Mālatī', 'L L L L G L L G L G L G')
+  # AddSamavrtta('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G')
+  # AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G G')
+  # AddSamavrtta('Vidyunmālā', 'G G G G G G G G')
 
 
 def CleanUpPatternString(pattern):
