@@ -206,6 +206,9 @@ def InitializeData():
   # "sati pradīpe saty agnau..." Proof: K48.130 (p. 51)
   AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
                 ['LGLGGGGG', '....LGL.', '....LGG.', '....LGL.'])
+  # guruṇā stana-bhāreṇa [...] śanaiś-carābhyāṃ pādābhyāṃ" K48.132 (52)
+  AddExactVrtta('Anuṣṭup (Śloka) (with third pāda not conforming)',
+                ['....LGG.', '....LGL.', 'LGLGGGGG', '....LGL.'])
 
   # AddMatravrtta('Āryā', [12, 18, 12, 15])
   # Bhartṛhari
@@ -216,7 +219,8 @@ def InitializeData():
   # Bhartṛhari
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
   # AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
-  # AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
+  # Bhartṛhari
+  AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
   # AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
   # Bhartṛhari
   AddSamavrtta('Drutavilambitam', 'L L L G L L G L L G L G')
