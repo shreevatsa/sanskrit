@@ -203,6 +203,9 @@ def InitializeData():
   # "jayanti te sukṛtino..."
   AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
                 ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'])
+  # "sati pradīpe saty agnau..." Proof: K48.130 (p. 51)
+  AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
+                ['LGLGGGGG', '....LGL.', '....LGG.', '....LGL.'])
 
   # AddMatravrtta('Āryā', [12, 18, 12, 15])
   # Bhartṛhari
