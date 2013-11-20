@@ -195,6 +195,12 @@ def AddAryaExamples():
   # From Bhartṛhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
   AddExactVrtta('Āryā',
                 ['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
+  # From Bhartṛhari (BharSt_2.26, āmīlitanayanānāṃ...)
+  AddExactVrtta('Gīti',
+                ['GGLLLLGG', 'GLLLLGLGLGGL', 'LLGLGLGLL', 'LLLLLLGLGLGGLL'])
+  # The version of the above in Kosambi
+  AddExactVrtta('Gīti',
+                ['GGLLLLGG', 'GLLLLGLGLGLLG', 'LLGLGLGLL', 'GLLLLGLGLGLLG'])
 
 
 def InitializeData():
@@ -260,8 +266,9 @@ def InitializeData():
   #                   'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
   # AddArdhasamavrtta('Aparavaktrā',
   #                   'L L L L L L G — L G L G', 'L L L L G — L L G L G L G')
-  # AddArdhasamavrtta('Puṣpitāgrā',
-  #                   'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
+  # Bhartṛhari
+  AddArdhasamavrtta('Puṣpitāgrā',
+                    'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
   # AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
   #                             'L L L L L  G  L  G  L G',
   #                             ' G  L L L L L L  G  L L G',
