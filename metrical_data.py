@@ -195,6 +195,9 @@ def AddAryaExamples():
   # From Bhartṛhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
   AddExactVrtta('Āryā',
                 ['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
+  # From Bhartṛhari (BharSt_2.60, "kaś cumbati kula-puruṣo...")
+  AddExactVrtta('Āryā',
+                ['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'])
   # From Bhartṛhari (BharSt_2.26, āmīlitanayanānāṃ...)
   AddExactVrtta('Gīti',
                 ['GGLLLLGG', 'GLLLLGLGLGGL', 'LLGLGLGLL', 'LLLLLLGLGLGGLL'])
@@ -219,9 +222,8 @@ def InitializeData():
   AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
                 ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'])
 
-  # AddMatravrtta('Āryā', [12, 18, 12, 15])
-  # Bhartṛhari
   AddAryaExamples()
+  # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
 
   # Bhartṛhari
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
