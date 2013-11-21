@@ -198,6 +198,9 @@ def AddAryaExamples():
   # From Bhartṛhari (BharSt_2.60, "kaś cumbati kula-puruṣo...")
   AddExactVrtta('Āryā',
                 ['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'])
+  # From Bhartṛhari ("virahe 'pi saṅgamaḥ khalu...", K48.328 (129))
+  AddExactVrtta('Āryā',
+                ['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'])
   # From Bhartṛhari (BharSt_2.26, āmīlitanayanānāṃ...)
   AddExactVrtta('Gīti',
                 ['GGLLLLGG', 'GLLLLGLGLGGL', 'LLGLGLGLL', 'LLLLLLGLGLGGLL'])
