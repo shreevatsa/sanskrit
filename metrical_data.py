@@ -263,8 +263,10 @@ def InitializeData():
   AddSamavrtta('Śārdūlavikrīḍitam', 'G G G L L G L G L L L G — G G L G G L G')
   # Bhartṛhari
   AddSamavrtta('Sragdharā', 'G G G G L G G — L L L L L L G — G L G G L G G')
-  # AddArdhasamavrtta('Viyoginī', 'L L G   L L G L G L G',
-  #                   'L L G G L L G L G L G')
+  # Bhartṛhari
+  AddArdhasamavrtta('Viyoginī',
+                    'L L G   L L G L G L G',
+                    'L L G G L L G L G L G')
   # AddArdhasamavrtta('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
   #                   'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
   # AddArdhasamavrtta('Aparavaktrā',
