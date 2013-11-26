@@ -21,29 +21,7 @@ def InputForm(default=''):
     <p>""" % cgi.escape(default)
 
 
-MAIN_PAGE_HTML = """\
-<html>
-  <body>
-    <p>
-      Type a Sanskrit verse into the box below and click the button.
-      <br/>
-      (The input can be in either Devanagari, IAST, Harvard-Kyoto, or
-      ITRANS format.)
-    </p>
-
-    %s
-
-    <p>
-    This is all very raw. Work in progress.
-    Source code at
-    <a href="https://github.com/shreevatsa/sanskrit/tree/metrical-scan"><!--
-    -->https://github.com/shreevatsa/sanskrit/tree/metrical-scan</a>
-    </p>
-
-  </body>
-</html>
-""" % InputForm()
-
+MAIN_PAGE_HTML = open('main.html').read().replace('${INPUT_FORM}', InputForm())
 
 class InputPage(webapp2.RequestHandler):
   def get(self):
