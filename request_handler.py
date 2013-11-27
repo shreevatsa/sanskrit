@@ -17,8 +17,7 @@ def InputForm(default=''):
     <form action="/identify" method="post">
       <div><textarea name="input_verse" rows="6" cols="80">%s</textarea></div>
       <div><input type="submit" value="Identify verse"></div>
-    </form>
-    <p>""" % cgi.escape(default)
+    </form>""" % cgi.escape(default)
 
 
 MAIN_PAGE_HTML = open('main.html').read().replace('${INPUT_FORM}', InputForm())
@@ -40,7 +39,9 @@ class IdentifyPage(webapp2.RequestHandler):
     metre = identifier.IdentifyFromLines(input_verse.split('\n'))
 
     self.response.write('<html><body>')
+    self.response.write('<p>')
     self.response.write(InputForm(input_verse))
+    self.response.write('</p>')
 
     if metre:
       self.response.write('<p>The metre is <font size="+2">%s</font>' % metre)
