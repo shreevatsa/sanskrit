@@ -39,6 +39,23 @@ import metrical_data
 import slp1
 
 
+class RecognitionResult(object):
+  """The result of a metre-identification attempt."""
+
+  def __init__(self, name=None):
+    self.name = name
+    self.issues = []
+
+  def __str__(self):
+    if not self.issues:
+      return self.name
+    else:
+      return self.name + '(probably: %s)' % ', '.join(self.issues)
+
+  def Name(self):
+    return self.name
+
+
 class Identifier(object):
   """An object used to make a single metre-identification call."""
 
@@ -66,20 +83,23 @@ class Identifier(object):
     for known_pattern, known_metre in metrical_data.known_metres.iteritems():
       if re.match('^' + known_pattern + '$', full_verse):
         self.latest_identified_metre = known_metre
-        return known_metre
+        return RecognitionResult(known_metre)
 
     morae = [MatraCount(line) for line in verse]
     if repr(morae) in metrical_data.known_morae:
       known_metre = metrical_data.known_morae[repr(morae)]
       self.latest_identified_metre = known_metre
-      return known_metre
+      return RecognitionResult(known_metre)
+
+    # Nothing recognized, need to examine lines individually
     self.output.append(
         'Metre unknown. There are %d (%s) syllables (%d mātra units).' %
         (len(full_verse), ' + '.join(str(len(line)) for line in verse),
          sum(morae)))
     for (i, line) in enumerate(verse):
+      identified = IdentifyPattern(line)
       self.output.append('  Line %d: pattern %s (%d) is %s' %
-                         (i + 1, line, morae[i], IdentitfyPattern(line)))
+                         (i + 1, line, morae[i], identified))
 
   def IdentifyFromLines(self, input_lines):
     """Takes a bunch of verse lines as input, and identifies metre."""
@@ -97,7 +117,7 @@ class Identifier(object):
     metre = self.IdentifyMetreFromPattern(pattern_lines)
     if metre:
       self.output.append('Identified as %s.' % metre)
-    else:
+    if not metre or metre.issues:
       self.output.extend(cleaner.clean_output)
     return metre
 
@@ -137,7 +157,7 @@ def MetricalPattern(text):
   return text
 
 
-def IdentitfyPattern(pattern):
+def IdentifyPattern(pattern):
   """Given metrical pattern (string of L's and G's), identifies metre."""
   assert re.match('^[LG]*$', pattern)
   return metrical_data.known_patterns.get(pattern, 'unknown')

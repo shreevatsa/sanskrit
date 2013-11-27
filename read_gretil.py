@@ -47,7 +47,7 @@ if __name__ == '__main__':
     metre = identifier.IdentifyFromLines(verse)
     if metre:
       print(('Verse %4d is in %s' % (verse_number + 1, metre)).encode('utf8'))
-    else:
+    if not metre or metre.issues:
       print('Verse %4d:' % (verse_number + 1))
       print('\n'.join(verse).encode('utf8'))
       print(identifier.AllDebugOutput().encode('utf8'))
