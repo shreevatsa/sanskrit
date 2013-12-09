@@ -99,7 +99,8 @@ class Identifier(object):
     self.output.extend(cleaner.error_output)
     self.cleaned_output = cleaner.clean_output
     cleaned_lines = MoveConsonants(cleaned_lines)
-    assert cleaned_lines
+    if not cleaned_lines:
+      return None
 
     pattern_lines = []
     for line in cleaned_lines:
