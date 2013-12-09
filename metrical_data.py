@@ -19,18 +19,53 @@ known_metres = {}
 known_morae = {}
 
 
-def LooseEnding(pattern):
-  assert pattern.endswith('.') or pattern.endswith('G'), pattern
-  return pattern[:-1] + '.'
+class MetrePattern(object):
+  """A metre pattern."""
+
+  FULL = 0
+  HALF = 1
+  PADA = 2
+
+  def __init__(self, metre_name, match_type):
+    self.metre_name = metre_name
+    self.match_type = match_type
+
+  def __str__(self):
+    return self.Name()
+
+  def Name(self):
+    if self.match_type == self.FULL:
+      return self.metre_name
+    if self.match_type == self.HALF:
+      return 'Half of %s' % self.metre_name
+    if self.match_type == self.PADA:
+      return 'One pāda of %s' % self.metre_name
+    assert False
+
+  def MetreName(self):
+    return self.metre_name
+
+
+def CleanUpPatternString(pattern):
+  pattern = simple_utils.RemoveChars(pattern, ' —–')
+  assert re.match(r'^[LG.]*$', pattern), pattern
+  return pattern
 
 
 def LaghuEnding(pattern):
+  assert re.match(r'^[LG.]*$', pattern)
   assert pattern.endswith('.') or pattern.endswith('G'), pattern
   return pattern[:-1] + 'L'
 
 
+def LooseEnding(pattern):
+  assert re.match(r'^[LG.]*$', pattern)
+  assert pattern.endswith('.') or pattern.endswith('G'), pattern
+  return pattern[:-1] + '.'
+
+
 def OptionsExpand(pattern):
-  """Given pattern with n '.'s, returns all 2^n patterns with L and G only."""
+  """Given pattern with n '.'s, yields all 2^n patterns with L and G only."""
   where = pattern.find('.')
   if where == -1:
     yield pattern
@@ -41,11 +76,11 @@ def OptionsExpand(pattern):
       yield prefix + fix + suffix
 
 
-def MaybeAddPada(metre_name, pattern):
+def AddPadaWithoutDuplicating(metre_name, pattern):
   assert re.match(r'^[LG]*$', pattern)
   if pattern in known_patterns:
-    logging.warning('Not adding %s for %s. It is already known as %s', pattern,
-                    metre_name, known_patterns[pattern])
+    logging.fatal('Not adding %s for %s. It is already known as %s', pattern,
+                  metre_name, known_patterns[pattern])
   else:
     AddPada(metre_name, pattern)
 
@@ -55,14 +90,16 @@ def AddPada(metre_name, pattern):
   if pattern in known_patterns:
     logging.warning('Pattern %s, being added for %s, is already known as %s',
                     pattern, metre_name, known_patterns[pattern])
-    known_patterns[pattern] += ' or one pāda of %s' % metre_name
+    known_patterns[pattern].append(MetrePattern(metre_name, MetrePattern.PADA))
   else:
-    known_patterns[pattern] = 'One pāda of %s' % metre_name
+    known_patterns[pattern] = [MetrePattern(metre_name, MetrePattern.PADA)]
   if pattern.endswith('G'):
-    MaybeAddPada(metre_name + ' (with pādānta-laghu)', LaghuEnding(pattern))
+    AddPadaWithoutDuplicating(metre_name + ' (with pādānta-laghu)',
+                              LaghuEnding(pattern))
 
 
 def AddArdha(metre_name, pattern_odd, pattern_even):
+  """Given the patterns of odd and even pādas, add to the data structures."""
   assert re.match(r'^[LG.]*$', pattern_odd)
   assert re.match(r'^[LG.]*$', pattern_even)
   assert pattern_even.endswith('.')
@@ -70,19 +107,21 @@ def AddArdha(metre_name, pattern_odd, pattern_even):
   # Making this a list as we use it twice.
   evens = list(OptionsExpand(pattern_even))
   for (o, e) in itertools.product(odds, evens):
-    known_patterns[o + e] = 'Half of %s' % metre_name
+    assert (o + e) not in known_patterns
+    known_patterns[o + e] = [MetrePattern(metre_name, MetrePattern.HALF)]
+  # Also add the viṣama-pādānta-laghu variants
   if pattern_odd.endswith('G'):
     odds = OptionsExpand(LaghuEnding(pattern_odd))
     for (o, e) in itertools.product(odds, evens):
-      known_patterns[o + e] = (
-          'Half of %s (with viṣama-pādānta-laghu)' % metre_name)
+      known_patterns[o + e] = [MetrePattern(
+          '%s (with viṣama-pādānta-laghu)' % metre_name, MetrePattern.HALF)]
 
 
 def AddVrtta(metre_name, verse_pattern):
   assert verse_pattern not in known_metres, (verse_pattern,
                                              known_metres[verse_pattern])
   logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
-  known_metres[verse_pattern] = metre_name
+  known_metres[verse_pattern] = MetrePattern(metre_name, MetrePattern.FULL)
 
 
 def AddExactVrtta(metre_name, line_patterns):
@@ -104,7 +143,7 @@ def AddFourLineVrtta(metre_name, line_patterns):
   assert clean[3].endswith('G')
   full_verse_pattern = clean[0] + loose[1] + clean[2] + loose[3]
   AddVrtta(metre_name, full_verse_pattern)
-
+  # Now add the other variations as well
   tolerable = []
   if clean[2].endswith('G'):
     tolerable.append(clean[0] + loose[1] + LaghuEnding(clean[2]) + loose[3])
@@ -148,8 +187,8 @@ def AddVishamavrtta(metre_name, line_patterns):
   """Given a viṣama-vṛtta metre, add it to the data structures."""
   AddFourLineVrtta(metre_name, line_patterns)
   clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
-  AddArdha('First ' + metre_name, clean[0], LooseEnding(clean[1]))
-  AddArdha('Second ' + metre_name, clean[2], LooseEnding(clean[3]))
+  AddArdha(metre_name + ', first half', clean[0], LooseEnding(clean[1]))
+  AddArdha(metre_name + ', second half', clean[2], LooseEnding(clean[3]))
   for (i, line) in enumerate(line_patterns):
     line = CleanUpPatternString(line)
     assert re.match(r'^[LG.]*$', line)
@@ -209,9 +248,8 @@ def AddAryaExamples():
                 ['GGLLLLGG', 'GLLLLGLGLGLLG', 'LLGLGLGLL', 'GLLLLGLGLGLLG'])
 
 
-def InitializeData():
-  """Add all known metres to the data structures."""
-  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
+def AddAnustupExamples():
+  """Examples of variation from standard Anuṣṭup."""
   # "jayanti te sukṛtino..."
   AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
                 ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'])
@@ -225,8 +263,14 @@ def InitializeData():
   AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
                 ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'])
 
-  AddAryaExamples()
+
+def InitializeData():
+  """Add all known metres to the data structures."""
+  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
+  AddAnustupExamples()
+
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
+  AddAryaExamples()
 
   # Bhartṛhari
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
@@ -296,7 +340,3 @@ def InitializeData():
   # AddSamavrtta('Vidyunmālā', 'G G G G G G G G')
 
 
-def CleanUpPatternString(pattern):
-  pattern = simple_utils.RemoveChars(pattern, ' —–')
-  assert re.match(r'^[LG.]*$', pattern), pattern
-  return pattern

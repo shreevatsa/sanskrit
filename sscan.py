@@ -19,7 +19,6 @@ Usage from Python code:
      print(identifier.AllDebugOutput())
 
 Known issues:
-     (1) Needs better treatment of pādānta-guru / pādānta-yati.
      (2) Needs a lot more data (metres).
      (3) Missing in output: description of metres.
      (4) When analyzing line-by-line, would be nice to show all resolutions.
@@ -39,23 +38,6 @@ import metrical_data
 import slp1
 
 
-class RecognitionResult(object):
-  """The result of a metre-identification attempt."""
-
-  def __init__(self, name=None):
-    self.name = name
-    self.issues = []
-
-  def __str__(self):
-    if not self.issues:
-      return self.name
-    else:
-      return self.name + '(probably: %s)' % ', '.join(self.issues)
-
-  def Name(self):
-    return self.name
-
-
 class Identifier(object):
   """An object used to make a single metre-identification call."""
 
@@ -72,34 +54,42 @@ class Identifier(object):
 
   def IdentifyMetreFromPattern(self, verse):
     """Given metrical pattern of entire verse, identifies metre."""
+    # Join lines of verse into full_verse
     for pattern in verse:
       if not re.match('^[LG]*$', pattern):
         self.output.append('%s is not a pattern (must have only L and G)'
                            % pattern)
         return None
-
     full_verse = ''.join(verse)
 
     for known_pattern, known_metre in metrical_data.known_metres.iteritems():
       if re.match('^' + known_pattern + '$', full_verse):
         self.latest_identified_metre = known_metre
-        return RecognitionResult(known_metre)
+        return known_metre
 
+    # The pattern was not recognized; try mātrā.
     morae = [MatraCount(line) for line in verse]
     if repr(morae) in metrical_data.known_morae:
       known_metre = metrical_data.known_morae[repr(morae)]
       self.latest_identified_metre = known_metre
-      return RecognitionResult(known_metre)
+      return known_metre
 
     # Nothing recognized, need to examine lines individually
     self.output.append(
         'Metre unknown. There are %d (%s) syllables (%d mātra units).' %
         (len(full_verse), ' + '.join(str(len(line)) for line in verse),
          sum(morae)))
+    result = []
     for (i, line) in enumerate(verse):
       identified = IdentifyPattern(line)
+      if identified:
+        assert isinstance(identified, list), identified
+        result.extend(identified)
+      else:
+        identified = 'unknown'
       self.output.append('  Line %d: pattern %s (%d) is %s' %
                          (i + 1, line, morae[i], identified))
+    return result
 
   def IdentifyFromLines(self, input_lines):
     """Takes a bunch of verse lines as input, and identifies metre."""
@@ -109,6 +99,7 @@ class Identifier(object):
     self.output.extend(cleaner.error_output)
     self.cleaned_output = cleaner.clean_output
     cleaned_lines = MoveConsonants(cleaned_lines)
+    assert cleaned_lines
 
     pattern_lines = []
     for line in cleaned_lines:
@@ -116,8 +107,13 @@ class Identifier(object):
       pattern_lines.append(line)
     metre = self.IdentifyMetreFromPattern(pattern_lines)
     if metre:
-      self.output.append('Identified as %s.' % metre)
-    if not metre or metre.issues:
+      if isinstance(metre, list):
+        self.output.append('Identified as one of %s.' % metre)
+        self.output.extend(cleaner.clean_output)
+      else:
+        assert isinstance(metre, metrical_data.MetrePattern)
+        self.output.append('Identified as %s.' % metre.Name())
+    if not metre:
       self.output.extend(cleaner.clean_output)
     return metre
 
@@ -160,7 +156,14 @@ def MetricalPattern(text):
 def IdentifyPattern(pattern):
   """Given metrical pattern (string of L's and G's), identifies metre."""
   assert re.match('^[LG]*$', pattern)
-  return metrical_data.known_patterns.get(pattern, 'unknown')
+  results = metrical_data.known_patterns.get(pattern)
+  if results is not None:
+    if not isinstance(results, list):
+      print(results.encode('utf8'))
+    assert isinstance(results, list), results
+    for result in results:
+      assert isinstance(result, metrical_data.MetrePattern), result
+  return results
 
 
 def MatraCount(pattern):

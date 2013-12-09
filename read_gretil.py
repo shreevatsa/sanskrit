@@ -46,8 +46,13 @@ if __name__ == '__main__':
     identifier = sscan.Identifier()
     metre = identifier.IdentifyFromLines(verse)
     if metre:
-      print(('Verse %4d is in %s' % (verse_number + 1, metre)).encode('utf8'))
-    if not metre or metre.issues:
+      result = ''
+      if isinstance(metre, list):
+        result = ' or '.join(set(m.MetreName() + ' (probably)' for m in metre))
+      else:
+        result = metre.MetreName()
+      print(('Verse %4d is in %s' % (verse_number + 1, result)).encode('utf8'))
+    if not metre:  # or isinstance(metre, list):
       print('Verse %4d:' % (verse_number + 1))
       print('\n'.join(verse).encode('utf8'))
       print(identifier.AllDebugOutput().encode('utf8'))
