@@ -46,6 +46,10 @@ class MetrePattern(object):
     return self.metre_name
 
 
+def Names(metre_patterns):
+  return ' AND '.join(m.Name() for m in metre_patterns)
+
+
 def CleanUpPatternString(pattern):
   pattern = simple_utils.RemoveChars(pattern, ' —–')
   assert re.match(r'^[LG.]*$', pattern), pattern
@@ -79,8 +83,8 @@ def OptionsExpand(pattern):
 def AddPadaWithoutDuplicating(metre_name, pattern):
   assert re.match(r'^[LG]*$', pattern)
   if pattern in known_patterns:
-    logging.fatal('Not adding %s for %s. It is already known as %s', pattern,
-                  metre_name, known_patterns[pattern])
+    logging.warning('Not adding %s for %s. It is already known as %s', pattern,
+                    metre_name, Names(known_patterns[pattern]))
   else:
     AddPada(metre_name, pattern)
 
@@ -89,7 +93,8 @@ def AddPada(metre_name, pattern):
   assert re.match(r'^[LG]*$', pattern)
   if pattern in known_patterns:
     logging.warning('Pattern %s, being added for %s, is already known as %s',
-                    pattern, metre_name, known_patterns[pattern])
+                    pattern, metre_name, Names(known_patterns[pattern]))
+
     known_patterns[pattern].append(MetrePattern(metre_name, MetrePattern.PADA))
   else:
     known_patterns[pattern] = [MetrePattern(metre_name, MetrePattern.PADA)]
