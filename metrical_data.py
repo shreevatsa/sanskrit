@@ -118,6 +118,7 @@ def AddArdha(metre_name, pattern_odd, pattern_even):
   if pattern_odd.endswith('G'):
     odds = OptionsExpand(LaghuEnding(pattern_odd))
     for (o, e) in itertools.product(odds, evens):
+      assert (o + e) not in known_patterns
       known_patterns[o + e] = [MetrePattern(
           '%s (with viṣama-pādānta-laghu)' % metre_name, MetrePattern.HALF)]
 
