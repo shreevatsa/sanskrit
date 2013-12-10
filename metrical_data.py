@@ -246,6 +246,15 @@ def AddAryaExamples():
   # From Bhartṛhari ("virahe 'pi saṅgamaḥ khalu...", K48.328 (129))
   AddExactVrtta('Āryā',
                 ['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'])
+  # From Bhartṛhari ("sva-para-pratārako...", K48.120 (47))
+  AddExactVrtta('Āryā',
+                ['LLGLGLGG', 'GLLGGLGLGLLG', 'GGLLGLLG', 'GGGGLGLL.'])
+  # From Bhartṛhari ("prathitaḥ praṇayavatīnāṃ...", K48.274 (107))
+  AddExactVrtta('Āryā',
+                ['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLG.'])
+
+
+def AddGitiExamples():
   # From Bhartṛhari (BharSt_2.26, āmīlitanayanānāṃ...)
   AddExactVrtta('Gīti',
                 ['GGLLLLGG', 'GLLLLGLGLGGL', 'LLGLGLGLL', 'LLLLLLGLGLGGLL'])
@@ -277,6 +286,7 @@ def InitializeData():
 
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
   AddAryaExamples()
+  AddGitiExamples()
 
   # Bhartṛhari
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
