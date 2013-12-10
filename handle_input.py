@@ -72,6 +72,8 @@ class InputHandler(object):
         continue
       (line, n) = RemoveVerseNumber(line)
       line = self.TransliterateAndClean(line)
+      if not line:
+        continue
       cleaned_lines.append(line)
       # If verse number was removed, can separate from next verse by blank line.
       if n:
