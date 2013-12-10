@@ -95,8 +95,20 @@ def TransliterateDevanagari(text, ignore=None):
                                      devanagari.Mangle(text), ignore)
 
 
+def IsoToIast(text):
+  text = text.replace('ṁ', 'ṃ')
+  text = text.replace('ē', 'e')
+  text = text.replace('ō', 'o')
+  text = text.replace('r̥̄', 'ṝ')
+  text = text.replace('r̥', 'ṛ')
+  text = text.replace('l̥̄', 'ḹ')
+  text = text.replace('l̥', 'ḷ')
+  return text
+
+
 def DetectAndTransliterate(text, ignore=None):
   """Transliterates text to SLP1, after guessing what script it is."""
+  text = IsoToIast(text)
   characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
   characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'
   characteristic_itrans = r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^|Sh'
