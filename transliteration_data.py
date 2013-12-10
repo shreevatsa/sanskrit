@@ -106,9 +106,18 @@ def IsoToIast(text):
   return text
 
 
+def FixBadDevanagari(text):
+  text = text.replace('ऎ', 'ए')
+  text = text.replace('ऒ', 'ओ')
+  text = text.replace('ॆ', 'े')
+  text = text.replace('ॊ', 'ो')
+  return text
+
+
 def DetectAndTransliterate(text, ignore=None):
   """Transliterates text to SLP1, after guessing what script it is."""
   text = IsoToIast(text)
+  text = FixBadDevanagari(text)
   characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
   characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'
   characteristic_itrans = r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^|Sh'
