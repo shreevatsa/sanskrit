@@ -1,0 +1,7 @@
+Recognize "Viyogini (probably)" etc.
+(This is based on one pAda being off.)
+Can make a RecognizedMetre class.
+viSama-pAdAnta-laghu will be an "issues" instance member.
+
+Print out table for each input file tested.
+Number and percentage.
