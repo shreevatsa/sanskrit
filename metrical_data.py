@@ -215,49 +215,48 @@ def MatraCount(pattern):
   return sum(2 if c == 'G' else 1 for c in pattern)
 
 
-def AddArya(line_patterns, laghu_endings=None):
+def AddArya(line_patterns):
   """Add an example of Arya, with proper morae checking."""
   assert len(line_patterns) == 4
   expected = [12, 18, 12, 15]
   for i in range(4):
-    if laghu_endings and i in laghu_endings:
+    allow_loose_ending = False
+    if i % 2 and line_patterns[i].endswith('L'):
+      allow_loose_ending = True
       expected[i] -= 1
     assert MatraCount(line_patterns[i]) == expected[i], (
         line_patterns[i], MatraCount(line_patterns[i]))
+    if allow_loose_ending:
+      line_patterns[i] = line_patterns[i][:-1] + '.'
   AddExactVrtta('Āryā', line_patterns)
 
 
 def AddAryaExamples():
   """Add collected examples of the Āryā metre."""
   # From Bhartṛhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
-  AddArya(['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'], [3])
-  AddArya(['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLG'])
+  AddArya(['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
   # From Bhartṛhari (BharSt_1.37, siṃhaḥ śiśur api nipatati...)
-  AddArya(['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'], [3])
-  AddArya(['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGG'])
+  AddArya(['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'])
   # From Bhartṛhari (BharSt_1.43, dānaṃ bhogo nāśas...)
-  AddArya(['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'], [1, 3])
-  AddArya(['GGGGGG', 'GGLLGLGLGGG', 'GLLGLLGG', 'GLLGGLGLLG'])
+  AddArya(['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'])
   # From Bhartṛhari (BharSt_1.61, mṛga-mīna-sajjanānāṃ...)
-  AddArya(['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'], [3])
-  AddArya(['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLG'])
+  AddArya(['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'])
   # From Bhartṛhari (BharSt_1.87, chinno 'pi rohati taruḥ...)
-  AddArya(['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'], [1, 3])
-  AddArya(['GGLGLLLG', 'GGLLGLGLGGG', 'LLLLGGGG', 'GGGGLGGG'])
+  AddArya(['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'])
   # From Bhartṛhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
   AddArya(['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
   # From Bhartṛhari (BharSt_2.60, "kaś cumbati kula-puruṣo...")
-  AddArya(['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'], [1, 3])
+  AddArya(['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'])
   # From Bhartṛhari ("virahe 'pi saṅgamaḥ khalu...", K48.328 (129))
-  AddArya(['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'], [3])
+  AddArya(['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'])
   # From Bhartṛhari ("sva-para-pratārako...", K48.120 (47))
-  AddArya(['LLGLGLGG', 'GLLGGLGLGLLG', 'GGLLGLLG', 'GGGGLGLLL'], [3])
+  AddArya(['LLGLGLGG', 'GLLGGLGLGLLG', 'GGLLGLLG', 'GGGGLGLLL'])
   # From Bhartṛhari ("prathitaḥ praṇayavatīnāṃ...", K48.274 (107))
-  AddArya(['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLGL'], [3])
+  AddArya(['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLGL'])
   # From Bhartṛhari ("sahakāra-kusuma-kesara-...", K48.340 (132))
   AddArya(['LLGLLLLGLL', 'LLLLGGLGLLLGG', 'LLLLLLLLLLG', 'LGLGGLGGG'])
   # From Bhartṛhari ("upari ghanaṃ...", K48.87 (34))
-  AddArya(['LLLLGLLLLG', 'GGLLGLGLLLGG', 'LLLLGLLLLG', 'GGLLGLGLLL'], [3])
+  AddArya(['LLLLGLLLLG', 'GGLLGLGLLLGG', 'LLLLGLLLLG', 'GGLLGLGLLL'])
 
 
 def AddGitiExamples():
