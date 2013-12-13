@@ -257,6 +257,8 @@ def AddAryaExamples():
   AddArya(['LLGLLLLGLL', 'LLLLGGLGLLLGG', 'LLLLLLLLLLG', 'LGLGGLGGG'])
   # From Bhartṛhari ("upari ghanaṃ...", K48.87 (34))
   AddArya(['LLLLGLLLLG', 'GGLLGLGLLLGG', 'LLLLGLLLLG', 'GGLLGLGLLL'])
+  # From Bhartṛhari ("yady asya..", K48.309 (121))
+  AddArya(['GGLGLLLG', 'GGGGLGLGGL', 'LLGGLLGG', 'LLGGGLGGG'])
 
 
 def AddGitiExamples():
