@@ -252,6 +252,9 @@ def AddAryaExamples():
   # From Bhartṛhari ("prathitaḥ praṇayavatīnāṃ...", K48.274 (107))
   AddExactVrtta('Āryā',
                 ['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLG.'])
+  # From Bhartṛhari ("sahakāra-kusuma-kesara-...", K48.340 (132))
+  AddExactVrtta('Āryā',
+                ['LLGLLLLGLL', 'LLLLGGLGLLLGG', 'LLLLLLLLLLG', 'LGLGGLGGG'])
 
 
 def AddGitiExamples():
