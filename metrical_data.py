@@ -210,51 +210,52 @@ def AddMatravrtta(metre_name, line_morae):
                       line_morae[2] + line_morae[3]])] = metre_name
 
 
+def MatraCount(pattern):
+  assert re.match('^[LG]*$', pattern)
+  return sum(2 if c == 'G' else 1 for c in pattern)
+
+
+def AddArya(line_patterns, laghu_endings=None):
+  """Add an example of Arya, with proper morae checking."""
+  assert len(line_patterns) == 4
+  expected = [12, 18, 12, 15]
+  for i in range(4):
+    if laghu_endings and i in laghu_endings:
+      expected[i] -= 1
+    assert MatraCount(line_patterns[i]) == expected[i], (
+        line_patterns[i], MatraCount(line_patterns[i]))
+  AddExactVrtta('Āryā', line_patterns)
+
+
 def AddAryaExamples():
   """Add collected examples of the Āryā metre."""
   # From Bhartṛhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
-  AddExactVrtta('Āryā (with final laghu)',
-                ['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
-  AddExactVrtta('Āryā',
-                ['GGLLGGG', 'LLLLGGLGLGG.', 'GLLLGLGG', 'GGLLGLGLL.'])
+  AddArya(['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'], [3])
+  AddArya(['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLG'])
   # From Bhartṛhari (BharSt_1.37, siṃhaḥ śiśur api nipatati...)
-  AddExactVrtta('Āryā (with final laghu)',
-                ['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'])
-  AddExactVrtta('Āryā',
-                ['GGLLLLLLLL', 'LLLLLLGLGLLLG.', 'LLLLGGLLG', 'LLLLGGLGG.'])
+  AddArya(['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'], [3])
+  AddArya(['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGG'])
   # From Bhartṛhari (BharSt_1.43, dānaṃ bhogo nāśas...)
-  AddExactVrtta('Āryā (with final laghu)',
-                ['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'])
-  AddExactVrtta('Āryā',
-                ['GGGGGG', 'GGLLGLGLGG.', 'GLLGLLGG', 'GLLGGLGLL.'])
+  AddArya(['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'], [1, 3])
+  AddArya(['GGGGGG', 'GGLLGLGLGGG', 'GLLGLLGG', 'GLLGGLGLLG'])
   # From Bhartṛhari (BharSt_1.61, mṛga-mīna-sajjanānāṃ...)
-  AddExactVrtta('Āryā (with final laghu)',
-                ['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'])
-  AddExactVrtta('Āryā',
-                ['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLL.'])
+  AddArya(['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'], [3])
+  AddArya(['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLG'])
   # From Bhartṛhari (BharSt_1.87, chinno 'pi rohati taruḥ...)
-  AddExactVrtta('Āryā (with final laghu)',
-                ['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'])
-  AddExactVrtta('Āryā',
-                ['GGLGLLLG', 'GGLLGLGLGG.', 'LLLLGGGG', 'GGGGLGG.'])
+  AddArya(['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'], [1, 3])
+  AddArya(['GGLGLLLG', 'GGLLGLGLGGG', 'LLLLGGGG', 'GGGGLGGG'])
   # From Bhartṛhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
-  AddExactVrtta('Āryā',
-                ['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
+  AddArya(['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
   # From Bhartṛhari (BharSt_2.60, "kaś cumbati kula-puruṣo...")
-  AddExactVrtta('Āryā',
-                ['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'])
+  AddArya(['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'], [1, 3])
   # From Bhartṛhari ("virahe 'pi saṅgamaḥ khalu...", K48.328 (129))
-  AddExactVrtta('Āryā',
-                ['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'])
+  AddArya(['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'], [3])
   # From Bhartṛhari ("sva-para-pratārako...", K48.120 (47))
-  AddExactVrtta('Āryā',
-                ['LLGLGLGG', 'GLLGGLGLGLLG', 'GGLLGLLG', 'GGGGLGLL.'])
+  AddArya(['LLGLGLGG', 'GLLGGLGLGLLG', 'GGLLGLLG', 'GGGGLGLLL'], [3])
   # From Bhartṛhari ("prathitaḥ praṇayavatīnāṃ...", K48.274 (107))
-  AddExactVrtta('Āryā',
-                ['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLG.'])
+  AddArya(['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLGL'], [3])
   # From Bhartṛhari ("sahakāra-kusuma-kesara-...", K48.340 (132))
-  AddExactVrtta('Āryā',
-                ['LLGLLLLGLL', 'LLLLGGLGLLLGG', 'LLLLLLLLLLG', 'LGLGGLGGG'])
+  AddArya(['LLGLLLLGLL', 'LLLLGGLGLLLGG', 'LLLLLLLLLLG', 'LGLGGLGGG'])
 
 
 def AddGitiExamples():
