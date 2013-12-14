@@ -132,7 +132,8 @@ def AddPada(metre_name, pattern, match_type=MetrePattern.PADA):
     AddPadaWithFinalLaghu(metre_name, LaghuEnding(pattern), match_type)
 
 
-def AddArdha(metre_name, pattern_odd, pattern_even):
+def AddArdha(metre_name, pattern_odd, pattern_even,
+             match_type=MetrePattern.HALF):
   """Given the patterns of odd and even pādas, add to the data structures."""
   assert re.match(r'^[LG.]*$', pattern_odd)
   assert re.match(r'^[LG.]*$', pattern_even)
@@ -142,14 +143,14 @@ def AddArdha(metre_name, pattern_odd, pattern_even):
   evens = list(OptionsExpand(pattern_even))
   for (o, e) in itertools.product(odds, evens):
     assert (o + e) not in known_patterns
-    known_patterns[o + e] = [MetrePattern(metre_name, MetrePattern.HALF)]
+    known_patterns[o + e] = [MetrePattern(metre_name, match_type)]
   # Also add the viṣama-pādānta-laghu variants
   if pattern_odd.endswith('G'):
     odds = OptionsExpand(LaghuEnding(pattern_odd))
     for (o, e) in itertools.product(odds, evens):
       assert (o + e) not in known_patterns
       known_patterns[o + e] = [
-          MetrePattern(metre_name, MetrePattern.HALF,
+          MetrePattern(metre_name, match_type,
                        [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])]
 
 
@@ -233,8 +234,9 @@ def AddVishamavrtta(metre_name, line_patterns):
   """Given a viṣama-vṛtta metre, add it to the data structures."""
   AddFourLineVrtta(metre_name, line_patterns)
   clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
-  AddArdha(metre_name + ', first half', clean[0], LooseEnding(clean[1]))
-  AddArdha(metre_name + ', second half', clean[2], LooseEnding(clean[3]))
+  AddArdha(metre_name, clean[0], LooseEnding(clean[1]), MetrePattern.FIRST_HALF)
+  AddArdha(metre_name, clean[2], LooseEnding(clean[3]),
+           MetrePattern.SECOND_HALF)
   for (i, line) in enumerate(line_patterns):
     line = CleanUpPatternString(line)
     assert re.match(r'^[LG.]*$', line)
