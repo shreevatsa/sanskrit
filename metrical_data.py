@@ -36,6 +36,10 @@ class MetrePattern(object):
   HALF = 5
   FIRST_HALF = 6
   SECOND_HALF = 7
+  PADA_1 = 8
+  PADA_2 = 9
+  PADA_3 = 10
+  PADA_4 = 11
 
   def __init__(self, metre_name, match_type, issues=None):
     self.metre_name = metre_name
@@ -241,7 +245,7 @@ def AddVishamavrtta(metre_name, line_patterns):
     line = CleanUpPatternString(line)
     assert re.match(r'^[LG.]*$', line)
     for pattern in OptionsExpand(line):
-      AddPada(metre_name + ' (pāda %d)' % (i + 1), pattern)
+      AddPada(metre_name, pattern, getattr(MetrePattern, 'PADA_%d' % (i + 1)))
 
 
 def AddMatravrtta(metre_name, line_morae):
