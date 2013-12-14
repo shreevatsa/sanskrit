@@ -1,6 +1,6 @@
 [DONE] Recognize "Viyogini (probably)" etc. (When some pAdas are off -- still line-by-line split.)
 
-* Instead of having metre names like
+* [DONE] Instead of having metre names like
   "Anuṣṭup (Śloka) (even pāda) (with pādānta-laghu)",
   make these details part of the MetrePattern class.
 
