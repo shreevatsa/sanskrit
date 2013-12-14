@@ -58,7 +58,7 @@ class MetrePattern(object):
 
   def MetreName(self):
     if self.issues:
-      return self.metre_name + ' (with %s)' % self.issues
+      return self.metre_name + ' (with %s)' % ', '.join(self.issues)
     else:
       return self.metre_name
 
@@ -138,7 +138,7 @@ def AddArdha(metre_name, pattern_odd, pattern_even):
       assert (o + e) not in known_patterns
       known_patterns[o + e] = [
           MetrePattern(metre_name, MetrePattern.HALF,
-                       METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU)]
+                       [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])]
 
 
 def AddVrtta(metre_name, verse_pattern):
@@ -154,7 +154,8 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
   logging.debug('Adding metre %s (with viṣama-pādānta-laghu) with pattern %s',
                 metre_name, verse_pattern)
   known_metres[verse_pattern] = MetrePattern(
-      metre_name, MetrePattern.FULL, METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU)
+      metre_name, MetrePattern.FULL,
+      [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])
 
 
 def AddExactVrtta(metre_name, line_patterns):
