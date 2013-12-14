@@ -48,7 +48,8 @@ if __name__ == '__main__':
     if metre:
       result = None
       if isinstance(metre, list):
-        result = ' or '.join(set(m.MetreName() + ' (probably)' for m in metre))
+        result = ' or '.join(set(m.MetreNameOnlyBase() for m in metre))
+        result += ' (probably)'
       else:
         result = metre.MetreName()
       print(('Verse %4d is in %s' % (verse_number + 1, result)).encode('utf8'))

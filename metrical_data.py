@@ -22,7 +22,8 @@ def Enum(**enums):
   return type(str('Enum'), (), enums)
 
 METRE_PATTERN_ISSUES = Enum(UNKNOWN_ISSUE=0,
-                            VISAMA_PADANTA_LAGHU='viṣama-pādānta-laghu')
+                            VISAMA_PADANTA_LAGHU='viṣama-pādānta-laghu',
+                            PADANTA_LAGHU='pādānta-laghu')
 
 
 class MetrePattern(object):
@@ -36,6 +37,8 @@ class MetrePattern(object):
     self.metre_name = metre_name
     self.match_type = match_type
     self.issues = issues
+    if issues:
+      assert isinstance(issues, list)
 
   def __str__(self):
     return self.Name()
@@ -61,6 +64,9 @@ class MetrePattern(object):
       return self.metre_name + ' (with %s)' % ', '.join(self.issues)
     else:
       return self.metre_name
+
+  def MetreNameOnlyBase(self):
+    return self.metre_name
 
 
 def Names(metre_patterns):
@@ -97,13 +103,14 @@ def OptionsExpand(pattern):
       yield prefix + fix + suffix
 
 
-def AddPadaWithoutDuplicating(metre_name, pattern):
-  assert re.match(r'^[LG]*$', pattern)
+def AddPadaWithFinalLaghu(metre_name, pattern):
+  assert re.match(r'^[LG]*L$', pattern)
   if pattern in known_patterns:
     logging.warning('Not adding %s for %s. It is already known as %s', pattern,
                     metre_name, Names(known_patterns[pattern]))
   else:
-    AddPada(metre_name, pattern)
+    known_patterns[pattern] = [MetrePattern(
+        metre_name, MetrePattern.PADA, [METRE_PATTERN_ISSUES.PADANTA_LAGHU])]
 
 
 def AddPada(metre_name, pattern):
@@ -116,8 +123,7 @@ def AddPada(metre_name, pattern):
   else:
     known_patterns[pattern] = [MetrePattern(metre_name, MetrePattern.PADA)]
   if pattern.endswith('G'):
-    AddPadaWithoutDuplicating(metre_name + ' (with pādānta-laghu)',
-                              LaghuEnding(pattern))
+    AddPadaWithFinalLaghu(metre_name, LaghuEnding(pattern))
 
 
 def AddArdha(metre_name, pattern_odd, pattern_even):
