@@ -1,4 +1,14 @@
 [DONE] Recognize "Viyogini (probably)" etc. (When some pAdas are off -- still line-by-line split.)
-- Can make a RecognizedMetre class. viSama-pAdAnta-laghu will be an "issues" instance member.
 
-Print out table for each input file tested. Number and percentage.
+* Instead of having metre names like
+  "Anuṣṭup (Śloka) (even pāda) (with pādānta-laghu)",
+  make these details part of the MetrePattern class.
+
+* Print out table for each input file tested. Number and percentage.
+  Put this table on the main page.
+
+* Syllabize the input text.
+
+* Use longest-common-subsequence to highlight aberrant syllables.
+
+* Check whether it loads ok on phone. (Autofocus textarea, maybe?)
