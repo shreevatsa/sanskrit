@@ -32,6 +32,10 @@ class MetrePattern(object):
   FULL = 0
   HALF = 1
   PADA = 2
+  ODD_PADA = 3
+  EVEN_PADA = 4
+  FIRST_HALF = 5
+  SECOND_HALF = 6
 
   def __init__(self, metre_name, match_type, issues=None):
     self.metre_name = metre_name
@@ -43,6 +47,15 @@ class MetrePattern(object):
   def __str__(self):
     return self.Name()
 
+  # def NameWithMatchType(self):
+  #   return {
+  #     self.FULL: '%s',
+  #     self.HALF: 'Half of %s',
+  #     self.PADA: 'One pāda of %s',
+  #     self.ODD_PADA: 'Odd pāda of %s',
+  #     self.EVEN_PADA: 'Even pāda of %s'
+  #     } % self.metre_name
+
   def Name(self):
     """Name of the match, including match type and issues."""
     name = None
@@ -52,6 +65,10 @@ class MetrePattern(object):
       name = 'Half of %s' % self.metre_name
     elif self.match_type == self.PADA:
       name = 'One pāda of %s' % self.metre_name
+    elif self.match_type == self.ODD_PADA:
+      name = 'Odd pāda of %s' % self.metre_name
+    elif self.match_type == self.EVEN_PADA:
+      name = 'Even pāda of %s' % self.metre_name
     else:
       assert False
     if self.issues:
@@ -103,27 +120,27 @@ def OptionsExpand(pattern):
       yield prefix + fix + suffix
 
 
-def AddPadaWithFinalLaghu(metre_name, pattern):
+def AddPadaWithFinalLaghu(metre_name, pattern, match_type=MetrePattern.PADA):
   assert re.match(r'^[LG]*L$', pattern)
   if pattern in known_patterns:
     logging.warning('Not adding %s for %s. It is already known as %s', pattern,
                     metre_name, Names(known_patterns[pattern]))
   else:
     known_patterns[pattern] = [MetrePattern(
-        metre_name, MetrePattern.PADA, [METRE_PATTERN_ISSUES.PADANTA_LAGHU])]
+        metre_name, match_type, [METRE_PATTERN_ISSUES.PADANTA_LAGHU])]
 
 
-def AddPada(metre_name, pattern):
+def AddPada(metre_name, pattern, match_type=MetrePattern.PADA):
   assert re.match(r'^[LG]*$', pattern)
   if pattern in known_patterns:
     logging.warning('Pattern %s, being added for %s, is already known as %s',
                     pattern, metre_name, Names(known_patterns[pattern]))
 
-    known_patterns[pattern].append(MetrePattern(metre_name, MetrePattern.PADA))
+    known_patterns[pattern].append(MetrePattern(metre_name, match_type))
   else:
-    known_patterns[pattern] = [MetrePattern(metre_name, MetrePattern.PADA)]
+    known_patterns[pattern] = [MetrePattern(metre_name, match_type)]
   if pattern.endswith('G'):
-    AddPadaWithFinalLaghu(metre_name, LaghuEnding(pattern))
+    AddPadaWithFinalLaghu(metre_name, LaghuEnding(pattern), match_type)
 
 
 def AddArdha(metre_name, pattern_odd, pattern_even):
@@ -218,9 +235,9 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
   AddFourLineVrtta(metre_name, [clean_odd, clean_even] * 2)
   AddArdha(metre_name, clean_odd, LooseEnding(clean_even))
   for explicit_pattern in OptionsExpand(clean_odd):
-    AddPada(metre_name + ' (odd pāda)', explicit_pattern)
+    AddPada(metre_name, explicit_pattern, MetrePattern.ODD_PADA)
   for explicit_pattern in OptionsExpand(clean_even):
-    AddPada(metre_name + ' (even pāda)', explicit_pattern)
+    AddPada(metre_name, explicit_pattern, MetrePattern.EVEN_PADA)
 
 
 def AddVishamavrtta(metre_name, line_patterns):
