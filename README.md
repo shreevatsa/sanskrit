@@ -25,5 +25,5 @@ At the lowest level are the functions / data structures in metrical_data.py.
           The match_type in these MetrePatterns is always a full verse.
      	  The issues can be things like viṣama-pādānta-laghu, or "off" pādas.
 
-
+Also at a similar level are the functions in handle_input.py.
 
