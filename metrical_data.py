@@ -29,13 +29,13 @@ METRE_PATTERN_ISSUES = Enum(UNKNOWN_ISSUE=0,
 class MetrePattern(object):
   """A metre pattern."""
 
-  FULL = 0
-  HALF = 1
+  FULL = 1
   PADA = 2
   ODD_PADA = 3
   EVEN_PADA = 4
-  FIRST_HALF = 5
-  SECOND_HALF = 6
+  HALF = 5
+  FIRST_HALF = 6
+  SECOND_HALF = 7
 
   def __init__(self, metre_name, match_type, issues=None):
     self.metre_name = metre_name
@@ -47,30 +47,19 @@ class MetrePattern(object):
   def __str__(self):
     return self.Name()
 
-  # def NameWithMatchType(self):
-  #   return {
-  #     self.FULL: '%s',
-  #     self.HALF: 'Half of %s',
-  #     self.PADA: 'One pāda of %s',
-  #     self.ODD_PADA: 'Odd pāda of %s',
-  #     self.EVEN_PADA: 'Even pāda of %s'
-  #     } % self.metre_name
+  def NameWithMatchType(self):
+    assert self.match_type
+    return {
+        self.FULL: '%s',
+        self.HALF: 'Half of %s',
+        self.PADA: 'One pāda of %s',
+        self.ODD_PADA: 'Odd pāda of %s',
+        self.EVEN_PADA: 'Even pāda of %s'
+        }[self.match_type] % self.metre_name
 
   def Name(self):
     """Name of the match, including match type and issues."""
-    name = None
-    if self.match_type == self.FULL:
-      name = self.metre_name
-    elif self.match_type == self.HALF:
-      name = 'Half of %s' % self.metre_name
-    elif self.match_type == self.PADA:
-      name = 'One pāda of %s' % self.metre_name
-    elif self.match_type == self.ODD_PADA:
-      name = 'Odd pāda of %s' % self.metre_name
-    elif self.match_type == self.EVEN_PADA:
-      name = 'Even pāda of %s' % self.metre_name
-    else:
-      assert False
+    name = self.NameWithMatchType()
     if self.issues:
       return name + ' (with %s)' % self.issues
     else:
