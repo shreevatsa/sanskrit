@@ -65,7 +65,7 @@ class MetrePattern(object):
     """Name of the match, including match type and issues."""
     name = self.NameWithMatchType()
     if self.issues:
-      return name + ' (with %s)' % self.issues
+      return name + ' (with %s)' % ', '.join(self.issues)
     else:
       return name
 
