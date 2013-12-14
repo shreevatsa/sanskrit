@@ -23,7 +23,10 @@ def Enum(**enums):
 
 METRE_PATTERN_ISSUES = Enum(UNKNOWN_ISSUE=0,
                             VISAMA_PADANTA_LAGHU='viṣama-pādānta-laghu',
-                            PADANTA_LAGHU='pādānta-laghu')
+                            PADANTA_LAGHU='pādānta-laghu',
+                            FIRST_PADA_OFF='first pāda not conforming',
+                            THIRD_PADA_OFF='third pāda not conforming'
+                           )
 
 
 class MetrePattern(object):
@@ -158,11 +161,12 @@ def AddArdha(metre_name, pattern_odd, pattern_even,
                        [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])]
 
 
-def AddVrtta(metre_name, verse_pattern):
+def AddVrtta(metre_name, verse_pattern, issues=None):
   assert verse_pattern not in known_metres, (verse_pattern,
                                              known_metres[verse_pattern])
   logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
-  known_metres[verse_pattern] = MetrePattern(metre_name, MetrePattern.FULL)
+  known_metres[verse_pattern] = MetrePattern(metre_name, MetrePattern.FULL,
+                                             issues)
 
 
 def AddVrttaWithVPL(metre_name, verse_pattern):
@@ -175,12 +179,12 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
       [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])
 
 
-def AddExactVrtta(metre_name, line_patterns):
+def AddExactVrtta(metre_name, line_patterns, issues=None):
   """Given the four lines of a vṛtta, add it to the data structures exactly."""
   assert len(line_patterns) == 4, (metre_name, line_patterns)
   for pattern in line_patterns:
     assert pattern == CleanUpPatternString(pattern)
-  AddVrtta(metre_name, ''.join(line_patterns))
+  AddVrtta(metre_name, ''.join(line_patterns), issues)
 
 
 def AddFourLineVrtta(metre_name, line_patterns):
@@ -319,17 +323,21 @@ def AddGitiExamples():
 def AddAnustupExamples():
   """Examples of variation from standard Anuṣṭup."""
   # "jayanti te sukṛtino..."
-  AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
-                ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'])
+  AddExactVrtta('Anuṣṭup (Śloka)',
+                ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'],
+                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
   # "sati pradīpe saty agnau..." Proof: K48.130 (p. 51)
-  AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
-                ['LGLGGGGG', '....LGL.', '....LGG.', '....LGL.'])
+  AddExactVrtta('Anuṣṭup (Śloka)',
+                ['LGLGGGGG', '....LGL.', '....LGG.', '....LGL.'],
+                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
   # "guruṇā stana-bhāreṇa [...] śanaiś-carābhyāṃ pādābhyāṃ" K48.132 (52)
-  AddExactVrtta('Anuṣṭup (Śloka) (with third pāda not conforming)',
-                ['....LGG.', '....LGL.', 'LGLGGGGG', '....LGL.'])
+  AddExactVrtta('Anuṣṭup (Śloka)',
+                ['....LGG.', '....LGL.', 'LGLGGGGG', '....LGL.'],
+                [METRE_PATTERN_ISSUES.THIRD_PADA_OFF])
   # "tāvad evāmṛtamayī..." K48.125 (49)
-  AddExactVrtta('Anuṣṭup (Śloka) (with first pāda not conforming)',
-                ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'])
+  AddExactVrtta('Anuṣṭup (Śloka)',
+                ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'],
+                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
 
 
 def InitializeData():
