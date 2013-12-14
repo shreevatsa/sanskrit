@@ -18,15 +18,11 @@ known_metres = {}
 known_morae = {}
 
 
-class MetrePatternIssues(object):
-  UNKNOWN_ISSUE = 0
-  VISAMA_PADANTA_LAGHU = 1
+def Enum(**enums):
+  return type(str('Enum'), (), enums)
 
-  def Name(self, issue):
-    assert issue
-    names = {self.VISAMA_PADANTA_LAGHU: 'viṣama-pādānta-laghu'}
-    assert issue in names, issue
-    return names[issue]
+METRE_PATTERN_ISSUES = Enum(UNKNOWN_ISSUE=0,
+                            VISAMA_PADANTA_LAGHU='viṣama-pādānta-laghu')
 
 
 class MetrePattern(object):
@@ -56,14 +52,13 @@ class MetrePattern(object):
     else:
       assert False
     if self.issues:
-      return name + ' (with %s)' % MetrePatternIssues().Name(self.issues)
+      return name + ' (with %s)' % self.issues
     else:
       return name
 
   def MetreName(self):
     if self.issues:
-      return self.metre_name + ' (with %s)' % (
-          MetrePatternIssues().Name(self.issues))
+      return self.metre_name + ' (with %s)' % self.issues
     else:
       return self.metre_name
 
@@ -143,7 +138,7 @@ def AddArdha(metre_name, pattern_odd, pattern_even):
       assert (o + e) not in known_patterns
       known_patterns[o + e] = [
           MetrePattern(metre_name, MetrePattern.HALF,
-                       MetrePatternIssues.VISAMA_PADANTA_LAGHU)]
+                       METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU)]
 
 
 def AddVrtta(metre_name, verse_pattern):
@@ -159,7 +154,7 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
   logging.debug('Adding metre %s (with viṣama-pādānta-laghu) with pattern %s',
                 metre_name, verse_pattern)
   known_metres[verse_pattern] = MetrePattern(
-      metre_name, MetrePattern.FULL, MetrePatternIssues.VISAMA_PADANTA_LAGHU)
+      metre_name, MetrePattern.FULL, METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU)
 
 
 def AddExactVrtta(metre_name, line_patterns):
