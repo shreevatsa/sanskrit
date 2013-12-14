@@ -13,10 +13,20 @@ import re
 
 import simple_utils
 
-# TODO(shreevatsa): Make this pattern -> list, not pattern -> specific pāda type
 known_patterns = {}
 known_metres = {}
 known_morae = {}
+
+
+class MetrePatternIssues(object):
+  UNKNOWN_ISSUE = 0
+  VISAMA_PADANTA_LAGHU = 1
+
+  def Name(self, issue):
+    assert issue
+    names = {self.VISAMA_PADANTA_LAGHU: 'viṣama-pādānta-laghu'}
+    assert issue in names, issue
+    return names[issue]
 
 
 class MetrePattern(object):
@@ -26,24 +36,36 @@ class MetrePattern(object):
   HALF = 1
   PADA = 2
 
-  def __init__(self, metre_name, match_type):
+  def __init__(self, metre_name, match_type, issues=None):
     self.metre_name = metre_name
     self.match_type = match_type
+    self.issues = issues
 
   def __str__(self):
     return self.Name()
 
   def Name(self):
+    """Name of the match, including match type and issues."""
+    name = None
     if self.match_type == self.FULL:
-      return self.metre_name
-    if self.match_type == self.HALF:
-      return 'Half of %s' % self.metre_name
-    if self.match_type == self.PADA:
-      return 'One pāda of %s' % self.metre_name
-    assert False
+      name = self.metre_name
+    elif self.match_type == self.HALF:
+      name = 'Half of %s' % self.metre_name
+    elif self.match_type == self.PADA:
+      name = 'One pāda of %s' % self.metre_name
+    else:
+      assert False
+    if self.issues:
+      return name + ' (with %s)' % MetrePatternIssues().Name(self.issues)
+    else:
+      return name
 
   def MetreName(self):
-    return self.metre_name
+    if self.issues:
+      return self.metre_name + ' (with %s)' % (
+          MetrePatternIssues().Name(self.issues))
+    else:
+      return self.metre_name
 
 
 def Names(metre_patterns):
@@ -119,8 +141,9 @@ def AddArdha(metre_name, pattern_odd, pattern_even):
     odds = OptionsExpand(LaghuEnding(pattern_odd))
     for (o, e) in itertools.product(odds, evens):
       assert (o + e) not in known_patterns
-      known_patterns[o + e] = [MetrePattern(
-          '%s (with viṣama-pādānta-laghu)' % metre_name, MetrePattern.HALF)]
+      known_patterns[o + e] = [
+          MetrePattern(metre_name, MetrePattern.HALF,
+                       MetrePatternIssues.VISAMA_PADANTA_LAGHU)]
 
 
 def AddVrtta(metre_name, verse_pattern):
@@ -128,6 +151,15 @@ def AddVrtta(metre_name, verse_pattern):
                                              known_metres[verse_pattern])
   logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
   known_metres[verse_pattern] = MetrePattern(metre_name, MetrePattern.FULL)
+
+
+def AddVrttaWithVPL(metre_name, verse_pattern):
+  assert verse_pattern not in known_metres, (verse_pattern,
+                                             known_metres[verse_pattern])
+  logging.debug('Adding metre %s (with viṣama-pādānta-laghu) with pattern %s',
+                metre_name, verse_pattern)
+  known_metres[verse_pattern] = MetrePattern(
+      metre_name, MetrePattern.FULL, MetrePatternIssues.VISAMA_PADANTA_LAGHU)
 
 
 def AddExactVrtta(metre_name, line_patterns):
@@ -159,7 +191,7 @@ def AddFourLineVrtta(metre_name, line_patterns):
     if clean[2].endswith('G'):
       tolerable.append(laghu0 + loose[1] + LaghuEnding(clean[2]) + loose[3])
   for verse_pattern in tolerable:
-    AddVrtta(metre_name + ' (with viṣama-pādānta-laghu)', verse_pattern)
+    AddVrttaWithVPL(metre_name, verse_pattern)
 
 
 def AddSamavrtta(metre_name, each_line_pattern):
