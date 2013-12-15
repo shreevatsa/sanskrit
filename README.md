@@ -33,5 +33,19 @@ Finally, the functions in sscan.py take this cleaned-up verse, identify
 laghus-and-gurus in it, and match it with the `known_metres` (failing that,
 `known_patterns` on each line) from metrical_data.py.
 
+--------------------------------------------------------------------------------
+
 From a user point of view, class Identifier in sscan.py is all that needs to be
-interacted with.
+interacted with. If `identifer` is an instance of `Identifier`, then
+
+    identifier.IdentifyFromLines(verse_lines)
+
+returns a list of MetrePatterns that the verse might be in.
+
+The point of using verse_lines rather than a single blob of text is to enable
+partial matches: if there are metrical errors in the verse, but some lines are
+in metre, then they can still be recognized.
+
+Similarly, the point of returning a list of results is to cover the case where
+there might be different results, say different lines in different metres.
+However, this has not ever been seen to happened yet.

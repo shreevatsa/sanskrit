@@ -50,16 +50,6 @@ if __name__ == '__main__':
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]
     metre = identifier.IdentifyFromLines(verse)
-    if metre:
-      result_string = None
-      assert isinstance(metre, list)
-      if len(metre) == 1 and not metre[0].issues:
-        Print('Verse %4d is in %s' % (verse_number + 1, metre[0].MetreName()))
-      else:
-        all_metres = set(m.MetreNameOnlyBase() for m in metre)
-        assert len(all_metres) == 1, (all_metres, verse)
-        Print('Verse %4d is in %s (probably), but it has issues'
-              % (verse_number + 1, all_metres.pop()))
     if not metre:
       clean = identifier.cleaned_output[1:]
       if not ''.join(clean):
@@ -68,3 +58,13 @@ if __name__ == '__main__':
       Print('\n'.join(verse))
       Print(identifier.AllDebugOutput())
       Print('')
+      continue
+    assert metre
+    assert isinstance(metre, list)
+    if len(metre) == 1 and not metre[0].issues:
+      Print('Verse %4d is in %s' % (verse_number + 1, metre[0].MetreName()))
+    else:
+      all_metres = set(m.MetreNameOnlyBase() for m in metre)
+      assert len(all_metres) == 1, (all_metres, verse)
+      Print('Verse %4d is in %s (probably), but it has issues'
+            % (verse_number + 1, all_metres.pop()))
