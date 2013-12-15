@@ -51,16 +51,16 @@ if __name__ == '__main__':
     verse = [l.strip() for l in verse]
     metre = identifier.IdentifyFromLines(verse)
     if metre:
-      result = None
-      if isinstance(metre, list):
+      result_string = None
+      assert isinstance(metre, list)
+      if len(metre) == 1 and not metre[0].issues:
+        Print('Verse %4d is in %s' % (verse_number + 1, metre[0].MetreName()))
+      else:
         all_metres = set(m.MetreNameOnlyBase() for m in metre)
         assert len(all_metres) == 1, (all_metres, verse)
-        result = all_metres.pop()
-        result += ' (probably)'
-      else:
-        result = metre.MetreName()
-      Print('Verse %4d is in %s' % (verse_number + 1, result))
-    if not metre:  # or isinstance(metre, list):
+        Print('Verse %4d is in %s (probably), but it has issues'
+              % (verse_number + 1, all_metres.pop()))
+    if not metre:
       clean = identifier.cleaned_output[1:]
       if not ''.join(clean):
         continue

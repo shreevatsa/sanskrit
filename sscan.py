@@ -68,24 +68,28 @@ class Identifier(object):
         return None
     full_verse = ''.join(verse)
 
-    for known_pattern, known_metre in metrical_data.known_metres.iteritems():
+    results = []
+    for (known_pattern, known_metre) in metrical_data.known_metres.iteritems():
       if re.match('^' + known_pattern + '$', full_verse):
         self.latest_identified_metre = known_metre
-        return known_metre
+        results.append(known_metre)
+        return results
 
     # The pattern was not recognized; try mātrā.
     morae = [MatraCount(line) for line in verse]
     if repr(morae) in metrical_data.known_morae:
       known_metre = metrical_data.known_morae[repr(morae)]
       self.latest_identified_metre = known_metre
-      return known_metre
+      results.append(known_metre)
+      return results
 
+    assert not results
     # Nothing recognized, need to examine lines individually
     self.output.append(
         'Metre unknown. There are %d (%s) syllables (%d mātra units).' %
         (len(full_verse), ' + '.join(str(len(line)) for line in verse),
          sum(morae)))
-    results = []
+
     for (i, line) in enumerate(verse):
       identified = IdentifyPattern(line)
       if identified:
@@ -116,17 +120,17 @@ class Identifier(object):
     for line in cleaned_lines:
       line = MetricalPattern(line)
       pattern_lines.append(line)
-    metre = self.IdentifyMetreFromPattern(pattern_lines)
-    if metre:
-      if isinstance(metre, list):
-        assert all(isinstance(p, metrical_data.MetrePattern)
-                   for p in metre)
-      else:
-        assert isinstance(metre, metrical_data.MetrePattern)
-        self.output.append('Identified as %s.' % metre.Name())
-    if not metre:
+    results = self.IdentifyMetreFromPattern(pattern_lines)
+    if not results:
       self.output.extend(cleaner.clean_output)
-    return metre
+      return None
+    assert isinstance(results, list)
+    assert all(isinstance(p, metrical_data.MetrePattern) for p in results)
+    if len(results) == 1:
+      self.output.append('Identified as %s.' % results[0].Name())
+      return results
+    # TODO(shreevatsa): Do some merging of the results here
+    return results
 
 
 def MoveConsonants(verse_lines):
