@@ -19,14 +19,14 @@ import sscan
 
 
 def ToUnicode(x):
-  if isinstance(x, list):
-    return ListToUnicode(x)
-  if isinstance(x, dict):
-    return DictToUnicode(x)
   if isinstance(x, unicode):
     return x
   if isinstance(x, int):
     return unicode(x)
+  if isinstance(x, list):
+    return ListToUnicode(x)
+  if isinstance(x, dict):
+    return DictToUnicode(x)
   assert False, (x, type(x))
 
 
@@ -50,6 +50,7 @@ def DictToUnicode(d):
 
 
 def Print(u):
+  u = ToUnicode(u)
   assert isinstance(u, unicode), (u, type(u))
   print(u.encode('utf8'))
 
@@ -114,7 +115,7 @@ if __name__ == '__main__':
   sum_counts = sum(value for (key, value) in table.items())
   for (metre, count) in table.items():
     table[metre] = [count, '%.2f%%' % (count * 100 / sum_counts)]
-  print(ToUnicode(table))
+  Print(table)
 
   stats_file_name = input_file_name + '.stats'
   stats_file = codecs.open(stats_file_name, 'w', 'utf-8')
