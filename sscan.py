@@ -50,6 +50,7 @@ class Identifier(object):
                  len(metrical_data.known_patterns))
 
   def Reset(self):
+    """Clear all parameters, for use again."""
     self.latest_identified_metre = None
     self.output = []
     self.cleaned_output = None
@@ -84,17 +85,20 @@ class Identifier(object):
         'Metre unknown. There are %d (%s) syllables (%d mātra units).' %
         (len(full_verse), ' + '.join(str(len(line)) for line in verse),
          sum(morae)))
-    result = []
+    results = []
     for (i, line) in enumerate(verse):
       identified = IdentifyPattern(line)
       if identified:
         assert isinstance(identified, list), identified
-        result.extend(identified)
+        assert all(isinstance(p, metrical_data.MetrePattern)
+                   for p in identified)
+        results.extend(identified)
+        self.output.append('  Line %d: pattern %s (%d) is %s' % (
+            i + 1, line, morae[i], metrical_data.Names(identified)))
       else:
-        identified = 'unknown'
-      self.output.append('  Line %d: pattern %s (%d) is %s' %
-                         (i + 1, line, morae[i], identified))
-    return result
+        self.output.append('  Line %d: pattern %s (%d) is unknown' % (
+            i + 1, line, morae[i]))
+    return results
 
   def IdentifyFromLines(self, input_lines):
     """Takes a bunch of verse lines as input, and identifies metre."""
@@ -115,8 +119,8 @@ class Identifier(object):
     metre = self.IdentifyMetreFromPattern(pattern_lines)
     if metre:
       if isinstance(metre, list):
-        self.output.append('Identified as one of %s.' % metre)
-        self.output.extend(cleaner.clean_output)
+        assert all(isinstance(p, metrical_data.MetrePattern)
+                   for p in metre)
       else:
         assert isinstance(metre, metrical_data.MetrePattern)
         self.output.append('Identified as %s.' % metre.Name())
