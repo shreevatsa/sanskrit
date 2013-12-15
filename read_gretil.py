@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 import codecs
 import json
 import logging
+import os.path
 import re
 import sys
 
@@ -117,7 +118,7 @@ if __name__ == '__main__':
     table[metre] = [count, '%.2f%%' % (count * 100 / sum_counts)]
   Print(table)
 
-  stats_file_name = input_file_name + '.stats'
+  stats_file_name = os.path.basename(input_file_name) + '.stats'
   stats_file = codecs.open(stats_file_name, 'w', 'utf-8')
   json.dump(table, stats_file, indent=2, ensure_ascii=False)
   stats_file.close()
