@@ -25,5 +25,13 @@ At the lowest level are the functions / data structures in metrical_data.py.
           The match_type in these MetrePatterns is always a full verse.
      	  The issues can be things like viṣama-pādānta-laghu, or "off" pādas.
 
-Also at a similar level are the functions in handle_input.py.
+Also at a similar level are the functions in handle_input.py: they take care of
+input, transliteration, removing things that are not part of the verse, and
+finally giving the actual verse in SLP1 format.
 
+Finally, the functions in sscan.py take this cleaned-up verse, identify
+laghus-and-gurus in it, and match it with the `known_metres` (failing that,
+`known_patterns` on each line) from metrical_data.py.
+
+From a user point of view, class Identifier in sscan.py is all that needs to be
+interacted with.
