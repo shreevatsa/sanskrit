@@ -54,7 +54,7 @@ if __name__ == '__main__':
       result = None
       if isinstance(metre, list):
         all_metres = set(m.MetreNameOnlyBase() for m in metre)
-        assert len(all_metres) == 1
+        assert len(all_metres) == 1, (all_metres, verse)
         result = all_metres.pop()
         result += ' (probably)'
       else:
