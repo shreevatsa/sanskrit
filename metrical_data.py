@@ -342,7 +342,7 @@ def AddAnustupExamples():
 
 def InitializeData():
   """Add all known metres to the data structures."""
-  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G .', '. . . . L G L G')
+  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G G', '. . . . L G L G')
   AddAnustupExamples()
 
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
