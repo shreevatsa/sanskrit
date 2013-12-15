@@ -16,6 +16,10 @@ import handle_input
 import sscan
 
 
+def Print(u):
+  assert isinstance(u, unicode)
+  print(u.encode('utf8'))
+
 if __name__ == '__main__':
   logger = logging.getLogger()
   handler = logging.FileHandler('/var/tmp/read_gretil.log')
@@ -49,16 +53,18 @@ if __name__ == '__main__':
     if metre:
       result = None
       if isinstance(metre, list):
-        result = ' or '.join(set(m.MetreNameOnlyBase() for m in metre))
+        all_metres = set(m.MetreNameOnlyBase() for m in metre)
+        assert len(all_metres) == 1
+        result = all_metres.pop()
         result += ' (probably)'
       else:
         result = metre.MetreName()
-      print(('Verse %4d is in %s' % (verse_number + 1, result)).encode('utf8'))
+      Print('Verse %4d is in %s' % (verse_number + 1, result))
     if not metre:  # or isinstance(metre, list):
       clean = identifier.cleaned_output[1:]
       if not ''.join(clean):
         continue
-      print('Verse %4d:' % (verse_number + 1))
-      print('\n'.join(verse).encode('utf8'))
-      print(identifier.AllDebugOutput().encode('utf8'))
-      print('')
+      Print('Verse %4d:' % (verse_number + 1))
+      Print('\n'.join(verse))
+      Print(identifier.AllDebugOutput())
+      Print('')

@@ -16,7 +16,7 @@ Usage from Python code:
      verse_lines = ['line 1 of verse', 'line 2 of verse', ...]
      identifier = sscan.Identifier()
      identifier.IdentifyFromLines(verse)
-     print(identifier.AllDebugOutput())
+     # also look at identifier.AllDebugOutput()
 
 Known issues:
      (2) Needs a lot more data (metres).
@@ -164,12 +164,11 @@ def IdentifyPattern(pattern):
   """Given metrical pattern (string of L's and G's), identifies metre."""
   assert re.match('^[LG]*$', pattern)
   results = metrical_data.known_patterns.get(pattern)
-  if results is not None:
-    if not isinstance(results, list):
-      print(results.encode('utf8'))
-    assert isinstance(results, list), results
-    for result in results:
-      assert isinstance(result, metrical_data.MetrePattern), result
+  if results is None:
+    return results
+  assert isinstance(results, list), results
+  for result in results:
+    assert isinstance(result, metrical_data.MetrePattern), result
   return results
 
 
@@ -178,9 +177,14 @@ def MatraCount(pattern):
   return sum(2 if c == 'G' else 1 for c in pattern)
 
 
+def Print(u):
+  assert isinstance(u, unicode)
+  print(u.encode('utf8'))
+
+
 if __name__ == '__main__':
   logging.getLogger().setLevel(logging.WARNING)
   lines = [l.decode('utf8') for l in sys.stdin]
   identifier = Identifier()
   identifier.IdentifyFromLines(lines)
-  print(identifier.AllDebugOutput().encode('utf8'))
+  Print(identifier.AllDebugOutput())
