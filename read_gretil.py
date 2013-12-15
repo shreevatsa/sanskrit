@@ -39,7 +39,8 @@ if __name__ == '__main__':
         lines.append('')
 
   verses = handle_input.BreakIntoVerses(lines)
-  verses = [verse for verse in verses if verse != ['{ūttarameghaḥ}']]
+  known_non_verses = [['{ūttarameghaḥ}'], ['iti śubhaṃ bhūyāt |']]
+  verses = [verse for verse in verses if verse not in known_non_verses]
 
   identifier = sscan.Identifier()
   for (verse_number, verse) in enumerate(verses):

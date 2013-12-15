@@ -22,6 +22,7 @@ def InputForm(default=''):
 
 MAIN_PAGE_HTML = open('main.html').read().replace('${INPUT_FORM}', InputForm())
 
+
 class InputPage(webapp2.RequestHandler):
   def get(self):
     self.response.write(MAIN_PAGE_HTML)
@@ -49,7 +50,7 @@ class IdentifyPage(webapp2.RequestHandler):
 
     self.response.write('<p><i>Debugging output:</i></p>')
     self.response.write('<pre>')
-    if metre: # else the debug output already has it
+    if metre:  # else the debug output already has it
       self.response.write('\n'.join(identifier.cleaned_output))
     self.response.write(identifier.AllDebugOutput())
     self.response.write('</pre></body></html>')
