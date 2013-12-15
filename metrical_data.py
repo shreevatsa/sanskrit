@@ -172,8 +172,8 @@ def AddVrtta(metre_name, verse_pattern, issues=None):
 def AddVrttaWithVPL(metre_name, verse_pattern):
   assert verse_pattern not in known_metres, (verse_pattern,
                                              known_metres[verse_pattern])
-  logging.debug('Adding metre %s (with viṣama-pādānta-laghu) with pattern %s',
-                metre_name, verse_pattern)
+  logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
+                'with pattern %s', metre_name, verse_pattern)
   known_metres[verse_pattern] = MetrePattern(
       metre_name, MetrePattern.FULL,
       [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])

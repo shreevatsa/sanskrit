@@ -19,8 +19,8 @@ import sscan
 if __name__ == '__main__':
   logger = logging.getLogger()
   handler = logging.FileHandler('/var/tmp/read_gretil.log')
-  handler.setFormatter(
-      logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+  handler.setFormatter(logging.Formatter(
+      '%(levelname)s %(asctime)s %(filename)s:%(lineno)d]	%(message)s'))
   logger.addHandler(handler)
   logger.setLevel(logging.DEBUG)
 
@@ -41,9 +41,10 @@ if __name__ == '__main__':
   verses = handle_input.BreakIntoVerses(lines)
   verses = [verse for verse in verses if verse != ['{ūttarameghaḥ}']]
 
+  identifier = sscan.Identifier()
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]
-    identifier = sscan.Identifier()
+    identifier.Reset()
     metre = identifier.IdentifyFromLines(verse)
     if metre:
       result = None

@@ -45,9 +45,14 @@ class Identifier(object):
     self.output = []
     if not metrical_data.known_metres:
       metrical_data.InitializeData()
-    logging.info('Done initializing. There are %d known_metres'
+    logging.info('Identifier is initialized. There are %d known_metres'
                  ' and %d known_patterns', len(metrical_data.known_metres),
                  len(metrical_data.known_patterns))
+
+  def Reset(self):
+    self.latest_identified_metre = None
+    self.output = []
+    self.cleaned_output = None
 
   def AllDebugOutput(self):
     return '\n'.join(self.output)
