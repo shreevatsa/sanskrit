@@ -44,7 +44,6 @@ if __name__ == '__main__':
   identifier = sscan.Identifier()
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]
-    identifier.Reset()
     metre = identifier.IdentifyFromLines(verse)
     if metre:
       result = None

@@ -98,6 +98,7 @@ class Identifier(object):
 
   def IdentifyFromLines(self, input_lines):
     """Takes a bunch of verse lines as input, and identifies metre."""
+    self.Reset()
     logging.info('Got input:\n%s', '\n'.join(input_lines))
     cleaner = handle_input.InputHandler()
     cleaned_lines = cleaner.CleanLines(input_lines)
