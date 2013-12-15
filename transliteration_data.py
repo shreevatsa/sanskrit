@@ -7,7 +7,6 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import logging
 import re
 
 import devanagari
@@ -122,15 +121,11 @@ def DetectAndTransliterate(text, ignore=None):
   characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'
   characteristic_itrans = r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^|Sh'
   if re.search(characteristic_devanagari, text):
-    logging.info('Reading as Devanāgari.')
     return TransliterateDevanagari(text, ignore)
   if re.search(characteristic_iast, text):
-    logging.info('Reading as IAST.')
     return transliterate.Transliterate(IASTToSLP1StateMachine(), text, ignore)
   if re.search(characteristic_itrans, text):
-    logging.info('Reading as ITRANS.')
     return transliterate.Transliterate(ITRANSToSLP1StateMachine(), text, ignore)
-  logging.info('Reading as Harvard-Kyoto.')
   return transliterate.Transliterate(HKToSLP1StateMachine(), text, ignore)
 
 
