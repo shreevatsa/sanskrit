@@ -55,6 +55,15 @@ def Print(u):
   assert isinstance(u, unicode), (u, type(u))
   print(u.encode('utf8'))
 
+
+def IgnoreLine(text):
+  if re.match('^[(].*[)]$', text):
+    return True
+  if text.startswith(r'\footnote'):
+    return True
+  return False
+
+
 if __name__ == '__main__':
   assert len(sys.argv) == 2
   input_file_name = sys.argv[1]
@@ -68,10 +77,12 @@ if __name__ == '__main__':
 
   lines = []
   seen_separators = 0
-  for l in open(input_file_name, 'r'):
-    l = l.decode('utf8')
+  for l in codecs.open(input_file_name, 'r', 'utf-8'):
+    assert isinstance(l, unicode)
     l = handle_input.RemoveHTML(l)
     l = l.strip()
+    if IgnoreLine(l):
+      continue
     if seen_separators < 2 and re.search('<![-]{50,}->', l):
       seen_separators += 1
     elif seen_separators == 2 and not l.startswith('<'):
