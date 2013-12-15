@@ -20,7 +20,7 @@ if __name__ == '__main__':
   logger = logging.getLogger()
   handler = logging.FileHandler('/var/tmp/read_gretil.log')
   handler.setFormatter(logging.Formatter(
-      '%(levelname)s %(asctime)s %(filename)s:%(lineno)d]	%(message)s'))
+      '%(levelname)s	%(asctime)s %(filename)s:%(lineno)d] %(message)s'))
   logger.addHandler(handler)
   logger.setLevel(logging.DEBUG)
 
