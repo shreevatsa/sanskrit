@@ -18,10 +18,30 @@ import handle_input
 import sscan
 
 
+def ToUnicode(x):
+  if isinstance(x, list):
+    return ListToUnicode(x)
+  if isinstance(x, dict):
+    return DictToUnicode(x)
+  if isinstance(x, unicode):
+    return x
+  if isinstance(x, int):
+    return unicode(x)
+  assert False, (x, type(x))
+
+
+def ListToUnicode(li):
+  assert isinstance(li, list)
+  ret = ('[' + ', '.join(ToUnicode(i) for i in li) + ']')
+  assert isinstance(ret, unicode)
+  return ret
+
+
 def DictToUnicode(d):
+  assert isinstance(d, dict)
   ret = '{'.encode('utf-8')
-  for (key, value) in d.items():
-    ret += ('\n  ' + key + ': ' + unicode(value)).encode('utf-8')
+  for (key, value) in sorted(d.items(), key=lambda x: x[1], reverse=True):
+    ret += ('\n  ' + key + ': ' + ToUnicode(value)).encode('utf-8')
   ret += '\n}'.encode('utf-8')
   assert isinstance(ret, str)
   ret = ret.decode('utf-8')
@@ -90,10 +110,15 @@ if __name__ == '__main__':
       Print('Verse %4d is in %s (probably), but it has issues'
             % (verse_number + 1, metre_name))
     table[metre_name] = table.get(metre_name, 0) + 1
-  print(DictToUnicode(table))
 
-  stats_file = codecs.open(input_file_name + '.stats', 'w', 'utf-8')
+  sum_counts = sum(value for (key, value) in table.items())
+  for (metre, count) in table.items():
+    table[metre] = [count, '%.2f%%' % (count * 100 / sum_counts)]
+  print(ToUnicode(table))
+
+  stats_file_name = input_file_name + '.stats'
+  stats_file = codecs.open(stats_file_name, 'w', 'utf-8')
   json.dump(table, stats_file, indent=2, ensure_ascii=False)
   stats_file.close()
-  stats_file = codecs.open(input_file_name + '.stats', 'r', 'utf-8')
+  stats_file = codecs.open(stats_file_name, 'r', 'utf-8')
   assert table == json.load(stats_file, 'utf-8')
