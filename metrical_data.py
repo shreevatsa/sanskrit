@@ -28,21 +28,22 @@ METRE_PATTERN_ISSUES = Enum(UNKNOWN_ISSUE=0,
                             THIRD_PADA_OFF='third pāda not conforming'
                            )
 
+MATCH_TYPE = Enum(FULL=1,
+                  PADA=2,
+                  ODD_PADA=3,
+                  EVEN_PADA=4,
+                  HALF=5,
+                  FIRST_HALF=6,
+                  SECOND_HALF=7,
+                  PADA_1=8,
+                  PADA_2=9,
+                  PADA_3=10,
+                  PADA_4=11
+                 )
+
 
 class MetrePattern(object):
   """A metre pattern."""
-
-  FULL = 1
-  PADA = 2
-  ODD_PADA = 3
-  EVEN_PADA = 4
-  HALF = 5
-  FIRST_HALF = 6
-  SECOND_HALF = 7
-  PADA_1 = 8
-  PADA_2 = 9
-  PADA_3 = 10
-  PADA_4 = 11
 
   def __init__(self, metre_name, match_type, issues=None):
     self.metre_name = metre_name
@@ -57,11 +58,11 @@ class MetrePattern(object):
   def NameWithMatchType(self):
     assert self.match_type
     return {
-        self.FULL: '%s',
-        self.HALF: 'Half of %s',
-        self.PADA: 'One pāda of %s',
-        self.ODD_PADA: 'Odd pāda of %s',
-        self.EVEN_PADA: 'Even pāda of %s'
+        MATCH_TYPE.FULL: '%s',
+        MATCH_TYPE.HALF: 'Half of %s',
+        MATCH_TYPE.PADA: 'One pāda of %s',
+        MATCH_TYPE.ODD_PADA: 'Odd pāda of %s',
+        MATCH_TYPE.EVEN_PADA: 'Even pāda of %s'
         }[self.match_type] % self.metre_name
 
   def Name(self):
@@ -116,7 +117,7 @@ def OptionsExpand(pattern):
       yield prefix + fix + suffix
 
 
-def AddPadaWithFinalLaghu(metre_name, pattern, match_type=MetrePattern.PADA):
+def AddPadaWithFinalLaghu(metre_name, pattern, match_type=MATCH_TYPE.PADA):
   assert re.match(r'^[LG]*L$', pattern)
   if pattern in known_patterns:
     logging.warning('Not adding %s for %s. It is already known as %s', pattern,
@@ -126,7 +127,7 @@ def AddPadaWithFinalLaghu(metre_name, pattern, match_type=MetrePattern.PADA):
         metre_name, match_type, [METRE_PATTERN_ISSUES.PADANTA_LAGHU])]
 
 
-def AddPada(metre_name, pattern, match_type=MetrePattern.PADA):
+def AddPada(metre_name, pattern, match_type=MATCH_TYPE.PADA):
   assert re.match(r'^[LG]*$', pattern)
   if pattern in known_patterns:
     logging.warning('Pattern %s, being added for %s, is already known as %s',
@@ -140,7 +141,7 @@ def AddPada(metre_name, pattern, match_type=MetrePattern.PADA):
 
 
 def AddArdha(metre_name, pattern_odd, pattern_even,
-             match_type=MetrePattern.HALF):
+             match_type=MATCH_TYPE.HALF):
   """Given the patterns of odd and even pādas, add to the data structures."""
   assert re.match(r'^[LG.]*$', pattern_odd)
   assert re.match(r'^[LG.]*$', pattern_even)
@@ -165,7 +166,7 @@ def AddVrtta(metre_name, verse_pattern, issues=None):
   assert verse_pattern not in known_metres, (verse_pattern,
                                              known_metres[verse_pattern])
   logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
-  known_metres[verse_pattern] = MetrePattern(metre_name, MetrePattern.FULL,
+  known_metres[verse_pattern] = MetrePattern(metre_name, MATCH_TYPE.FULL,
                                              issues)
 
 
@@ -175,7 +176,7 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
   logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
                 'with pattern %s', metre_name, verse_pattern)
   known_metres[verse_pattern] = MetrePattern(
-      metre_name, MetrePattern.FULL,
+      metre_name, MATCH_TYPE.FULL,
       [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])
 
 
@@ -233,23 +234,23 @@ def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
   AddFourLineVrtta(metre_name, [clean_odd, clean_even] * 2)
   AddArdha(metre_name, clean_odd, LooseEnding(clean_even))
   for explicit_pattern in OptionsExpand(clean_odd):
-    AddPada(metre_name, explicit_pattern, MetrePattern.ODD_PADA)
+    AddPada(metre_name, explicit_pattern, MATCH_TYPE.ODD_PADA)
   for explicit_pattern in OptionsExpand(clean_even):
-    AddPada(metre_name, explicit_pattern, MetrePattern.EVEN_PADA)
+    AddPada(metre_name, explicit_pattern, MATCH_TYPE.EVEN_PADA)
 
 
 def AddVishamavrtta(metre_name, line_patterns):
   """Given a viṣama-vṛtta metre, add it to the data structures."""
   AddFourLineVrtta(metre_name, line_patterns)
   clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
-  AddArdha(metre_name, clean[0], LooseEnding(clean[1]), MetrePattern.FIRST_HALF)
+  AddArdha(metre_name, clean[0], LooseEnding(clean[1]), MATCH_TYPE.FIRST_HALF)
   AddArdha(metre_name, clean[2], LooseEnding(clean[3]),
-           MetrePattern.SECOND_HALF)
+           MATCH_TYPE.SECOND_HALF)
   for (i, line) in enumerate(line_patterns):
     line = CleanUpPatternString(line)
     assert re.match(r'^[LG.]*$', line)
     for pattern in OptionsExpand(line):
-      AddPada(metre_name, pattern, getattr(MetrePattern, 'PADA_%d' % (i + 1)))
+      AddPada(metre_name, pattern, getattr(MATCH_TYPE, 'PADA_%d' % (i + 1)))
 
 
 def AddMatravrtta(metre_name, line_morae):
@@ -401,9 +402,9 @@ def InitializeData():
   AddArdhasamavrtta('Puṣpitāgrā',
                     'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
   # AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
-  #                             'L L L L L  G  L  G  L G',
-  #                             ' G  L L L L L L  G  L L G',
-  #                             'L L  G  L  G  L L L  G  L G L G'])
+  #                            'L L L L L  G  L  G  L G',
+  #                            ' G  L L L L L L  G  L L G',
+  #                            'L L  G  L  G  L L L  G  L G L G'])
   # AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
   #              'G G L G L L L – G G L G L L L – G G L G L L L G')
   # AddSamavrtta('Śivatāṇḍava',
@@ -415,5 +416,3 @@ def InitializeData():
   # AddSamavrtta('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G')
   # AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G G')
   # AddSamavrtta('Vidyunmālā', 'G G G G G G G G')
-
-

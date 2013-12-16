@@ -19,9 +19,7 @@ Usage from Python code:
      # also look at identifier.AllDebugOutput()
 
 Known issues:
-     (2) Needs a lot more data (metres).
-     (3) Missing in output: description of metres.
-     (4) When analyzing line-by-line, would be nice to show all resolutions.
+     See https://github.com/shreevatsa/sanskrit/issues?state=open
 """
 
 from __future__ import absolute_import
