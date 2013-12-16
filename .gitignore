@@ -1,3 +1,5 @@
+*.stats
+
 *.py[cod]
 
 # C extensions

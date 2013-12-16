@@ -21,7 +21,14 @@ def Print(x):
 known_texts = {
     'amaru_u.htm': 'Amaruśataka',
     'bharst_u.htm': 'Bhartṛhari: Śatakatrakya',
-    'meghdk_u.htm': 'Meghadūta'
+    'meghdk_u.htm': 'Meghadūta',
+    'bhakirpu.htm': 'Bhāravi: Kirātārjunīya',
+    'bhall_xu.htm': 'Bhallaṭaśataka',
+    'kakumspu.htm': 'Kālidāsa: Kumārasambhava',
+    'kragh_pu.htm': 'Kālidāsa: Raghuvamśa',
+    'maghspvu.htm': 'Māgha: Śiśupālavadha',
+    'nkalivxu.htm': 'Nīlakaṇṭha Dīkṣita: Kaliviḍambana',
+    'ramodtpu.htm': 'Rāmodantam',
     }
 
 if __name__ == '__main__':
