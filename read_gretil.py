@@ -86,7 +86,7 @@ if __name__ == '__main__':
       Print('Verse %4d is in %s' % (verse_number + 1, metre_name))
     else:
       all_metres = set(m.MetreNameOnlyBase() for m in metre)
-      assert len(all_metres) == 1, (all_metres, verse)
+      # assert len(all_metres) == 1, (all_metres, verse)
       metre_name = all_metres.pop()
       Print('Verse %4d is in %s (probably), but it has issues'
             % (verse_number + 1, metre_name))

@@ -156,16 +156,16 @@ def AddArdha(metre_name, pattern_odd, pattern_even,
   # Making this a list as we use it twice.
   evens = list(OptionsExpand(pattern_even))
   for (o, e) in itertools.product(odds, evens):
-    assert (o + e) not in known_patterns
-    known_patterns[o + e] = [MetrePattern(metre_name, match_type)]
+    known_patterns[o + e] = known_patterns.get(o + e, [])
+    known_patterns[o + e].append(MetrePattern(metre_name, match_type))
   # Also add the viṣama-pādānta-laghu variants
   if pattern_odd.endswith('G'):
     odds = OptionsExpand(LaghuEnding(pattern_odd))
     for (o, e) in itertools.product(odds, evens):
-      assert (o + e) not in known_patterns
-      known_patterns[o + e] = [
+      known_patterns[o + e] = known_patterns.get(o + e, [])
+      known_patterns[o + e].append(
           MetrePattern(metre_name, match_type,
-                       [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])]
+                       [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU]))
 
 
 def AddVrtta(metre_name, verse_pattern, issues=None):
@@ -358,16 +358,103 @@ def InitializeData():
 
   # Bhartṛhari
   AddSamavrtta('Upajāti', '. G L G G L L G L G G')
+
   # Bhartṛhari
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
-  # AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
+  # Māgha
+  AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
+  # Also add all their Upajāti mixtures, with the above two 0000 and 1111
+  # AddSamavrtta('Upajāti of Vaṃśastham and Indravaṃśā',
+  #              '. G L G G L L G L G L G')
+  # 0001
+  AddVishamavrtta('Śīlāturā',
+                  ['L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G'])
+  # 0010
+  AddVishamavrtta('Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G'])
+  # 0011
+  AddVishamavrtta('Indumā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G'])
+  # 0100
+  AddVishamavrtta('Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G'])
+  # 0101
+  AddArdhasamavrtta('Upameyā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                    'L G L G G L L G L G L G',
+                    'G G L G G L L G L G L G')
+  # 0110
+  AddVishamavrtta('Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G'])
+  # 0111
+  AddVishamavrtta('Varāsikā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G'])
+  # 1000
+  AddVishamavrtta('Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G'])
+  # 1001
+  AddVishamavrtta('Saurabheyī (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G'])
+  # 1010
+  AddArdhasamavrtta('Śiśirā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                    'G G L G G L L G L G L G',
+                    'L G L G G L L G L G L G')
+  # 1011
+  AddVishamavrtta('Ratākhyānakī (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G'])
+  # 1100
+  AddVishamavrtta('Śaṅkhacūḍā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'L G L G G L L G L G L G'])
+  # 1101
+  AddVishamavrtta('Puṣṭidā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G',
+                   'G G L G G L L G L G L G'])
+  # 1110
+  AddVishamavrtta('Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                  ['G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'G G L G G L L G L G L G',
+                   'L G L G G L L G L G L G'])
+
   # Bhartṛhari
   AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
   # Bhāravi
   AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
   # Bhartṛhari
   AddSamavrtta('Drutavilambitam', 'L L L G L L G L L G L G')
-  # AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
+  # Māgha
+  AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
   # Bhartṛhari
   AddSamavrtta('Śālinī', 'G G G G — G L G G L G G')
   # Bhāravi
@@ -448,3 +535,6 @@ def InitializeData():
   # Bhāravi
   AddSamavrtta('Vaṃśapatrapatitam (Vaṃśadala)',
                'G L L G L G L L L G L L L L L L G')
+
+  # Māgha
+  AddSamavrtta('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G')
