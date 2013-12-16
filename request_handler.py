@@ -47,7 +47,7 @@ class IdentifyPage(webapp2.RequestHandler):
     input_verse = self.request.get('input_verse')
 
     identifier = common_identifier
-    metre = identifier.IdentifyFromLines(input_verse.split('\n'))
+    results = identifier.IdentifyFromLines(input_verse.split('\n'))
 
     self.response.write('<html><body>')
     self.response.write('<p>')
@@ -55,18 +55,21 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('</p>')
 
     ok = False
-    if metre:
-      assert isinstance(metre, list)
-      all_metres = set(m.MetreNameOnlyBase() for m in metre)
+    if results:
+      assert isinstance(results, list)
+      all_metres = set(m.MetreNameOnlyBase() for m in results)
+      all_issues = [i for m in results for i in m.issues]
       if len(all_metres) == 1:
-        if len(metre) == 1 and not metre[0].issues:
+        if len(results) == 1 and not results[0].issues:
           ok = True
           self.response.write('<p>The metre is <font size="+2">%s</font>'
-                              % metre[0])
+                              % results[0])
         else:
           self.response.write('<p>The intended metre is probably '
                               '<font size="+2">%s</font>, '
-                              'but there are issues.' % all_metres.pop())
+                              'but there are issues: %s' %
+                              (all_metres.pop(),
+                               ', '.join(unicode(i) for i in all_issues)))
       else:
         self.response.write('<p>The metre may be one of %s.' %
                             ' AND '.join(m.Name() for m in all_metres))
@@ -76,8 +79,7 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('<hr/>')
     self.response.write('<p><i>Debugging output:</i></p>')
     self.response.write('<pre>')
-    if ok:  # else the debug output already has it
-      self.response.write('\n'.join(identifier.cleaned_output))
+    self.response.write('\n'.join(identifier.cleaned_output))
 
     self.response.write(identifier.AllDebugOutput())
     self.response.write('</pre></body></html>')

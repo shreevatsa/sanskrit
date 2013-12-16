@@ -48,9 +48,11 @@ class MetrePattern(object):
   def __init__(self, metre_name, match_type, issues=None):
     self.metre_name = metre_name
     self.match_type = match_type
-    self.issues = issues
-    if issues:
+    if issues is None:
+      self.issues = []
+    else:
       assert isinstance(issues, list)
+      self.issues = issues
 
   def __str__(self):
     return self.Name()

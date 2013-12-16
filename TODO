@@ -1,0 +1,2 @@
+* Do the merging of issues of same metre in sscan itself, before returning list of metres.
+  All returned metres must have distinct names.
