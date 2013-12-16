@@ -347,18 +347,8 @@ def AddAnustupExamples():
                 [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
 
 
-def InitializeData():
-  """Add all known metres to the data structures."""
-  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G G', '. . . . L G L G')
-  AddAnustupExamples()
-
-  # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
-  AddAryaExamples()
-  AddGitiExamples()
-
-  # Bhartṛhari
-  AddSamavrtta('Upajāti', '. G L G G L L G L G G')
-
+def AddLongerUpajati():
+  """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
   # Bhartṛhari
   AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
   # Māgha
@@ -447,6 +437,21 @@ def InitializeData():
                    'G G L G G L L G L G L G',
                    'L G L G G L L G L G L G'])
 
+
+def InitializeData():
+  """Add all known metres to the data structures."""
+  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G G', '. . . . L G L G')
+  AddAnustupExamples()
+
+  # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
+  AddAryaExamples()
+  AddGitiExamples()
+
+  # Bhartṛhari
+  AddSamavrtta('Upajāti', '. G L G G L L G L G G')
+
+  AddLongerUpajati()
+
   # Bhartṛhari
   AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
   # Bhāravi
@@ -501,9 +506,9 @@ def InitializeData():
                     'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
   # Bhāravi
   AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
-                             'L L L L L  G  L  G  L G',
-                             ' G  L L L L L L  G  L L G',
-                             'L L  G  L  G  L L L  G  L G L G'])
+                              'L L L L L  G  L  G  L G',
+                              ' G  L L L L L L  G  L L G',
+                              'L L  G  L  G  L L L  G  L G L G'])
   # AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
   #              'G G L G L L L – G G L G L L L – G G L G L L L G')
   # AddSamavrtta('Śivatāṇḍava',
