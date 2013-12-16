@@ -6,6 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import cgi
+import codecs
 
 import webapp2
 
@@ -20,7 +21,14 @@ def InputForm(default=''):
     </form>""" % cgi.escape(default)
 
 
-MAIN_PAGE_HTML = open('main.html').read().replace('${INPUT_FORM}', InputForm())
+def StatsTable():
+  return codecs.open('stats_table.html', 'r', 'utf-8').read()
+
+
+MAIN_PAGE_HTML = open('main.html').read()
+MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${INPUT_FORM}', InputForm())
+MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${METRE_STATISTICS}', StatsTable())
+
 
 CommonIdentifier = sscan.Identifier()
 

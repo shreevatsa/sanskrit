@@ -47,7 +47,7 @@ if __name__ == '__main__':
   Print('<tr>')
   Print('  <td>Metre</td>')
   for name in names:
-    Print(' <td>%s</td>' % name)
+    Print(' <td>%s</td>' % known_texts[name])
   Print('</tr>')
 
   for metre in metres:
