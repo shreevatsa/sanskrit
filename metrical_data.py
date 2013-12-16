@@ -62,7 +62,13 @@ class MetrePattern(object):
         MATCH_TYPE.HALF: 'Half of %s',
         MATCH_TYPE.PADA: 'One pāda of %s',
         MATCH_TYPE.ODD_PADA: 'Odd pāda of %s',
-        MATCH_TYPE.EVEN_PADA: 'Even pāda of %s'
+        MATCH_TYPE.EVEN_PADA: 'Even pāda of %s',
+        MATCH_TYPE.FIRST_HALF: 'First half of %s',
+        MATCH_TYPE.SECOND_HALF: 'Second half of %s',
+        MATCH_TYPE.PADA_1: 'First pāda of %s',
+        MATCH_TYPE.PADA_2: 'Second pāda of %s',
+        MATCH_TYPE.PADA_3: 'Third pāda of %s',
+        MATCH_TYPE.PADA_4: 'Fourth pāda of %s'
         }[self.match_type] % self.metre_name
 
   def Name(self):
@@ -357,17 +363,20 @@ def InitializeData():
   # AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
   # Bhartṛhari
   AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
-  # AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
+  # Bhāravi
+  AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
   # Bhartṛhari
   AddSamavrtta('Drutavilambitam', 'L L L G L L G L L G L G')
   # AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
   # Bhartṛhari
   AddSamavrtta('Śālinī', 'G G G G — G L G G L G G')
-  # AddSamavrtta('Praharṣiṇī', 'G G G L L L L G L G L G G')
+  # Bhāravi
+  AddSamavrtta('Praharṣiṇī', 'G G G L L L L G L G L G G')
   # AddSamavrtta('Bhujañgaprayātam', 'L G G L G G L G G L G G')
   # AddSamavrtta('Toṭakam', 'L L G L L G L L G L L G')
   # AddSamavrtta('Sragviṇī', 'G L G G L G G L G G L G')
-  # AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L G')
+  # Bhāravi
+  AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L G')
   # Bhartṛhari
   AddSamavrtta('Vasantatilakā', 'G G L G L L L G L L G L G G')
   # Bhartṛhari
@@ -394,17 +403,20 @@ def InitializeData():
   AddArdhasamavrtta('Viyoginī',
                     'L L G   L L G L G L G',
                     'L L G G L L G L G L G')
-  # AddArdhasamavrtta('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
-  #                   'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
-  # AddArdhasamavrtta('Aparavaktrā',
-  #                   'L L L L L L G — L G L G', 'L L L L G — L L G L G L G')
+  # Bhāravi
+  AddArdhasamavrtta('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
+                    'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
+  # Bhāravi
+  AddArdhasamavrtta('Aparavaktrā',
+                    'L L L L L L G — L G L G', 'L L L L G — L L G L G L G')
   # Bhartṛhari
   AddArdhasamavrtta('Puṣpitāgrā',
                     'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
-  # AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
-  #                            'L L L L L  G  L  G  L G',
-  #                            ' G  L L L L L L  G  L L G',
-  #                            'L L  G  L  G  L L L  G  L G L G'])
+  # Bhāravi
+  AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
+                             'L L L L L  G  L  G  L G',
+                             ' G  L L L L L L  G  L L G',
+                             'L L  G  L  G  L L L  G  L G L G'])
   # AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
   #              'G G L G L L L – G G L G L L L – G G L G L L L G')
   # AddSamavrtta('Śivatāṇḍava',
@@ -414,5 +426,25 @@ def InitializeData():
   # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
   # AddSamavrtta('Mālatī', 'L L L L G L L G L G L G')
   # AddSamavrtta('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G')
-  # AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G G')
+  # Bhāravi
+  AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G G')
   # AddSamavrtta('Vidyunmālā', 'G G G G G G G G')
+
+  # Bhāravi
+  AddSamavrtta('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG')
+
+  # Bhāravi
+  AddSamavrtta('Prabhā (Mandākinī)', 'LLLLLLGLGGLG')
+
+  # Bhāravi
+  AddSamavrtta('Jaladharamālā', 'GGGGLLLLGGGG')
+  # Bhāravi
+  AddSamavrtta('Jaloddhatagatiḥ', 'LGLLLGLGLLLG')
+
+  # Bhāravi
+  AddSamavrtta('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)',
+               'G G G G L L L L L L G G G G')
+
+  # Bhāravi
+  AddSamavrtta('Vaṃśapatrapatitam (Vaṃśadala)',
+               'G L L G L G L L L G L L L L L L G')
