@@ -9,6 +9,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import codecs
+import datetime
 import json
 import logging
 import os.path
@@ -24,6 +25,11 @@ def Print(x):
   return print_utils.Print(x)
 
 
+def Timestamp():
+  return datetime.datetime.strftime(datetime.datetime.now(),
+                                    '%Y-%m-%d.%H:%M:%S')
+
+
 def IgnoreLine(text):
   if re.match('^[(].*[)]$', text):
     return True
@@ -37,7 +43,7 @@ if __name__ == '__main__':
   input_file_name = sys.argv[1]
 
   logger = logging.getLogger()
-  handler = logging.FileHandler('/var/tmp/read_gretil.log')
+  handler = logging.FileHandler('/var/tmp/read_gretil_%s.log' % Timestamp())
   handler.setFormatter(logging.Formatter(
       '%(levelname)s	%(asctime)s %(filename)s:%(lineno)d] %(message)s'))
   logger.addHandler(handler)
