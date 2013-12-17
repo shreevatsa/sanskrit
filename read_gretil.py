@@ -38,6 +38,20 @@ def IgnoreLine(text):
   return False
 
 
+def AcceptVerse(v):
+  """Checks that the verse is not in one of a number of known bad patterns."""
+  if len(v) == 1:
+    line = v[0]
+    assert isinstance(line, unicode)
+    if line in ['{ūttarameghaḥ}', 'iti śubhaṃ bhūyāt |']:
+      return False
+    if line.startswith('iti'):
+      return False
+    if line.startswith('atha'):
+      return False
+  return True
+
+
 if __name__ == '__main__':
   assert len(sys.argv) == 2
   input_file_name = sys.argv[1]
@@ -66,8 +80,7 @@ if __name__ == '__main__':
         lines.append('')
 
   verses = handle_input.BreakIntoVerses(lines)
-  known_non_verses = [['{ūttarameghaḥ}'], ['iti śubhaṃ bhūyāt |']]
-  verses = [verse for verse in verses if verse not in known_non_verses]
+  verses = [verse for verse in verses if AcceptVerse(verse)]
 
   identifier = sscan.Identifier()
   table = {}

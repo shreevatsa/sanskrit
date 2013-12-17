@@ -15,7 +15,9 @@ import transliteration_data
 
 
 def RemoveHTML(text):
-  return re.sub('<BR>', '', text)
+  text = re.sub('<BR>', '', text)
+  text = re.sub('&nbsp;', ' ', text)
+  return text.strip()
 
 
 def RemoveVerseNumber(text):

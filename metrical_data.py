@@ -345,6 +345,17 @@ def AddAnustupExamples():
   AddExactVrtta('Anuṣṭup (Śloka)',
                 ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'],
                 [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
+  # Covers a lot of cases
+  AddExactVrtta('Anuṣṭup (Śloka)',
+                ['........', '....LGL.', '....LGG.', '....LGL.'],
+                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
+  AddExactVrtta('Anuṣṭup (Śloka)',
+                ['....LGG.', '....LGL.', '........', '....LGL.'],
+                [METRE_PATTERN_ISSUES.THIRD_PADA_OFF])
+  AddExactVrtta('Anuṣṭup (Śloka)',
+                ['........', '....LGL.', '........', '....LGL.'],
+                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF,
+                 METRE_PATTERN_ISSUES.THIRD_PADA_OFF])
 
 
 def AddLongerUpajati():

@@ -35,13 +35,17 @@
     1, 
     "0.10%"
   ], 
-  "Śīlāturā": [
-    1, 
-    "0.10%"
-  ], 
   "Śikhariṇī": [
     3, 
     "0.29%"
+  ], 
+  "Vaṃśastham (Vaṃśasthavila)": [
+    213, 
+    "20.48%"
+  ], 
+  "Aparavaktrā": [
+    1, 
+    "0.10%"
   ], 
   "Udgatā": [
     53, 
@@ -84,27 +88,15 @@
     "0.10%"
   ], 
   "Anuṣṭup (Śloka)": [
-    120, 
-    "11.54%"
+    125, 
+    "12.02%"
   ], 
-  "Aparavaktrā": [
+  "Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)": [
     1, 
     "0.10%"
-  ], 
-  "Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)": [
-    10, 
-    "0.96%"
   ], 
   "Prabhā (Mandākinī)": [
     6, 
     "0.58%"
-  ], 
-  "unknown": [
-    5, 
-    "0.48%"
-  ], 
-  "Vaṃśastham": [
-    203, 
-    "19.52%"
   ]
 }
