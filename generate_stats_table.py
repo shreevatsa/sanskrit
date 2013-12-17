@@ -29,6 +29,7 @@ known_texts = {
     'maghspvu.htm': 'Māgha: Śiśupālavadha',
     'nkalivxu.htm': 'Nīlakaṇṭha Dīkṣita: Kaliviḍambana',
     'ramodtpu.htm': 'Rāmodantam',
+    'msubhs_u.htm': 'Mahā-subhāṣita-saṅgraha',
     }
 
 if __name__ == '__main__':
