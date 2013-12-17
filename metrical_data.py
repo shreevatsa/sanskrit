@@ -191,9 +191,7 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
 def AddExactVrtta(metre_name, line_patterns, issues=None):
   """Given the four lines of a vṛtta, add it to the data structures exactly."""
   assert len(line_patterns) == 4, (metre_name, line_patterns)
-  for pattern in line_patterns:
-    assert pattern == CleanUpPatternString(pattern)
-  AddVrtta(metre_name, ''.join(line_patterns), issues)
+  AddVrtta(metre_name, CleanUpPatternString(''.join(line_patterns)), issues)
 
 
 def AddFourLineVrtta(metre_name, line_patterns):
@@ -352,92 +350,92 @@ def AddAnustupExamples():
 def AddLongerUpajati():
   """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
   # Bhartṛhari
-  AddSamavrtta('Vaṃśastham', 'L G L G G L L G L G L G')
+  AddSamavrtta('Vaṃśastham (Vaṃśasthavila)', 'L G L G G L L G L G L G')
   # Māgha
   AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
   # Also add all their Upajāti mixtures, with the above two 0000 and 1111
   # AddSamavrtta('Upajāti of Vaṃśastham and Indravaṃśā',
   #              '. G L G G L L G L G L G')
   # 0001
-  AddVishamavrtta('Śīlāturā',
-                  ['L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G'])
+  AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['LGLGGLLGLGLG',
+                 'LGLGGLLGLGLG',
+                 'LGLGGLLGLGLG',
+                 'GGLGGLLGLGLG'])
   # 0010
-  AddVishamavrtta('Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G'])
+  AddExactVrtta('Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['L G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G'])
   # 0011
-  AddVishamavrtta('Indumā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G'])
+  AddExactVrtta('Indumā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['L G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G'])
   # 0100
-  AddVishamavrtta('Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G'])
+  AddExactVrtta('Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'L G L G G L L G L G L G'])
   # 0101
-  AddArdhasamavrtta('Upameyā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                    'L G L G G L L G L G L G',
-                    'G G L G G L L G L G L G')
+  AddExactVrtta('Upameyā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G'] * 2)
   # 0110
-  AddVishamavrtta('Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G'])
+  AddExactVrtta('Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G'])
   # 0111
-  AddVishamavrtta('Varāsikā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G'])
+  AddExactVrtta('Varāsikā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G'])
   # 1000
-  AddVishamavrtta('Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G'])
+  AddExactVrtta('Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'L G L G G L L G L G L G'])
   # 1001
-  AddVishamavrtta('Saurabheyī (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G'])
+  AddExactVrtta('Saurabheyī (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G'])
   # 1010
-  AddArdhasamavrtta('Śiśirā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                    'G G L G G L L G L G L G',
-                    'L G L G G L L G L G L G')
+  AddExactVrtta('Śiśirā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G'] * 2)
   # 1011
-  AddVishamavrtta('Ratākhyānakī (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G'])
+  AddExactVrtta('Ratākhyānakī (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G'])
   # 1100
-  AddVishamavrtta('Śaṅkhacūḍā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'L G L G G L L G L G L G'])
+  AddExactVrtta('Śaṅkhacūḍā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'L G L G G L L G L G L G'])
   # 1101
-  AddVishamavrtta('Puṣṭidā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G',
-                   'G G L G G L L G L G L G'])
+  AddExactVrtta('Puṣṭidā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G',
+                 'G G L G G L L G L G L G'])
   # 1110
-  AddVishamavrtta('Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                  ['G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'G G L G G L L G L G L G',
-                   'L G L G G L L G L G L G'])
+  AddExactVrtta('Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)',
+                ['G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'G G L G G L L G L G L G',
+                 'L G L G G L L G L G L G'])
 
 
 def InitializeData():
