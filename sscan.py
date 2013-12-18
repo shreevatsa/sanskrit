@@ -179,6 +179,20 @@ def IdentifyPattern(pattern):
   return results
 
 
+def Syllabize(text):
+  """Given SLP1 text, returns a list of syllables."""
+  syllables = re.findall('.*?%s[MH]?' % slp1.ANY_VOWEL, text)
+
+  # Handle final consonants (edge case)
+  tail = re.search('(%s+$)' % slp1.CONSONANT, text)
+  if syllables and tail:
+    match = tail.group(1)
+    if match[0] not in 'MH':
+      syllables[-1] += tail.group(1)
+
+  return syllables
+
+
 def MatraCount(pattern):
   assert re.match('^[LG]*$', pattern)
   return sum(2 if c == 'G' else 1 for c in pattern)
