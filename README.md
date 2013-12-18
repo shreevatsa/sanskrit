@@ -48,4 +48,4 @@ in metre, then they can still be recognized.
 
 Similarly, the point of returning a list of results is to cover the case where
 there might be different results, say different lines in different metres.
-However, this has not ever been seen to happened yet.
+However, this has not ever been seen to happen yet.
