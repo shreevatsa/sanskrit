@@ -9,5 +9,5 @@ ALPHABET = 'aAiIuUfFxXeEoOMHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh'
 CONSONANT = '[MHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh]'
 SHORT_VOWEL = '[aiufx]'
 LONG_VOWEL = '[AIUFXeEoO]'
-
+ANY_VOWEL = '[aAiIuUfFxXeEoO]'
 
