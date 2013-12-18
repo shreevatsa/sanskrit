@@ -129,5 +129,18 @@ def DetectAndTransliterate(text, ignore=None):
   return transliterate.Transliterate(HKToSLP1StateMachine(), text, ignore)
 
 
+def SLP1ToMangledDevanagariStateMachine():
+  return transliterate.MakeStateMachine(SLP1ToAlphabet(devanagari.Alphabet()))
+
+
+def SLP1ToDevanagari(text):
+  (text, _) = transliterate.Transliterate(
+      SLP1ToMangledDevanagariStateMachine(), text)
+  assert isinstance(text, unicode), text
+  return devanagari.UnMangle(text)
+
+
 def TransliterateForOutput(text):
-  return transliterate.Transliterate(SLP1ToIASTStateMachine(), text)
+  return '%s (%s)' % (
+      transliterate.Transliterate(SLP1ToIASTStateMachine(), text)[0],
+      SLP1ToDevanagari(text))

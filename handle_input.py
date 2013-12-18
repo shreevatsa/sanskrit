@@ -85,7 +85,7 @@ class InputHandler(object):
 
     self.clean_output.append('Input read as:')
     for (number, line) in enumerate(cleaned_lines):
-      transliterated = transliteration_data.TransliterateForOutput(line)[0]
+      transliterated = transliteration_data.TransliterateForOutput(line)
       self.clean_output.append('Line %d: %s' % (number + 1, transliterated))
     self.clean_output.append('')
     return cleaned_lines
