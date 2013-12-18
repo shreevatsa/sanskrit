@@ -85,7 +85,7 @@ class Identifier(object):
     # Nothing recognized, need to examine lines individually
     self.output.append(
         'Metre unknown. There are %d (%s) syllables (%d mātra units).' %
-        (len(full_verse), ' + '.join(str(len(line)) for line in verse),
+        (len(full_verse), ' + '.join(unicode(len(line)) for line in verse),
          sum(morae)))
 
     for (i, line) in enumerate(verse):
@@ -95,8 +95,9 @@ class Identifier(object):
         assert all(isinstance(p, metrical_data.MetrePattern)
                    for p in identified)
         results.extend(identified)
-        self.output.append('  Line %d: pattern %s (%d) is %s' % (
-            i + 1, line, morae[i], metrical_data.Names(identified)))
+        self.output.append('  Line %d: pattern %s (%d syllables, %d mātras) is '
+                           '%s' % (i + 1, line, len(line),
+                                   morae[i], metrical_data.Names(identified)))
       else:
         self.output.append('  Line %d: pattern %s (%d) is unknown' % (
             i + 1, line, morae[i]))
