@@ -71,8 +71,8 @@ class IdentifyPage(webapp2.RequestHandler):
                               (all_metres.pop(),
                                ', '.join(unicode(i) for i in all_issues)))
       else:
-        self.response.write('<p>The metre may be one of %s.' %
-                            ' AND '.join(m.Name() for m in all_metres))
+        self.response.write('<p>The metre may be one of: %s.' %
+                            ' OR '.join(m.Name() for m in all_metres))
     else:
       self.response.write('<p>No metre recognized.</p>')
 
@@ -80,7 +80,8 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('<p><i>Debugging output:</i></p>')
     self.response.write('<pre>')
     self.response.write('\n'.join(identifier.cleaned_output))
-
+    if not ok:
+      self.response.write('This might help:')
     self.response.write(identifier.AllDebugOutput())
     self.response.write('</pre></body></html>')
 

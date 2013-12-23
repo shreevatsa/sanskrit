@@ -517,9 +517,9 @@ def InitializeData():
                     'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
   # Bhāravi
   AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
-                              'L L L L L  G  L  G  L G',
-                              ' G  L L L L L L  G  L L G',
-                              'L L  G  L  G  L L L  G  L G L G'])
+                             'L L L L L  G  L  G  L G',
+                             ' G  L L L L L L  G  L L G',
+                             'L L  G  L  G  L L L  G  L G L G'])
   # AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
   #              'G G L G L L L – G G L G L L L – G G L G L L L G')
   # AddSamavrtta('Śivatāṇḍava',
