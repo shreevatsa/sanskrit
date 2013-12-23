@@ -92,7 +92,7 @@ class Identifier(object):
       identified = IdentifyPattern(line)
       if identified:
         assert isinstance(identified, list), identified
-        assert all(isinstance(p, metrical_data.MetrePattern)
+        assert all(isinstance(p, metrical_data.MatchResult)
                    for p in identified)
         results.extend(identified)
         self.output.append('  Line %d: pattern %s (%d syllables, %d mātras) is '
@@ -124,7 +124,7 @@ class Identifier(object):
       self.output.extend(cleaner.clean_output)
       return None
     assert isinstance(results, list)
-    assert all(isinstance(p, metrical_data.MetrePattern) for p in results)
+    assert all(isinstance(p, metrical_data.MatchResult) for p in results)
     if len(results) == 1:
       self.output.append('Identified as %s.' % results[0].Name())
       return results
@@ -175,7 +175,7 @@ def IdentifyPattern(pattern):
     return results
   assert isinstance(results, list), results
   for result in results:
-    assert isinstance(result, metrical_data.MetrePattern), result
+    assert isinstance(result, metrical_data.MatchResult), result
   return results
 
 

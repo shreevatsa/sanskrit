@@ -42,8 +42,8 @@ MATCH_TYPE = Enum(FULL=1,
                  )
 
 
-class MetrePattern(object):
-  """A metre pattern."""
+class MatchResult(object):
+  """Result of match against some known pattern/regex: metre with some info."""
 
   def __init__(self, metre_name, match_type, issues=None):
     self.metre_name = metre_name
@@ -131,7 +131,7 @@ def AddPadaWithFinalLaghu(metre_name, pattern, match_type=MATCH_TYPE.PADA):
     logging.warning('Not adding %s for %s. It is already known as %s', pattern,
                     metre_name, Names(known_patterns[pattern]))
   else:
-    known_patterns[pattern] = [MetrePattern(
+    known_patterns[pattern] = [MatchResult(
         metre_name, match_type, [METRE_PATTERN_ISSUES.PADANTA_LAGHU])]
 
 
@@ -141,9 +141,9 @@ def AddPada(metre_name, pattern, match_type=MATCH_TYPE.PADA):
     logging.warning('Pattern %s, being added for %s, is already known as %s',
                     pattern, metre_name, Names(known_patterns[pattern]))
 
-    known_patterns[pattern].append(MetrePattern(metre_name, match_type))
+    known_patterns[pattern].append(MatchResult(metre_name, match_type))
   else:
-    known_patterns[pattern] = [MetrePattern(metre_name, match_type)]
+    known_patterns[pattern] = [MatchResult(metre_name, match_type)]
   if pattern.endswith('G'):
     AddPadaWithFinalLaghu(metre_name, LaghuEnding(pattern), match_type)
 
@@ -159,23 +159,23 @@ def AddArdha(metre_name, pattern_odd, pattern_even,
   evens = list(OptionsExpand(pattern_even))
   for (o, e) in itertools.product(odds, evens):
     known_patterns[o + e] = known_patterns.get(o + e, [])
-    known_patterns[o + e].append(MetrePattern(metre_name, match_type))
+    known_patterns[o + e].append(MatchResult(metre_name, match_type))
   # Also add the viṣama-pādānta-laghu variants
   if pattern_odd.endswith('G'):
     odds = OptionsExpand(LaghuEnding(pattern_odd))
     for (o, e) in itertools.product(odds, evens):
       known_patterns[o + e] = known_patterns.get(o + e, [])
       known_patterns[o + e].append(
-          MetrePattern(metre_name, match_type,
-                       [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU]))
+          MatchResult(metre_name, match_type,
+                      [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU]))
 
 
 def AddVrtta(metre_name, verse_pattern, issues=None):
   assert verse_pattern not in known_metres, (verse_pattern,
                                              known_metres[verse_pattern])
   logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
-  known_metres[verse_pattern] = MetrePattern(metre_name, MATCH_TYPE.FULL,
-                                             issues)
+  known_metres[verse_pattern] = MatchResult(metre_name, MATCH_TYPE.FULL,
+                                            issues)
 
 
 def AddVrttaWithVPL(metre_name, verse_pattern):
@@ -183,7 +183,7 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
                                              known_metres[verse_pattern])
   logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
                 'with pattern %s', metre_name, verse_pattern)
-  known_metres[verse_pattern] = MetrePattern(
+  known_metres[verse_pattern] = MatchResult(
       metre_name, MATCH_TYPE.FULL,
       [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])
 
