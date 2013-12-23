@@ -1,9 +1,45 @@
 sanskrit/metrical-scan
 ======================
 
-Code to recognize metre given a Sanskrit verse.
+Code to recognize Sanskrit metres.
 
-The code and data are organized as follows.
+Given a Sanskrit verse,
+
+    1. [Scan] The verse is analysed for laghu and guru syllables, and converted
+    into a "metrical pattern" that might look like this:
+
+        GGLGGLLGLGL
+        GGLGGLLGLGG
+        LGLGGLLGLGG
+        GGLGGLLGLGG
+
+    2. [Identify] This metrical pattern is compared against the known metrical
+    patterns, and some best-guess metre is output.
+
+--------------------------------------------------------------------------------
+
+From a user point of view, class Identifier in sscan.py is all that needs to be
+interacted with. If `identifer` is an instance of `Identifier`, then
+
+    identifier.IdentifyFromLines(verse_lines)
+
+returns a list of MetrePatterns that the verse might be in.
+
+(The reason for using verse_lines rather than a single blob of text is to enable
+detection of partial matches: if there are metrical errors in the verse, but
+some lines are in metre, then they could still be recognized..)
+
+Similarly, the point of returning a list of results is to cover the case where
+there might be different results, say different lines in different metres.
+(This has so far been seen only with the well-known upajāti etc. mixtures.)
+
+--------------------------------------------------------------------------------
+
+Step 1 [Scan] involves detecting the transliteration format of the input,
+transliterating it to SLP1 (the encoding we use internally), removing junk
+characters, and looking at the pattern of gurus and laghus.
+
+For Step 2 [Identify], the code and data are organized as follows.
 
 At the lowest level are the functions / data structures in metrical_data.py.
 
@@ -35,17 +71,25 @@ laghus-and-gurus in it, and match it with the `known_metres` (failing that,
 
 --------------------------------------------------------------------------------
 
-From a user point of view, class Identifier in sscan.py is all that needs to be
-interacted with. If `identifer` is an instance of `Identifier`, then
+Redesign.
 
-    identifier.IdentifyFromLines(verse_lines)
+Data structures.
+    * `known_metre_patterns`, a dict mapping a pattern to a MetrePattern.
+    * `known_metre_regexes', a list of pairs (regex, MetrePattern)
+    * `known_partial_patterns`, a dict mapping a pattern to a MetrePattern.
 
-returns a list of MetrePatterns that the verse might be in.
+Identification algorithm.
+    Given a verse,
+        1. Look in known_metre_patterns.
+        2. Loop through known_metre_regexes.
+        3. Look in known_partial_patterns for:
+            -- whole verse,
+            -- each half (if verse is 4 lines),
+            -- each line.
+        4. [Maybe] Look for substrings, find closest match, etc.?
+           Would have to restrict to only the most popular metres.
 
-The point of using verse_lines rather than a single blob of text is to enable
-partial matches: if there are metrical errors in the verse, but some lines are
-in metre, then they can still be recognized.
 
-Similarly, the point of returning a list of results is to cover the case where
-there might be different results, say different lines in different metres.
-However, this has not ever been seen to happen yet.
+
+
+
