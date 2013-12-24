@@ -101,7 +101,7 @@ class MatchResult(object):
 
 known_patterns = {}
 known_metres = {}
-known_morae = {}
+# known_morae = {}
 
 
 # Unless we want to create another type for a list of MatchResults
@@ -273,12 +273,12 @@ def AddVishamavrtta(metre_name, line_patterns):
       AddPada(metre_name, pattern, getattr(MATCH_TYPE, 'PADA_%d' % (i + 1)))
 
 
-def AddMatravrtta(metre_name, line_morae):
-  known_morae[repr(line_morae)] = metre_name
-  if len(line_morae) == 4:
-    # Not ideal (lossy), but input is often like this.
-    known_morae[repr([line_morae[0] + line_morae[1],
-                      line_morae[2] + line_morae[3]])] = metre_name
+# def AddMatravrtta(metre_name, line_morae):
+#   known_morae[repr(line_morae)] = metre_name
+#   if len(line_morae) == 4:
+#     # Not ideal (lossy), but input is often like this.
+#     known_morae[repr([line_morae[0] + line_morae[1],
+#                       line_morae[2] + line_morae[3]])] = metre_name
 
 
 def MatraCount(pattern):
