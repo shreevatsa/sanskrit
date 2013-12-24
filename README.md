@@ -23,7 +23,7 @@ interacted with. If `identifer` is an instance of `Identifier`, then
 
     identifier.IdentifyFromLines(verse_lines)
 
-returns a list of MetrePatterns that the verse might be in.
+returns a list of MatchResults that the verse might be in.
 
 (The reason for using verse_lines rather than a single blob of text is to enable
 detection of partial matches: if there are metrical errors in the verse, but
@@ -44,9 +44,9 @@ For Step 2 [Identify], the code and data are organized as follows.
 At the lowest level are the functions / data structures in metrical_data.py.
 
   * `known_patterns`: a dict mapping a sequence over the alphabet {'L', 'G'} to
-    a list of `MetrePattern`s.
+    a list of `MatchResult`s.
 
-     A MetrePattern can be seen as a tuple (metre_name, match_type, issues):
+     A MatchResult can be seen as a tuple (metre_name, match_type, issues):
      metre_name - name of the metre,
      match_type - used to distinguish between matching one pāda (quarter) or one
      		  ardha (half) of a metre. Or, in ardha-sama metres, it can
@@ -55,10 +55,10 @@ At the lowest level are the functions / data structures in metrical_data.py.
      		  instead laghu in this particular sequence.
 
   * `known_metres`: a dict mapping a regex (as of now, just a string over the
-     alphabet {'.', 'L', G'}) to a `MetrePattern`.
-     (Just a single MetrePattern, not a list, because it doesn't make sense to
+     alphabet {'.', 'L', G'}) to a `MatchResult`.
+     (Just a single MatchResult, not a list, because it doesn't make sense to
      have multiple metres for the same verse.)
-          The match_type in these MetrePatterns is always a full verse.
+          The match_type in these MatchResults is always a full verse.
      	  The issues can be things like viṣama-pādānta-laghu, or "off" pādas.
 
 Also at a similar level are the functions in handle_input.py: they take care of
@@ -74,9 +74,9 @@ laghus-and-gurus in it, and match it with the `known_metres` (failing that,
 Redesign.
 
 Data structures.
-    * `known_metre_patterns`, a dict mapping a pattern to a MetrePattern.
-    * `known_metre_regexes', a list of pairs (regex, MetrePattern)
-    * `known_partial_patterns`, a dict mapping a pattern to a MetrePattern.
+    * `known_metre_patterns`, a dict mapping a pattern to a MatchResult.
+    * `known_metre_regexes', a list of pairs (regex, MatchResult)
+    * `known_partial_patterns`, a dict mapping a pattern to a MatchResult.
 
 Identification algorithm.
     Given a verse,
@@ -87,9 +87,5 @@ Identification algorithm.
             -- each half (if verse is 4 lines),
             -- each line.
         4. [Maybe] Look for substrings, find closest match, etc.?
-           Would have to restrict to only the most popular metres.
-
-
-
-
+           Would have to restrict to the popular metres on the web version.
 

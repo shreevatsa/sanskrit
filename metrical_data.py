@@ -18,6 +18,7 @@ known_metres = {}
 known_morae = {}
 
 
+# Poor man's enum for now. Python adds enum support in Python 3.4+.
 def Enum(**enums):
   return type(str('Enum'), (), enums)
 
@@ -28,7 +29,8 @@ METRE_PATTERN_ISSUES = Enum(UNKNOWN_ISSUE=0,
                             THIRD_PADA_OFF='third pāda not conforming'
                            )
 
-MATCH_TYPE = Enum(FULL=1,
+MATCH_TYPE = Enum(UNKNOWN=0,
+                  FULL=1,
                   PADA=2,
                   ODD_PADA=3,
                   EVEN_PADA=4,
