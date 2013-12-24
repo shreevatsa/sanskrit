@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Functions that deal with the actual data."""
+"""Data structures that store matching metres for known patterns."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -13,9 +13,15 @@ import re
 
 import simple_utils
 
-known_patterns = {}
-known_metres = {}
-known_morae = {}
+
+class AllMetricalData(object):
+  """Known patterns and regexes, both full and partial."""
+
+  def __init__(self, known_metre_patterns, known_metre_regexes,
+               known_partial_patterns):
+    self.known_metre_patterns = known_metre_patterns
+    self.known_metre_regexes = known_metre_regexes
+    self.known_partial_patterns = known_partial_patterns
 
 
 # Poor man's enum for now. Python adds enum support in Python 3.4+.
@@ -93,8 +99,14 @@ class MatchResult(object):
     return self.metre_name
 
 
-def Names(metre_patterns):
-  return ' AND '.join(m.Name() for m in metre_patterns)
+known_patterns = {}
+known_metres = {}
+known_morae = {}
+
+
+# Unless we want to create another type for a list of MatchResults
+def Names(match_results):
+  return ' AND '.join(m.Name() for m in match_results)
 
 
 def CleanUpPatternString(pattern):
