@@ -9,51 +9,48 @@ from __future__ import unicode_literals
 
 import unittest
 
-import metrical_data
-import sscan
-
-identifier = sscan.Identifier()
+import identifier
+import match_result
 
 
 class BadInput(unittest.TestCase):
   def __init__(self, *args, **kwargs):
     super(BadInput, self).__init__(*args, **kwargs)
+    self.identifier = identifier.Identifier()
 
   def testEmpty(self):
     """Identifier should fail with empty input."""
-    # self.assertRaises(self.identifier.EmptyInputError,
+    # self.assertRaises(identifier.EmptyInputError,
     #                   self.identifier.IdentifyFromLines, [])
-    self.assertEqual(identifier.IdentifyFromLines([]), None)
+    self.assertIsNone(self.identifier.IdentifyFromLines([]))
 
   def testNoSyllables(self):
     """Identifier should return no result, for input containing no syllabes."""
-    self.assertEqual(identifier.IdentifyFromLines(['t', 't', 't', 't']), None)
+    self.assertIsNone(self.identifier.IdentifyFromLines(['t', 't', 't', 't']))
 
 
 class KnownValues(unittest.TestCase):
   def __init__(self, *args, **kwargs):
     super(KnownValues, self).__init__(*args, **kwargs)
-    self.addTypeEqualityFunc(metrical_data.MatchResult, self.MatchResultEqual)
+    self.identifier = identifier.Identifier()
 
-  def MatchResultEqual(self, m1, m2, unused_msg=None):
-    if m1.metre_name != m2.metre_name:
-      raise self.failureException('Metre names unequal: %s != %s' % (
-          m1.metre_name, m2.metre_name))
-    if m1.match_type != m2.match_type:
-      raise self.failureException('Match types unequal: %s != %s' % (
-          m1.match_type, m2.match_type))
-    if m1.issues != m2.issues:
-      raise self.failureException('Issues unequal: %s != %s' % (m1.issues,
-                                                                m2.issues))
+  def AssertSingleMatchResultEquals(self, results, metre_name, match_type,
+                                    issues):
+    assert isinstance(results, list)
+    assert len(results) == 1
+    result = results[0]
+    assert result.metre_name == metre_name
+    assert result.match_type == match_type
+    assert result.issues == issues
 
   def testFineAnustup(self):
     """Good anuṣṭup must be recognized."""
-    verse = ['agajānana padmārkaṃ gajānanam aharniṣam anekadantam bhaktānām',
-             'ekadantam upāsmahe']
-    self.MatchResultEqual(
-        identifier.IdentifyFromLines(verse)[0],
-        metrical_data.MatchResult('Anuṣṭup (Śloka)',
-                                  metrical_data.MATCH_TYPE.FULL))
+    verse = ['agajānana padmārkaṃ gajānanam aharniṣam anekadantam',
+             'bhaktānām ekadantam upāsmahe']
+    self.AssertSingleMatchResultEquals(identifier.IdentifyFromLines(verse),
+                                       'Anuṣṭup (Śloka)',
+                                       match_result.MATCH_TYPE.FULL,
+                                       [])
 
 
 if __name__ == '__main__':
