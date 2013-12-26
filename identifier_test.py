@@ -36,12 +36,21 @@ class KnownValues(unittest.TestCase):
 
   def AssertSingleMatchResultEquals(self, results, metre_name, match_type,
                                     issues):
-    assert isinstance(results, list)
-    assert len(results) == 1
-    result = results[0]
-    assert result.metre_name == metre_name
-    assert result.match_type == match_type
-    assert result.issues == issues
+    try:
+      assert isinstance(results, list)
+      assert len(results) == 1
+      result = results[0]
+      assert result.metre_name == metre_name
+      assert result.match_type == match_type
+      assert result.issues == issues
+    except AssertionError:
+      print('Mismatch: Got results')
+      print(match_result.Description(results))
+      print('...instead of')
+      print('Metre name: %s' % metre_name)
+      print('Match type: %s' % match_type)
+      print('Issues: %s' % issues)
+      raise self.failureException
 
   def testFineAnustup(self):
     """Good anuṣṭup must be recognized."""
