@@ -15,6 +15,7 @@ import logging
 import os.path
 import re
 import sys
+import tempfile
 
 import handle_input
 import print_utils
@@ -57,7 +58,9 @@ if __name__ == '__main__':
   input_file_name = sys.argv[1]
 
   logger = logging.getLogger()
-  handler = logging.FileHandler('/var/tmp/read_gretil_%s.log' % Timestamp())
+  log_file = tempfile.NamedTemporaryFile(prefix='read_gretil', delete=False)
+  print('Logging to %s' % log_file.name)
+  handler = logging.FileHandler(log_file.name)
   handler.setFormatter(logging.Formatter(
       '%(levelname)s	%(asctime)s %(filename)s:%(lineno)d] %(message)s'))
   logger.addHandler(handler)
