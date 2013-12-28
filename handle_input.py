@@ -8,7 +8,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import itertools
+import logging
 import re
+import unicodedata
 
 import slp1
 import transliteration_data
@@ -50,17 +52,20 @@ class InputHandler(object):
     underline = ''
     bad_chars = []
     if rejects:
-      for (i, c) in enumerate(orig_text):
-        if i in rejects and c not in ignore:
-          underline += '^'
+      for c in orig_text:
+        if c in rejects:
+          if c in ignore:
+            logging.error('%s is supposed to be ignored', c)
           bad_chars.append(c)
+          underline += '^'
         else:
           underline += ' '
     if underline.strip():
-      self.error_output.append('Unknown characters are ignored: %s' %
-                               (' '.join(bad_chars)))
+      self.error_output.append('Unknown characters are ignored: %s' % (
+          ', '.join('%s (U+%s %s)' % (c, ord(c), unicodedata.name(c))
+                    for c in bad_chars)))
       self.error_output.append(orig_text)
-      self.error_output.append(underline)
+      # self.error_output.append(underline)
 
     assert not re.search('[^%s]' % slp1.ALPHABET, text), text
     return text

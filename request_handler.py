@@ -81,7 +81,7 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('<pre>')
     self.response.write('\n'.join(identifier.cleaned_output))
     if not ok:
-      self.response.write('This might help:')
+      pass
     self.response.write(identifier.AllDebugOutput())
     self.response.write('</pre></body></html>')
 
