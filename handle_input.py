@@ -8,7 +8,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import itertools
-import logging
 import re
 import unicodedata
 
@@ -49,23 +48,20 @@ class InputHandler(object):
     ignore = r""" 0123456789'".\/$&%{}|-!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
     (text, rejects) = transliteration_data.DetectAndTransliterate(text, ignore)
 
-    underline = ''
-    bad_chars = []
+    recognized_text = ''
+    for c in orig_text:
+      if c in rejects:
+        recognized_text += '[U+%s]' % ord(c)
+      else:
+        recognized_text += c
+
     if rejects:
-      for c in orig_text:
-        if c in rejects:
-          if c in ignore:
-            logging.error('%s is supposed to be ignored', c)
-          bad_chars.append(c)
-          underline += '^'
-        else:
-          underline += ' '
-    if underline.strip():
       self.error_output.append('Unknown characters are ignored: %s' % (
           ', '.join('%s (U+%s %s)' % (c, ord(c), unicodedata.name(c))
-                    for c in bad_chars)))
+                    for c in rejects)))
       self.error_output.append(orig_text)
-      # self.error_output.append(underline)
+      self.error_output.append('recognized as')
+      self.error_output.append(recognized_text)
 
     assert not re.search('[^%s]' % slp1.ALPHABET, text), text
     return text
