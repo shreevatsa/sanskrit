@@ -103,13 +103,25 @@ class KnownValues(unittest.TestCase):
         match_result.MATCH_TYPE.FULL,
         [match_result.ISSUES.VISAMA_PADANTA_LAGHU])
 
-  def testArya(self):
-    """Test some examples of Arya."""
-    pass
+  def testAryaKnown(self):
+    """A known example of Āryā should be recognized."""
+    verse = ['siṃhaḥ śiśur api nipatati',
+             'mada-malina-kapola-bhittiṣu gajeṣu |',
+             'prakṛtir iyaṃ sattvavatāṃ',
+             'na khalu vayas tejaso hetuḥ ||']
+    self.AssertSingleMatchResultEquals(
+        self.identifier.IdentifyFromLines(verse),
+        'Āryā',
+        match_result.MATCH_TYPE.FULL,
+        [])
+
+  def testAryaUnknown(self):
+    """An example of Āryā that has not been explicitly added."""
+    raise self.failureException
 
   def testBreakUp(self):
     """Test all the above by inserting random breaks in the list."""
-    pass
+    raise self.failureException
 
 
 if __name__ == '__main__':
