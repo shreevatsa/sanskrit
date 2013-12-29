@@ -9,8 +9,13 @@ from __future__ import unicode_literals
 
 import unittest
 
-import identifier
-import match_result
+# TODO(shreevatsa): Change this back
+# import match_result
+import metrical_data as match_result
+
+# TODO(shreevatsa): Change this back
+# import identifier
+import sscan as identifier
 
 
 class BadInput(unittest.TestCase):
@@ -42,14 +47,14 @@ class KnownValues(unittest.TestCase):
       result = results[0]
       assert result.metre_name == metre_name
       assert result.match_type == match_type
-      assert result.issues == set(issues)
+      assert set(result.issues) == set(issues)
     except AssertionError:
-      print('Mismatch: Got results')
+      print('\n\nMismatch: Got results')
       print(match_result.Description(results))
-      print('...instead of')
-      print('Metre name: %s' % metre_name)
-      print('Match type: %s' % match_type)
-      print('Issues: %s' % issues)
+      print('instead of')
+      print('\tMetre name: %s' % metre_name)
+      print('\tMatch type: %s' % match_type)
+      print('\tIssues: %s' % issues)
       raise self.failureException
 
   def testFineAnustubh(self):
@@ -58,7 +63,7 @@ class KnownValues(unittest.TestCase):
              'gajānanam aharniṣam',
              'anekadantam bhaktānām',
              'ekadantam upāsmahe']
-    self.AssertSingleMatchResultEquals(identifier.IdentifyFromLines(verse),
+    self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse),
                                        'Anuṣṭup (Śloka)',
                                        match_result.MATCH_TYPE.FULL,
                                        [])
@@ -68,7 +73,7 @@ class KnownValues(unittest.TestCase):
     verse = ['तपःस्वाध्यायनिरतं तपस्वी वाग्विदां वरम् ।',
              'नारदं परिपप्रच्छ वाल्मीकिर्मुनिपुङ्गवम् ।। 1.1.1 ।।']
     self.AssertSingleMatchResultEquals(
-        identifier.IdentifyFromLines(verse),
+        self.identifier.IdentifyFromLines(verse),
         'Anuṣṭup (Śloka)',
         match_result.MATCH_TYPE.FULL,
         [match_result.ISSUES.FIRST_PADA_OFF,
@@ -81,7 +86,7 @@ class KnownValues(unittest.TestCase):
              'yakSaz cakre janakatanayAsnAnapuNyodakeSu %',
              'snigdhacchAyAtaruSu vasatiM rAmagiryAzrameSu // 1.1 //']
     self.AssertSingleMatchResultEquals(
-        identifier.IdentifyFromLines(verse),
+        self.identifier.IdentifyFromLines(verse),
         'Mandākrāntā',
         match_result.MATCH_TYPE.FULL,
         [])
@@ -93,18 +98,30 @@ class KnownValues(unittest.TestCase):
              'prekSiSyante gaganagatayo nUnam Avarjya dRSTir %',
              'ekaM bhuktAguNam iva bhuvaH sthUlamadhyendranIlam // 1.49 //']
     self.AssertSingleMatchResultEquals(
-        identifier.IdentifyFromLines(verse),
+        self.identifier.IdentifyFromLines(verse),
         'Mandākrāntā',
         match_result.MATCH_TYPE.FULL,
         [match_result.ISSUES.VISAMA_PADANTA_LAGHU])
 
-  def testArya(self):
-    """Test some examples of Arya."""
-    pass
+  def testAryaKnown(self):
+    """A known example of Āryā should be recognized."""
+    verse = ['siṃhaḥ śiśur api nipatati',
+             'mada-malina-kapola-bhittiṣu gajeṣu |',
+             'prakṛtir iyaṃ sattvavatāṃ',
+             'na khalu vayas tejaso hetuḥ ||']
+    self.AssertSingleMatchResultEquals(
+        self.identifier.IdentifyFromLines(verse),
+        'Āryā',
+        match_result.MATCH_TYPE.FULL,
+        [])
+
+  def testAryaUnknown(self):
+    """An example of Āryā that has not been explicitly added."""
+    raise self.failureException
 
   def testBreakUp(self):
     """Test all the above by inserting random breaks in the list."""
-    pass
+    raise self.failureException
 
 
 if __name__ == '__main__':
