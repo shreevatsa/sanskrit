@@ -28,12 +28,12 @@ class AllMetricalData(object):
 def Enum(**enums):
   return type(str('Enum'), (), enums)
 
-METRE_PATTERN_ISSUES = Enum(UNKNOWN_ISSUE=0,
-                            VISAMA_PADANTA_LAGHU='viṣama-pādānta-laghu',
-                            PADANTA_LAGHU='pādānta-laghu',
-                            FIRST_PADA_OFF='first pāda not conforming',
-                            THIRD_PADA_OFF='third pāda not conforming'
-                           )
+ISSUES = Enum(UNKNOWN_ISSUE=0,
+              VISAMA_PADANTA_LAGHU='viṣama-pādānta-laghu',
+              PADANTA_LAGHU='pādānta-laghu',
+              FIRST_PADA_OFF='first pāda not conforming',
+              THIRD_PADA_OFF='third pāda not conforming'
+             )
 
 MATCH_TYPE = Enum(UNKNOWN=0,
                   FULL=1,
@@ -109,6 +109,16 @@ def Names(match_results):
   return ' AND '.join(m.Name() for m in match_results)
 
 
+def Description(match_results):
+  s = ''
+  for (i, result) in enumerate(match_results):
+    s += '\nResult %d: ' % i
+    s += '\n\tMetre name: %s' % result.metre_name
+    s += '\n\tMatch type: %s' % result.match_type
+    s += '\n\tIssues: %s' % result.issues
+  return s
+
+
 def CleanUpPatternString(pattern):
   pattern = simple_utils.RemoveChars(pattern, ' —–')
   assert re.match(r'^[LG.]*$', pattern), pattern
@@ -145,8 +155,8 @@ def AddPadaWithFinalLaghu(metre_name, pattern, match_type=MATCH_TYPE.PADA):
     logging.warning('Not adding %s for %s. It is already known as %s', pattern,
                     metre_name, Names(known_patterns[pattern]))
   else:
-    known_patterns[pattern] = [MatchResult(
-        metre_name, match_type, [METRE_PATTERN_ISSUES.PADANTA_LAGHU])]
+    known_patterns[pattern] = [MatchResult(metre_name, match_type,
+                                           [ISSUES.PADANTA_LAGHU])]
 
 
 def AddPada(metre_name, pattern, match_type=MATCH_TYPE.PADA):
@@ -180,8 +190,7 @@ def AddArdha(metre_name, pattern_odd, pattern_even,
     for (o, e) in itertools.product(odds, evens):
       known_patterns[o + e] = known_patterns.get(o + e, [])
       known_patterns[o + e].append(
-          MatchResult(metre_name, match_type,
-                      [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU]))
+          MatchResult(metre_name, match_type, [ISSUES.VISAMA_PADANTA_LAGHU]))
 
 
 def AddVrtta(metre_name, verse_pattern, issues=None):
@@ -198,8 +207,7 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
   logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
                 'with pattern %s', metre_name, verse_pattern)
   known_metres[verse_pattern] = MatchResult(
-      metre_name, MATCH_TYPE.FULL,
-      [METRE_PATTERN_ISSUES.VISAMA_PADANTA_LAGHU])
+      metre_name, MATCH_TYPE.FULL, [ISSUES.VISAMA_PADANTA_LAGHU])
 
 
 def AddExactVrtta(metre_name, line_patterns, issues=None):
@@ -346,30 +354,30 @@ def AddAnustupExamples():
   # "jayanti te sukṛtino..."
   AddExactVrtta('Anuṣṭup (Śloka)',
                 ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'],
-                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
+                [ISSUES.FIRST_PADA_OFF])
   # "sati pradīpe saty agnau..." Proof: K48.130 (p. 51)
   AddExactVrtta('Anuṣṭup (Śloka)',
                 ['LGLGGGGG', '....LGL.', '....LGG.', '....LGL.'],
-                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
+                [ISSUES.FIRST_PADA_OFF])
   # "guruṇā stana-bhāreṇa [...] śanaiś-carābhyāṃ pādābhyāṃ" K48.132 (52)
   AddExactVrtta('Anuṣṭup (Śloka)',
                 ['....LGG.', '....LGL.', 'LGLGGGGG', '....LGL.'],
-                [METRE_PATTERN_ISSUES.THIRD_PADA_OFF])
+                [ISSUES.THIRD_PADA_OFF])
   # "tāvad evāmṛtamayī..." K48.125 (49)
   AddExactVrtta('Anuṣṭup (Śloka)',
                 ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'],
-                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
+                [ISSUES.FIRST_PADA_OFF])
   # Covers a lot of cases
   AddExactVrtta('Anuṣṭup (Śloka)',
                 ['........', '....LGL.', '....LGG.', '....LGL.'],
-                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF])
+                [ISSUES.FIRST_PADA_OFF])
   AddExactVrtta('Anuṣṭup (Śloka)',
                 ['....LGG.', '....LGL.', '........', '....LGL.'],
-                [METRE_PATTERN_ISSUES.THIRD_PADA_OFF])
+                [ISSUES.THIRD_PADA_OFF])
   AddExactVrtta('Anuṣṭup (Śloka)',
                 ['........', '....LGL.', '........', '....LGL.'],
-                [METRE_PATTERN_ISSUES.FIRST_PADA_OFF,
-                 METRE_PATTERN_ISSUES.THIRD_PADA_OFF])
+                [ISSUES.FIRST_PADA_OFF,
+                 ISSUES.THIRD_PADA_OFF])
 
 
 def AddLongerUpajati():
