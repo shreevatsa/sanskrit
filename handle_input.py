@@ -35,6 +35,10 @@ def BreakIntoVerses(input_lines):
   return verses
 
 
+def UnicodeNotation(c):
+  return 'U+%04x' % ord(c)
+
+
 class InputHandler(object):
   """Class that takes arbitrary input and returns list of clean lines."""
 
@@ -51,13 +55,14 @@ class InputHandler(object):
     recognized_text = ''
     for c in orig_text:
       if c in rejects:
-        recognized_text += '[U+%s]' % ord(c)
+        recognized_text += '[%s]' % UnicodeNotation(c)
       else:
         recognized_text += c
 
     if rejects:
       self.error_output.append('Unknown characters are ignored: %s' % (
-          ', '.join('%s (U+%s %s)' % (c, ord(c), unicodedata.name(c))
+          ', '.join('%s (%s %s)' %
+                    (c, UnicodeNotation(c), unicodedata.name(c, 'Unknown'))
                     for c in rejects)))
       self.error_output.append(orig_text)
       self.error_output.append('recognized as')
