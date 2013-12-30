@@ -120,10 +120,10 @@ class KnownValues(unittest.TestCase):
 
   def testAryaUnknown(self):
     """An example of Āryā that has not been explicitly added."""
-    verse = ['upari ghanaṃ ghana-paṭalaṃ',
-             "tiryag girayo 'pi nartita-mayūrāḥ |",
-             'kṣitir api kandala-dhavalā',
-             'dṛṣṭiṃ pathikaḥ kva pātayati']
+    verse = ['nītijñā niyatijñā'
+             'vādajñā api bhavanti vedajñāḥ',
+             'brahmajñā api labhyā',
+             'svājñāna-jñānino viralāḥ']
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
         'Āryā (matched from regex)',
