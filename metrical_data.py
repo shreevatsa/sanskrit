@@ -205,6 +205,7 @@ def AddVrtta(metre_name, verse_pattern, issues=None):
                                              issues))
   regexes_known.add(key)
   known_metre_regexes.append((key, value))
+  # known_metre_regexes.append((re.compile('^' + key + '$'), value))
 
 
 def AddVrttaWithVPL(metre_name, verse_pattern):
@@ -215,6 +216,7 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
                                              [ISSUES.VISAMA_PADANTA_LAGHU]))
   regexes_known.add(key)
   known_metre_regexes.append((key, value))
+  # known_metre_regexes.append((re.compile('^' + key + '$'), value))
 
 
 def AddExactVrtta(metre_name, line_patterns, issues=None):

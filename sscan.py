@@ -68,8 +68,8 @@ class Identifier(object):
     full_verse = ''.join(verse)
 
     results = []
-    for (known_pattern, known_metre) in metrical_data.known_metre_regexes:
-      if re.match('^' + known_pattern + '$', full_verse):
+    for (known_regex, known_metre) in metrical_data.known_metre_regexes:
+      if re.match('^' + known_regex + '$', full_verse):
         self.latest_identified_metre = known_metre
         results.append(known_metre)
         return results
