@@ -62,10 +62,10 @@ class KnownValues(unittest.TestCase):
 
   def testFineAnustubh(self):
     """Good anuṣṭubh should be recognized."""
-    verse = ['agajānana padmārkaṃ',
-             'gajānanam aharniṣam',
-             'anekadantam bhaktānām',
-             'ekadantam upāsmahe']
+    verse = ['karmaṇyevādhikāraste',
+             'mā phaleṣu kadācana |',
+             'mā karmaphalahetur bhūr',
+             'mā te saṅgo stvakarmaṇi ||47||']
     self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse),
                                        'Anuṣṭup (Śloka)',
                                        match_result.MATCH_TYPE.FULL,
