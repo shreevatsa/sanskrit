@@ -423,7 +423,7 @@ def InitializeData():
 
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
   AddAryaExamples()
-  AddAryaRegex()
+  # AddAryaRegex()
   AddGitiExamples()
 
   # Bhartṛhari
@@ -524,4 +524,4 @@ def InitializeData():
   AddSamavrtta('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G')
 
   # Raghuvamśa (hard to believe, but there it is)
-  AddSamavrtta('nārācam', 'L L L L L L G L G G L G G L G G L G')
+  AddSamavrtta('Nārācam', 'L L L L L L G L G G L G G L G G L G')
