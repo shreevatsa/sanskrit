@@ -475,12 +475,11 @@ def AddLongerUpajati():
 
 def AddAryaRegex():
   four_any = '(LLLL|LLG|LGL|GLL|GG)'
-  four_not_lgl = '(LLLL|LLG|GLL|GG)'
   AddExactVrtta('Āryā (matched from regex)',
-                [four_any + four_not_lgl + four_any,  # 12 in groups of 4
-                 four_any + four_not_lgl + '(LGL|LLLL)' + four_not_lgl + '[LG]',
-                 four_any + four_not_lgl + four_any,
-                 four_any + four_not_lgl + four_any + 'L' + '[LG]'])
+                [four_any + four_any + four_any,  # 12 in groups of 4
+                 four_any + four_any + four_any + four_any + '[LG]',
+                 four_any + four_any + four_any,
+                 four_any + four_any + four_any + 'L' + '[LG]'])
 
 
 def InitializeData():
