@@ -204,7 +204,7 @@ def AddVrtta(metre_name, verse_pattern, issues=None):
   (key, value) = (verse_pattern, MatchResult(metre_name, MATCH_TYPE.FULL,
                                              issues))
   regexes_known.add(key)
-  known_metre_regexes.append((key, value))
+  known_metre_regexes.append(('^' + key + '$', value))
   # known_metre_regexes.append((re.compile('^' + key + '$'), value))
 
 
@@ -215,7 +215,7 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
   (key, value) = (verse_pattern, MatchResult(metre_name, MATCH_TYPE.FULL,
                                              [ISSUES.VISAMA_PADANTA_LAGHU]))
   regexes_known.add(key)
-  known_metre_regexes.append((key, value))
+  known_metre_regexes.append(('^' + key + '$', value))
   # known_metre_regexes.append((re.compile('^' + key + '$'), value))
 
 
