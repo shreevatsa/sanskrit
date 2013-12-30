@@ -27,7 +27,7 @@ known_texts = {
     'kakumspu.htm': 'Kālidāsa: Kumārasambhava',
     'kragh_pu.htm': 'Kālidāsa: Raghuvamśa',
     'maghspvu.htm': 'Māgha: Śiśupālavadha',
-    'nkalivxu.htm': 'Nīlakaṇṭha Dīkṣita: Kaliviḍambana',
+    'nkalivpu.htm': 'Nīlakaṇṭha Dīkṣita: Kaliviḍambana',
     'ramodtpu.htm': 'Rāmodantam',
     'msubhs_u.htm': 'Mahā-subhāṣita-saṅgraha',
     }
