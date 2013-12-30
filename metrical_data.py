@@ -122,7 +122,8 @@ def Description(match_results, indent_depth=0):
 
 def CleanUpPatternString(pattern):
   pattern = simple_utils.RemoveChars(pattern, ' —–')
-  assert re.match(r'^[LG.]*$', pattern), pattern
+  chars = ['L', 'G', '.', '(', ')', '[', r'\]', '|']
+  assert re.match(r'^[%s]*$' % ''.join(chars), pattern), pattern
   return pattern
 
 
@@ -472,6 +473,16 @@ def AddLongerUpajati():
                  'L G L G G L L G L G L G'])
 
 
+def AddAryaRegex():
+  four_any = '(LLLL|LLG|LGL|GLL|GG)'
+  four_not_lgl = '(LLLL|LLG|GLL|GG)'
+  AddExactVrtta('Āryā (matched from regex)',
+                [four_any + four_not_lgl + four_any,  # 12 in groups of 4
+                 four_any + four_not_lgl + '(LGL|LLLL)' + four_not_lgl + '[LG]',
+                 four_any + four_not_lgl + four_any,
+                 four_any + four_not_lgl + four_any + 'L' + '[LG]'])
+
+
 def InitializeData():
   """Add all known metres to the data structures."""
   AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G G', '. . . . L G L G')
@@ -479,6 +490,7 @@ def InitializeData():
 
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
   AddAryaExamples()
+  AddAryaRegex()
   AddGitiExamples()
 
   # Bhartṛhari

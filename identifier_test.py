@@ -126,7 +126,7 @@ class KnownValues(unittest.TestCase):
              'dṛṣṭiṃ pathikaḥ kva pātayati']
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
-        'Āryā',
+        'Āryā (matched from regex)',
         match_result.MATCH_TYPE.FULL,
         [])
 
