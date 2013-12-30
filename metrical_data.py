@@ -215,7 +215,9 @@ def AddVrttaWithVPL(metre_name, verse_pattern):
 def AddExactVrtta(metre_name, line_patterns, issues=None):
   """Given the four lines of a vṛtta, add it to the data structures exactly."""
   assert len(line_patterns) == 4, (metre_name, line_patterns)
-  AddVrtta(metre_name, CleanUpPatternString(''.join(line_patterns)), issues)
+  full_verse_pattern = ''.join('(%s)' % CleanUpPatternString(s)
+                               for s in line_patterns)
+  AddVrtta(metre_name, full_verse_pattern, issues)
 
 
 def AddFourLineVrtta(metre_name, line_patterns):
@@ -473,13 +475,23 @@ def AddLongerUpajati():
                  'L G L G G L L G L G L G'])
 
 
+patterns_memo = {0: [''], 1: ['L']}
+
+
+def PatternsOfLength(n):
+  if n in patterns_memo:
+    return patterns_memo[n]
+  patterns_memo[n] = [p + 'L' for p in PatternsOfLength(n - 1)]
+  patterns_memo[n] += [p + 'G' for p in PatternsOfLength(n - 2)]
+  return patterns_memo[n]
+
+
 def AddAryaRegex():
-  four_any = '(LLLL|LLG|LGL|GLL|GG)'
   AddExactVrtta('Āryā (matched from regex)',
-                [four_any + four_any + four_any,  # 12 in groups of 4
-                 four_any + four_any + four_any + four_any + '[LG]',
-                 four_any + four_any + four_any,
-                 four_any + four_any + four_any + 'L' + '[LG]'])
+                ['|'.join(PatternsOfLength(12)),
+                 '|'.join([p + '[LG]' for p in PatternsOfLength(16)]),
+                 '|'.join(PatternsOfLength(12)),
+                 '|'.join([p + '[LG]' for p in PatternsOfLength(13)])])
 
 
 def InitializeData():
