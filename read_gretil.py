@@ -8,13 +8,13 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import argparse
 import codecs
 import datetime
 import json
 import logging
 import os.path
 import re
-import sys
 import tempfile
 
 import handle_input
@@ -54,12 +54,29 @@ def AcceptVerse(v):
 
 
 if __name__ == '__main__':
-  assert len(sys.argv) == 2
-  input_file_name = sys.argv[1]
+  argument_parser = argparse.ArgumentParser(description='Read a GRETIL file, '
+                                            'identify verses and their metres, '
+                                            'and generate statistics.')
+  argument_parser.add_argument('input_file', type=unicode,
+                               help='A file containing list of verses')
+  argument_parser.add_argument('--print_identified_verses',
+                               choices=['none', 'brief', 'full'],
+                               default='brief',
+                               help='What to print when the metre of a verse is'
+                               ' identified: nothing, just the metre, or'
+                               ' the whole verse')
+  argument_parser.add_argument('--print_unidentified_verses',
+                               choices=['none', 'brief', 'full'],
+                               default='full',
+                               help='What to print when a verse is not in any'
+                               ' known metre: nothing, just a message,'
+                               ' or the whole verse')
+  args = argument_parser.parse_args()
+  input_file_name = args.input_file
 
   logger = logging.getLogger()
-  log_file = tempfile.NamedTemporaryFile(prefix='read_gretil', delete=False)
-  print('Logging to %s' % log_file.name)
+  log_file = tempfile.NamedTemporaryFile(prefix='read_gretil_', delete=False)
+  Print('Logging to %s' % log_file.name)
   handler = logging.FileHandler(log_file.name)
   handler.setFormatter(logging.Formatter(
       '%(levelname)s	%(asctime)s %(filename)s:%(lineno)d] %(message)s'))
@@ -95,23 +112,34 @@ if __name__ == '__main__':
       if not ''.join(clean):
         continue
       table['unknown'] = table.get('unknown', 0) + 1
-      Print('Verse %4d:' % (verse_number + 1))
-      Print('\n'.join(verse))
-      Print(identifier.AllDebugOutput())
-      Print('')
+      if args.print_unidentified_verses != 'none':
+        Print('Verse %4d:' % (verse_number + 1))
+        if args.print_unidentified_verses == 'full':
+          Print('\n'.join(verse))
+          Print(identifier.AllDebugOutput())
+          Print('')
       continue
+
+    # We've dealt with the case where there are no results
     assert metre
     assert isinstance(metre, list)
     metre_name = None
     if len(metre) == 1 and not metre[0].issues:
+      # The best possible case
       metre_name = metre[0].MetreName()
-      Print('Verse %4d is in %s' % (verse_number + 1, metre_name))
+      if args.print_identified_verses != 'none':
+        Print('Verse %4d is in %s' % (verse_number + 1, metre_name))
+        if args.print_identified_verses == 'full':
+          Print('\n'.join(verse))
     else:
       all_metres = set(m.MetreNameOnlyBase() for m in metre)
-      # assert len(all_metres) == 1, (all_metres, verse)
+      assert len(all_metres) == 1, (all_metres, verse)
       metre_name = all_metres.pop()
-      Print('Verse %4d is in %s (probably), but it has issues'
-            % (verse_number + 1, metre_name))
+      if args.print_identified_verses != 'none':
+        Print('Verse %4d is in %s (probably), but it has issues'
+              % (verse_number + 1, metre_name))
+    # Either way, metre_name should be set by now
+    assert metre_name is not None
     table[metre_name] = table.get(metre_name, 0) + 1
 
   sum_counts = sum(value for (key, value) in table.items())
