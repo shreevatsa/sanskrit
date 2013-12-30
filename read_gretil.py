@@ -75,7 +75,9 @@ if __name__ == '__main__':
   input_file_name = args.input_file
 
   logger = logging.getLogger()
-  log_file = tempfile.NamedTemporaryFile(prefix='read_gretil_', delete=False)
+  log_file = tempfile.NamedTemporaryFile(prefix='read_gretil_%s_' %
+                                         os.path.basename(input_file_name),
+                                         delete=False)
   Print('Logging to %s' % log_file.name)
   handler = logging.FileHandler(log_file.name)
   handler.setFormatter(logging.Formatter(

@@ -423,7 +423,7 @@ def InitializeData():
 
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
   AddAryaExamples()
-  # AddAryaRegex()
+  AddAryaRegex()
   AddGitiExamples()
 
   # Bhartṛhari
