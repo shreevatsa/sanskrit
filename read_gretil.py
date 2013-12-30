@@ -151,7 +151,8 @@ if __name__ == '__main__':
 
   stats_file_name = os.path.basename(input_file_name) + '.stats'
   stats_file = codecs.open(stats_file_name, 'w', 'utf-8')
-  json.dump(table, stats_file, indent=2, ensure_ascii=False)
+  json.dump(table, stats_file, indent=2, ensure_ascii=False,
+            separators=(',', ': '))
   stats_file.close()
   stats_file = codecs.open(stats_file_name, 'r', 'utf-8')
   assert table == json.load(stats_file, 'utf-8')
