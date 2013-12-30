@@ -99,8 +99,8 @@ class Identifier(object):
                            '%s' % (i + 1, line, len(line),
                                    morae[i], metrical_data.Names(identified)))
       else:
-        self.output.append('  Line %d: pattern %s (%d) is unknown' % (
-            i + 1, line, morae[i]))
+        self.output.append('  Line %d: pattern %s (%d syllables, %d mātras) is '
+                           'unknown' % (i + 1, line, len(line), morae[i]))
     return results
 
   def IdentifyFromLines(self, input_lines):
