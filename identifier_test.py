@@ -50,7 +50,10 @@ class KnownValues(unittest.TestCase):
       assert set(result.issues) == set(issues)
     except AssertionError:
       print('\n\nMismatch: Got results')
-      print(match_result.Description(results))
+      if results is None:
+        print('\tNo results')
+      else:
+        print(match_result.Description(results, 4))
       print('instead of')
       print('\tMetre name: %s' % metre_name)
       print('\tMatch type: %s' % match_type)
@@ -122,10 +125,10 @@ class KnownValues(unittest.TestCase):
              'kṣitir api kandala-dhavalā',
              'dṛṣṭiṃ pathikaḥ kva pātayati']
     self.AssertSingleMatchResultEquals(
-      self.identifier.IdentifyFromLines(verse),
-      'Āryā',
-      match_result.MATCH_TYPE.FULL,
-      [])
+        self.identifier.IdentifyFromLines(verse),
+        'Āryā',
+        match_result.MATCH_TYPE.FULL,
+        [])
 
   def testBreakUp(self):
     """Test all the above by inserting random breaks in the list."""

@@ -109,13 +109,14 @@ def Names(match_results):
   return ' AND '.join(m.Name() for m in match_results)
 
 
-def Description(match_results):
+def Description(match_results, indent_depth=0):
+  indent = ' ' * indent_depth
   s = ''
   for (i, result) in enumerate(match_results):
-    s += '\nResult %d: ' % i
-    s += '\n\tMetre name: %s' % result.metre_name
-    s += '\n\tMatch type: %s' % result.match_type
-    s += '\n\tIssues: %s' % result.issues
+    s += indent + 'Result %d: ' % i
+    s += '\n' + indent + '\tMetre name: %s' % result.metre_name
+    s += '\n' + indent + '\tMatch type: %s' % result.match_type
+    s += '\n' + indent + '\tIssues: %s' % result.issues
   return s
 
 
