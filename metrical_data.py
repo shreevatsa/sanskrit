@@ -30,7 +30,6 @@ known_patterns = {}
 regexes_known = set()
 known_metre_regexes = []
 known_metre_patterns = {}
-# known_morae = {}
 
 
 def CleanUpPatternString(pattern):
@@ -213,14 +212,6 @@ def AddVishamavrtta(metre_name, line_patterns):
     for pattern in OptionsExpand(line):
       AddPada(metre_name, pattern,
               getattr(match_result.MATCH_TYPE, 'PADA_%d' % (i + 1)))
-
-
-# def AddMatravrtta(metre_name, line_morae):
-#   known_morae[repr(line_morae)] = metre_name
-#   if len(line_morae) == 4:
-#     # Not ideal (lossy), but input is often like this.
-#     known_morae[repr([line_morae[0] + line_morae[1],
-#                       line_morae[2] + line_morae[3]])] = metre_name
 
 
 def MatraCount(pattern):

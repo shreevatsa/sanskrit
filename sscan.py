@@ -75,13 +75,8 @@ class Identifier(object):
         results.append(known_metre)
         return results
 
-    # The pattern was not recognized; try mātrā.
+    # The pattern was not recognized; look at mātrās.
     morae = [MatraCount(line) for line in verse]
-    # if repr(morae) in metrical_data.known_morae:
-    #   known_metre = metrical_data.known_morae[repr(morae)]
-    #   self.latest_identified_metre = known_metre
-    #   results.append(known_metre)
-    #   return results
 
     assert not results
     # Nothing recognized, need to examine lines individually
