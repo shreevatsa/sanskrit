@@ -135,7 +135,7 @@ if __name__ == '__main__':
           Print('\n'.join(verse))
     else:
       all_metres = set(m.MetreNameOnlyBase() for m in metre)
-      assert len(all_metres) == 1, (all_metres, verse)
+      # assert len(all_metres) == 1, (all_metres, verse)
       metre_name = all_metres.pop()
       if args.print_identified_verses != 'none':
         Print('Verse %4d is in %s (probably), but it has issues'
