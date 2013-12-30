@@ -9,9 +9,7 @@ from __future__ import unicode_literals
 
 import unittest
 
-# TODO(shreevatsa): Change this back
-# import match_result
-import metrical_data as match_result
+import match_result
 
 # TODO(shreevatsa): Change this back
 # import identifier

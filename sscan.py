@@ -32,6 +32,7 @@ import re
 import sys
 
 import handle_input
+import match_result
 import metrical_data
 import slp1
 
@@ -93,12 +94,12 @@ class Identifier(object):
       identified = IdentifyPattern(line)
       if identified:
         assert isinstance(identified, list), identified
-        assert all(isinstance(p, metrical_data.MatchResult)
+        assert all(isinstance(p, match_result.MatchResult)
                    for p in identified)
         results.extend(identified)
         self.output.append('  Line %d: pattern %s (%d syllables, %d mātras) is '
                            '%s' % (i + 1, line, len(line),
-                                   morae[i], metrical_data.Names(identified)))
+                                   morae[i], match_result.Names(identified)))
       else:
         self.output.append('  Line %d: pattern %s (%d syllables, %d mātras) is '
                            'unknown' % (i + 1, line, len(line), morae[i]))
@@ -125,7 +126,7 @@ class Identifier(object):
       self.output.extend(cleaner.clean_output)
       return None
     assert isinstance(results, list)
-    assert all(isinstance(p, metrical_data.MatchResult) for p in results)
+    assert all(isinstance(p, match_result.MatchResult) for p in results)
     if len(results) == 1:
       self.output.append('Identified as %s.' % results[0].Name())
       return results
@@ -176,7 +177,7 @@ def IdentifyPattern(pattern):
     return results
   assert isinstance(results, list), results
   for result in results:
-    assert isinstance(result, metrical_data.MatchResult), result
+    assert isinstance(result, match_result.MatchResult), result
   return results
 
 
