@@ -117,7 +117,15 @@ class KnownValues(unittest.TestCase):
 
   def testAryaUnknown(self):
     """An example of Āryā that has not been explicitly added."""
-    raise self.failureException
+    verse = ['upari ghanaṃ ghana-paṭalaṃ',
+             "tiryag girayo 'pi nartita-mayūrāḥ |",
+             'kṣitir api kandala-dhavalā',
+             'dṛṣṭiṃ pathikaḥ kva pātayati']
+    self.AssertSingleMatchResultEquals(
+      self.identifier.IdentifyFromLines(verse),
+      'Āryā',
+      match_result.MATCH_TYPE.FULL,
+      [])
 
   def testBreakUp(self):
     """Test all the above by inserting random breaks in the list."""
