@@ -23,7 +23,7 @@ known_texts = {
     'bharst_u.htm': 'Bhartṛhari: Śatakatrakya',
     'meghdk_u.htm': 'Meghadūta',
     'bhakirpu.htm': 'Bhāravi: Kirātārjunīya',
-    'bhall_xu.htm': 'Bhallaṭaśataka',
+    'bhall_pu.htm': 'Bhallaṭaśataka',
     'kakumspu.htm': 'Kālidāsa: Kumārasambhava',
     'kragh_pu.htm': 'Kālidāsa: Raghuvamśa',
     'maghspvu.htm': 'Māgha: Śiśupālavadha',

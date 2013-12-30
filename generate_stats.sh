@@ -1,6 +1,6 @@
 patch ~/GRETIL/forme/amaru_u.htm -o /tmp/amaru_u.htm < diff-amaru_u.htm.patch && ./read_gretil.py /tmp/amaru_u.htm --print_identified_verses=none
 ./read_gretil.py ~/GRETIL/forme/bhakirpu.htm --print_identified_verses=none
-./read_gretil.py ~/GRETIL/forme/bhall_xu.htm --print_identified_verses=none
+./read_gretil.py ~/GRETIL/forme/bhall_pu.htm --print_identified_verses=none
 ./read_gretil.py bharst_u.htm --print_identified_verses=none
 ./read_gretil.py ~/GRETIL/forme/kakumspu.htm --print_identified_verses=none
 ./read_gretil.py kragh_pu.htm --print_identified_verses=none
