@@ -116,7 +116,7 @@ def AddArdha(metre_name, pattern_odd, pattern_even,
 
 def AddVrtta(metre_name, verse_pattern, issues=None):
   assert verse_pattern not in regexes_known, verse_pattern
-  logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
+  # logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
   (key, value) = (verse_pattern,
                   match_result.MatchResult(metre_name,
                                            match_result.MATCH_TYPE.FULL,
@@ -128,8 +128,8 @@ def AddVrtta(metre_name, verse_pattern, issues=None):
 def AddVrttaWithVPL(metre_name, verse_pattern):
   """Add the viṣama-pādānta-laghu variant of a metre to the known patterns."""
   assert verse_pattern not in regexes_known, verse_pattern
-  logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
-                'with pattern %s', metre_name, verse_pattern)
+  # logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
+  #               'with pattern %s', metre_name, verse_pattern)
   (key, value) = (verse_pattern,
                   match_result.MatchResult(metre_name,
                                            match_result.MATCH_TYPE.FULL,
