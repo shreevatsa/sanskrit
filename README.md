@@ -27,7 +27,7 @@ returns a list of MatchResults that the verse might be in.
 
 (The reason for using verse_lines rather than a single blob of text is to enable
 detection of partial matches: if there are metrical errors in the verse, but
-some lines are in metre, then they could still be recognized..)
+some lines are in some metre, then that metre could still be recognized.)
 
 Similarly, the point of returning a list of results is to cover the case where
 there might be different results, say different lines in different metres.
