@@ -17,11 +17,12 @@ import simple_utils
 class AllMetricalData(object):
   """Known patterns and regexes, both full and partial."""
 
-  def __init__(self, known_metre_patterns, known_metre_regexes,
-               known_partial_patterns):
-    self.known_metre_patterns = known_metre_patterns
-    self.known_metre_regexes = known_metre_regexes
-    self.known_partial_patterns = known_partial_patterns
+  # TODO(shreevatsa): Remove _init from these names
+  def __init__(self, known_metre_patterns_init, known_metre_regexes_init,
+               known_partial_patterns_init):
+    self.known_metre_patterns = known_metre_patterns_init
+    self.known_metre_regexes = known_metre_regexes_init
+    self.known_partial_patterns = known_partial_patterns_init
 
 
 # Poor man's enum for now. Python adds enum support in Python 3.4+.
@@ -100,7 +101,9 @@ class MatchResult(object):
 
 
 known_patterns = {}
-known_metres = {}
+regexes_known = set()
+known_metre_regexes = []
+known_metre_patterns = {}
 # known_morae = {}
 
 
@@ -196,20 +199,22 @@ def AddArdha(metre_name, pattern_odd, pattern_even,
 
 
 def AddVrtta(metre_name, verse_pattern, issues=None):
-  assert verse_pattern not in known_metres, (verse_pattern,
-                                             known_metres[verse_pattern])
+  assert verse_pattern not in regexes_known, verse_pattern
   logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
-  known_metres[verse_pattern] = MatchResult(metre_name, MATCH_TYPE.FULL,
-                                            issues)
+  (key, value) = (verse_pattern, MatchResult(metre_name, MATCH_TYPE.FULL,
+                                             issues))
+  regexes_known.add(key)
+  known_metre_regexes.append((key, value))
 
 
 def AddVrttaWithVPL(metre_name, verse_pattern):
-  assert verse_pattern not in known_metres, (verse_pattern,
-                                             known_metres[verse_pattern])
+  assert verse_pattern not in regexes_known, verse_pattern
   logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
                 'with pattern %s', metre_name, verse_pattern)
-  known_metres[verse_pattern] = MatchResult(
-      metre_name, MATCH_TYPE.FULL, [ISSUES.VISAMA_PADANTA_LAGHU])
+  (key, value) = (verse_pattern, MatchResult(metre_name, MATCH_TYPE.FULL,
+                                             [ISSUES.VISAMA_PADANTA_LAGHU]))
+  regexes_known.add(key)
+  known_metre_regexes.append((key, value))
 
 
 def AddExactVrtta(metre_name, line_patterns, issues=None):
@@ -487,6 +492,7 @@ def PatternsOfLength(n):
 
 
 def AddAryaRegex():
+  # TODO(shreevatsa): Make sure this huge one is compiled!
   AddExactVrtta('Āryā (matched from regex)',
                 ['|'.join(PatternsOfLength(12)),
                  '|'.join([p + '[LG]' for p in PatternsOfLength(16)]),
@@ -501,7 +507,7 @@ def InitializeData():
 
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
   AddAryaExamples()
-  AddAryaRegex()
+  # AddAryaRegex()
   AddGitiExamples()
 
   # Bhartṛhari

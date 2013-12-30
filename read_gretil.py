@@ -138,6 +138,8 @@ if __name__ == '__main__':
       if args.print_identified_verses != 'none':
         Print('Verse %4d is in %s (probably), but it has issues'
               % (verse_number + 1, metre_name))
+        if args.print_identified_verses == 'full':
+          Print('\n'.join(verse))
     # Either way, metre_name should be set by now
     assert metre_name is not None
     table[metre_name] = table.get(metre_name, 0) + 1

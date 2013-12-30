@@ -41,10 +41,11 @@ class Identifier(object):
 
   def __init__(self):
     self.output = []
-    if not metrical_data.known_metres:
+    if not metrical_data.known_patterns:
       metrical_data.InitializeData()
-    logging.info('Identifier is initialized. There are %d known_metres'
-                 ' and %d known_patterns', len(metrical_data.known_metres),
+    logging.info('Identifier is initialized. There are %d known metres'
+                 ' and %d known_patterns',
+                 len(metrical_data.known_metre_regexes),
                  len(metrical_data.known_patterns))
 
   def Reset(self):
@@ -67,7 +68,7 @@ class Identifier(object):
     full_verse = ''.join(verse)
 
     results = []
-    for (known_pattern, known_metre) in metrical_data.known_metres.iteritems():
+    for (known_pattern, known_metre) in metrical_data.known_metre_regexes:
       if re.match('^' + known_pattern + '$', full_verse):
         self.latest_identified_metre = known_metre
         results.append(known_metre)
