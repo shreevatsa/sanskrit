@@ -34,6 +34,7 @@ import sys
 import handle_input
 import match_result
 import metrical_data
+import print_utils
 import slp1
 
 
@@ -196,8 +197,7 @@ def MatraCount(pattern):
 
 
 def Print(u):
-  assert isinstance(u, unicode)
-  print(u.encode('utf8'))
+  return print_utils.Print(u)
 
 
 if __name__ == '__main__':
