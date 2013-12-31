@@ -36,9 +36,9 @@ there might be different results, say different lines in different metres.
 --------------------------------------------------------------------------------
 
 Code organization
-=================
+-----------------
 
-![Dependency graph](deps.svg)
+![Dependency graph](deps.svg?raw=true)
 
 Step 1 [Scan] involves detecting the transliteration format of the input,
 transliterating it to SLP1 (the encoding we use internally), removing junk
