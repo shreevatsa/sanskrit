@@ -38,7 +38,7 @@ there might be different results, say different lines in different metres.
 Code organization
 =================
 
-![Dependency graph](shreevatsa.github.com/sanskrit/tree/metrical/scan/deps.svg)
+![Dependency graph](deps.svg)
 
 Step 1 [Scan] involves detecting the transliteration format of the input,
 transliterating it to SLP1 (the encoding we use internally), removing junk
