@@ -203,8 +203,8 @@ def AddSamavrttaPattern(metre_name, each_line_pattern):
         metre_name, match_result.MATCH_TYPE.PADA, issues)]
 
 
-def AddSamavrtta(metre_name, each_line_pattern):
-  """Given a sama-vṛtta metre, add it to the data structures."""
+def AddSamavrttaRegex(metre_name, each_line_pattern):
+  """Given a sama-vṛtta metre's regex, add it to the data structures."""
   clean = CleanUpPatternString(each_line_pattern)
   assert re.match(r'^[LG.]*$', clean)
   assert clean.endswith('G'), (clean, metre_name)
@@ -344,8 +344,8 @@ def AddLongerUpajati():
   # Māgha
   AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
   # Also add all their Upajāti mixtures, with the above two 0000 and 1111
-  # AddSamavrtta('Upajāti of Vaṃśastham and Indravaṃśā',
-  #              '. G L G G L L G L G L G')
+  # AddSamavrttaRegex('Upajāti of Vaṃśastham and Indravaṃśā',
+  #                   '. G L G G L L G L G L G')
   # 0001
   AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
                 ['LGLGGLLGLGLG',
@@ -459,7 +459,7 @@ def InitializeData():
   AddGitiExamples()
 
   # Bhartṛhari
-  AddSamavrtta('Upajāti', '. G L G G L L G L G G')
+  AddSamavrttaRegex('Upajāti', '. G L G G L L G L G G')
 
   AddLongerUpajati()
 
