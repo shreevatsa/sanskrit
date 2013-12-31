@@ -203,6 +203,37 @@ def AddSamavrttaPattern(metre_name, each_line_pattern):
         metre_name, match_result.MATCH_TYPE.PADA, issues)]
 
 
+def AddArdhasamavrttaPattern(metre_name, odd_line_pattern, even_line_pattern):
+  """Given an ardha-sama-vṛtta metres' pattern, add it."""
+  clean_odd = CleanUpPattern(odd_line_pattern)
+  assert re.match(r'^[LG]*G$', clean_odd)
+  clean_even = CleanUpPattern(even_line_pattern)
+  assert re.match(r'^[LG]*G$', clean_even)
+  patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
+  patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
+  for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2):
+    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU]
+              if a.endswith('L') or c.endswith('L')
+              else [])
+    assert (a + b + c + d) not in known_metre_patterns
+    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.FULL, issues)
+  for (a, b) in itertools.product(patterns_odd, patterns_even):
+    assert a + b not in known_partial_patterns
+    known_partial_patterns[a + b] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.HALF, issues)]
+  for a in patterns_odd:
+    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
+    assert a not in known_partial_patterns
+    known_partial_patterns[a] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.ODD_PADA, issues)]
+  for a in patterns_even:
+    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
+    assert a not in known_partial_patterns
+    known_partial_patterns[a] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.EVEN_PADA, issues)]
+
+
 def AddSamavrttaRegex(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's regex, add it to the data structures."""
   clean = CleanUpPatternString(each_line_pattern)
@@ -215,7 +246,7 @@ def AddSamavrttaRegex(metre_name, each_line_pattern):
     AddPada(metre_name, explicit_pattern)
 
 
-def AddArdhasamavrtta(metre_name, odd_line_pattern, even_line_pattern):
+def AddArdhasamavrttaRegex(metre_name, odd_line_pattern, even_line_pattern):
   """Given an ardha-sama-vṛtta metre, add it to the data structures."""
   clean_odd = CleanUpPatternString(odd_line_pattern)
   assert re.match(r'^[LG.]*$', clean_odd)
@@ -450,7 +481,9 @@ def AddAryaRegex():
 
 def InitializeData():
   """Add all known metres to the data structures."""
-  AddArdhasamavrtta('Anuṣṭup (Śloka)', '. . . . L G G G', '. . . . L G L G')
+  AddArdhasamavrttaRegex('Anuṣṭup (Śloka)',
+                         '. . . . L G G G',
+                         '. . . . L G L G')
   AddAnustupExamples()
 
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
@@ -505,18 +538,21 @@ def InitializeData():
   AddSamavrttaPattern('Sragdharā',
                       'G G G G L G G — L L L L L L G — G L G G L G G')
   # Bhartṛhari
-  AddArdhasamavrtta('Viyoginī',
-                    'L L G   L L G L G L G',
-                    'L L G G L L G L G L G')
+  AddArdhasamavrttaPattern('Viyoginī',
+                           'L L G   L L G L G L G',
+                           'L L G G L L G L G L G')
   # Bhāravi
-  AddArdhasamavrtta('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
-                    'L L G   L L G L G L G G', 'L L G G L L G L G L G G')
+  AddArdhasamavrttaPattern('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
+                           'L L G   L L G L G L G G',
+                           'L L G G L L G L G L G G')
   # Bhāravi
-  AddArdhasamavrtta('Aparavaktrā',
-                    'L L L L L L G — L G L G', 'L L L L G — L L G L G L G')
+  AddArdhasamavrttaPattern('Aparavaktrā',
+                           'L L L L L L G — L G L G',
+                           'L L L L G — L L G L G L G')
   # Bhartṛhari
-  AddArdhasamavrtta('Puṣpitāgrā',
-                    'L L L L L L G L G L G G', 'L L L L G L L G L G L G G')
+  AddArdhasamavrttaPattern('Puṣpitāgrā',
+                           'L L L L L L G L G L G G',
+                           'L L L L G L L G L G L G G')
   # Bhāravi
   AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
                              'L L L L L  G  L  G  L G',
