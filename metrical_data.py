@@ -30,6 +30,13 @@ known_patterns = {}
 regexes_known = set()
 known_metre_regexes = []
 known_metre_patterns = {}
+known_partial_patterns = {}
+
+
+def CleanUpPattern(pattern):
+  pattern = simple_utils.RemoveChars(pattern, ' —–')
+  assert re.match(r'^[LG]*$', pattern), pattern
+  return pattern
 
 
 def CleanUpPatternString(pattern):
@@ -171,6 +178,31 @@ def AddFourLineVrtta(metre_name, line_patterns):
     AddVrttaWithVPL(metre_name, verse_pattern)
 
 
+def AddSamavrttaPattern(metre_name, each_line_pattern):
+  """Given a sama-vṛtta metre's pattern, add it to the data structures."""
+  clean = CleanUpPattern(each_line_pattern)
+  assert re.match(r'^[LG]*G$', clean), (each_line_pattern, metre_name)
+  patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
+  for (a, b, c, d) in itertools.product(patterns, repeat=4):
+    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU]
+              if a.endswith('L') or c.endswith('L')
+              else [])
+    assert (a + b + c + d) not in known_metre_patterns
+    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.FULL, issues)
+  for (a, b) in itertools.product(patterns, repeat=2):
+    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU] if a.endswith('L')
+              else [])
+    assert a + b not in known_partial_patterns
+    known_partial_patterns[a + b] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.HALF, issues)]
+  for a in patterns:
+    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
+    assert a not in known_partial_patterns
+    known_partial_patterns[a] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.PADA, issues)]
+
+
 def AddSamavrtta(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre, add it to the data structures."""
   clean = CleanUpPatternString(each_line_pattern)
@@ -308,9 +340,9 @@ def AddAnustupExamples():
 def AddLongerUpajati():
   """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
   # Bhartṛhari
-  AddSamavrtta('Vaṃśastham (Vaṃśasthavila)', 'L G L G G L L G L G L G')
+  AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)', 'L G L G G L L G L G L G')
   # Māgha
-  AddSamavrtta('Indravaṃśā', 'G G L G G L L G L G L G')
+  AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
   # Also add all their Upajāti mixtures, with the above two 0000 and 1111
   # AddSamavrtta('Upajāti of Vaṃśastham and Indravaṃśā',
   #              '. G L G G L L G L G L G')
@@ -432,44 +464,46 @@ def InitializeData():
   AddLongerUpajati()
 
   # Bhartṛhari
-  AddSamavrtta('Rathoddhatā', 'G L G L L L G L G L G')
+  AddSamavrttaPattern('Rathoddhatā', 'G L G L L L G L G L G')
   # Bhāravi
-  AddSamavrtta('Svāgatā', 'G L G L L L G L L G G')
+  AddSamavrttaPattern('Svāgatā', 'G L G L L L G L L G G')
   # Bhartṛhari
-  AddSamavrtta('Drutavilambitam', 'L L L G L L G L L G L G')
+  AddSamavrttaPattern('Drutavilambitam', 'L L L G L L G L L G L G')
   # Māgha
-  AddSamavrtta('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
+  AddSamavrttaPattern('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G')
   # Bhartṛhari
-  AddSamavrtta('Śālinī', 'G G G G — G L G G L G G')
+  AddSamavrttaPattern('Śālinī', 'G G G G — G L G G L G G')
   # Bhāravi
-  AddSamavrtta('Praharṣiṇī', 'G G G L L L L G L G L G G')
-  # AddSamavrtta('Bhujañgaprayātam', 'L G G L G G L G G L G G')
-  # AddSamavrtta('Toṭakam', 'L L G L L G L L G L L G')
-  # AddSamavrtta('Sragviṇī', 'G L G G L G G L G G L G')
+  AddSamavrttaPattern('Praharṣiṇī', 'G G G L L L L G L G L G G')
+  # AddSamavrttaPattern('Bhujañgaprayātam', 'L G G L G G L G G L G G')
+  # AddSamavrttaPattern('Toṭakam', 'L L G L L G L L G L L G')
+  # AddSamavrttaPattern('Sragviṇī', 'G L G G L G G L G G L G')
   # Bhāravi
-  AddSamavrtta('Pramitākṣarā', 'L L G L G L L L G L L G')
+  AddSamavrttaPattern('Pramitākṣarā', 'L L G L G L L L G L L G')
   # Bhartṛhari
-  AddSamavrtta('Vasantatilakā', 'G G L G L L L G L L G L G G')
+  AddSamavrttaPattern('Vasantatilakā', 'G G L G L L L G L L G L G G')
   # Bhartṛhari
-  AddSamavrtta('Mālinī', 'L L L L L L G G — G L G G L G G')
-  # AddSamavrtta('Cārucāmaram', 'G L G L G L G L G L G L G L G')
-  # AddSamavrtta('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
+  AddSamavrttaPattern('Mālinī', 'L L L L L L G G — G L G G L G G')
+  # AddSamavrttaPattern('Cārucāmaram', 'G L G L G L G L G L G L G L G')
+  # AddSamavrttaPattern('Pañcacāmaram', 'L G L G L G L G L G L G L G L G')
   # Meghadūta
-  AddSamavrtta('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G')
+  AddSamavrttaPattern('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G')
   # Bhartṛhari
-  AddSamavrtta('Śikhariṇī', 'L G G G G G – L L L L L G G — L L L G')
+  AddSamavrttaPattern('Śikhariṇī', 'L G G G G G – L L L L L G G — L L L G')
   # Bhartṛhari
-  AddSamavrtta('Hariṇī', 'L L L L L G — G G G G — L G L L G L G')
+  AddSamavrttaPattern('Hariṇī', 'L L L L L G — G G G G — L G L L G L G')
   # Bhartṛhari
-  AddSamavrtta('Pṛthvī', 'L G L L L G L G—L L L G L G G L G')
-  # AddSamavrtta('Kokilalam (Nardaṭakam)',
+  AddSamavrttaPattern('Pṛthvī', 'L G L L L G L G—L L L G L G G L G')
+  # AddSamavrttaPattern('Kokilalam (Nardaṭakam)',
   #              'L L L L G L G L L L G — L L G L L G')
-  # AddSamavrtta('Mallikāmālā (Matta-kokilā)',
+  # AddSamavrttaPattern('Mallikāmālā (Matta-kokilā)',
   #              'G L G L L G L G L L G L G L L G L G')
   # Bhartṛhari
-  AddSamavrtta('Śārdūlavikrīḍitam', 'G G G L L G L G L L L G — G G L G G L G')
+  AddSamavrttaPattern('Śārdūlavikrīḍitam',
+                      'G G G L L G L G L L L G — G G L G G L G')
   # Bhartṛhari
-  AddSamavrtta('Sragdharā', 'G G G G L G G — L L L L L L G — G L G G L G G')
+  AddSamavrttaPattern('Sragdharā',
+                      'G G G G L G G — L L L L L L G — G L G G L G G')
   # Bhartṛhari
   AddArdhasamavrtta('Viyoginī',
                     'L L G   L L G L G L G',
@@ -488,40 +522,41 @@ def InitializeData():
                              'L L L L L  G  L  G  L G',
                              ' G  L L L L L L  G  L L G',
                              'L L  G  L  G  L L L  G  L G L G'])
-  # AddSamavrtta('Aśvadhāṭī (Sitastavaka?)',
+  # AddSamavrttaPattern('Aśvadhāṭī (Sitastavaka?)',
   #              'G G L G L L L – G G L G L L L – G G L G L L L G')
-  # AddSamavrtta('Śivatāṇḍava',
+  # AddSamavrttaPattern('Śivatāṇḍava',
   #              'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G')
   # Bhartṛhari
-  AddSamavrtta('Dodhakam', 'G L L G L L G L L G G')
+  AddSamavrttaPattern('Dodhakam', 'G L L G L L G L L G G')
   # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
-  # AddSamavrtta('Mālatī', 'L L L L G L L G L G L G')
-  # AddSamavrtta('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G')
+  # AddSamavrttaPattern('Mālatī', 'L L L L G L L G L G L G')
+  # AddSamavrttaPattern('Madīrā',
+  #                     'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G')
   # Bhāravi
-  AddSamavrtta('Matta-mayūram', 'G G G G – G L L G G – L L G G')
-  # AddSamavrtta('Vidyunmālā', 'G G G G G G G G')
+  AddSamavrttaPattern('Matta-mayūram', 'G G G G – G L L G G – L L G G')
+  # AddSamavrttaPattern('Vidyunmālā', 'G G G G G G G G')
 
   # Bhāravi
-  AddSamavrtta('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG')
+  AddSamavrttaPattern('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG')
 
   # Bhāravi
-  AddSamavrtta('Prabhā (Mandākinī)', 'LLLLLLGLGGLG')
+  AddSamavrttaPattern('Prabhā (Mandākinī)', 'LLLLLLGLGGLG')
 
   # Bhāravi
-  AddSamavrtta('Jaladharamālā', 'GGGGLLLLGGGG')
+  AddSamavrttaPattern('Jaladharamālā', 'GGGGLLLLGGGG')
   # Bhāravi
-  AddSamavrtta('Jaloddhatagatiḥ', 'LGLLLGLGLLLG')
+  AddSamavrttaPattern('Jaloddhatagatiḥ', 'LGLLLGLGLLLG')
 
   # Bhāravi
-  AddSamavrtta('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)',
-               'G G G G L L L L L L G G G G')
+  AddSamavrttaPattern('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)',
+                      'G G G G L L L L L L G G G G')
 
   # Bhāravi
-  AddSamavrtta('Vaṃśapatrapatitam (Vaṃśadala)',
-               'G L L G L G L L L G L L L L L L G')
+  AddSamavrttaPattern('Vaṃśapatrapatitam (Vaṃśadala)',
+                      'G L L G L G L L L G L L L L L L G')
 
   # Māgha
-  AddSamavrtta('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G')
+  AddSamavrttaPattern('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G')
 
   # Raghuvamśa (hard to believe, but there it is)
-  AddSamavrtta('Nārācam', 'L L L L L L G L G G L G G L G G L G')
+  AddSamavrttaPattern('Nārācam', 'L L L L L L G L G G L G G L G G L G')

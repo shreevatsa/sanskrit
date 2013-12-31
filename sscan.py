@@ -70,6 +70,10 @@ class Identifier(object):
     full_verse = ''.join(verse)
 
     results = []
+    result = metrical_data.known_metre_patterns.get(full_verse)
+    if result:
+      return [result]
+
     for (known_regex, known_metre) in metrical_data.known_metre_regexes:
       if known_regex.match(full_verse):
         self.latest_identified_metre = known_metre
@@ -168,12 +172,12 @@ def MetricalPattern(text):
 def IdentifyPattern(pattern):
   """Given metrical pattern (string of L's and G's), identifies metre."""
   assert re.match('^[LG]*$', pattern)
-  results = metrical_data.known_patterns.get(pattern)
-  if results is None:
-    return results
-  assert isinstance(results, list), results
-  for result in results:
-    assert isinstance(result, match_result.MatchResult), result
+  results = (metrical_data.known_partial_patterns.get(pattern) or
+             metrical_data.known_patterns.get(pattern))
+  if results is not None:
+    assert isinstance(results, list), (results, type(results))
+    for result in results:
+      assert isinstance(result, match_result.MatchResult), result
   return results
 
 
