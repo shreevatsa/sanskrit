@@ -79,12 +79,15 @@ laghus-and-gurus in it, and match it with the `known_metres` (failing that,
 Redesign.
 
 Data structures.
+
     * `known_metre_patterns`, a dict mapping a pattern to a MatchResult.
     * `known_metre_regexes', a list of pairs (regex, MatchResult)
     * `known_partial_patterns`, a dict mapping a pattern to a MatchResult.
 
 Identification algorithm.
+
     Given a verse,
+
         1. Look in known_metre_patterns.
         2. Loop through known_metre_regexes.
         3. Look in known_partial_patterns for:
