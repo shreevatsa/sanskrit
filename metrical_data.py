@@ -28,6 +28,7 @@ class AllMetricalData(object):
 
 known_metre_regexes = []
 known_metre_patterns = {}
+known_partial_regexes = []
 known_partial_patterns = {}
 
 
@@ -93,11 +94,65 @@ def AddArdhasamavrttaPattern(metre_name, odd_line_pattern, even_line_pattern):
         metre_name, match_result.MATCH_TYPE.EVEN_PADA, issues)]
 
 
+def AddVishamavrttaPattern(metre_name, line_patterns):
+  """Given the four lines of a viṣama-vṛtta, add the metre."""
+  assert len(line_patterns) == 4
+  line_patterns = [CleanUpPattern(p) for p in line_patterns]
+  for p in line_patterns:
+    assert re.match(r'^[LG]*$', p)
+  (pa, pb, pc, pd) = line_patterns
+  assert pb.endswith('G')
+  assert pd.endswith('G')
+  patterns_a = [pa]
+  patterns_b = [pb[:-1] + 'G', pb[:-1] + 'L']
+  patterns_c = [pc]
+  patterns_d = [pd[:-1] + 'G', pd[:-1] + 'L']
+  for (a, b, c, d) in itertools.product(patterns_a, patterns_b,
+                                        patterns_c, patterns_d):
+    assert (a + b + c + d) not in known_metre_patterns
+    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.FULL, [])
+  for (a, b) in itertools.product(patterns_a, patterns_b):
+    assert a + b not in known_metre_patterns
+    known_partial_patterns[a + b] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.FIRST_HALF, [])]
+  for (c, d) in itertools.product(patterns_c, patterns_d):
+    assert c + d not in known_partial_patterns
+    known_partial_patterns[c + d] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.SECOND_HALF, [])]
+
+
+def AddAnustup():
+  """Add Anuṣṭup to the list of regexes."""
+  regex_ac = '....LGG.'
+  regex_bd = '....LGL.'
+  half_regex = regex_ac + regex_bd
+  full_regex = half_regex * 2
+
+  match = match_result.MatchResult('Anuṣṭup (Śloka)',
+                                   match_result.MATCH_TYPE.FULL,
+                                   [])
+  known_metre_regexes.append((re.compile('^' + full_regex + '$'), match))
+
+  match = match_result.MatchResult('Anuṣṭup (Śloka)',
+                                   match_result.MATCH_TYPE.HALF,
+                                   [])
+  known_partial_regexes.append((re.compile('^' + half_regex + '$'), match))
+
+  match = match_result.MatchResult('Anuṣṭup (Śloka)',
+                                   match_result.MATCH_TYPE.ODD_PADA,
+                                   [])
+  known_partial_regexes.append((re.compile('^' + regex_ac + '$'), match))
+
+  match = match_result.MatchResult('Anuṣṭup (Śloka)',
+                                   match_result.MATCH_TYPE.EVEN_PADA,
+                                   [])
+  known_partial_regexes.append((re.compile('^' + regex_bd + '$'), match))
+
+
 def InitializeData():
   """Add all known metres to the data structures."""
-  AddArdhasamavrttaRegex('Anuṣṭup (Śloka)',
-                         '. . . . L G G G',
-                         '. . . . L G L G')
+  AddAnustup()
   AddAnustupExamples()
 
   # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
@@ -168,10 +223,10 @@ def InitializeData():
                            'L L L L L L G L G L G G',
                            'L L L L G L L G L G L G G')
   # Bhāravi
-  AddVishamavrtta('Udgatā', ['L L  G  L  G  L L L G L',
-                             'L L L L L  G  L  G  L G',
-                             ' G  L L L L L L  G  L L G',
-                             'L L  G  L  G  L L L  G  L G L G'])
+  AddVishamavrttaPattern('Udgatā', ['L L  G  L  G  L L L G L',
+                                    'L L L L L  G  L  G  L G',
+                                    ' G  L L L L L L  G  L L G',
+                                    'L L  G  L  G  L L L  G  L G L G'])
   # AddSamavrttaPattern('Aśvadhāṭī (Sitastavaka?)',
   #              'G G L G L L L – G G L G L L L – G G L G L L L G')
   # AddSamavrttaPattern('Śivatāṇḍava',
@@ -367,35 +422,35 @@ def AddSamavrttaRegex(metre_name, each_line_pattern):
     AddPada(metre_name, explicit_pattern)
 
 
-def AddArdhasamavrttaRegex(metre_name, odd_line_pattern, even_line_pattern):
-  """Given an ardha-sama-vṛtta metre, add it to the data structures."""
-  clean_odd = CleanUpPatternString(odd_line_pattern)
-  assert re.match(r'^[LG.]*$', clean_odd)
-  clean_even = CleanUpPatternString(even_line_pattern)
-  assert re.match(r'^[LG.]*$', clean_even)
+# def AddArdhasamavrttaRegex(metre_name, odd_line_pattern, even_line_pattern):
+#   """Given an ardha-sama-vṛtta metre, add it to the data structures."""
+#   clean_odd = CleanUpPatternString(odd_line_pattern)
+#   assert re.match(r'^[LG.]*$', clean_odd)
+#   clean_even = CleanUpPatternString(even_line_pattern)
+#   assert re.match(r'^[LG.]*$', clean_even)
 
-  AddFourLineVrtta(metre_name, [clean_odd, clean_even] * 2)
-  AddArdha(metre_name, clean_odd, LooseEnding(clean_even))
-  for explicit_pattern in OptionsExpand(clean_odd):
-    AddPada(metre_name, explicit_pattern, match_result.MATCH_TYPE.ODD_PADA)
-  for explicit_pattern in OptionsExpand(clean_even):
-    AddPada(metre_name, explicit_pattern, match_result.MATCH_TYPE.EVEN_PADA)
+#   AddFourLineVrtta(metre_name, [clean_odd, clean_even] * 2)
+#   AddArdha(metre_name, clean_odd, LooseEnding(clean_even))
+#   for explicit_pattern in OptionsExpand(clean_odd):
+#     AddPada(metre_name, explicit_pattern, match_result.MATCH_TYPE.ODD_PADA)
+#   for explicit_pattern in OptionsExpand(clean_even):
+#     AddPada(metre_name, explicit_pattern, match_result.MATCH_TYPE.EVEN_PADA)
 
 
-def AddVishamavrtta(metre_name, line_patterns):
-  """Given a viṣama-vṛtta metre, add it to the data structures."""
-  AddFourLineVrtta(metre_name, line_patterns)
-  clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
-  AddArdha(metre_name, clean[0], LooseEnding(clean[1]),
-           match_result.MATCH_TYPE.FIRST_HALF)
-  AddArdha(metre_name, clean[2], LooseEnding(clean[3]),
-           match_result.MATCH_TYPE.SECOND_HALF)
-  for (i, line) in enumerate(line_patterns):
-    line = CleanUpPatternString(line)
-    assert re.match(r'^[LG.]*$', line)
-    for pattern in OptionsExpand(line):
-      AddPada(metre_name, pattern,
-              getattr(match_result.MATCH_TYPE, 'PADA_%d' % (i + 1)))
+# def AddVishamavrtta(metre_name, line_patterns):
+#   """Given a viṣama-vṛtta metre, add it to the data structures."""
+#   AddFourLineVrtta(metre_name, line_patterns)
+#   clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
+#   AddArdha(metre_name, clean[0], LooseEnding(clean[1]),
+#            match_result.MATCH_TYPE.FIRST_HALF)
+#   AddArdha(metre_name, clean[2], LooseEnding(clean[3]),
+#            match_result.MATCH_TYPE.SECOND_HALF)
+#   for (i, line) in enumerate(line_patterns):
+#     line = CleanUpPatternString(line)
+#     assert re.match(r'^[LG.]*$', line)
+#     for pattern in OptionsExpand(line):
+#       AddPada(metre_name, pattern,
+#               getattr(match_result.MATCH_TYPE, 'PADA_%d' % (i + 1)))
 
 
 def MatraCount(pattern):

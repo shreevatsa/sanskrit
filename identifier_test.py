@@ -77,8 +77,7 @@ class KnownValues(unittest.TestCase):
         self.identifier.IdentifyFromLines(verse),
         'Anuṣṭup (Śloka)',
         match_result.MATCH_TYPE.FULL,
-        [match_result.ISSUES.FIRST_PADA_OFF,
-         match_result.ISSUES.VISAMA_PADANTA_LAGHU])
+        [match_result.ISSUES.FIRST_PADA_OFF])
 
   def testFineMandakranta(self):
     """A valid example of Mandākrāntā should be recognized."""

@@ -176,9 +176,15 @@ def IdentifyPattern(pattern):
   results = (metrical_data.known_partial_patterns.get(pattern) or
              metrical_data.known_patterns.get(pattern))
   if results is not None:
-    assert isinstance(results, list), (results, type(results))
+    assert isinstance(results, list), (unicode(results), type(results))
     for result in results:
       assert isinstance(result, match_result.MatchResult), result
+  else:
+    assert results is None
+    for (known_regex, known_result) in metrical_data.known_partial_regexes:
+      if known_regex.match(pattern):
+        results = [known_result]
+        break
   return results
 
 
