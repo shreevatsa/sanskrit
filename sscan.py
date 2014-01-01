@@ -43,12 +43,13 @@ class Identifier(object):
 
   def __init__(self):
     self.output = []
-    if not metrical_data.known_patterns:
+    if not metrical_data.known_metre_patterns:
       metrical_data.InitializeData()
-    logging.info('Identifier is initialized. There are %d known metres'
-                 ' and %d known_patterns',
+    logging.info('Identifier is initialized. There are %d known metres regexes'
+                 ' and %d known metre patterns and %d known partial patterns',
                  len(metrical_data.known_metre_regexes),
-                 len(metrical_data.known_patterns))
+                 len(metrical_data.known_metre_patterns),
+                 len(metrical_data.known_partial_patterns))
 
   def Reset(self):
     """Clear all parameters, for use again."""
