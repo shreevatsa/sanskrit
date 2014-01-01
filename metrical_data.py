@@ -139,6 +139,7 @@ def AddVrttaRegex(metre_name, line_regexes, issues=None):
 
 
 def AddSamavrttaRegex(metre_name, line_regex):
+  """Add a sama-vṛtta's regex (full, half, pāda). No variants."""
   line_regex = CleanUpSimpleRegex(line_regex)
   full_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 4)
   match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL, [])
@@ -538,88 +539,88 @@ def AddKarambajati():
   # Māgha
   AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
   # Also add all their Upajāti mixtures, with the above two 0000 and 1111
-  # AddSamavrttaRegex('Upajāti of Vaṃśastham and Indravaṃśā',
-  #                   '. G L G G L L G L G L G')
-  # 0001
-  AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['LGLGGLLGLGLG',
-                 'LGLGGLLGLGLG',
-                 'LGLGGLLGLGLG',
-                 'GGLGGLLGLGLG'])
-  # 0010
-  AddExactVrtta('Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['L G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G'])
-  # 0011
-  AddExactVrtta('Indumā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['L G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G'])
-  # 0100
-  AddExactVrtta('Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'L G L G G L L G L G L G'])
-  # 0101
-  AddExactVrtta('Upameyā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G'] * 2)
-  # 0110
-  AddExactVrtta('Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G'])
-  # 0111
-  AddExactVrtta('Varāsikā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G'])
-  # 1000
-  AddExactVrtta('Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'L G L G G L L G L G L G'])
-  # 1001
-  AddExactVrtta('Saurabheyī (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G'])
-  # 1010
-  AddExactVrtta('Śiśirā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G'] * 2)
-  # 1011
-  AddExactVrtta('Ratākhyānakī (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G'])
-  # 1100
-  AddExactVrtta('Śaṅkhacūḍā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'L G L G G L L G L G L G'])
-  # 1101
-  AddExactVrtta('Puṣṭidā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G',
-                 'G G L G G L L G L G L G'])
-  # 1110
-  AddExactVrtta('Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)',
-                ['G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'G G L G G L L G L G L G',
-                 'L G L G G L L G L G L G'])
+  AddSamavrttaRegex('Karambajāti (Upajāti of Vaṃśastham and Indravaṃśā)',
+                    '. G L G G L L G L G L G')
+  # # 0001
+  # AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['LGLGGLLGLGLG',
+  #                'LGLGGLLGLGLG',
+  #                'LGLGGLLGLGLG',
+  #                'GGLGGLLGLGLG'])
+  # # 0010
+  # AddExactVrtta('Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 0011
+  # AddExactVrtta('Indumā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 0100
+  # AddExactVrtta('Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 0101
+  # AddExactVrtta('Upameyā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'] * 2)
+  # # 0110
+  # AddExactVrtta('Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 0111
+  # AddExactVrtta('Varāsikā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 1000
+  # AddExactVrtta('Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 1001
+  # AddExactVrtta('Saurabheyī (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 1010
+  # AddExactVrtta('Śiśirā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'] * 2)
+  # # 1011
+  # AddExactVrtta('Ratākhyānakī (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 1100
+  # AddExactVrtta('Śaṅkhacūḍā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 1101
+  # AddExactVrtta('Puṣṭidā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 1110
+  # AddExactVrtta('Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
 
 
 def PatternsOfLength(n):

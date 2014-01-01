@@ -1,8 +1,4 @@
 {
-  "Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)": [
-    1,
-    "0.01%"
-  ],
   "Mañjubhāṣiṇī": [
     15,
     "0.15%"
@@ -11,17 +7,17 @@
     1,
     "0.01%"
   ],
-  "Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)": [
-    1,
-    "0.01%"
+  "Viyoginī": [
+    86,
+    "0.84%"
   ],
   "Pramitākṣarā": [
     34,
     "0.33%"
   ],
-  "Viyoginī": [
-    86,
-    "0.84%"
+  "Śālinī": [
+    37,
+    "0.36%"
   ],
   "Puṣpitāgrā": [
     102,
@@ -32,8 +28,8 @@
     "0.01%"
   ],
   "unknown": [
-    626,
-    "6.14%"
+    619,
+    "6.07%"
   ],
   "Śikhariṇī": [
     321,
@@ -47,10 +43,6 @@
     226,
     "2.22%"
   ],
-  "Śālinī": [
-    37,
-    "0.36%"
-  ],
   "Udgatā": [
     1,
     "0.01%"
@@ -58,10 +50,6 @@
   "Upajāti": [
     645,
     "6.33%"
-  ],
-  "Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)": [
-    1,
-    "0.01%"
   ],
   "Drutavilambitam": [
     106,
@@ -115,10 +103,6 @@
     4,
     "0.04%"
   ],
-  "Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)": [
-    1,
-    "0.01%"
-  ],
   "Rucirā (Prabhāvatī)": [
     7,
     "0.07%"
@@ -134,6 +118,10 @@
   "Śārdūlavikrīḍitam": [
     1192,
     "11.69%"
+  ],
+  "Karambajāti (Upajāti of Vaṃśastham and Indravaṃśā)": [
+    11,
+    "0.11%"
   ],
   "Pṛthvī": [
     70,
