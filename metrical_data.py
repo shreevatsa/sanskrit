@@ -534,13 +534,16 @@ def AddGitiExamples():
 
 def AddKarambajati():
   """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
-  # Bhartṛhari
-  AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)', 'L G L G G L L G L G L G')
-  # Māgha
-  AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
+  # # Bhartṛhari
+  # AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)', 'L G L G G L L G L G L G')
+  # # Māgha
+  # AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
   # Also add all their Upajāti mixtures, with the above two 0000 and 1111
-  AddSamavrttaRegex('Karambajāti (Upajāti of Vaṃśastham and Indravaṃśā)',
-                    '. G L G G L L G L G L G')
+  # Allow final laghu
+  # AddSamavrttaRegex('Karambajāti (Vaṃśastham/Indravaṃśā)',
+  #                   '. G L G G L L G L G L .')
+  AddSamavrttaRegex('Vaṃśastham/Indravaṃśā',
+                    '. G L G G L L G L G L .')
   # # 0001
   # AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
   #               ['LGLGGLLGLGLG',
