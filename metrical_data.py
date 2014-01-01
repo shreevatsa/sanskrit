@@ -224,7 +224,7 @@ def InitializeData():
   # viṣama-pādānta-laghu is VERY common, so leave last syllable free.
   AddSamavrttaRegex('Upajāti', '. G L G G L L G L G .')
 
-  AddLongerUpajati()
+  AddKarambajati()
 
   # Bhartṛhari
   AddSamavrttaPattern('Rathoddhatā', 'G L G L L L G L G L G')
@@ -531,7 +531,7 @@ def AddGitiExamples():
                 ['GGLLLLGG', 'GLLLLGLGLGLLG', 'LLGLGLGLL', 'GLLLLGLGLGLLG'])
 
 
-def AddLongerUpajati():
+def AddKarambajati():
   """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
   # Bhartṛhari
   AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)', 'L G L G G L L G L G L G')
