@@ -38,7 +38,7 @@ def CleanUpPattern(pattern):
   return pattern
 
 
-def CleanUpRegex(regex):
+def CleanUpSimpleRegex(regex):
   regex = simple_utils.RemoveChars(regex, ' —–')
   assert re.match(r'^[LG.]*$', regex), regex
   return regex
@@ -131,10 +131,24 @@ def AddVishamavrttaPattern(metre_name, line_patterns):
 def AddVrttaRegex(metre_name, line_regexes, issues=None):
   """Given the four lines of a vṛtta, add it to known_metre_regexes."""
   assert len(line_regexes) == 4, (metre_name, line_regexes)
-  full_verse_regex = ''.join('(%s)' % CleanUpRegex(s) for s in line_regexes)
+  line_regexes = [CleanUpSimpleRegex(s) for s in line_regexes]
+  full_verse_regex = ''.join('(%s)' % s for s in line_regexes)
   match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL,
                                    issues)
   known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), match))
+
+
+def AddSamavrttaRegex(metre_name, line_regex):
+  line_regex = CleanUpSimpleRegex(line_regex)
+  full_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 4)
+  match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL, [])
+  known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), match))
+  half_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 2)
+  match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF, [])
+  known_partial_regexes.append((re.compile('^' + half_verse_regex + '$'),
+                                match))
+  match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.PADA, [])
+  known_partial_regexes.append((re.compile('^' + line_regex + '$'), match))
 
 
 def AddAnustup():
@@ -207,7 +221,8 @@ def InitializeData():
   AddGitiExamples()
 
   # Bhartṛhari
-  AddSamavrttaRegex('Upajāti', '. G L G G L L G L G G')
+  # viṣama-pādānta-laghu is VERY common, so leave last syllable free.
+  AddSamavrttaRegex('Upajāti', '. G L G G L L G L G .')
 
   AddLongerUpajati()
 
@@ -454,18 +469,6 @@ def AddFourLineVrtta(metre_name, line_patterns):
       tolerable.append(laghu0 + loose[1] + LaghuEnding(clean[2]) + loose[3])
   for verse_pattern in tolerable:
     AddVrttaWithVPL(metre_name, verse_pattern)
-
-
-def AddSamavrttaRegex(metre_name, each_line_pattern):
-  """Given a sama-vṛtta metre's regex, add it to the data structures."""
-  clean = CleanUpPatternString(each_line_pattern)
-  assert re.match(r'^[LG.]*$', clean)
-  assert clean.endswith('G'), (clean, metre_name)
-  loose = LooseEnding(clean)
-  AddFourLineVrtta(metre_name, [clean] * 4)
-  AddArdha(metre_name, clean, loose)
-  for explicit_pattern in OptionsExpand(clean):
-    AddPada(metre_name, explicit_pattern)
 
 
 def MatraCount(pattern):
