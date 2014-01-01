@@ -38,6 +38,12 @@ def CleanUpPattern(pattern):
   return pattern
 
 
+def CleanUpRegex(regex):
+  regex = simple_utils.RemoveChars(regex, ' —–')
+  assert re.match(r'^[LG.]*$', regex), regex
+  return regex
+
+
 def AddSamavrttaPattern(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = CleanUpPattern(each_line_pattern)
@@ -122,6 +128,15 @@ def AddVishamavrttaPattern(metre_name, line_patterns):
         metre_name, match_result.MATCH_TYPE.SECOND_HALF, [])]
 
 
+def AddVrttaRegex(metre_name, line_regexes, issues=None):
+  """Given the four lines of a vṛtta, add it to known_metre_regexes."""
+  assert len(line_regexes) == 4, (metre_name, line_regexes)
+  full_verse_regex = ''.join('(%s)' % CleanUpRegex(s) for s in line_regexes)
+  match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL,
+                                   issues)
+  known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), match))
+
+
 def AddAnustup():
   """Add Anuṣṭup to the list of regexes."""
   regex_ac = '....LGG.'
@@ -148,6 +163,37 @@ def AddAnustup():
                                    match_result.MATCH_TYPE.EVEN_PADA,
                                    [])
   known_partial_regexes.append((re.compile('^' + regex_bd + '$'), match))
+
+
+def AddAnustupExamples():
+  """Examples of variation from standard Anuṣṭup."""
+  # "jayanti te sukṛtino..."
+  AddVrttaRegex('Anuṣṭup (Śloka)',
+                ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'],
+                [match_result.ISSUES.FIRST_PADA_OFF])
+  # "sati pradīpe saty agnau..." Proof: K48.130 (p. 51)
+  AddVrttaRegex('Anuṣṭup (Śloka)',
+                ['LGLGGGGG', '....LGL.', '....LGG.', '....LGL.'],
+                [match_result.ISSUES.FIRST_PADA_OFF])
+  # "guruṇā stana-bhāreṇa [...] śanaiś-carābhyāṃ pādābhyāṃ" K48.132 (52)
+  AddVrttaRegex('Anuṣṭup (Śloka)',
+                ['....LGG.', '....LGL.', 'LGLGGGGG', '....LGL.'],
+                [match_result.ISSUES.THIRD_PADA_OFF])
+  # "tāvad evāmṛtamayī..." K48.125 (49)
+  AddVrttaRegex('Anuṣṭup (Śloka)',
+                ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'],
+                [match_result.ISSUES.FIRST_PADA_OFF])
+  # Covers a lot of cases
+  AddVrttaRegex('Anuṣṭup (Śloka)',
+                ['........', '....LGL.', '....LGG.', '....LGL.'],
+                [match_result.ISSUES.FIRST_PADA_OFF])
+  AddVrttaRegex('Anuṣṭup (Śloka)',
+                ['....LGG.', '....LGL.', '........', '....LGL.'],
+                [match_result.ISSUES.THIRD_PADA_OFF])
+  AddVrttaRegex('Anuṣṭup (Śloka)',
+                ['........', '....LGL.', '........', '....LGL.'],
+                [match_result.ISSUES.FIRST_PADA_OFF,
+                 match_result.ISSUES.THIRD_PADA_OFF])
 
 
 def InitializeData():
@@ -422,37 +468,6 @@ def AddSamavrttaRegex(metre_name, each_line_pattern):
     AddPada(metre_name, explicit_pattern)
 
 
-# def AddArdhasamavrttaRegex(metre_name, odd_line_pattern, even_line_pattern):
-#   """Given an ardha-sama-vṛtta metre, add it to the data structures."""
-#   clean_odd = CleanUpPatternString(odd_line_pattern)
-#   assert re.match(r'^[LG.]*$', clean_odd)
-#   clean_even = CleanUpPatternString(even_line_pattern)
-#   assert re.match(r'^[LG.]*$', clean_even)
-
-#   AddFourLineVrtta(metre_name, [clean_odd, clean_even] * 2)
-#   AddArdha(metre_name, clean_odd, LooseEnding(clean_even))
-#   for explicit_pattern in OptionsExpand(clean_odd):
-#     AddPada(metre_name, explicit_pattern, match_result.MATCH_TYPE.ODD_PADA)
-#   for explicit_pattern in OptionsExpand(clean_even):
-#     AddPada(metre_name, explicit_pattern, match_result.MATCH_TYPE.EVEN_PADA)
-
-
-# def AddVishamavrtta(metre_name, line_patterns):
-#   """Given a viṣama-vṛtta metre, add it to the data structures."""
-#   AddFourLineVrtta(metre_name, line_patterns)
-#   clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
-#   AddArdha(metre_name, clean[0], LooseEnding(clean[1]),
-#            match_result.MATCH_TYPE.FIRST_HALF)
-#   AddArdha(metre_name, clean[2], LooseEnding(clean[3]),
-#            match_result.MATCH_TYPE.SECOND_HALF)
-#   for (i, line) in enumerate(line_patterns):
-#     line = CleanUpPatternString(line)
-#     assert re.match(r'^[LG.]*$', line)
-#     for pattern in OptionsExpand(line):
-#       AddPada(metre_name, pattern,
-#               getattr(match_result.MATCH_TYPE, 'PADA_%d' % (i + 1)))
-
-
 def MatraCount(pattern):
   assert re.match('^[LG]*$', pattern)
   return sum(2 if c == 'G' else 1 for c in pattern)
@@ -511,37 +526,6 @@ def AddGitiExamples():
   # The version of the above in Kosambi
   AddExactVrtta('Gīti',
                 ['GGLLLLGG', 'GLLLLGLGLGLLG', 'LLGLGLGLL', 'GLLLLGLGLGLLG'])
-
-
-def AddAnustupExamples():
-  """Examples of variation from standard Anuṣṭup."""
-  # "jayanti te sukṛtino..."
-  AddExactVrtta('Anuṣṭup (Śloka)',
-                ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'],
-                [match_result.ISSUES.FIRST_PADA_OFF])
-  # "sati pradīpe saty agnau..." Proof: K48.130 (p. 51)
-  AddExactVrtta('Anuṣṭup (Śloka)',
-                ['LGLGGGGG', '....LGL.', '....LGG.', '....LGL.'],
-                [match_result.ISSUES.FIRST_PADA_OFF])
-  # "guruṇā stana-bhāreṇa [...] śanaiś-carābhyāṃ pādābhyāṃ" K48.132 (52)
-  AddExactVrtta('Anuṣṭup (Śloka)',
-                ['....LGG.', '....LGL.', 'LGLGGGGG', '....LGL.'],
-                [match_result.ISSUES.THIRD_PADA_OFF])
-  # "tāvad evāmṛtamayī..." K48.125 (49)
-  AddExactVrtta('Anuṣṭup (Śloka)',
-                ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'],
-                [match_result.ISSUES.FIRST_PADA_OFF])
-  # Covers a lot of cases
-  AddExactVrtta('Anuṣṭup (Śloka)',
-                ['........', '....LGL.', '....LGG.', '....LGL.'],
-                [match_result.ISSUES.FIRST_PADA_OFF])
-  AddExactVrtta('Anuṣṭup (Śloka)',
-                ['....LGG.', '....LGL.', '........', '....LGL.'],
-                [match_result.ISSUES.THIRD_PADA_OFF])
-  AddExactVrtta('Anuṣṭup (Śloka)',
-                ['........', '....LGL.', '........', '....LGL.'],
-                [match_result.ISSUES.FIRST_PADA_OFF,
-                 match_result.ISSUES.THIRD_PADA_OFF])
 
 
 def AddLongerUpajati():
