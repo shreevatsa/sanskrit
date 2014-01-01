@@ -26,8 +26,6 @@ class AllMetricalData(object):
     self.known_partial_patterns = known_partial_patterns_init
 
 
-known_patterns = {}
-regexes_known = set()
 known_metre_regexes = []
 known_metre_patterns = {}
 known_partial_patterns = {}
@@ -37,6 +35,66 @@ def CleanUpPattern(pattern):
   pattern = simple_utils.RemoveChars(pattern, ' —–')
   assert re.match(r'^[LG]*$', pattern), pattern
   return pattern
+
+
+def AddSamavrttaPattern(metre_name, each_line_pattern):
+  """Given a sama-vṛtta metre's pattern, add it to the data structures."""
+  clean = CleanUpPattern(each_line_pattern)
+  assert re.match(r'^[LG]*G$', clean), (each_line_pattern, metre_name)
+  patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
+  for (a, b, c, d) in itertools.product(patterns, repeat=4):
+    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU]
+              if a.endswith('L') or c.endswith('L')
+              else [])
+    assert (a + b + c + d) not in known_metre_patterns
+    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.FULL, issues)
+  for (a, b) in itertools.product(patterns, repeat=2):
+    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU] if a.endswith('L')
+              else [])
+    assert a + b not in known_partial_patterns
+    known_partial_patterns[a + b] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.HALF, issues)]
+  for a in patterns:
+    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
+    assert a not in known_partial_patterns
+    known_partial_patterns[a] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.PADA, issues)]
+
+
+def AddArdhasamavrttaPattern(metre_name, odd_line_pattern, even_line_pattern):
+  """Given an ardha-sama-vṛtta metres' pattern, add it."""
+  clean_odd = CleanUpPattern(odd_line_pattern)
+  assert re.match(r'^[LG]*G$', clean_odd)
+  clean_even = CleanUpPattern(even_line_pattern)
+  assert re.match(r'^[LG]*G$', clean_even)
+  patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
+  patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
+  for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2):
+    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU]
+              if a.endswith('L') or c.endswith('L')
+              else [])
+    assert (a + b + c + d) not in known_metre_patterns
+    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.FULL, issues)
+  for (a, b) in itertools.product(patterns_odd, patterns_even):
+    assert a + b not in known_partial_patterns
+    known_partial_patterns[a + b] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.HALF, issues)]
+  for a in patterns_odd:
+    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
+    assert a not in known_partial_patterns
+    known_partial_patterns[a] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.ODD_PADA, issues)]
+  for a in patterns_even:
+    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
+    assert a not in known_partial_patterns
+    known_partial_patterns[a] = [match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.EVEN_PADA, issues)]
+
+################################################################################
+regexes_known = set()
+known_patterns = {}
 
 
 def CleanUpPatternString(pattern):
@@ -176,62 +234,6 @@ def AddFourLineVrtta(metre_name, line_patterns):
       tolerable.append(laghu0 + loose[1] + LaghuEnding(clean[2]) + loose[3])
   for verse_pattern in tolerable:
     AddVrttaWithVPL(metre_name, verse_pattern)
-
-
-def AddSamavrttaPattern(metre_name, each_line_pattern):
-  """Given a sama-vṛtta metre's pattern, add it to the data structures."""
-  clean = CleanUpPattern(each_line_pattern)
-  assert re.match(r'^[LG]*G$', clean), (each_line_pattern, metre_name)
-  patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
-  for (a, b, c, d) in itertools.product(patterns, repeat=4):
-    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU]
-              if a.endswith('L') or c.endswith('L')
-              else [])
-    assert (a + b + c + d) not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.FULL, issues)
-  for (a, b) in itertools.product(patterns, repeat=2):
-    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU] if a.endswith('L')
-              else [])
-    assert a + b not in known_partial_patterns
-    known_partial_patterns[a + b] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.HALF, issues)]
-  for a in patterns:
-    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
-    assert a not in known_partial_patterns
-    known_partial_patterns[a] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.PADA, issues)]
-
-
-def AddArdhasamavrttaPattern(metre_name, odd_line_pattern, even_line_pattern):
-  """Given an ardha-sama-vṛtta metres' pattern, add it."""
-  clean_odd = CleanUpPattern(odd_line_pattern)
-  assert re.match(r'^[LG]*G$', clean_odd)
-  clean_even = CleanUpPattern(even_line_pattern)
-  assert re.match(r'^[LG]*G$', clean_even)
-  patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
-  patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
-  for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2):
-    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU]
-              if a.endswith('L') or c.endswith('L')
-              else [])
-    assert (a + b + c + d) not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.FULL, issues)
-  for (a, b) in itertools.product(patterns_odd, patterns_even):
-    assert a + b not in known_partial_patterns
-    known_partial_patterns[a + b] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.HALF, issues)]
-  for a in patterns_odd:
-    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
-    assert a not in known_partial_patterns
-    known_partial_patterns[a] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.ODD_PADA, issues)]
-  for a in patterns_even:
-    issues = [match_result.ISSUES.PADANTA_LAGHU] if a.endswith('L') else []
-    assert a not in known_partial_patterns
-    known_partial_patterns[a] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.EVEN_PADA, issues)]
 
 
 def AddSamavrttaRegex(metre_name, each_line_pattern):
@@ -459,15 +461,13 @@ def AddLongerUpajati():
                  'L G L G G L L G L G L G'])
 
 
-patterns_memo = {0: [''], 1: ['L']}
-
-
 def PatternsOfLength(n):
   if n in patterns_memo:
     return patterns_memo[n]
   patterns_memo[n] = [p + 'L' for p in PatternsOfLength(n - 1)]
   patterns_memo[n] += [p + 'G' for p in PatternsOfLength(n - 2)]
   return patterns_memo[n]
+patterns_memo = {0: [''], 1: ['L']}
 
 
 def AddAryaRegex():
