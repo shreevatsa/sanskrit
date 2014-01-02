@@ -128,8 +128,8 @@ def AddVishamavrttaPattern(metre_name, line_patterns):
         metre_name, match_result.MATCH_TYPE.SECOND_HALF, [])]
 
 
-def AddVrttaRegex(metre_name, line_regexes, issues=None, simple=True):
-  """Given the four lines of a vṛtta, add it to known_metre_regexes."""
+def AddMetreRegex(metre_name, line_regexes, issues=None, simple=True):
+  """Given regexes for the four lines of a metre, add it."""
   assert len(line_regexes) == 4, (metre_name, line_regexes)
   if simple:
     line_regexes = [CleanUpSimpleRegex(s) for s in line_regexes]
@@ -184,29 +184,29 @@ def AddAnustup():
 def AddAnustupExamples():
   """Examples of variation from standard Anuṣṭup."""
   # "jayanti te sukṛtino..."
-  AddVrttaRegex('Anuṣṭup (Śloka)',
+  AddMetreRegex('Anuṣṭup (Śloka)',
                 ['LGLGLLLG', '....LGL.', '....LGG.', '....LGL.'],
                 [match_result.ISSUES.FIRST_PADA_OFF])
   # "sati pradīpe saty agnau..." Proof: K48.130 (p. 51)
-  AddVrttaRegex('Anuṣṭup (Śloka)',
+  AddMetreRegex('Anuṣṭup (Śloka)',
                 ['LGLGGGGG', '....LGL.', '....LGG.', '....LGL.'],
                 [match_result.ISSUES.FIRST_PADA_OFF])
   # "guruṇā stana-bhāreṇa [...] śanaiś-carābhyāṃ pādābhyāṃ" K48.132 (52)
-  AddVrttaRegex('Anuṣṭup (Śloka)',
+  AddMetreRegex('Anuṣṭup (Śloka)',
                 ['....LGG.', '....LGL.', 'LGLGGGGG', '....LGL.'],
                 [match_result.ISSUES.THIRD_PADA_OFF])
   # "tāvad evāmṛtamayī..." K48.125 (49)
-  AddVrttaRegex('Anuṣṭup (Śloka)',
+  AddMetreRegex('Anuṣṭup (Śloka)',
                 ['GLGGLLLG', '....LGL.', '....LGG.', '....LGL.'],
                 [match_result.ISSUES.FIRST_PADA_OFF])
   # Covers a lot of cases
-  AddVrttaRegex('Anuṣṭup (Śloka)',
+  AddMetreRegex('Anuṣṭup (Śloka)',
                 ['........', '....LGL.', '....LGG.', '....LGL.'],
                 [match_result.ISSUES.FIRST_PADA_OFF])
-  AddVrttaRegex('Anuṣṭup (Śloka)',
+  AddMetreRegex('Anuṣṭup (Śloka)',
                 ['....LGG.', '....LGL.', '........', '....LGL.'],
                 [match_result.ISSUES.THIRD_PADA_OFF])
-  AddVrttaRegex('Anuṣṭup (Śloka)',
+  AddMetreRegex('Anuṣṭup (Śloka)',
                 ['........', '....LGL.', '........', '....LGL.'],
                 [match_result.ISSUES.FIRST_PADA_OFF,
                  match_result.ISSUES.THIRD_PADA_OFF])
@@ -230,7 +230,7 @@ def AddArya(line_patterns):
     if allow_loose_ending:
       line_patterns[i] = line_patterns[i][:-1] + '.'
   # TODO(shreevatsa): Should we just add (up to) 4 patterns instead?
-  AddVrttaRegex('Āryā', line_patterns, simple=False)
+  AddMetreRegex('Āryā', line_patterns, simple=False)
 
 
 def AddAryaExamples():
@@ -273,7 +273,7 @@ patterns_memo = {0: [''], 1: ['L']}
 
 
 def AddAryaRegex():
-  AddVrttaRegex('Āryā (matched from regex)',
+  AddMetreRegex('Āryā (matched from regex)',
                 ['|'.join(PatternsOfLength(12)),
                  '|'.join([p + '[LG]' for p in PatternsOfLength(16)]),
                  '|'.join(PatternsOfLength(12)),
@@ -295,7 +295,7 @@ def AddGiti(line_patterns):
     if allow_loose_ending:
       line_patterns[i] = line_patterns[i][:-1] + '.'
   # TODO(shreevatsa): Should we just add (up to) 4 patterns instead?
-  AddVrttaRegex('Gīti', line_patterns, simple=False)
+  AddMetreRegex('Gīti', line_patterns, simple=False)
 
 
 def AddGitiExamples():
