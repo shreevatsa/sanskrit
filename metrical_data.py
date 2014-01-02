@@ -8,7 +8,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import itertools
-import logging
+# import logging
 import re
 
 import match_result
@@ -128,10 +128,11 @@ def AddVishamavrttaPattern(metre_name, line_patterns):
         metre_name, match_result.MATCH_TYPE.SECOND_HALF, [])]
 
 
-def AddVrttaRegex(metre_name, line_regexes, issues=None):
+def AddVrttaRegex(metre_name, line_regexes, issues=None, simple=True):
   """Given the four lines of a vṛtta, add it to known_metre_regexes."""
   assert len(line_regexes) == 4, (metre_name, line_regexes)
-  line_regexes = [CleanUpSimpleRegex(s) for s in line_regexes]
+  if simple:
+    line_regexes = [CleanUpSimpleRegex(s) for s in line_regexes]
   full_verse_regex = ''.join('(%s)' % s for s in line_regexes)
   match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL,
                                    issues)
@@ -209,6 +210,193 @@ def AddAnustupExamples():
                 ['........', '....LGL.', '........', '....LGL.'],
                 [match_result.ISSUES.FIRST_PADA_OFF,
                  match_result.ISSUES.THIRD_PADA_OFF])
+
+
+def MatraCount(pattern):
+  assert re.match('^[LG]*$', pattern)
+  return sum(2 if c == 'G' else 1 for c in pattern)
+
+
+def AddArya(line_patterns):
+  """Add an example of Arya, with proper morae checking."""
+  assert len(line_patterns) == 4
+  expected = [12, 18, 12, 15]
+  for i in range(4):
+    allow_loose_ending = False
+    if i % 2 and line_patterns[i].endswith('L'):
+      allow_loose_ending = True
+      expected[i] -= 1
+    assert MatraCount(line_patterns[i]) == expected[i]
+    if allow_loose_ending:
+      line_patterns[i] = line_patterns[i][:-1] + '.'
+  # TODO(shreevatsa): Should we just add (up to) 4 patterns instead?
+  AddVrttaRegex('Āryā', line_patterns, simple=False)
+
+
+def AddAryaExamples():
+  """Add collected examples of the Āryā metre."""
+  # From Bhartṛhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
+  AddArya(['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
+  # From Bhartṛhari (BharSt_1.37, siṃhaḥ śiśur api nipatati...)
+  AddArya(['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'])
+  # From Bhartṛhari (BharSt_1.43, dānaṃ bhogo nāśas...)
+  AddArya(['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'])
+  # From Bhartṛhari (BharSt_1.61, mṛga-mīna-sajjanānāṃ...)
+  AddArya(['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'])
+  # From Bhartṛhari (BharSt_1.87, chinno 'pi rohati taruḥ...)
+  AddArya(['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'])
+  # From Bhartṛhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
+  AddArya(['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
+  # From Bhartṛhari (BharSt_2.60, "kaś cumbati kula-puruṣo...")
+  AddArya(['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'])
+  # From Bhartṛhari ("virahe 'pi saṅgamaḥ khalu...", K48.328 (129))
+  AddArya(['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'])
+  # From Bhartṛhari ("sva-para-pratārako...", K48.120 (47))
+  AddArya(['LLGLGLGG', 'GLLGGLGLGLLG', 'GGLLGLLG', 'GGGGLGLLL'])
+  # From Bhartṛhari ("prathitaḥ praṇayavatīnāṃ...", K48.274 (107))
+  AddArya(['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLGL'])
+  # From Bhartṛhari ("sahakāra-kusuma-kesara-...", K48.340 (132))
+  AddArya(['LLGLLLLGLL', 'LLLLGGLGLLLGG', 'LLLLLLLLLLG', 'LGLGGLGGG'])
+  # From Bhartṛhari ("upari ghanaṃ...", K48.87 (34))
+  AddArya(['LLLLGLLLLG', 'GGLLGLGLLLGG', 'LLLLGLLLLG', 'GGLLGLGLLL'])
+  # From Bhartṛhari ("yady asya..", K48.309 (121))
+  AddArya(['GGLGLLLG', 'GGGGLGLGGL', 'LLGGLLGG', 'LLGGGLGGG'])
+
+
+def PatternsOfLength(n):
+  if n in patterns_memo:
+    return patterns_memo[n]
+  patterns_memo[n] = [p + 'L' for p in PatternsOfLength(n - 1)]
+  patterns_memo[n] += [p + 'G' for p in PatternsOfLength(n - 2)]
+  return patterns_memo[n]
+patterns_memo = {0: [''], 1: ['L']}
+
+
+def AddAryaRegex():
+  AddVrttaRegex('Āryā (matched from regex)',
+                ['|'.join(PatternsOfLength(12)),
+                 '|'.join([p + '[LG]' for p in PatternsOfLength(16)]),
+                 '|'.join(PatternsOfLength(12)),
+                 '|'.join([p + '[LG]' for p in PatternsOfLength(13)])],
+                simple=False)
+
+
+def AddGiti(line_patterns):
+  """Add an example of Gīti, with proper morae checking."""
+  assert len(line_patterns) == 4
+  expected = [12, 18, 12, 18]
+  for i in range(4):
+    allow_loose_ending = False
+    if i % 2 and line_patterns[i].endswith('L'):
+      allow_loose_ending = True
+      expected[i] -= 1
+    assert MatraCount(line_patterns[i]) == expected[i], (
+        i, line_patterns[i], MatraCount(line_patterns[i]), expected[i])
+    if allow_loose_ending:
+      line_patterns[i] = line_patterns[i][:-1] + '.'
+  # TODO(shreevatsa): Should we just add (up to) 4 patterns instead?
+  AddVrttaRegex('Gīti', line_patterns, simple=False)
+
+
+def AddGitiExamples():
+  # From Bhartṛhari (BharSt_2.26, āmīlitanayanānāṃ...)
+  AddGiti(['GGLLLLGG', 'GLLLLGLGLGGL', 'LLGLGLGLL', 'LLLLLLGLGLGLLL'])
+  # The version of the above in Kosambi
+  AddGiti(['GGLLLLGG', 'GLLLLGLGLGLLG', 'LLGLGLGLL', 'GLLLLGLGLGLLG'])
+
+
+def AddKarambajati():
+  """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
+  # # Bhartṛhari
+  # AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)', 'L G L G G L L G L G L G')
+  # # Māgha
+  # AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
+  # Also add all their Upajāti mixtures, with the above two 0000 and 1111
+  # Allow final laghu
+  # AddSamavrttaRegex('Karambajāti (Vaṃśastham/Indravaṃśā)',
+  #                   '. G L G G L L G L G L .')
+  AddSamavrttaRegex('Vaṃśastham/Indravaṃśā',
+                    '. G L G G L L G L G L .')
+  # # 0001
+  # AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['LGLGGLLGLGLG',
+  #                'LGLGGLLGLGLG',
+  #                'LGLGGLLGLGLG',
+  #                'GGLGGLLGLGLG'])
+  # # 0010
+  # AddExactVrtta('Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 0011
+  # AddExactVrtta('Indumā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 0100
+  # AddExactVrtta('Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 0101
+  # AddExactVrtta('Upameyā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'] * 2)
+  # # 0110
+  # AddExactVrtta('Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 0111
+  # AddExactVrtta('Varāsikā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 1000
+  # AddExactVrtta('Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 1001
+  # AddExactVrtta('Saurabheyī (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 1010
+  # AddExactVrtta('Śiśirā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'] * 2)
+  # # 1011
+  # AddExactVrtta('Ratākhyānakī (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 1100
+  # AddExactVrtta('Śaṅkhacūḍā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
+  # # 1101
+  # AddExactVrtta('Puṣṭidā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G'])
+  # # 1110
+  # AddExactVrtta('Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)',
+  #               ['G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'G G L G G L L G L G L G',
+  #                'L G L G G L L G L G L G'])
 
 
 def InitializeData():
@@ -329,318 +517,149 @@ def InitializeData():
   AddSamavrttaPattern('Nārācam', 'L L L L L L G L G G L G G L G G L G')
 
 ################################################################################
-regexes_known = set()
-known_patterns = {}
+# regexes_known = set()
+# known_patterns = {}
 
 
-def CleanUpPatternString(pattern):
-  pattern = simple_utils.RemoveChars(pattern, ' —–')
-  chars = ['L', 'G', '.', '(', ')', '[', r'\]', '|']
-  assert re.match(r'^[%s]*$' % ''.join(chars), pattern), pattern
-  return pattern
+# def CleanUpPatternString(pattern):
+#   pattern = simple_utils.RemoveChars(pattern, ' —–')
+#   chars = ['L', 'G', '.', '(', ')', '[', r'\]', '|']
+#   assert re.match(r'^[%s]*$' % ''.join(chars), pattern), pattern
+#   return pattern
 
 
-def LaghuEnding(pattern):
-  assert re.match(r'^[LG.]*$', pattern)
-  assert pattern.endswith('.') or pattern.endswith('G'), pattern
-  return pattern[:-1] + 'L'
+# def LaghuEnding(pattern):
+#   assert re.match(r'^[LG.]*$', pattern)
+#   assert pattern.endswith('.') or pattern.endswith('G'), pattern
+#   return pattern[:-1] + 'L'
 
 
-def LooseEnding(pattern):
-  assert re.match(r'^[LG.]*$', pattern)
-  assert pattern.endswith('.') or pattern.endswith('G'), pattern
-  return pattern[:-1] + '.'
+# def LooseEnding(pattern):
+#   assert re.match(r'^[LG.]*$', pattern)
+#   assert pattern.endswith('.') or pattern.endswith('G'), pattern
+#   return pattern[:-1] + '.'
 
 
-def OptionsExpand(pattern):
-  """Given pattern with n '.'s, yields all 2^n patterns with L and G only."""
-  where = pattern.find('.')
-  if where == -1:
-    yield pattern
-    return
-  prefix = pattern[:where]
-  for suffix in OptionsExpand(pattern[where + 1:]):
-    for fix in ['L', 'G']:
-      yield prefix + fix + suffix
+# def OptionsExpand(pattern):
+#   """Given pattern with n '.'s, yields all 2^n patterns with L and G only."""
+#   where = pattern.find('.')
+#   if where == -1:
+#     yield pattern
+#     return
+#   prefix = pattern[:where]
+#   for suffix in OptionsExpand(pattern[where + 1:]):
+#     for fix in ['L', 'G']:
+#       yield prefix + fix + suffix
 
 
-def AddPadaWithFinalLaghu(metre_name, pattern,
-                          match_type=match_result.MATCH_TYPE.PADA):
-  assert re.match(r'^[LG]*L$', pattern)
-  if pattern in known_patterns:
-    logging.warning('Not adding %s for %s. It is already known as %s', pattern,
-                    metre_name, match_result.Names(known_patterns[pattern]))
-  else:
-    known_patterns[pattern] = [
-        match_result.MatchResult(metre_name, match_type,
-                                 [match_result.ISSUES.PADANTA_LAGHU])]
+# def AddPadaWithFinalLaghu(metre_name, pattern,
+#                           match_type=match_result.MATCH_TYPE.PADA):
+#   assert re.match(r'^[LG]*L$', pattern)
+#   if pattern in known_patterns:
+#     logging.warning('Not adding %s for %s. It is already known as %s', pattern,
+#                     metre_name, match_result.Names(known_patterns[pattern]))
+#   else:
+#     known_patterns[pattern] = [
+#         match_result.MatchResult(metre_name, match_type,
+#                                  [match_result.ISSUES.PADANTA_LAGHU])]
 
 
-def AddPada(metre_name, pattern, match_type=match_result.MATCH_TYPE.PADA):
-  """Add the pattern of a pada to the list of known patterns."""
-  assert re.match(r'^[LG]*$', pattern)
-  if pattern in known_patterns:
-    logging.warning('Pattern %s, being added for %s, is already known as %s',
-                    pattern, metre_name,
-                    match_result.Names(known_patterns[pattern]))
+# def AddPada(metre_name, pattern, match_type=match_result.MATCH_TYPE.PADA):
+#   """Add the pattern of a pada to the list of known patterns."""
+#   assert re.match(r'^[LG]*$', pattern)
+#   if pattern in known_patterns:
+#     logging.warning('Pattern %s, being added for %s, is already known as %s',
+#                     pattern, metre_name,
+#                     match_result.Names(known_patterns[pattern]))
 
-    known_patterns[pattern].append(
-        match_result.MatchResult(metre_name, match_type))
-  else:
-    known_patterns[pattern] = [match_result.MatchResult(metre_name, match_type)]
-  if pattern.endswith('G'):
-    AddPadaWithFinalLaghu(metre_name, LaghuEnding(pattern), match_type)
-
-
-def AddArdha(metre_name, pattern_odd, pattern_even,
-             match_type=match_result.MATCH_TYPE.HALF):
-  """Given the patterns of odd and even pādas, add to the data structures."""
-  assert re.match(r'^[LG.]*$', pattern_odd)
-  assert re.match(r'^[LG.]*$', pattern_even)
-  assert pattern_even.endswith('.')
-  odds = OptionsExpand(pattern_odd)
-  # Making this a list as we use it twice.
-  evens = list(OptionsExpand(pattern_even))
-  for (o, e) in itertools.product(odds, evens):
-    known_patterns[o + e] = known_patterns.get(o + e, [])
-    known_patterns[o + e].append(
-        match_result.MatchResult(metre_name, match_type))
-  # Also add the viṣama-pādānta-laghu variants
-  if pattern_odd.endswith('G'):
-    odds = OptionsExpand(LaghuEnding(pattern_odd))
-    for (o, e) in itertools.product(odds, evens):
-      known_patterns[o + e] = known_patterns.get(o + e, [])
-      known_patterns[o + e].append(
-          match_result.MatchResult(metre_name, match_type,
-                                   [match_result.ISSUES.VISAMA_PADANTA_LAGHU]))
+#     known_patterns[pattern].append(
+#         match_result.MatchResult(metre_name, match_type))
+#   else:
+#     known_patterns[pattern] = [match_result.MatchResult(metre_name, match_type)]
+#   if pattern.endswith('G'):
+#     AddPadaWithFinalLaghu(metre_name, LaghuEnding(pattern), match_type)
 
 
-def AddVrtta(metre_name, verse_pattern, issues=None):
-  assert verse_pattern not in regexes_known, verse_pattern
-  # logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
-  (key, value) = (verse_pattern,
-                  match_result.MatchResult(metre_name,
-                                           match_result.MATCH_TYPE.FULL,
-                                           issues))
-  regexes_known.add(key)
-  known_metre_regexes.append((re.compile('^' + key + '$'), value))
+# def AddArdha(metre_name, pattern_odd, pattern_even,
+#              match_type=match_result.MATCH_TYPE.HALF):
+#   """Given the patterns of odd and even pādas, add to the data structures."""
+#   assert re.match(r'^[LG.]*$', pattern_odd)
+#   assert re.match(r'^[LG.]*$', pattern_even)
+#   assert pattern_even.endswith('.')
+#   odds = OptionsExpand(pattern_odd)
+#   # Making this a list as we use it twice.
+#   evens = list(OptionsExpand(pattern_even))
+#   for (o, e) in itertools.product(odds, evens):
+#     known_patterns[o + e] = known_patterns.get(o + e, [])
+#     known_patterns[o + e].append(
+#         match_result.MatchResult(metre_name, match_type))
+#   # Also add the viṣama-pādānta-laghu variants
+#   if pattern_odd.endswith('G'):
+#     odds = OptionsExpand(LaghuEnding(pattern_odd))
+#     for (o, e) in itertools.product(odds, evens):
+#       known_patterns[o + e] = known_patterns.get(o + e, [])
+#       known_patterns[o + e].append(
+#           match_result.MatchResult(metre_name, match_type,
+#                                    [match_result.ISSUES.VISAMA_PADANTA_LAGHU]))
 
 
-def AddVrttaWithVPL(metre_name, verse_pattern):
-  """Add the viṣama-pādānta-laghu variant of a metre to the known patterns."""
-  assert verse_pattern not in regexes_known, verse_pattern
-  # logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
-  #               'with pattern %s', metre_name, verse_pattern)
-  (key, value) = (verse_pattern,
-                  match_result.MatchResult(metre_name,
-                                           match_result.MATCH_TYPE.FULL,
-                                           [match_result.ISSUES.
-                                            VISAMA_PADANTA_LAGHU]))
-  regexes_known.add(key)
-  known_metre_regexes.append((re.compile('^' + key + '$'), value))
+# def AddVrtta(metre_name, verse_pattern, issues=None):
+#   assert verse_pattern not in regexes_known, verse_pattern
+#   # logging.debug('Adding metre %s with pattern %s', metre_name, verse_pattern)
+#   (key, value) = (verse_pattern,
+#                   match_result.MatchResult(metre_name,
+#                                            match_result.MATCH_TYPE.FULL,
+#                                            issues))
+#   regexes_known.add(key)
+#   known_metre_regexes.append((re.compile('^' + key + '$'), value))
 
 
-def AddExactVrtta(metre_name, line_patterns, issues=None):
-  """Given the four lines of a vṛtta, add it to the data structures exactly."""
-  assert len(line_patterns) == 4, (metre_name, line_patterns)
-  full_verse_pattern = ''.join('(%s)' % CleanUpPatternString(s)
-                               for s in line_patterns)
-  AddVrtta(metre_name, full_verse_pattern, issues)
+# def AddVrttaWithVPL(metre_name, verse_pattern):
+#   """Add the viṣama-pādānta-laghu variant of a metre to the known patterns."""
+#   assert verse_pattern not in regexes_known, verse_pattern
+#   # logging.debug('Adding viṣama-pādānta-laghu variant of metre %s '
+#   #               'with pattern %s', metre_name, verse_pattern)
+#   (key, value) = (verse_pattern,
+#                   match_result.MatchResult(metre_name,
+#                                            match_result.MATCH_TYPE.FULL,
+#                                            [match_result.ISSUES.
+#                                             VISAMA_PADANTA_LAGHU]))
+#   regexes_known.add(key)
+#   known_metre_regexes.append((re.compile('^' + key + '$'), value))
 
 
-def AddFourLineVrtta(metre_name, line_patterns):
-  """Given the four lines of a vṛtta, add it to the data structures."""
-  assert len(line_patterns) == 4, (metre_name, line_patterns)
-  clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
-  for pattern in clean:
-    assert re.match(r'^[LG.]*$', pattern)
-  loose = [None, LooseEnding(clean[1]), None, LooseEnding(clean[3])]
-  assert clean[1].endswith('G')
-  assert clean[3].endswith('G')
-  full_verse_pattern = clean[0] + loose[1] + clean[2] + loose[3]
-  AddVrtta(metre_name, full_verse_pattern)
-  # Now add the other variations as well
-  tolerable = []
-  if clean[2].endswith('G'):
-    tolerable.append(clean[0] + loose[1] + LaghuEnding(clean[2]) + loose[3])
-  if clean[0].endswith('G'):
-    laghu0 = LaghuEnding(clean[0])
-    tolerable.append(laghu0 + loose[1] + clean[2] + loose[3])
-    if clean[2].endswith('G'):
-      tolerable.append(laghu0 + loose[1] + LaghuEnding(clean[2]) + loose[3])
-  for verse_pattern in tolerable:
-    AddVrttaWithVPL(metre_name, verse_pattern)
+# def AddExactVrtta(metre_name, line_patterns, issues=None):
+#   """Given the four lines of a vṛtta, add it to the data structures exactly."""
+#   assert len(line_patterns) == 4, (metre_name, line_patterns)
+#   full_verse_pattern = ''.join('(%s)' % CleanUpPatternString(s)
+#                                for s in line_patterns)
+#   AddVrtta(metre_name, full_verse_pattern, issues)
 
 
-def MatraCount(pattern):
-  assert re.match('^[LG]*$', pattern)
-  return sum(2 if c == 'G' else 1 for c in pattern)
+# def AddFourLineVrtta(metre_name, line_patterns):
+#   """Given the four lines of a vṛtta, add it to the data structures."""
+#   assert len(line_patterns) == 4, (metre_name, line_patterns)
+#   clean = [CleanUpPatternString(pattern) for pattern in line_patterns]
+#   for pattern in clean:
+#     assert re.match(r'^[LG.]*$', pattern)
+#   loose = [None, LooseEnding(clean[1]), None, LooseEnding(clean[3])]
+#   assert clean[1].endswith('G')
+#   assert clean[3].endswith('G')
+#   full_verse_pattern = clean[0] + loose[1] + clean[2] + loose[3]
+#   AddVrtta(metre_name, full_verse_pattern)
+#   # Now add the other variations as well
+#   tolerable = []
+#   if clean[2].endswith('G'):
+#     tolerable.append(clean[0] + loose[1] + LaghuEnding(clean[2]) + loose[3])
+#   if clean[0].endswith('G'):
+#     laghu0 = LaghuEnding(clean[0])
+#     tolerable.append(laghu0 + loose[1] + clean[2] + loose[3])
+#     if clean[2].endswith('G'):
+#       tolerable.append(laghu0 + loose[1] + LaghuEnding(clean[2]) + loose[3])
+#   for verse_pattern in tolerable:
+#     AddVrttaWithVPL(metre_name, verse_pattern)
 
 
-def AddArya(line_patterns):
-  """Add an example of Arya, with proper morae checking."""
-  assert len(line_patterns) == 4
-  expected = [12, 18, 12, 15]
-  for i in range(4):
-    allow_loose_ending = False
-    if i % 2 and line_patterns[i].endswith('L'):
-      allow_loose_ending = True
-      expected[i] -= 1
-    assert MatraCount(line_patterns[i]) == expected[i], (
-        line_patterns[i], MatraCount(line_patterns[i]))
-    if allow_loose_ending:
-      line_patterns[i] = line_patterns[i][:-1] + '.'
-  AddExactVrtta('Āryā', line_patterns)
 
-
-def AddAryaExamples():
-  """Add collected examples of the Āryā metre."""
-  # From Bhartṛhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
-  AddArya(['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
-  # From Bhartṛhari (BharSt_1.37, siṃhaḥ śiśur api nipatati...)
-  AddArya(['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'])
-  # From Bhartṛhari (BharSt_1.43, dānaṃ bhogo nāśas...)
-  AddArya(['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'])
-  # From Bhartṛhari (BharSt_1.61, mṛga-mīna-sajjanānāṃ...)
-  AddArya(['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'])
-  # From Bhartṛhari (BharSt_1.87, chinno 'pi rohati taruḥ...)
-  AddArya(['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'])
-  # From Bhartṛhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
-  AddArya(['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
-  # From Bhartṛhari (BharSt_2.60, "kaś cumbati kula-puruṣo...")
-  AddArya(['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'])
-  # From Bhartṛhari ("virahe 'pi saṅgamaḥ khalu...", K48.328 (129))
-  AddArya(['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'])
-  # From Bhartṛhari ("sva-para-pratārako...", K48.120 (47))
-  AddArya(['LLGLGLGG', 'GLLGGLGLGLLG', 'GGLLGLLG', 'GGGGLGLLL'])
-  # From Bhartṛhari ("prathitaḥ praṇayavatīnāṃ...", K48.274 (107))
-  AddArya(['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLGL'])
-  # From Bhartṛhari ("sahakāra-kusuma-kesara-...", K48.340 (132))
-  AddArya(['LLGLLLLGLL', 'LLLLGGLGLLLGG', 'LLLLLLLLLLG', 'LGLGGLGGG'])
-  # From Bhartṛhari ("upari ghanaṃ...", K48.87 (34))
-  AddArya(['LLLLGLLLLG', 'GGLLGLGLLLGG', 'LLLLGLLLLG', 'GGLLGLGLLL'])
-  # From Bhartṛhari ("yady asya..", K48.309 (121))
-  AddArya(['GGLGLLLG', 'GGGGLGLGGL', 'LLGGLLGG', 'LLGGGLGGG'])
-
-
-def AddGitiExamples():
-  # From Bhartṛhari (BharSt_2.26, āmīlitanayanānāṃ...)
-  AddExactVrtta('Gīti',
-                ['GGLLLLGG', 'GLLLLGLGLGGL', 'LLGLGLGLL', 'LLLLLLGLGLGGLL'])
-  # The version of the above in Kosambi
-  AddExactVrtta('Gīti',
-                ['GGLLLLGG', 'GLLLLGLGLGLLG', 'LLGLGLGLL', 'GLLLLGLGLGLLG'])
-
-
-def AddKarambajati():
-  """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
-  # # Bhartṛhari
-  # AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)', 'L G L G G L L G L G L G')
-  # # Māgha
-  # AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
-  # Also add all their Upajāti mixtures, with the above two 0000 and 1111
-  # Allow final laghu
-  # AddSamavrttaRegex('Karambajāti (Vaṃśastham/Indravaṃśā)',
-  #                   '. G L G G L L G L G L .')
-  AddSamavrttaRegex('Vaṃśastham/Indravaṃśā',
-                    '. G L G G L L G L G L .')
-  # # 0001
-  # AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['LGLGGLLGLGLG',
-  #                'LGLGGLLGLGLG',
-  #                'LGLGGLLGLGLG',
-  #                'GGLGGLLGLGLG'])
-  # # 0010
-  # AddExactVrtta('Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 0011
-  # AddExactVrtta('Indumā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 0100
-  # AddExactVrtta('Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 0101
-  # AddExactVrtta('Upameyā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'] * 2)
-  # # 0110
-  # AddExactVrtta('Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 0111
-  # AddExactVrtta('Varāsikā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 1000
-  # AddExactVrtta('Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 1001
-  # AddExactVrtta('Saurabheyī (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 1010
-  # AddExactVrtta('Śiśirā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'] * 2)
-  # # 1011
-  # AddExactVrtta('Ratākhyānakī (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 1100
-  # AddExactVrtta('Śaṅkhacūḍā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 1101
-  # AddExactVrtta('Puṣṭidā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 1110
-  # AddExactVrtta('Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-
-
-def PatternsOfLength(n):
-  if n in patterns_memo:
-    return patterns_memo[n]
-  patterns_memo[n] = [p + 'L' for p in PatternsOfLength(n - 1)]
-  patterns_memo[n] += [p + 'G' for p in PatternsOfLength(n - 2)]
-  return patterns_memo[n]
-patterns_memo = {0: [''], 1: ['L']}
-
-
-def AddAryaRegex():
-  # TODO(shreevatsa): Make sure this huge one is compiled!
-  AddExactVrtta('Āryā (matched from regex)',
-                ['|'.join(PatternsOfLength(12)),
-                 '|'.join([p + '[LG]' for p in PatternsOfLength(16)]),
-                 '|'.join(PatternsOfLength(12)),
-                 '|'.join([p + '[LG]' for p in PatternsOfLength(13)])])
 
 

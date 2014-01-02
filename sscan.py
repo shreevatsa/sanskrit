@@ -173,8 +173,7 @@ def MetricalPattern(text):
 def IdentifyPattern(pattern):
   """Given metrical pattern (string of L's and G's), identifies metre."""
   assert re.match('^[LG]*$', pattern)
-  results = (metrical_data.known_partial_patterns.get(pattern) or
-             metrical_data.known_patterns.get(pattern))
+  results = metrical_data.known_partial_patterns.get(pattern)
   if results is not None:
     assert isinstance(results, list), (unicode(results), type(results))
     for result in results:
