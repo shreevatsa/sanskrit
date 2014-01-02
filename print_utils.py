@@ -5,8 +5,11 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import match_result
+
 
 def ToUnicode(x):
+  """Convert x to unicode, whatever it is."""
   if isinstance(x, unicode):
     return x
   if isinstance(x, int):
@@ -15,6 +18,8 @@ def ToUnicode(x):
     return ListToUnicode(x)
   if isinstance(x, dict):
     return DictToUnicode(x)
+  if isinstance(x, match_result.MatchResult):
+    return x.Name()
   assert False, (x, type(x))
 
 

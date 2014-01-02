@@ -51,13 +51,14 @@ def AddSamavrttaPattern(metre_name, each_line_pattern):
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
   for (a, b, c, d) in itertools.product(patterns, repeat=4):
     issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU]
-              if a.endswith('L') or c.endswith('L')
+              if (a.endswith('L') or c.endswith('L')) and len(clean) > 14
               else [])
     assert (a + b + c + d) not in known_metre_patterns
     known_metre_patterns[a + b + c + d] = match_result.MatchResult(
         metre_name, match_result.MATCH_TYPE.FULL, issues)
   for (a, b) in itertools.product(patterns, repeat=2):
-    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU] if a.endswith('L')
+    issues = ([match_result.ISSUES.VISAMA_PADANTA_LAGHU]
+              if a.endswith('L') and len(clean) > 14
               else [])
     assert a + b not in known_partial_patterns
     known_partial_patterns[a + b] = [match_result.MatchResult(
@@ -433,6 +434,7 @@ def InitializeData():
   # Bhāravi
   AddSamavrttaPattern('Pramitākṣarā', 'L L G L G L L L G L L G')
   # Bhartṛhari
+  # TODO(shreevatsa): Should be a whitelist. (+Vasantatilakā, -Śālinī)
   AddSamavrttaPattern('Vasantatilakā', 'G G L G L L L G L L G L G G')
   # Bhartṛhari
   AddSamavrttaPattern('Mālinī', 'L L L L L L G G — G L G G L G G')
