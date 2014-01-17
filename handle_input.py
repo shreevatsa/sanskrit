@@ -75,6 +75,20 @@ class InputHandler(object):
     """Clean up the input lines (strip junk, transliterate, break verses)."""
     cleaned_lines = []
     for line in lines:
+      line = line.strip()
+      nfc = unicodedata.normalize('NFC', line)
+      nfkc = unicodedata.normalize('NFKC', line)
+      if not (line == nfc and line == nfkc):
+        self.error_output.append('%s normalized to %s' % (line, nfkc) +
+                                 (' (itself different from %s)' % nfc
+                                  if nfc != nfkc else ''))
+        line = nfkc
+      # without_control = ''.join(c for c in line if
+      #                           not unicodedata.category(c).startswith('C'))
+      # if line != without_control:
+      #   self.error_output.append('Removed control characters in %s to get %s'
+      #                            % (line, without_control))
+      #   line = without_control
       line = RemoveHTML(line).strip()
       if not line:
         continue
