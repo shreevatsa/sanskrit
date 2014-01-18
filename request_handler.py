@@ -22,7 +22,7 @@ def InputForm(default=''):
 
 
 def StatsTable():
-  return codecs.open('stats_table.html', 'r', 'utf-8').read()
+  return codecs.open('gretil_stats/stats_table.html', 'r', 'utf-8').read()
 
 
 MAIN_PAGE_HTML = open('main.html').read()
