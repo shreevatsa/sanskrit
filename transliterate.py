@@ -51,7 +51,7 @@ def MakeStateMachine(table):
   return root
 
 
-def FirstLongestMatch(state_machine, text):
+def _LongestRead(state_machine, text):
   """Finds longest match from state machine at start of the text."""
   where = state_machine
   num_seen = 0
@@ -74,20 +74,18 @@ def Transliterate(state_machine, text, ignore=None):
   unparsed_characters = set()
   num_parsed = 0
   while num_parsed < len(text):
-    (num_matched, replacement) = FirstLongestMatch(state_machine,
-                                                   text[num_parsed:])
-    if num_matched == 0:
-      char = text[num_parsed]
-      if ignore and char in ignore:
-        pass
-      else:
-        logging.debug('Could not parse (%s) %s (%s)', text[:num_parsed],
-                      text[num_parsed], text[num_parsed + 1:])
-        unparsed_characters.add(char)
-      num_parsed += 1
-    else:
+    # TODO(shreevatsa): Is text[num_parsed:] doing many copies for long text?
+    (num_matched, replacement) = _LongestRead(state_machine, text[num_parsed:])
+    if num_matched > 0:
       transliterated += replacement
       num_parsed += num_matched
+    else:
+      # Couldn't match anything; strip one char and retry.
+      char = text[num_parsed]
+      if ignore is None or char not in ignore:
+        unparsed_characters.add(char)
+      num_parsed += 1
+  if unparsed_characters:
+    logging.debug('Could not parse some characters (%s) in %s',
+                  unparsed_characters, text)
   return (transliterated, unparsed_characters)
-
-
