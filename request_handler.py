@@ -25,7 +25,7 @@ def StatsTable():
   return codecs.open('gretil_stats/stats_table.html', 'r', 'utf-8').read()
 
 
-MAIN_PAGE_HTML = open('main.html').read()
+MAIN_PAGE_HTML = open('main_page_template.html').read()
 MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${INPUT_FORM}', InputForm())
 MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${METRE_STATISTICS}', StatsTable())
 
