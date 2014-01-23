@@ -133,9 +133,10 @@ def SLP1ToMangledDevanagariStateMachine():
   return transliterate.MakeStateMachine(SLP1ToAlphabet(devanagari.Alphabet()))
 
 
-def SLP1ToDevanagari(text):
-  (text, _) = transliterate.Transliterate(
+def CleanSLP1ToDevanagari(text):
+  (text, unparsed) = transliterate.Transliterate(
       SLP1ToMangledDevanagariStateMachine(), text)
+  assert not unparsed, (text, unparsed)
   assert isinstance(text, unicode), text
   return devanagari.UnMangle(text)
 
@@ -143,4 +144,4 @@ def SLP1ToDevanagari(text):
 def TransliterateForOutput(text):
   return '%s (%s)' % (
       transliterate.Transliterate(SLP1ToIASTStateMachine(), text)[0],
-      SLP1ToDevanagari(text))
+      CleanSLP1ToDevanagari(text))
