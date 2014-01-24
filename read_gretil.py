@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 import argparse
 import codecs
 import datetime
+import itertools
 import json
 import logging
 import os.path
@@ -29,6 +30,14 @@ def Print(x):
 def Timestamp():
   return datetime.datetime.strftime(datetime.datetime.now(),
                                     '%Y-%m-%d.%H:%M:%S')
+
+
+def SplitIntoVerses(input_lines):
+  verses_found = []
+  for key, group in itertools.groupby(input_lines, bool):
+    if key:
+      verses_found.append(list(group))
+  return verses_found
 
 
 def IgnoreLine(text):
@@ -101,7 +110,7 @@ if __name__ == '__main__':
       if n:
         lines.append('')
 
-  verses = handle_input.BreakIntoVerses(lines)
+  verses = SplitIntoVerses(lines)
   verses = [verse for verse in verses if AcceptVerse(verse)]
 
   identifier = simple_identifier.SimpleIdentifier()

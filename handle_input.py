@@ -7,7 +7,6 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import itertools
 import re
 import unicodedata
 
@@ -24,15 +23,6 @@ def RemoveHTML(text):
 def RemoveVerseNumber(text):
   # return re.subn(r'[/|]{2}[ \d.a-zA-z}_*\-]*[/|]{2}$', '', text)
   return re.subn(r'(॥|([|।/])\2).*', '', text)
-
-
-def BreakIntoVerses(input_lines):
-  verses = []
-  for key, group in itertools.groupby(input_lines, bool):
-    if not key:
-      continue
-    verses.append(list(group))
-  return verses
 
 
 def UnicodeNotation(c):
