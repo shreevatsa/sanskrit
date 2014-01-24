@@ -16,7 +16,7 @@ def ToUnicode(x):
     return _ListToUnicode(x)
   if isinstance(x, dict):
     return _DictToUnicode(x)
-  # For MatchResult
+  # For MatchResult, use x.Name()
   if callable(getattr(x, 'Name', None)):
     return x.Name()
   assert False, (x, type(x))
@@ -31,12 +31,10 @@ def _ListToUnicode(li):
 
 def _DictToUnicode(d):
   assert isinstance(d, dict)
-  ret = '{'.encode('utf-8')
+  ret = '{'
   for (key, value) in sorted(d.items(), key=lambda x: x[1], reverse=True):
-    ret += ('\n  ' + key + ': ' + ToUnicode(value)).encode('utf-8')
-  ret += '\n}'.encode('utf-8')
-  assert isinstance(ret, str)
-  ret = ret.decode('utf-8')
+    ret += ('\n  ' + key + ': ' + ToUnicode(value))
+  ret += '\n}'
   assert isinstance(ret, unicode)
   return ret
 
