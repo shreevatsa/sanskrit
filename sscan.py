@@ -28,7 +28,7 @@ import simple_identifier
 
 
 if __name__ == '__main__':
-  logging.getLogger().setLevel(logging.DEBUG)
+  logging.getLogger().setLevel(logging.WARNING)
   lines = [l.decode('utf8') for l in sys.stdin]
   identifier = simple_identifier.SimpleIdentifier()
   identifier.IdentifyFromLines(lines)
