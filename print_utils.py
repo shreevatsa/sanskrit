@@ -5,10 +5,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import match_result
 
-
-def _ToUnicode(x):
+def ToUnicode(x):
   """Convert x to unicode, whatever it is."""
   if isinstance(x, unicode):
     return x
@@ -18,14 +16,15 @@ def _ToUnicode(x):
     return _ListToUnicode(x)
   if isinstance(x, dict):
     return _DictToUnicode(x)
-  if isinstance(x, match_result.MatchResult):
+  # For MatchResult
+  if callable(getattr(x, 'Name', None)):
     return x.Name()
   assert False, (x, type(x))
 
 
 def _ListToUnicode(li):
   assert isinstance(li, list)
-  ret = ('[' + ', '.join(_ToUnicode(i) for i in li) + ']')
+  ret = ('[' + ', '.join(ToUnicode(i) for i in li) + ']')
   assert isinstance(ret, unicode)
   return ret
 
@@ -34,7 +33,7 @@ def _DictToUnicode(d):
   assert isinstance(d, dict)
   ret = '{'.encode('utf-8')
   for (key, value) in sorted(d.items(), key=lambda x: x[1], reverse=True):
-    ret += ('\n  ' + key + ': ' + _ToUnicode(value)).encode('utf-8')
+    ret += ('\n  ' + key + ': ' + ToUnicode(value)).encode('utf-8')
   ret += '\n}'.encode('utf-8')
   assert isinstance(ret, str)
   ret = ret.decode('utf-8')
@@ -43,6 +42,6 @@ def _DictToUnicode(d):
 
 
 def Print(u):
-  u = _ToUnicode(u)
+  u = ToUnicode(u)
   assert isinstance(u, unicode), (u, type(u))
   print(u.encode('utf8'))
