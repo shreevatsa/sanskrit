@@ -10,7 +10,7 @@ import codecs
 
 import webapp2
 
-import sscan
+import simple_identifier
 
 
 def InputForm(default=''):
@@ -30,7 +30,7 @@ MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${INPUT_FORM}', InputForm())
 MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${METRE_STATISTICS}', StatsTable())
 
 
-common_identifier = sscan.Identifier()
+common_identifier = simple_identifier.SimpleIdentifier()
 
 
 class InputPage(webapp2.RequestHandler):

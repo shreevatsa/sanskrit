@@ -19,7 +19,7 @@ import tempfile
 
 import handle_input
 import print_utils
-import sscan
+import simple_identifier
 
 
 def Print(x):
@@ -104,7 +104,7 @@ if __name__ == '__main__':
   verses = handle_input.BreakIntoVerses(lines)
   verses = [verse for verse in verses if AcceptVerse(verse)]
 
-  identifier = sscan.Identifier()
+  identifier = simple_identifier.SimpleIdentifier()
   table = {}
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]

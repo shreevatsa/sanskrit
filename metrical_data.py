@@ -12,7 +12,6 @@ import itertools
 import re
 
 import match_result
-import simple_utils
 
 
 class AllMetricalData(object):
@@ -32,14 +31,21 @@ known_partial_regexes = []
 known_partial_patterns = {}
 
 
+def _RemoveChars(input_string, chars):
+  """Wrapper function because string.translate != unicode.translate."""
+  for char in chars:
+    input_string = input_string.replace(char, '')
+  return input_string
+
+
 def CleanUpPattern(pattern):
-  pattern = simple_utils.RemoveChars(pattern, ' —–')
+  pattern = _RemoveChars(pattern, ' —–')
   assert re.match(r'^[LG]*$', pattern), pattern
   return pattern
 
 
 def CleanUpSimpleRegex(regex):
-  regex = simple_utils.RemoveChars(regex, ' —–')
+  regex = _RemoveChars(regex, ' —–')
   assert re.match(r'^[LG.]*$', regex), regex
   return regex
 

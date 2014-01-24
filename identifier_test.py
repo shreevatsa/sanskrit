@@ -10,16 +10,13 @@ from __future__ import unicode_literals
 import unittest
 
 import match_result
-
-# TODO(shreevatsa): Change this back
-# import identifier
-import sscan as identifier
+import simple_identifier
 
 
 class BadInput(unittest.TestCase):
   def __init__(self, *args, **kwargs):
     super(BadInput, self).__init__(*args, **kwargs)
-    self.identifier = identifier.Identifier()
+    self.identifier = simple_identifier.SimpleIdentifier()
 
   def testEmpty(self):
     """Identifier should fail with empty input."""
@@ -35,7 +32,7 @@ class BadInput(unittest.TestCase):
 class KnownValues(unittest.TestCase):
   def __init__(self, *args, **kwargs):
     super(KnownValues, self).__init__(*args, **kwargs)
-    self.identifier = identifier.Identifier()
+    self.identifier = simple_identifier.SimpleIdentifier()
 
   def AssertSingleMatchResultEquals(self, results, metre_name, match_type,
                                     issues):

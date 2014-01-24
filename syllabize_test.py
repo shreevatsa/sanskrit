@@ -2,7 +2,7 @@
 
 import unittest
 
-from sscan import Syllabize
+from scan import Syllabize
 
 VOWELS = 'aAiIuUfFxXeEoO'
 
