@@ -33,7 +33,7 @@ def _DictToUnicode(d):
   assert isinstance(d, dict)
   ret = '{'
   for (key, value) in sorted(d.items(), key=lambda x: x[1], reverse=True):
-    ret += ('\n  ' + key + ': ' + ToUnicode(value))
+    ret += ('\n  ' + ToUnicode(key) + ': ' + ToUnicode(value))
   ret += '\n}'
   assert isinstance(ret, unicode)
   return ret
