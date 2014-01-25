@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Utility for normalising Devanagari module.
 
 The wrinkle here is that Unicode Devanāgari stores 'ki' as 'ka+vowel sign i' and

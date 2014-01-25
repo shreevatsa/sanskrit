@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Data structure that stores the result of a metre matching a known pattern."""
 

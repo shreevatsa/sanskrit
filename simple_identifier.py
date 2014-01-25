@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """A unified interface to reader + scanner + metrical_data + identifier."""
 
 from __future__ import absolute_import

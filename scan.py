@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Given lines in SLP1, converts them to a pattern of laghus and gurus."""
 
 from __future__ import absolute_import
@@ -11,7 +9,7 @@ import re
 import slp1
 
 
-def MetricalPattern(text):
+def _PatternFromLine(text):
   """Given SLP1 text, returns its metrical pattern (string of 'L's and 'G's)."""
   orig_text = text
   # A regular-expression "character class" for each type
@@ -37,13 +35,7 @@ def MetricalPattern(text):
 
 def ScanVerse(lines):
   cleaned_lines = _MoveConsonants(lines)
-  if not cleaned_lines:
-    return None
-  pattern_lines = []
-  for line in cleaned_lines:
-    line = MetricalPattern(line)
-    pattern_lines.append(line)
-  return pattern_lines
+  return [_PatternFromLine(line) for line in cleaned_lines]
 
 
 def _MoveConsonants(verse_lines):
