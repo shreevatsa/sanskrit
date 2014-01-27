@@ -24,7 +24,7 @@ def ToUnicode(x):
 
 def _ListToUnicode(li):
   assert isinstance(li, list)
-  ret = ('[' + ', '.join(ToUnicode(i) for i in li) + ']')
+  ret = '[%s]' % ', '.join(ToUnicode(i) for i in li)
   assert isinstance(ret, unicode)
   return ret
 
@@ -33,7 +33,7 @@ def _DictToUnicode(d):
   assert isinstance(d, dict)
   ret = '{'
   for (key, value) in sorted(d.items(), key=lambda x: x[1], reverse=True):
-    ret += ('\n  ' + ToUnicode(key) + ': ' + ToUnicode(value))
+    ret += '\n  %s: %s' % (ToUnicode(key), ToUnicode(value))
   ret += '\n}'
   assert isinstance(ret, unicode)
   return ret
