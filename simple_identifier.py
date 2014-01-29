@@ -14,9 +14,10 @@ import scan
 
 
 class SimpleIdentifier(object):
-  """A single interface to read-scan-identify."""
+  """A single interface to read-scan-data-identify-display."""
 
   def __init__(self):
+    """Initialize whichever of the parts need it."""
     if not metrical_data.known_metre_patterns:
       metrical_data.InitializeData()
     self.identifier = identifier.Identifier(metrical_data)
