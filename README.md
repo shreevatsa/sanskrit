@@ -5,7 +5,7 @@ Code to recognize Sanskrit metres.
 
 Given a Sanskrit verse,
 
-    0. [Read] The verse is cleaned-up and transliterated into a standard format.
+    0. [Read] The verse is cleaned up and transliterated into a standard format.
 
     1. [Scan] The verse is analysed for laghu and guru syllables, and converted
     into a "metrical pattern" that might look like this:

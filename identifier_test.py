@@ -128,6 +128,11 @@ class KnownValues(unittest.TestCase):
     """Test all the above by inserting random breaks in the list."""
     raise self.failureException
 
+  def testBadVerse(self):
+    """Test a verse that has typos, and see if correct metre can be guessed."""
+    unused_verse = ['स्मराहुताशनमुर्मुरचूर्णतां दधुरिवाम्रवनस्य रजःकणाः ।',
+                    'निपातिताः परितः पथिकव्रजानुपरि ते परितेपुरतो भृशम् ॥']
+    raise self.failureException
 
 if __name__ == '__main__':
   unittest.main()
