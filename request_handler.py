@@ -34,11 +34,13 @@ common_identifier = simple_identifier.SimpleIdentifier()
 
 
 class InputPage(webapp2.RequestHandler):
+
   def get(self):
     self.response.write(MAIN_PAGE_HTML)
 
 
 class IdentifyPage(webapp2.RequestHandler):
+
   def get(self):
     self.response.write(MAIN_PAGE_HTML)
 

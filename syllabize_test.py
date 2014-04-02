@@ -9,6 +9,7 @@ VOWELS = 'aAiIuUfFxXeEoO'
 
 
 class SyllabizeTest(unittest.TestCase):
+
   def testEmpty(self):
     """Syllables should return an empty list on empty input."""
     empty = []

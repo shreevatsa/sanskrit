@@ -3,7 +3,9 @@ sanskrit/metrical-scan
 
 Code to recognize Sanskrit metres.
 
-Given a Sanskrit verse,
+(Data, Input) → Read–Scan–Identify–Display
+
+Given a verse,
 
     0. [Read] The verse is cleaned up and transliterated into a standard format.
 
@@ -18,23 +20,32 @@ Given a Sanskrit verse,
     2. [Identify] This metrical pattern is compared against the known metrical
     patterns, and some best-guess metre is output.
 
+    3. [Display] The result of the match (perfect/partial match, known errors)
+    is displayed.
+
 --------------------------------------------------------------------------------
 
-From a user point of view, class Identifier in sscan.py is all that needs to be
-interacted with. If `identifer` is an instance of `Identifier`, then
+Simple usage:
 
-    identifier.IdentifyFromLines(verse_lines)
+   import simple_identifier
+   identifier = simple_identifier.SimpleIdentifier()
+   match_results = identifier.IdentifyFromLines(verse_lines)
 
 returns a list of MatchResults that the verse might be in.
 
-(The reason for using verse_lines as input, rather than a single blob of text,
-is to enable detection of partial matches: if there are metrical errors in the
-verse, but some lines are in some metre, then that metre could still be
-recognized.)
+Notes:
 
-Similarly, the point of returning a list of results is to cover the case where
+1. The reason for using `verse_lines` as input, rather than a string that is a
+single blob of text, is to enable detection of partial matches: if there are
+metrical errors in the verse, but some lines are in some metre, then that metre
+could still be recognized.
+
+(TODO: Do this automatically even when the line breaks aren't explicitly or
+correctly given, breaking at, say, likely points near half or fourths of the
+verse. Or even try all points, if computationally feasible.)
+
+2. Similarly, the point of returning a list of results is to cover the case where
 there might be different results, say different lines in different metres.
-(This has so far been seen only with the well-known upajāti etc. mixtures.)
 
 --------------------------------------------------------------------------------
 
@@ -47,22 +58,23 @@ Code organization
 
 Covered by handle_input.py and its dependencies.
 
-Detecting the transliteration format of the input, transliterating the input to
-SLP1 (the encoding we use internally), and removing junk characters.
-
-Also at a similar level are the functions in handle_input.py: they take care of
-input, transliteration, removing things that are not part of the verse, and
-finally giving the actual verse in SLP1 format.
+Detecting the transliteration format of the input, removing junk characters that
+are not part of the verse, and transliterating the input to SLP1 (the encoding
+we use internally).
 
 ### Step 1 [Scan]
 
 Determining the pattern of gurus and laghus.
 
-The functions in sscan.py take this cleaned-up verse, identify laghus-and-gurus
-in it, and match it with the `known_metres` (failing that, `known_patterns` on
-each line) from metrical_data.py.
+The functions in scan.py take this cleaned-up verse, and convert it to a pattern
+of laghus and gurus.
+
+    * A "pattern" means a sequence over the alphabet {'L', 'G'}.
+
 
 ### Step 2 [Identify]
+
+Match this pattern with known metres, or failing that, known patterns for each line.
 
 The code and data are organized as follows.
 
@@ -102,6 +114,10 @@ At the lowest level are the functions / data structures in metrical_data.py.
             -- whole verse,
             -- each half (if verse is 4 lines),
             -- each line.
-        4. [Maybe] Look for substrings, find closest match, etc.?
+        4. [TODO/Maybe] Look for substrings, find closest match, etc.?
            Would have to restrict to the popular metres on the web version.
 
+### Step 3. [Display]
+
+Display the information contained in MatchResult, along with debugging output
+from the previous steps.

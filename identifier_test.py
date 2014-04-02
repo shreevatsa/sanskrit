@@ -14,6 +14,7 @@ import simple_identifier
 
 
 class BadInput(unittest.TestCase):
+
   def __init__(self, *args, **kwargs):
     super(BadInput, self).__init__(*args, **kwargs)
     self.identifier = simple_identifier.SimpleIdentifier()
@@ -30,6 +31,7 @@ class BadInput(unittest.TestCase):
 
 
 class KnownValues(unittest.TestCase):
+
   def __init__(self, *args, **kwargs):
     super(KnownValues, self).__init__(*args, **kwargs)
     self.identifier = simple_identifier.SimpleIdentifier()
