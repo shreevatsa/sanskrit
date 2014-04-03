@@ -21,7 +21,7 @@ Given a verse,
     patterns, and some best-guess metre is output.
 
     3. [Display] The result of the match (perfect/partial match, known errors)
-    is displayed.
+    is displayed, along with (TODO) information about the metre.
 
 --------------------------------------------------------------------------------
 
@@ -120,4 +120,4 @@ At the lowest level are the functions / data structures in metrical_data.py.
 ### Step 3. [Display]
 
 Display the information contained in MatchResult, along with debugging output
-from the previous steps.
+from the previous steps. TODO: Also, information about the metre.

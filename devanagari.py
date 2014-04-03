@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Utility for normalising Devanagari module.
+"""Utilities for normalizing Devanāgari.
 
-The wrinkle here is that Unicode Devanāgari stores 'ki' as 'ka+vowel sign i' and
-'k' as 'ka + virāma' etc.
+The issue is that Unicode Devanāgari includes the "implicit a": for instance it
+represents 'ki' as 'ka + vowel sign i' and 'k' as 'ka + virāma'. This requires
+special handling of vowel signs, and also special handling when the vowel is a.
+So for internal work, we "normalize" all Devanāgari text to a form we call
+"Mangled Devanāgari", wherein all (consonant + vowel sign) combinations are
+represented internally as (consonant + virāma + vowel) [not vowel sign], even
+when the vowel is 'a'.
 """
-
 
 from __future__ import absolute_import
 from __future__ import division
@@ -15,55 +19,49 @@ import logging
 import re
 
 
-def A():
-  return 'अ'
-
-
-def NonAVowels():
-  return 'आइईउऊऋॠऌॡएऐओऔ'
-
-
-def VowelSigns():
-  return ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ']
-
-
-def Virama():
-  return '्'
-
-
-def Consonants():
-  return 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'
+_CONSONANTS = 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'
+_CONSONANT_RE = '[%s]' % _CONSONANTS
+_VOWEL_A = 'अ'
+_VOWELS_NON_A = 'आइईउऊऋॠऌॡएऐओऔ'
+_VOWEL_SIGNS = ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ']
+_VOWEL_SIGNS_STR = ''.join(_VOWEL_SIGNS)
+_VOWEL_SIGNS_RE = '[%s]' % _VOWEL_SIGNS_STR
+_ANUSVARA_VISARGA = 'ंः'
+_VIRAMA = '्'
 
 
 def Alphabet():
-  return list(A() + NonAVowels() + 'ंः') + [s + Virama() for s in Consonants()]
+  return list(_VOWEL_A + _VOWELS_NON_A +
+              _ANUSVARA_VISARGA) + [s + _VIRAMA for s in _CONSONANTS]
 
 
 def Mangle(text):
-  """Normalises text in Devanāgari."""
+  """Normalize standard Devanāgari to Mangled Devanāgari."""
+  # TODO(shreevatsa): Shouldn't this be in the transliteration layer?
   text = re.sub('ळ', 'ल', text)
   orig_text = text
-  consonant = '[' + Consonants() + ']'
-  vowel_signs = ''.join(VowelSigns())
-  vowels = NonAVowels()
-  signs_to_vowels = dict(zip(vowel_signs, vowels))
-  virama = Virama()
+
+  signs_to_vowels = dict(zip(_VOWEL_SIGNS, _VOWELS_NON_A))
+  # TODO(shreevatsa): Remove this assert; enough confidence
+  assert signs_to_vowels == dict(zip(_VOWEL_SIGNS_STR, _VOWELS_NON_A))
 
   # consonant + vowel sign -> consonant + virāma + vowel
   def Replacer(match):
-    return match.group(1) + virama + signs_to_vowels[match.group(2)]
-  text = re.sub('(' + consonant + ')([' + vowel_signs + '])', Replacer, text)
+    return match.group(1) + _VIRAMA + signs_to_vowels[match.group(2)]
+  text = re.sub('(%s)([%s])' % (_CONSONANT_RE, _VOWEL_SIGNS_STR),
+                Replacer,
+                text)
   # Check that no more vowel signs exist
-  if re.search(vowel_signs, text):
-    logging.error('Error in Devanāgari text: Stray vowel signs.')
-    return None
+  if re.search(_VOWEL_SIGNS_RE, text):
+    logging.error('Error in Devanāgari text %s: Stray vowel signs.', orig_text)
 
-  # consonant + [not virama] -> consonant + virama + 'a'
-  text = re.sub('(%s)(?!%s)' % (consonant, virama),
-                r'\g<1>%s%s' % (virama, A()), text)
-  # Check that no more consonants exist that are not followed by space
-  for c in re.finditer(consonant, text):
-    assert text[c.start() + 1] == virama, (text, c.start())
+  # consonant + [not virāma] -> consonant + virāma + 'a'
+  text = re.sub('(%s)(?!%s)' % (_CONSONANT_RE, _VIRAMA),
+                r'\g<1>%s%s' % (_VIRAMA, _VOWEL_A),
+                text)
+  # Check that no more consonants exist that are not followed by virāma
+  for c in re.finditer(_CONSONANT_RE, text):
+    assert text[c.start() + 1] == _VIRAMA, (text, c.start())
 
   assert orig_text == UnMangle(text), (orig_text, text, UnMangle(text))
   logging.debug('Mangled to: %s', text)
@@ -71,14 +69,12 @@ def Mangle(text):
 
 
 def UnMangle(text):
-  """Converts normalized Devanagari to standard Devanagari."""
+  """Converts normalized (Mangled) Devanāgari to standard Devanāgari."""
   # consonant + virāma + vowel -> consonant + vowel sign
-  consonant = '[' + Consonants() + ']'
-  vowels = A() + NonAVowels()
-  vowel_signs = [''] + VowelSigns()
-  vowels_to_signs = dict(zip(vowels, vowel_signs))
-  def Replacer(match):
-    return match.group(1) + vowels_to_signs[match.group(2)]
-  text = re.sub('(' + consonant + ')' + Virama() + '([' + vowels + '])',
-                Replacer, text)
+  vowels = _VOWEL_A + _VOWELS_NON_A
+  vowel_re = '[%s]' % vowels
+  vowels_to_signs = dict(zip(vowels, [''] + _VOWEL_SIGNS))
+  text = re.sub('(%s)%s([%s])' % (_CONSONANT_RE, _VIRAMA, vowel_re),
+                lambda match: match.group(1) + vowels_to_signs[match.group(2)],
+                text)
   return text
