@@ -11,7 +11,7 @@ import re
 import unicodedata
 
 import slp1
-import transliteration_data
+import transliterate
 
 
 def RemoveHTML(text):
@@ -40,7 +40,7 @@ class InputHandler(object):
     """Transliterates text to SLP1, removing all other characters."""
     orig_text = text
     ignore = r""" 0123456789'".\/$&%{}|-!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-    (text, rejects) = transliteration_data.DetectAndTransliterate(text, ignore)
+    (text, rejects) = transliterate.DetectAndTransliterate(text, ignore)
 
     recognized_text = ''
     for c in orig_text:
@@ -95,7 +95,7 @@ class InputHandler(object):
 
     self.clean_output.append('Input read as:')
     for (number, line) in enumerate(cleaned_lines):
-      transliterated = transliteration_data.TransliterateForOutput(line)
+      transliterated = transliterate.TransliterateForOutput(line)
       self.clean_output.append('Line %d: %s' % (number + 1, transliterated))
     self.clean_output.append('')
     return cleaned_lines
