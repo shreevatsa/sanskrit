@@ -11,7 +11,7 @@ import re
 
 import devanagari
 import slp1
-import transliterate
+import transliterator
 
 
 def AlphabetToSLP1(alphabet):
@@ -34,7 +34,7 @@ HK_ALPHABET = (list('aAiIuUR') + ['RR', 'lR', 'lRR', 'e', 'ai', 'o', 'au'] +
 
 
 def HKToSLP1StateMachine():
-  return transliterate.MakeStateMachine(AlphabetToSLP1(HK_ALPHABET))
+  return transliterator.MakeStateMachine(AlphabetToSLP1(HK_ALPHABET))
 
 
 IAST_ALPHABET_LOWER = (list('aāiīuūṛṝḷḹe') + ['ai', 'o', 'au', 'ṃ', 'ḥ'] +
@@ -58,11 +58,11 @@ def IASTToSLP1StateMachine():
   lower = AlphabetToSLP1(IAST_ALPHABET_LOWER)
   upper = AlphabetToSLP1(IAST_ALPHABET_UPPER)
   lower.update(upper)
-  return transliterate.MakeStateMachine(lower)
+  return transliterator.MakeStateMachine(lower)
 
 
 def SLP1ToIASTStateMachine():
-  return transliterate.MakeStateMachine(SLP1ToAlphabet(IAST_ALPHABET_LOWER))
+  return transliterator.MakeStateMachine(SLP1ToAlphabet(IAST_ALPHABET_LOWER))
 
 
 ITRANS_ALPHABET = (['a', 'aa', 'i', 'ii', 'u', 'uu', 'RRi', 'RRI',
@@ -82,16 +82,16 @@ def ITRANSToSLP1StateMachine():
                   ('~N', 'N^'), ('~n', 'JN'), ('v', 'w')]
   for (letter, alternative) in alternatives:
     table[alternative] = table[letter]
-  return transliterate.MakeStateMachine(table)
+  return transliterator.MakeStateMachine(table)
 
 
 def MangledDevanagariToSLP1StateMachine():
-  return transliterate.MakeStateMachine(AlphabetToSLP1(devanagari.Alphabet()))
+  return transliterator.MakeStateMachine(AlphabetToSLP1(devanagari.Alphabet()))
 
 
 def TransliterateDevanagari(text, ignore=None):
-  return transliterate.Transliterate(MangledDevanagariToSLP1StateMachine(),
-                                     devanagari.Mangle(text), ignore)
+  return transliterator.Transliterate(MangledDevanagariToSLP1StateMachine(),
+                                      devanagari.Mangle(text), ignore)
 
 
 def IsoToIast(text):
@@ -123,18 +123,19 @@ def DetectAndTransliterate(text, ignore=None):
   if re.search(characteristic_devanagari, text):
     return TransliterateDevanagari(text, ignore)
   if re.search(characteristic_iast, text):
-    return transliterate.Transliterate(IASTToSLP1StateMachine(), text, ignore)
+    return transliterator.Transliterate(IASTToSLP1StateMachine(), text, ignore)
   if re.search(characteristic_itrans, text):
-    return transliterate.Transliterate(ITRANSToSLP1StateMachine(), text, ignore)
-  return transliterate.Transliterate(HKToSLP1StateMachine(), text, ignore)
+    return transliterator.Transliterate(ITRANSToSLP1StateMachine(),
+                                        text, ignore)
+  return transliterator.Transliterate(HKToSLP1StateMachine(), text, ignore)
 
 
 def SLP1ToMangledDevanagariStateMachine():
-  return transliterate.MakeStateMachine(SLP1ToAlphabet(devanagari.Alphabet()))
+  return transliterator.MakeStateMachine(SLP1ToAlphabet(devanagari.Alphabet()))
 
 
 def CleanSLP1ToDevanagari(text):
-  (text, unparsed) = transliterate.Transliterate(
+  (text, unparsed) = transliterator.Transliterate(
       SLP1ToMangledDevanagariStateMachine(), text)
   assert not unparsed, (text, unparsed)
   assert isinstance(text, unicode), text
@@ -143,5 +144,5 @@ def CleanSLP1ToDevanagari(text):
 
 def TransliterateForOutput(text):
   return '%s (%s)' % (
-      transliterate.Transliterate(SLP1ToIASTStateMachine(), text)[0],
+      transliterator.Transliterate(SLP1ToIASTStateMachine(), text)[0],
       CleanSLP1ToDevanagari(text))

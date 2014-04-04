@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Transliteration.
+"""The algorithm / machine for transliteration.
 
 The simplest case of transliteration is when each character of input corresponds
 to a unique string of output. When you see 'e' output <e>, when you see 'y'
