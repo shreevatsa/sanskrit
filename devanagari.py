@@ -37,8 +37,6 @@ def Alphabet():
 
 def Mangle(text):
   """Normalize standard Devanāgari to Mangled Devanāgari."""
-  # TODO(shreevatsa): Shouldn't this be in the transliteration layer?
-  text = re.sub('ळ', 'ल', text)
   orig_text = text
 
   signs_to_vowels = dict(zip(_VOWEL_SIGNS, _VOWELS_NON_A))
