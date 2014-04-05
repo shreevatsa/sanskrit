@@ -9,6 +9,7 @@ import re
 import slp1
 
 
+# See ScanVerse: this can be replaced by functions below
 def _PatternFromLine(text):
   """Given SLP1 text, returns its metrical pattern (string of 'L's and 'G's)."""
   orig_text = text
@@ -36,9 +37,17 @@ def _PatternFromLine(text):
 def ScanVerse(lines):
   cleaned_lines = _MoveConsonants(lines)
   old = [_PatternFromLine(line) for line in cleaned_lines]
-  new = [''.join(s[1] for s in Syllables(line)) for line in cleaned_lines]
-  assert old == new, (old, new, Syllables(line))
+  new = [''.join(s[1] for s in _Syllables(line)) for line in cleaned_lines]
+  assert old == new, (old, new, _Syllables(line))
   return new
+
+
+def _MoveConsonants(verse_lines):
+  """Move initial consonants of each line to the end of the previous line."""
+  for i in xrange(1, len(verse_lines)):
+    (consonants, verse_lines[i]) = _StripInitialConsonants(verse_lines[i])
+    verse_lines[i - 1] += consonants
+  return verse_lines
 
 
 def _StripInitialConsonants(text):
@@ -50,7 +59,7 @@ def _StripInitialConsonants(text):
   return (initial, text[len(initial):])
 
 
-def Weight(syllable):
+def _Weight(syllable):
   """Whether a syllable is laghu or guru."""
   assert re.match('^%s%s*$' % (slp1.ANY_VOWEL, slp1.CONSONANT), syllable)
   if re.search(slp1.LONG_VOWEL, syllable):
@@ -60,17 +69,10 @@ def Weight(syllable):
   return 'L'
 
 
-def _MoveConsonants(verse_lines):
-  for i in xrange(1, len(verse_lines)):
-    (consonants, verse_lines[i]) = _StripInitialConsonants(verse_lines[i])
-    verse_lines[i - 1] += consonants
-  return verse_lines
-
-
-def Syllables(text):
+def _Syllables(text):
   (initial_consonants, text) = _StripInitialConsonants(text)
   syllables = re.findall(slp1.ANY_VOWEL + slp1.CONSONANT + '*', text)
-  syllables = [(s, Weight(s)) for s in syllables]
+  syllables = [(s, _Weight(s)) for s in syllables]
   if syllables:
     syllables[0] = (initial_consonants + syllables[0][0], syllables[0][1])
   return syllables
