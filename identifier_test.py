@@ -132,9 +132,9 @@ class KnownValues(unittest.TestCase):
 
   def testBadVerse(self):
     """Test a verse that has typos, and see if correct metre can be guessed."""
-    unused_verse = ['स्मराहुताशनमुर्मुरचूर्णतां दधुरिवाम्रवनस्य रजःकणाः ।',
-                    'निपातिताः परितः पथिकव्रजानुपरि ते परितेपुरतो भृशम् ॥']
-    raise self.failureException
+    verse = ['स्मराहुताशनमुर्मुरचूर्णतां दधुरिवाम्रवनस्य रजःकणाः ।',
+             'निपातिताः परितः पथिकव्रजानुपरि ते परितेपुरतो भृशम् ॥']
+    assert self.identifier.IdentifyFromLines(verse) is not None
 
 if __name__ == '__main__':
   unittest.main()
