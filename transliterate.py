@@ -144,5 +144,5 @@ def _CleanSLP1ToDevanagari(text):
 
 def TransliterateForOutput(text):
   return '%s (%s)' % (
-      transliterator.Transliterate(_SLP1_TO_IAST_STATE_MACHINE(), text)[0],
+      transliterator.Transliterate(_SLP1_TO_IAST_STATE_MACHINE, text)[0],
       _CleanSLP1ToDevanagari(text))

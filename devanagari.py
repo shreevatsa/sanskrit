@@ -72,7 +72,7 @@ def UnMangle(text):
   vowels = _VOWEL_A + _VOWELS_NON_A
   vowel_re = '[%s]' % vowels
   vowels_to_signs = dict(zip(vowels, [''] + _VOWEL_SIGNS))
-  text = re.sub('(%s)%s([%s])' % (_CONSONANT_RE, _VIRAMA, vowel_re),
+  text = re.sub('(%s)%s(%s)' % (_CONSONANT_RE, _VIRAMA, vowel_re),
                 lambda match: match.group(1) + vowels_to_signs[match.group(2)],
                 text)
   return text
