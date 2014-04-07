@@ -56,7 +56,7 @@ class Identifier(object):
     results = []
     for (i, line) in enumerate(verse):
       line_metre = 'unknown'
-      identified = self.IdentifyPattern(line)
+      identified = self._IdentifyPattern(line)
       if identified:
         results.extend(_CheckListOfResults(identified))
         line_metre = match_result.Names(identified)
@@ -72,7 +72,7 @@ class Identifier(object):
     # Nothing recognized for full verse, return results of line-by-line.
     return results
 
-  def IdentifyPattern(self, pattern):
+  def _IdentifyPattern(self, pattern):
     """Given metrical pattern (string of L's and G's), identifies metre."""
     results = self.metrical_data.known_partial_patterns.get(pattern)
     if results is not None:
