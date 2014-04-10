@@ -404,6 +404,15 @@ def AddKarambajati():
   #                'L G L G G L L G L G L G'])
 
 
+_curated_data = [
+    # viṣama-pādānta-laghu is VERY common, so leave last syllable free.
+    # Bhartṛhari
+    ('Upajāti', 'sama', 'regex', '. G L G G L L G L G .'),
+    # Bhartṛhari
+    ('Rathoddhatā', 'sama', 'pattern', 'G L G L L L G L G L G'),
+    ]
+
+
 def InitializeData():
   """Add all known metres to the data structures."""
   AddAnustup()
@@ -414,14 +423,16 @@ def InitializeData():
   AddAryaRegex()
   AddGitiExamples()
 
-  # Bhartṛhari
-  # viṣama-pādānta-laghu is VERY common, so leave last syllable free.
-  AddSamavrttaRegex('Upajāti', '. G L G G L L G L G .')
-
   AddKarambajati()
 
-  # Bhartṛhari
-  AddSamavrttaPattern('Rathoddhatā', 'G L G L L L G L G L G')
+  for (name, is_sama, need_regex, description) in _curated_data:
+    assert is_sama in ['sama', 'viṣama']
+    assert need_regex in ['regex', 'pattern']
+    if is_sama == 'sama' and need_regex == 'regex':
+      AddSamavrttaRegex(name, description)
+    elif is_sama == 'sama' and need_regex == 'pattern':
+      AddSamavrttaPattern(name, description)
+
   # Bhāravi
   AddSamavrttaPattern('Svāgatā', 'G L G L L L G L L G G')
   # Bhartṛhari
