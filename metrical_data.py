@@ -534,4 +534,4 @@ def InitializeData():
     elif samatva == 'viṣama' and need_regex == 'pattern':
       _AddVishamavrttaPattern(name, description)
     else:
-      assert False, (name, 'hello')
+      assert False, name
