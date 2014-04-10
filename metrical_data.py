@@ -407,7 +407,6 @@ def _AddKarambajati():
 
 
 _curated_data = [
-    # viṣama-pādānta-laghu is VERY common, so leave last syllable free.
     # Bhartṛhari
     ('Upajāti', 'sama', 'regex', '. G L G G L L G L G .'),
     # Bhartṛhari
@@ -422,9 +421,6 @@ _curated_data = [
     ('Śālinī', 'sama', 'pattern', 'G G G G — G L G G L G G'),
     # Bhāravi
     ('Praharṣiṇī', 'sama', 'pattern', 'G G G L L L L G L G L G G'),
-    # ('Bhujañgaprayātam', 'sama', 'pattern', 'L G G L G G L G G L G G'),
-    # ('Toṭakam', 'sama', 'pattern', 'L L G L L G L L G L L G'),
-    # ('Sragviṇī', 'sama', 'pattern', 'G L G G L G G L G G L G'),
     # Bhāravi
     ('Pramitākṣarā', 'sama', 'pattern', 'L L G L G L L L G L L G'),
     # Bhartṛhari
@@ -432,8 +428,6 @@ _curated_data = [
     ('Vasantatilakā', 'sama', 'pattern', 'G G L G L L L G L L G L G G'),
     # Bhartṛhari
     ('Mālinī', 'sama', 'pattern', 'L L L L L L G G — G L G G L G G'),
-    # ('Cārucāmaram', 'sama', 'pattern', 'G L G L G L G L G L G L G L G'),
-    # ('Pañcacāmaram', 'sama', 'pattern', 'L G L G L G L G L G L G L G L G'),
     # Meghadūta
     ('Mandākrāntā', 'sama', 'pattern', 'G G G G — L L L L L G — G L G G L G G'),
     # Bhartṛhari
@@ -442,10 +436,6 @@ _curated_data = [
     ('Hariṇī', 'sama', 'pattern', 'L L L L L G — G G G G — L G L L G L G'),
     # Bhartṛhari
     ('Pṛthvī', 'sama', 'pattern', 'L G L L L G L G—L L L G L G G L G'),
-    # ('Kokilalam (Nardaṭakam)', 'sama', 'pattern',
-    #              'L L L L G L G L L L G — L L G L L G'),
-    # ('Mallikāmālā (Matta-kokilā)', 'sama', 'pattern',
-    #              'G L G L L G L G L L G L G L L G L G'),
     # Bhartṛhari
     ('Śārdūlavikrīḍitam', 'sama', 'pattern',
      'G G G L L G L G L L L G — G G L G G L G'),
@@ -469,44 +459,47 @@ _curated_data = [
                                      'L L L L L  G  L  G  L G',
                                      ' G  L L L L L L  G  L L G',
                                      'L L  G  L  G  L L L  G  L G L G']),
-    # ('Aśvadhāṭī (Sitastavaka?)', 'sama', 'pattern',
-    #              'G G L G L L L – G G L G L L L – G G L G L L L G'),
-    # ('Śivatāṇḍava', 'sama', 'pattern',
-    #              'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G'),
     # Bhartṛhari
     ('Dodhakam', 'sama', 'pattern', 'G L L G L L G L L G G'),
-    # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
-    # ('Mālatī', 'sama', 'pattern', 'L L L L G L L G L G L G'),
-    # ('Madīrā', 'sama', 'pattern',
-    #                     'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G'),
     # Bhāravi
     ('Matta-mayūram', 'sama', 'pattern', 'G G G G – G L L G G – L L G G'),
-    # ('Vidyunmālā', 'sama', 'pattern', 'G G G G G G G G'),
-
     # Bhāravi
     ('Kṣamā (Candrikā, Utpalinī)', 'sama', 'pattern', 'LLLLLLGGLGGLG'),
-
     # Bhāravi
     ('Prabhā (Mandākinī)', 'sama', 'pattern', 'LLLLLLGLGGLG'),
-
     # Bhāravi
     ('Jaladharamālā', 'sama', 'pattern', 'GGGGLLLLGGGG'),
     # Bhāravi
     ('Jaloddhatagatiḥ', 'sama', 'pattern', 'LGLLLGLGLLLG'),
-
     # Bhāravi
     ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)', 'sama', 'pattern',
      'G G G G L L L L L L G G G G'),
-
     # Bhāravi
     ('Vaṃśapatrapatitam (Vaṃśadala)', 'sama', 'pattern',
      'G L L G L G L L L G L L L L L L G'),
-
     # Māgha
     ('Rucirā (Prabhāvatī)', 'sama', 'pattern', 'L G L G L L L L G L G L G'),
-
     # Raghuvamśa (hard to believe, but there it is)
     ('Nārācam', 'sama', 'pattern', 'L L L L L L G L G G L G G L G G L G'),
+
+    # ('Bhujañgaprayātam', 'sama', 'pattern', 'L G G L G G L G G L G G'),
+    # ('Toṭakam', 'sama', 'pattern', 'L L G L L G L L G L L G'),
+    # ('Sragviṇī', 'sama', 'pattern', 'G L G G L G G L G G L G'),
+    # ('Cārucāmaram', 'sama', 'pattern', 'G L G L G L G L G L G L G L G'),
+    # ('Pañcacāmaram', 'sama', 'pattern', 'L G L G L G L G L G L G L G L G'),
+    # ('Kokilalam (Nardaṭakam)', 'sama', 'pattern',
+    #              'L L L L G L G L L L G — L L G L L G'),
+    # ('Mallikāmālā (Matta-kokilā)', 'sama', 'pattern',
+    #              'G L G L L G L G L L G L G L L G L G'),
+    # ('Aśvadhāṭī (Sitastavaka?)', 'sama', 'pattern',
+    #              'G G L G L L L – G G L G L L L – G G L G L L L G'),
+    # ('Śivatāṇḍava', 'sama', 'pattern',
+    #              'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G'),
+    # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
+    # ('Mālatī', 'sama', 'pattern', 'L L L L G L L G L G L G'),
+    # ('Madīrā', 'sama', 'pattern',
+    #                     'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G'),
+    # ('Vidyunmālā', 'sama', 'pattern', 'G G G G G G G G'),
     ]
 
 
@@ -523,6 +516,11 @@ def InitializeData():
   _AddKarambajati()
 
   for (name, samatva, need_regex, description) in _curated_data:
+    if isinstance(description, list):
+      assert (len(description) == 4 and samatva == 'viṣama' or
+              len(description) == 2 and samatva == 'ardhasama')
+    else:
+      assert samatva == 'sama'
     assert samatva in ['sama', 'ardhasama', 'viṣama']
     assert need_regex in ['regex', 'pattern']
     if samatva == 'sama' and need_regex == 'regex':
