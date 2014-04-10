@@ -519,10 +519,17 @@ def InitializeData():
     if isinstance(description, list):
       assert (len(description) == 4 and samatva == 'viṣama' or
               len(description) == 2 and samatva == 'ardhasama')
+      assert need_regex == 'pattern'
     else:
       assert samatva == 'sama'
+      if re.match(r'^[LG]*$', _RemoveChars(description, ' —–')):
+        assert need_regex == 'pattern'
+      else:
+        assert need_regex == 'regex'
+
     assert samatva in ['sama', 'ardhasama', 'viṣama']
     assert need_regex in ['regex', 'pattern']
+
     if samatva == 'sama' and need_regex == 'regex':
       _AddSamavrttaRegex(name, description)
     elif samatva == 'sama' and need_regex == 'pattern':
