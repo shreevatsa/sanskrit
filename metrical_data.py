@@ -270,12 +270,12 @@ def _AddAryaExamples():
 
 
 def _PatternsOfLength(n):
-  if n in patterns_memo:
-    return patterns_memo[n]
-  patterns_memo[n] = [p + 'L' for p in _PatternsOfLength(n - 1)]
-  patterns_memo[n] += [p + 'G' for p in _PatternsOfLength(n - 2)]
-  return patterns_memo[n]
-patterns_memo = {0: [''], 1: ['L']}
+  if n in _patterns_memo:
+    return _patterns_memo[n]
+  _patterns_memo[n] = [p + 'L' for p in _PatternsOfLength(n - 1)]
+  _patterns_memo[n] += [p + 'G' for p in _PatternsOfLength(n - 2)]
+  return _patterns_memo[n]
+_patterns_memo = {0: [''], 1: ['L']}
 
 
 def _AddAryaRegex():
@@ -406,100 +406,97 @@ def _AddKarambajati():
   #                'L G L G G L L G L G L G'])
 
 
-_curated_data = [
+_curated_vrtta_data = [
     # Bhartṛhari
-    ('Upajāti', 'sama', 'regex', '. G L G G L L G L G .'),
+    ('Upajāti', '. G L G G L L G L G .'),
     # Bhartṛhari
-    ('Rathoddhatā', 'sama', 'pattern', 'G L G L L L G L G L G'),
+    ('Rathoddhatā', 'G L G L L L G L G L G'),
     # Bhāravi
-    ('Svāgatā', 'sama', 'pattern', 'G L G L L L G L L G G'),
+    ('Svāgatā', 'G L G L L L G L L G G'),
     # Bhartṛhari
-    ('Drutavilambitam', 'sama', 'pattern', 'L L L G L L G L L G L G'),
+    ('Drutavilambitam', 'L L L G L L G L L G L G'),
     # Māgha
-    ('Mañjubhāṣiṇī', 'sama', 'pattern', 'L L G L G L L L G L G L G'),
+    ('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G'),
     # Bhartṛhari
-    ('Śālinī', 'sama', 'pattern', 'G G G G — G L G G L G G'),
+    ('Śālinī', 'G G G G — G L G G L G G'),
     # Bhāravi
-    ('Praharṣiṇī', 'sama', 'pattern', 'G G G L L L L G L G L G G'),
+    ('Praharṣiṇī', 'G G G L L L L G L G L G G'),
     # Bhāravi
-    ('Pramitākṣarā', 'sama', 'pattern', 'L L G L G L L L G L L G'),
+    ('Pramitākṣarā', 'L L G L G L L L G L L G'),
     # Bhartṛhari
     # TODO(shreevatsa): pādānta-lagu whitelist: +Vasantatilakā, -Śālinī
-    ('Vasantatilakā', 'sama', 'pattern', 'G G L G L L L G L L G L G G'),
+    ('Vasantatilakā', 'G G L G L L L G L L G L G G'),
     # Bhartṛhari
-    ('Mālinī', 'sama', 'pattern', 'L L L L L L G G — G L G G L G G'),
+    ('Mālinī', 'L L L L L L G G — G L G G L G G'),
     # Meghadūta
-    ('Mandākrāntā', 'sama', 'pattern', 'G G G G — L L L L L G — G L G G L G G'),
+    ('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G'),
     # Bhartṛhari
-    ('Śikhariṇī', 'sama', 'pattern', 'L G G G G G – L L L L L G G — L L L G'),
+    ('Śikhariṇī', 'L G G G G G – L L L L L G G — L L L G'),
     # Bhartṛhari
-    ('Hariṇī', 'sama', 'pattern', 'L L L L L G — G G G G — L G L L G L G'),
+    ('Hariṇī', 'L L L L L G — G G G G — L G L L G L G'),
     # Bhartṛhari
-    ('Pṛthvī', 'sama', 'pattern', 'L G L L L G L G—L L L G L G G L G'),
+    ('Pṛthvī', 'L G L L L G L G—L L L G L G G L G'),
     # Bhartṛhari
-    ('Śārdūlavikrīḍitam', 'sama', 'pattern',
+    ('Śārdūlavikrīḍitam',
      'G G G L L G L G L L L G — G G L G G L G'),
     # Bhartṛhari
-    ('Sragdharā', 'sama', 'pattern',
+    ('Sragdharā',
      'G G G G L G G — L L L L L L G — G L G G L G G'),
     # Bhartṛhari
-    ('Viyoginī', 'ardhasama', 'pattern', ['L L G   L L G L G L G',
-                                          'L L G G L L G L G L G']),
+    ('Viyoginī', ['L L G   L L G L G L G', 'L L G G L L G L G L G']),
     # Bhāravi
-    ('Aupacchandasikam (Vasantamālikā) (Upodgatā)', 'ardhasama', 'pattern',
+    ('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
      ['L L G   L L G L G L G G', 'L L G G L L G L G L G G']),
     # Bhāravi
-    ('Aparavaktrā', 'ardhasama', 'pattern', ['L L L L L L G — L G L G',
-                                             'L L L L G — L L G L G L G']),
+    ('Aparavaktrā', ['L L L L L L G — L G L G', 'L L L L G — L L G L G L G']),
     # Bhartṛhari
-    ('Puṣpitāgrā', 'ardhasama', 'pattern', ['L L L L L L G L G L G G',
-                                            'L L L L G L L G L G L G G']),
+    ('Puṣpitāgrā', ['L L L L L L G L G L G G', 'L L L L G L L G L G L G G']),
     # Bhāravi
-    ('Udgatā', 'viṣama', 'pattern', ['L L  G  L  G  L L L G L',
-                                     'L L L L L  G  L  G  L G',
-                                     ' G  L L L L L L  G  L L G',
-                                     'L L  G  L  G  L L L  G  L G L G']),
+    ('Udgatā', ['L L  G  L  G  L L L G L',
+                'L L L L L  G  L  G  L G',
+                ' G  L L L L L L  G  L L G',
+                'L L  G  L  G  L L L  G  L G L G']),
     # Bhartṛhari
-    ('Dodhakam', 'sama', 'pattern', 'G L L G L L G L L G G'),
+    ('Dodhakam', 'G L L G L L G L L G G'),
     # Bhāravi
-    ('Matta-mayūram', 'sama', 'pattern', 'G G G G – G L L G G – L L G G'),
+    ('Matta-mayūram', 'G G G G – G L L G G – L L G G'),
     # Bhāravi
-    ('Kṣamā (Candrikā, Utpalinī)', 'sama', 'pattern', 'LLLLLLGGLGGLG'),
+    ('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG'),
     # Bhāravi
-    ('Prabhā (Mandākinī)', 'sama', 'pattern', 'LLLLLLGLGGLG'),
+    ('Prabhā (Mandākinī)', 'LLLLLLGLGGLG'),
     # Bhāravi
-    ('Jaladharamālā', 'sama', 'pattern', 'GGGGLLLLGGGG'),
+    ('Jaladharamālā', 'GGGGLLLLGGGG'),
     # Bhāravi
-    ('Jaloddhatagatiḥ', 'sama', 'pattern', 'LGLLLGLGLLLG'),
+    ('Jaloddhatagatiḥ', 'LGLLLGLGLLLG'),
     # Bhāravi
-    ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)', 'sama', 'pattern',
+    ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)',
      'G G G G L L L L L L G G G G'),
     # Bhāravi
-    ('Vaṃśapatrapatitam (Vaṃśadala)', 'sama', 'pattern',
+    ('Vaṃśapatrapatitam (Vaṃśadala)',
      'G L L G L G L L L G L L L L L L G'),
     # Māgha
-    ('Rucirā (Prabhāvatī)', 'sama', 'pattern', 'L G L G L L L L G L G L G'),
+    ('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G'),
     # Raghuvamśa (hard to believe, but there it is)
-    ('Nārācam', 'sama', 'pattern', 'L L L L L L G L G G L G G L G G L G'),
+    ('Nārācam', 'L L L L L L G L G G L G G L G G L G'),
 
-    # ('Bhujañgaprayātam', 'sama', 'pattern', 'L G G L G G L G G L G G'),
-    # ('Toṭakam', 'sama', 'pattern', 'L L G L L G L L G L L G'),
-    # ('Sragviṇī', 'sama', 'pattern', 'G L G G L G G L G G L G'),
-    # ('Cārucāmaram', 'sama', 'pattern', 'G L G L G L G L G L G L G L G'),
-    # ('Pañcacāmaram', 'sama', 'pattern', 'L G L G L G L G L G L G L G L G'),
-    # ('Kokilalam (Nardaṭakam)', 'sama', 'pattern',
+    # ('Bhujañgaprayātam', 'L G G L G G L G G L G G'),
+    # ('Toṭakam', 'L L G L L G L L G L L G'),
+    # ('Sragviṇī', 'G L G G L G G L G G L G'),
+    # ('Cārucāmaram', 'G L G L G L G L G L G L G L G'),
+    # ('Pañcacāmaram', 'L G L G L G L G L G L G L G L G'),
+    # ('Kokilalam (Nardaṭakam)',
     #              'L L L L G L G L L L G — L L G L L G'),
-    # ('Mallikāmālā (Matta-kokilā)', 'sama', 'pattern',
+    # ('Mallikāmālā (Matta-kokilā)',
     #              'G L G L L G L G L L G L G L L G L G'),
-    # ('Aśvadhāṭī (Sitastavaka?)', 'sama', 'pattern',
+    # ('Aśvadhāṭī (Sitastavaka?)',
     #              'G G L G L L L – G G L G L L L – G G L G L L L G'),
-    # ('Śivatāṇḍava', 'sama', 'pattern',
+    # ('Śivatāṇḍava',
     #              'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G'),
     # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
-    # ('Mālatī', 'sama', 'pattern', 'L L L L G L L G L G L G'),
-    # ('Madīrā', 'sama', 'pattern',
+    # ('Mālatī', 'L L L L G L L G L G L G'),
+    # ('Madīrā',
     #                     'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G'),
-    # ('Vidyunmālā', 'sama', 'pattern', 'G G G G G G G G'),
+    # ('Vidyunmālā', 'G G G G G G G G'),
     ]
 
 
@@ -515,17 +512,19 @@ def InitializeData():
 
   _AddKarambajati()
 
-  for (name, samatva, need_regex, description) in _curated_data:
+  for (name, description) in _curated_vrtta_data:
+    samatva = None
+    need_regex = None
     if isinstance(description, list):
-      assert (len(description) == 4 and samatva == 'viṣama' or
-              len(description) == 2 and samatva == 'ardhasama')
-      assert need_regex == 'pattern'
+      assert len(description) in [2, 4]
+      samatva = 'ardhasama' if len(description) == 2 else 'viṣama'
+      need_regex = 'pattern'
     else:
-      assert samatva == 'sama'
+      samatva = 'sama'
       if re.match(r'^[LG]*$', _RemoveChars(description, ' —–')):
-        assert need_regex == 'pattern'
+        need_regex = 'pattern'
       else:
-        assert need_regex == 'regex'
+        need_regex = 'regex'
 
     assert samatva in ['sama', 'ardhasama', 'viṣama']
     assert need_regex in ['regex', 'pattern']
