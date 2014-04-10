@@ -57,6 +57,7 @@ def _IASTToSLP1StateMachine():
   upper = _AlphabetToSLP1(_IAST_ALPHABET_UPPER)
   lower.update(upper)
   return transliterator.MakeStateMachine(lower)
+_IAST_TO_SLP1_STATE_MACHINE = _IASTToSLP1StateMachine()
 
 
 _SLP1_TO_IAST_STATE_MACHINE = transliterator.MakeStateMachine(
@@ -81,6 +82,7 @@ def _ITRANSToSLP1StateMachine():
   for (letter, alternative) in alternatives:
     table[alternative] = table[letter]
   return transliterator.MakeStateMachine(table)
+_ITRANS_TO_SLP1_STATE_MACHINE = _ITRANSToSLP1StateMachine()
 
 
 _MANGLED_DEVANAGARI_TO_SLP1_STATE_MACHINE = transliterator.MakeStateMachine(
@@ -123,9 +125,10 @@ def DetectAndTransliterate(text, ignore=None):
   if re.search(characteristic_devanagari, text):
     return _TransliterateDevanagari(text, ignore)
   if re.search(characteristic_iast, text):
-    return transliterator.Transliterate(_IASTToSLP1StateMachine(), text, ignore)
+    return transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE,
+                                        text, ignore)
   if re.search(characteristic_itrans, text):
-    return transliterator.Transliterate(_ITRANSToSLP1StateMachine(),
+    return transliterator.Transliterate(_ITRANS_TO_SLP1_STATE_MACHINE,
                                         text, ignore)
   return transliterator.Transliterate(_HK_TO_SLP1_STATE_MACHINE, text, ignore)
 
