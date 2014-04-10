@@ -7,7 +7,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import itertools
-# import logging
 import re
 
 import match_result
@@ -37,13 +36,13 @@ def _RemoveChars(input_string, chars):
   return input_string
 
 
-def CleanUpPattern(pattern):
+def _CleanUpPattern(pattern):
   pattern = _RemoveChars(pattern, ' —–')
   assert re.match(r'^[LG]*$', pattern), pattern
   return pattern
 
 
-def CleanUpSimpleRegex(regex):
+def _CleanUpSimpleRegex(regex):
   regex = _RemoveChars(regex, ' —–')
   assert re.match(r'^[LG.]*$', regex), regex
   return regex
@@ -51,7 +50,7 @@ def CleanUpSimpleRegex(regex):
 
 def AddSamavrttaPattern(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
-  clean = CleanUpPattern(each_line_pattern)
+  clean = _CleanUpPattern(each_line_pattern)
   assert re.match(r'^[LG]*G$', clean), (each_line_pattern, metre_name)
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
   for (a, b, c, d) in itertools.product(patterns, repeat=4):
@@ -77,9 +76,9 @@ def AddSamavrttaPattern(metre_name, each_line_pattern):
 
 def AddArdhasamavrttaPattern(metre_name, odd_line_pattern, even_line_pattern):
   """Given an ardha-sama-vṛtta metres' pattern, add it."""
-  clean_odd = CleanUpPattern(odd_line_pattern)
+  clean_odd = _CleanUpPattern(odd_line_pattern)
   assert re.match(r'^[LG]*G$', clean_odd)
-  clean_even = CleanUpPattern(even_line_pattern)
+  clean_even = _CleanUpPattern(even_line_pattern)
   assert re.match(r'^[LG]*G$', clean_even)
   patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
   patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
@@ -109,7 +108,7 @@ def AddArdhasamavrttaPattern(metre_name, odd_line_pattern, even_line_pattern):
 def AddVishamavrttaPattern(metre_name, line_patterns):
   """Given the four lines of a viṣama-vṛtta, add the metre."""
   assert len(line_patterns) == 4
-  line_patterns = [CleanUpPattern(p) for p in line_patterns]
+  line_patterns = [_CleanUpPattern(p) for p in line_patterns]
   for p in line_patterns:
     assert re.match(r'^[LG]*$', p)
   (pa, pb, pc, pd) = line_patterns
@@ -138,7 +137,7 @@ def AddMetreRegex(metre_name, line_regexes, issues=None, simple=True):
   """Given regexes for the four lines of a metre, add it."""
   assert len(line_regexes) == 4, (metre_name, line_regexes)
   if simple:
-    line_regexes = [CleanUpSimpleRegex(s) for s in line_regexes]
+    line_regexes = [_CleanUpSimpleRegex(s) for s in line_regexes]
   full_verse_regex = ''.join('(%s)' % s for s in line_regexes)
   match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL,
                                    issues)
@@ -147,7 +146,7 @@ def AddMetreRegex(metre_name, line_regexes, issues=None, simple=True):
 
 def AddSamavrttaRegex(metre_name, line_regex):
   """Add a sama-vṛtta's regex (full, half, pāda). No variants."""
-  line_regex = CleanUpSimpleRegex(line_regex)
+  line_regex = _CleanUpSimpleRegex(line_regex)
   full_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 4)
   match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL, [])
   known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), match))
