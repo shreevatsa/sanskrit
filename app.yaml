@@ -1,5 +1,5 @@
 application: sanskritmetres
-version: 1d
+version: 1e
 runtime: python27
 api_version: 1
 threadsafe: yes
