@@ -32,3 +32,17 @@ Sun Apr 13 18:31:40 IST 2014
     try that first.
       
 
+c575b401f08a07394701411c14bccd51f621dfb1
+Wed Apr 16 2014
+
+    Done 3. The abstraction of
+        input --(read)--> slp1 --(scan)--> pattern --(identify)--> metres
+    has been really helpful in keeping the code clean.
+
+    The last "display" step can be one of "aligning" a potential metre to the
+    input.
+
+    So perhaps we don't need all the "issues" in MatchResult. All we need to
+    know is whether we got a perfect match for the whole verse, or not. If not,
+    then the aligning step will handle the mismatch.
+
