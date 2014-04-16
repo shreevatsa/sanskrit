@@ -43,63 +43,39 @@ class Identifier(object):
 
     full_verse = ''.join(pattern_lines)
     assert _IsPattern(full_verse)
-    (global_results,
-     self.global_info) = self._IdentifyMetreFromFullPattern(full_verse)
+    (global_results, self.global_info) = self._MetresAndInfo(full_verse,
+                                                             try_partial=False)
+    self.global_info = [self.global_info]
 
-    (self.lines_info,
-     lines_results) = self._IdentifyMetresFromLinePatterns(pattern_lines)
+    lines_results = []
+    for (i, line) in enumerate(pattern_lines):
+      (results, info) = self._MetresAndInfo(line)
+      self.lines_info.append('  Line %d: %s' % (i + 1, info))
+      lines_results = _MergeResults([lines_results, results])
 
     halves_results = []
     quarters_results = []
     if not global_results:
       for (ab, cd) in _SplitHalves(full_verse):
-        (ab_results, ab_info) = self._IdentifyMetresFromPattern(ab)
-        (cd_results, cd_info) = self._IdentifyMetresFromPattern(cd)
+        (ab_results, ab_info) = self._MetresAndInfo(ab)
+        (cd_results, cd_info) = self._MetresAndInfo(cd)
         self.halves_info.append('  Half 1: %s' % ab_info)
         self.halves_info.append('  Half 2: %s' % cd_info)
         halves_results = _MergeResults([halves_results, ab_results, cd_results])
       for quarters in _SplitQuarters(full_verse):
         all_results = []
         for (i, quarter_i) in enumerate(quarters):
-          (results, info) = self._IdentifyMetresFromPattern(quarter_i)
+          (results, info) = self._MetresAndInfo(quarter_i)
           self.quarters_info.append('  Quarter %d: %s' % (i + 1, info))
           all_results.extend(results)
         quarters_results = _MergeResults([quarters_results, all_results])
     if global_results:
       return global_results
     else:
-      return _MergeResults([global_results, _MergeResults(lines_results),
+      return _MergeResults([global_results, lines_results,
                             halves_results, quarters_results])
 
-  def _IdentifyMetreFromFullPattern(self, full_verse):
-    """Attempts to identify what metre the full verse might be in."""
-    (results, info) = self._IdentifyMetresFromPattern(full_verse,
-                                                      try_partial=False)
-    assert isinstance(results, list)
-    for result in results:
-      assert isinstance(result, match_result.MatchResult)
-    return (results, [info])
-    # global_info = ['The pattern %s has %d syllables and %d mātra units.' %
-    #                (full_verse, len(full_verse), sum(morae))]
-    # result = self.metrical_data.known_metre_patterns.get(full_verse)
-    # if result:
-    #   return ([result], global_info)
-    # for (known_regex, known_metre) in self.metrical_data.known_metre_regexes:
-    #   if known_regex.match(full_verse):
-    #     return ([known_metre], global_info)
-    # return ([], global_info)
-
-  def _IdentifyMetresFromLinePatterns(self, pattern_lines):
-    """Given patterns of lines, identifies."""
-    lines_results = []
-    lines_info = []
-    for (i, line) in enumerate(pattern_lines):
-      (results, info) = self._IdentifyMetresFromPattern(line)
-      lines_results.append(results)
-      lines_info.append('  Line %d: %s' % (i + 1, info))
-    return (lines_info, lines_results)
-
-  def _IdentifyMetresFromPattern(self, pattern, try_partial=True):
+  def _MetresAndInfo(self, pattern, try_partial=True):
     assert _IsPattern(pattern)
     results = self._IdentifyPattern(pattern, try_partial)
     name = match_result.Names(results) if results else 'unknown'
