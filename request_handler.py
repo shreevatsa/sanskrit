@@ -60,18 +60,15 @@ class IdentifyPage(webapp2.RequestHandler):
     if results:
       assert isinstance(results, list)
       all_metres = set(m.MetreNameOnlyBase() for m in results)
-      all_issues = [i for m in results for i in m.issues]
       if len(all_metres) == 1:
-        if len(results) == 1 and not results[0].issues:
+        if len(results) == 1:
           ok = True
           self.response.write('<p>The metre is <font size="+2">%s</font>'
                               % results[0])
         else:
           self.response.write('<p>The intended metre is probably '
-                              '<font size="+2">%s</font>, '
-                              'but there are issues: %s' %
-                              (all_metres.pop(),
-                               ', '.join(unicode(i) for i in all_issues)))
+                              '<font size="+2">%s</font>' %
+                              all_metres.pop())
       else:
         self.response.write('<p>The metre may be one of: %s.' %
                             ' OR '.join(m.Name() for m in all_metres))

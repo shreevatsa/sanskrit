@@ -135,7 +135,7 @@ if __name__ == '__main__':
     assert metre
     assert isinstance(metre, list)
     metre_name = None
-    if len(metre) == 1 and not metre[0].issues:
+    if len(metre) == 1:
       # The best possible case
       metre_name = metre[0].MetreName()
       if args.print_identified_verses != 'none':

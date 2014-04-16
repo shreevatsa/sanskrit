@@ -37,15 +37,13 @@ class KnownValues(unittest.TestCase):
     super(KnownValues, self).__init__(*args, **kwargs)
     self.identifier = simple_identifier.SimpleIdentifier()
 
-  def AssertSingleMatchResultEquals(self, results, metre_name, match_type,
-                                    issues):
+  def AssertSingleMatchResultEquals(self, results, metre_name, match_type):
     try:
       assert isinstance(results, list)
       assert len(results) == 1
       result = results[0]
       assert result.metre_name == metre_name
       assert result.match_type == match_type
-      assert set(result.issues) == set(issues)
     except AssertionError:
       print('\n\nMismatch: Got results')
       if results is None:
@@ -55,7 +53,6 @@ class KnownValues(unittest.TestCase):
       print('instead of')
       print('\tMetre name: %s' % metre_name)
       print('\tMatch type: %s' % match_type)
-      print('\tIssues: %s' % issues)
       raise self.failureException
 
   def testFineAnustubh(self):
@@ -66,8 +63,7 @@ class KnownValues(unittest.TestCase):
              'mā te saṅgo stvakarmaṇi ||47||']
     self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse),
                                        'Anuṣṭup (Śloka)',
-                                       match_result.MATCH_TYPE.FULL,
-                                       [])
+                                       match_result.MATCH_TYPE.FULL)
 
   def testFirstOffAnustubh(self):
     """Anuṣṭubh with first pāda wrong should be recognized."""
@@ -76,8 +72,7 @@ class KnownValues(unittest.TestCase):
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
         'Anuṣṭup (Śloka)',
-        match_result.MATCH_TYPE.FULL,
-        [match_result.ISSUES.FIRST_PADA_OFF])
+        match_result.MATCH_TYPE.FULL)
 
   def testFineMandakranta(self):
     """A valid example of Mandākrāntā should be recognized."""
@@ -88,8 +83,7 @@ class KnownValues(unittest.TestCase):
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
         'Mandākrāntā',
-        match_result.MATCH_TYPE.FULL,
-        [])
+        match_result.MATCH_TYPE.FULL)
 
   def testMandakrantaWithVpl(self):
     """Mandākrāntā with viṣama-pādānta-laghu."""
@@ -100,8 +94,7 @@ class KnownValues(unittest.TestCase):
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
         'Mandākrāntā',
-        match_result.MATCH_TYPE.FULL,
-        [match_result.ISSUES.VISAMA_PADANTA_LAGHU])
+        match_result.MATCH_TYPE.FULL)
 
   def testAryaKnown(self):
     """A known example of Āryā should be recognized."""
@@ -112,8 +105,7 @@ class KnownValues(unittest.TestCase):
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
         'Āryā',
-        match_result.MATCH_TYPE.FULL,
-        [])
+        match_result.MATCH_TYPE.FULL)
 
   def testAryaUnknown(self):
     """An example of Āryā that has not been explicitly added."""
@@ -124,8 +116,7 @@ class KnownValues(unittest.TestCase):
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
         'Āryā (matched from regex)',
-        match_result.MATCH_TYPE.FULL,
-        [])
+        match_result.MATCH_TYPE.FULL)
 
   def testBreakUp(self):
     """Test all the above by inserting random breaks in the list."""
