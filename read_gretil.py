@@ -33,14 +33,28 @@ def Timestamp():
 
 
 def SplitIntoVerses(input_lines):
+  """Try to return a list of verses, from the lines."""
+  lines_new = []
+  last_seen_verse_number = -1
+  for line in input_lines:
+    match = re.match(r'^MSS_(\d+)-\d+', line)
+    if match:
+      current_verse_number = match.group(1)
+      if current_verse_number != last_seen_verse_number:
+        last_seen_verse_number = current_verse_number
+        lines_new.append('')
+      # line = line[len(match.group(0)):]
+    lines_new.append(line)
+
   verses_found = []
-  for key, group in itertools.groupby(input_lines, bool):
+  for key, group in itertools.groupby(lines_new, bool):
     if key:
       verses_found.append(list(group))
   return verses_found
 
 
 def IgnoreLine(text):
+  # Line enclosed in round brackets
   if re.match('^[(].*[)]$', text):
     return True
   if text.startswith(r'\footnote'):
@@ -107,8 +121,8 @@ if __name__ == '__main__':
     elif seen_separators == 2 and not l.startswith('<'):
       (l, n) = handle_input.RemoveVerseNumber(l)
       lines.append(l)
-      if n:
-        lines.append('')
+      # if n:
+      #   lines.append('')
 
   verses = SplitIntoVerses(lines)
   verses = [verse for verse in verses if AcceptVerse(verse)]
@@ -143,12 +157,9 @@ if __name__ == '__main__':
         if args.print_identified_verses == 'full':
           Print('\n'.join(verse))
     else:
-      all_metres = set(m.MetreNameOnlyBase() for m in metre)
-      # assert len(all_metres) == 1, (all_metres, verse)
-      metre_name = all_metres.pop()
+      metre_name = metre[0].MetreNameOnlyBase()
       if args.print_identified_verses != 'none':
-        Print('Verse %4d is in %s (probably), but it has issues'
-              % (verse_number + 1, metre_name))
+        Print('Verse %4d is in %s' % (verse_number + 1, metre_name))
         if args.print_identified_verses == 'full':
           Print('\n'.join(verse))
     # Either way, metre_name should be set by now

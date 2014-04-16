@@ -16,6 +16,7 @@ import transliterate
 
 def RemoveHTML(text):
   text = re.sub('<BR>', '', text)
+  text = re.sub('<br>', '', text)
   text = re.sub('&nbsp;', ' ', text)
   return text.strip()
 
