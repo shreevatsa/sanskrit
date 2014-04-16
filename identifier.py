@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Module to identify metre from scanned verse."""
+"""Module to identify metre from scanned verse.
+
+The input is a list of "pattern" lines, where a pattern is a sequence over the
+alphabet {'L', 'G'}. The output is a list of `MatchResult`s.
+"""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -16,7 +20,7 @@ class Identifier(object):
   """An object used to make a single metre-identification call."""
 
   def __init__(self, metrical_data):
-    self.output = []
+    self._Reset()
     self.metrical_data = metrical_data
     logging.info('Identifier is initialized. It knows %d metre regexes,'
                  ' %d metre patterns, %d partial regexes, and'
@@ -28,70 +32,174 @@ class Identifier(object):
 
   def _Reset(self):
     """Clear all parameters, for use again."""
-    self.output = []
+    self.global_info = []
+    self.lines_info = []
+    self.halves_info = []
+    self.quarters_info = []
 
   def IdentifyFromLines(self, pattern_lines):
     """Wrapper. Takes patterns of verse lines as input and identifies metres."""
     self._Reset()
 
-    results = self._IdentifyMetresFromPatterns(pattern_lines)
-    if not results:
-      return None
-    _CheckListOfResults(results)
-    if len(results) == 1:
-      self.output.append('Identified as %s.' % results[0].Name())
-      return results
-    # TODO(shreevatsa): Do some merging of the results here
-    return results
+    full_verse = ''.join(pattern_lines)
+    assert _IsPattern(full_verse)
+    (global_results,
+     self.global_info) = self._IdentifyMetreFromFullPattern(full_verse)
 
-  def _IdentifyMetresFromPatterns(self, verse):
-    """Given metrical pattern of each line of verse, identifies metres."""
-    full_verse = ''.join(verse)
-    assert re.match('^[LG]*$', full_verse)
+    (self.lines_info,
+     lines_results) = self._IdentifyMetresFromLinePatterns(pattern_lines)
 
-    morae = [_MatraCount(line) for line in verse]
-    self.output.append('The input has %d syllables and %d mātra units.' %
-                       (len(full_verse), sum(morae)))
-
-    results = []
-    for (i, line) in enumerate(verse):
-      line_metre = 'unknown'
-      identified = self._IdentifyPattern(line)
-      if identified:
-        results.extend(_CheckListOfResults(identified))
-        line_metre = match_result.Names(identified)
-      self.output.append('  Line %d: pattern %s (%d syllables, %d mātras) is %s'
-                         % (i + 1, line, len(line), morae[i], line_metre))
-
-    result = self.metrical_data.known_metre_patterns.get(full_verse)
-    if result:
-      return [result]
-    for (known_regex, known_metre) in self.metrical_data.known_metre_regexes:
-      if known_regex.match(full_verse):
-        return [known_metre]
-    # Nothing recognized for full verse, return results of line-by-line.
-    return results
-
-  def _IdentifyPattern(self, pattern):
-    """Given metrical pattern (string of L's and G's), identifies metre."""
-    results = self.metrical_data.known_partial_patterns.get(pattern)
-    if results is not None:
-      _CheckListOfResults(results)
+    halves_results = []
+    quarters_results = []
+    if not global_results:
+      for (ab, cd) in _SplitHalves(full_verse):
+        (ab_results, ab_info) = self._IdentifyMetresFromPattern(ab)
+        (cd_results, cd_info) = self._IdentifyMetresFromPattern(cd)
+        self.halves_info.append('  Half 1: %s' % ab_info)
+        self.halves_info.append('  Half 2: %s' % cd_info)
+        halves_results = _MergeResults([halves_results, ab_results, cd_results])
+      for quarters in _SplitQuarters(full_verse):
+        all_results = []
+        for (i, quarter_i) in enumerate(quarters):
+          (results, info) = self._IdentifyMetresFromPattern(quarter_i)
+          self.quarters_info.append('  Quarter %d: %s' % (i + 1, info))
+          all_results.extend(results)
+        quarters_results = _MergeResults([quarters_results, all_results])
+    if global_results:
+      return global_results
     else:
-      for (known_regex,
-           known_result) in self.metrical_data.known_partial_regexes:
-        if known_regex.match(pattern):
-          results = [known_result]
-          break
-    return results
+      return _MergeResults([global_results, _MergeResults(lines_results),
+                            halves_results, quarters_results])
+
+  def _IdentifyMetreFromFullPattern(self, full_verse):
+    """Attempts to identify what metre the full verse might be in."""
+    (results, info) = self._IdentifyMetresFromPattern(full_verse,
+                                                      try_partial=False)
+    assert isinstance(results, list)
+    for result in results:
+      assert isinstance(result, match_result.MatchResult)
+    return (results, [info])
+    # global_info = ['The pattern %s has %d syllables and %d mātra units.' %
+    #                (full_verse, len(full_verse), sum(morae))]
+    # result = self.metrical_data.known_metre_patterns.get(full_verse)
+    # if result:
+    #   return ([result], global_info)
+    # for (known_regex, known_metre) in self.metrical_data.known_metre_regexes:
+    #   if known_regex.match(full_verse):
+    #     return ([known_metre], global_info)
+    # return ([], global_info)
+
+  def _IdentifyMetresFromLinePatterns(self, pattern_lines):
+    """Given patterns of lines, identifies."""
+    lines_results = []
+    lines_info = []
+    for (i, line) in enumerate(pattern_lines):
+      (results, info) = self._IdentifyMetresFromPattern(line)
+      lines_results.append(results)
+      lines_info.append('  Line %d: %s' % (i + 1, info))
+    return (lines_info, lines_results)
+
+  def _IdentifyMetresFromPattern(self, pattern, try_partial=True):
+    assert _IsPattern(pattern)
+    results = self._IdentifyPattern(pattern, try_partial)
+    name = match_result.Names(results) if results else 'unknown'
+    info = ('pattern %s (%d syllables, %d mātras) is %s' %
+            (pattern, len(pattern), _MatraCount(pattern), name))
+    return (results, info)
+
+  def _IdentifyPattern(self, pattern, try_partial=True):
+    """Given metrical pattern (string of L's and G's), identifies metre."""
+    full_results = self._IdentifyPatternFrom(
+        pattern, self.metrical_data.known_metre_patterns,
+        self.metrical_data.known_metre_regexes)
+    partial_results = []
+    if try_partial:
+      partial_results = self._IdentifyPatternFrom(
+          pattern,
+          self.metrical_data.known_partial_patterns,
+          self.metrical_data.known_partial_regexes)
+    return _MergeResults([full_results, partial_results])
+
+  def _IdentifyPatternFrom(self, pattern, known_patterns, known_regexes):
+    """Identify pattern from given data."""
+    results = known_patterns.get(pattern)
+    if results:
+      if isinstance(results, match_result.MatchResult):
+        return [results]
+      else:
+        return results
+    for (known_regex, known_result) in known_regexes:
+      if known_regex.match(pattern):
+        return [known_result]
+    return []
 
 
 def _MatraCount(pattern):
   return sum(2 if c == 'G' else 1 for c in pattern)
 
 
-def _CheckListOfResults(results):
-  assert isinstance(results, list), results
-  assert all(isinstance(result, match_result.MatchResult)
-             for result in results)
-  return results
+def _MergeResults(results_lists):
+  """Return all possible results."""
+  # print('Merging %s' % results_lists)
+  nonempty_results = []
+  for results_list in results_lists:
+    assert isinstance(results_list, list)
+    for result in results_list:
+      assert isinstance(result, match_result.MatchResult), result
+      nonempty_results.append(result)
+  if len(nonempty_results) == 1:
+    return nonempty_results
+
+  # TODO(shreevatsa): Do some uniq of the results here
+  return nonempty_results
+
+
+def _SplitHalves(full_pattern):
+  """Attempt splits at halves."""
+  splits = []
+  n = len(full_pattern)
+  if n % 2 == 0:
+    m = n // 2
+    splits.append([full_pattern[:m], full_pattern[m:]])
+  else:
+    for m in [(n-1)//2, (n+1)//2]:
+      splits.append([full_pattern[:m], full_pattern[m:]])
+  return splits
+
+
+def _SplitQuarters(full_pattern):
+  """Attempt splits at quarters."""
+  splits = []
+  n = len(full_pattern)
+  mss = []
+  if n % 4 == 0:
+    m = n // 4
+    mss.append([m, 2 * m, 3 * m])
+  elif n % 4 == 1:
+    # The extra syllable could be in any of the four _pāda_s
+    m = (n - 1) // 4
+    mss.append([m + 1, 2 * m + 1, 3 * m + 1])
+    mss.append([m, 2 * m + 1, 3 * m + 1])
+    mss.append([m, 2 * m, 3 * m + 1])
+    mss.append([m, 2 * m, 3 * m])
+  elif n % 4 == 2:
+    # TODO(shreevatsa): Code this up
+    pass
+  else:
+    assert n % 4 == 3
+    m = (n + 1) // 4
+    # The missing syllable could be in any of the four _pāda_s
+    mss.append([m - 1, 2 * m - 1, 3 * m - 1])
+    mss.append([m, 2 * m - 1, 3 * m - 1])
+    mss.append([m, 2 * m, 3 * m - 1])
+    mss.append([m, 2 * m, 3 * m])
+  for ms in mss:
+    splits.append([full_pattern[:ms[0]],
+                   full_pattern[ms[0]:ms[1]],
+                   full_pattern[ms[1]:ms[2]],
+                   full_pattern[ms[2]:]])
+  return splits
+
+
+def _IsPattern(pattern):
+  return re.match('^[LG]*$', pattern)

@@ -95,4 +95,5 @@ def Description(match_results, indent_depth=0):
     s += '\n' + indent + '\tMetre name: %s' % result.metre_name
     s += '\n' + indent + '\tMatch type: %s' % result.match_type
     s += '\n' + indent + '\tIssues: %s' % result.issues
+    s += '\n'
   return s

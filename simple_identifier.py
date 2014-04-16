@@ -45,4 +45,8 @@ class SimpleIdentifier(object):
     return result
 
   def AllDebugOutput(self):
-    return '\n'.join(self.output + self.identifier.output)
+    return '\n'.join(self.output +
+                     ['Full:'] + self.identifier.global_info +
+                     ['Lines:'] + self.identifier.lines_info +
+                     ['Halves:'] + self.identifier.halves_info +
+                     ['Quarters:'] + self.identifier.quarters_info)

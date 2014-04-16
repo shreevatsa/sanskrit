@@ -27,7 +27,8 @@ class BadInput(unittest.TestCase):
 
   def testNoSyllables(self):
     """Identifier should return no result, for input containing no syllabes."""
-    self.assertIsNone(self.identifier.IdentifyFromLines(['t', 't', 't', 't']))
+    # self.assertIsNone(self.identifier.IdentifyFromLines(['t', 't', 't', 't']))
+    self.assertFalse(self.identifier.IdentifyFromLines(['t', 't', 't', 't']))
 
 
 class KnownValues(unittest.TestCase):
