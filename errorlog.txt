@@ -46,3 +46,7 @@ Wed Apr 16 2014
     know is whether we got a perfect match for the whole verse, or not. If not,
     then the aligning step will handle the mismatch.
 
+7c988d96101629e17f5b4598cf14d45229e24ca5
+
+    Got rid of "issues".
+

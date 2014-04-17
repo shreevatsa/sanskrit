@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Module to identify metre from scanned verse.
+"""Module to identify metre(s) from scanned verse.
 
-The input is a list of "pattern" lines, where a pattern is a sequence over the
+The input is a list of "pattern" lines, where a "pattern" is a sequence over the
 alphabet {'L', 'G'}. The output is a list of `MatchResult`s.
 """
 
@@ -38,7 +38,7 @@ class Identifier(object):
     self.quarters_info = []
 
   def IdentifyFromLines(self, pattern_lines):
-    """Wrapper. Takes patterns of verse lines as input and identifies metres."""
+    """Main function. Takes patterns of verse lines and identifies metres."""
     self._Reset()
 
     full_verse = ''.join(pattern_lines)
@@ -53,27 +53,26 @@ class Identifier(object):
       self.lines_info.append('  Line %d: %s' % (i + 1, info))
       lines_results = _MergeResults([lines_results, results])
 
-    halves_results = []
-    quarters_results = []
-    if not global_results:
-      for (ab, cd) in _SplitHalves(full_verse):
-        (ab_results, ab_info) = self._MetresAndInfo(ab)
-        (cd_results, cd_info) = self._MetresAndInfo(cd)
-        self.halves_info.append('  Half 1: %s' % ab_info)
-        self.halves_info.append('  Half 2: %s' % cd_info)
-        halves_results = _MergeResults([halves_results, ab_results, cd_results])
-      for quarters in _SplitQuarters(full_verse):
-        all_results = []
-        for (i, quarter_i) in enumerate(quarters):
-          (results, info) = self._MetresAndInfo(quarter_i)
-          self.quarters_info.append('  Quarter %d: %s' % (i + 1, info))
-          all_results.extend(results)
-        quarters_results = _MergeResults([quarters_results, all_results])
     if global_results:
       return global_results
-    else:
-      return _MergeResults([global_results, lines_results,
-                            halves_results, quarters_results])
+
+    halves_results = []
+    quarters_results = []
+    for (ab, cd) in _SplitHalves(full_verse):
+      (ab_results, ab_info) = self._MetresAndInfo(ab)
+      (cd_results, cd_info) = self._MetresAndInfo(cd)
+      self.halves_info.append('  Half 1: %s' % ab_info)
+      self.halves_info.append('  Half 2: %s' % cd_info)
+      halves_results = _MergeResults([halves_results, ab_results, cd_results])
+    for quarters in _SplitQuarters(full_verse):
+      all_results = []
+      for (i, quarter_i) in enumerate(quarters):
+        (results, info) = self._MetresAndInfo(quarter_i)
+        self.quarters_info.append('  Quarter %d: %s' % (i + 1, info))
+        all_results.extend(results)
+      quarters_results = _MergeResults([quarters_results, all_results])
+    return _MergeResults([global_results, lines_results,
+                          halves_results, quarters_results])
 
   def _MetresAndInfo(self, pattern, try_partial=True):
     assert _IsPattern(pattern)
@@ -148,27 +147,50 @@ def _SplitQuarters(full_pattern):
   splits = []
   n = len(full_pattern)
   mss = []
+
+  def Cumulative(ns):
+    s = 0
+    out = []
+    for n in ns:
+      out.append(n + s)
+      s += n
+    return out
+
   if n % 4 == 0:
     m = n // 4
-    mss.append([m, 2 * m, 3 * m])
+    mss.append(Cumulative([m, m, m]))
   elif n % 4 == 1:
     # The extra syllable could be in any of the four _pāda_s
     m = (n - 1) // 4
-    mss.append([m + 1, 2 * m + 1, 3 * m + 1])
-    mss.append([m, 2 * m + 1, 3 * m + 1])
-    mss.append([m, 2 * m, 3 * m + 1])
-    mss.append([m, 2 * m, 3 * m])
+    mss.append(Cumulative([m + 1, m, m]))
+    mss.append(Cumulative([m, m + 1, m]))
+    mss.append(Cumulative([m, m, m + 1]))
+    mss.append(Cumulative([m, m, m]))
   elif n % 4 == 2:
-    # TODO(shreevatsa): Code this up
-    pass
+    # Either we have two extra syllables...
+    m = (n - 2) // 4
+    mss.append(Cumulative([m + 1, m + 1, m]))
+    mss.append(Cumulative([m + 1, m, m + 1]))
+    mss.append(Cumulative([m + 1, m, m]))
+    mss.append(Cumulative([m, m + 1, m + 1]))
+    mss.append(Cumulative([m, m + 1, m]))
+    mss.append(Cumulative([m, m, m + 1]))
+    # ... or we're missing two
+    m = (n + 2) // 4
+    mss.append(Cumulative([m - 1, m - 1, m]))
+    mss.append(Cumulative([m - 1, m, m - 1]))
+    mss.append(Cumulative([m - 1, m, m]))
+    mss.append(Cumulative([m, m - 1, m - 1]))
+    mss.append(Cumulative([m, m - 1, m]))
+    mss.append(Cumulative([m, m, m - 1]))
   else:
     assert n % 4 == 3
     m = (n + 1) // 4
     # The missing syllable could be in any of the four _pāda_s
-    mss.append([m - 1, 2 * m - 1, 3 * m - 1])
-    mss.append([m, 2 * m - 1, 3 * m - 1])
-    mss.append([m, 2 * m, 3 * m - 1])
-    mss.append([m, 2 * m, 3 * m])
+    mss.append(Cumulative([m - 1, m, m]))
+    mss.append(Cumulative([m, m - 1, m]))
+    mss.append(Cumulative([m, m, m - 1]))
+    mss.append(Cumulative([m, m, m]))
   for ms in mss:
     splits.append([full_pattern[:ms[0]],
                    full_pattern[ms[0]:ms[1]],
