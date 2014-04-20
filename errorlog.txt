@@ -50,3 +50,5 @@ Wed Apr 16 2014
 
     Got rid of "issues".
 
+    Seems to be in a reasonably OK state again, next it remains to handle the
+    alignment problem.
