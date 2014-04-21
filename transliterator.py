@@ -68,7 +68,7 @@ def _LongestRead(state_machine, text):
   return (num_matched, replacement)
 
 
-def Transliterate(state_machine, text, ignore=None):
+def Transliterate(state_machine, text, ignore=None, pass_through=None):
   """Transliterates text using the state machine."""
   transliterated = ''
   unparsed_characters = set()
@@ -82,7 +82,9 @@ def Transliterate(state_machine, text, ignore=None):
     else:
       # Couldn't match anything; strip one char and retry.
       char = text[num_parsed]
-      if ignore is None or char not in ignore:
+      if pass_through and char in pass_through:
+        transliterated += char
+      elif ignore is None or char not in ignore:
         unparsed_characters.add(char)
       num_parsed += 1
   if unparsed_characters:

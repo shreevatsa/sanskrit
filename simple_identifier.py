@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import logging
 
+import display
 import handle_input
 import identifier
 import metrical_data
@@ -27,11 +28,11 @@ class SimpleIdentifier(object):
     self.cleaned_output = None
 
   def IdentifyFromLines(self, input_lines):
-    """Given bunch of lines of verse, clean-scan-identify."""
+    """Given bunch of lines of verse, clean-scan-identify-display."""
     self._Reset()
     logging.info('Got input:\n%s', '\n'.join(input_lines))
     cleaner = handle_input.InputHandler()
-    cleaned_lines = cleaner.CleanLines(input_lines)
+    (display_lines, cleaned_lines) = cleaner.CleanLines(input_lines)
     self.output.extend(cleaner.error_output)
     self.cleaned_output = cleaner.clean_output
 
@@ -42,6 +43,13 @@ class SimpleIdentifier(object):
     result = self.identifier.IdentifyFromLines(pattern_lines)
     if not result:
       self.output.extend(cleaner.clean_output)
+    else:
+      for m in result:
+        print('Aligning verse to %s' % m.MetreName())
+        known_pattern = metrical_data.GetPattern(m.MetreName())
+        if known_pattern:
+          display.AlignVerseToMetre(display_lines, ''.join(pattern_lines),
+                                    known_pattern)
     return result
 
   def AllDebugOutput(self):

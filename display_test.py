@@ -24,7 +24,11 @@ class KnownValues(unittest.TestCase):
     self.assertEqual(display._Align('hello', 'ohell'),
                      ('-hello', 'ohell-'))
     self.assertEqual(display._Align('abcdabcd', 'abcd'),
-                     ('abcd----', 'abcd'))
+                     ('abcdabcd', 'abcd----'))
+    # display.AlignVerseToMetre(
+    #   ['asahyaM tvasAdhyaM ca bANIyavANyAH punArUpaNaM tvanyavANISu pUrNam .'
+    #    'itIdaM mahAvAraNaM vArayantaM tvadIyaM prayatnaM stuvehaM kathaM vA'],
+    #   'Bhujañgaprayātam', '')
 
 
 if __name__ == '__main__':

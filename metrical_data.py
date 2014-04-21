@@ -12,21 +12,11 @@ import re
 import match_result
 
 
-class AllMetricalData(object):
-  """Known patterns and regexes, both full and partial."""
-
-  # TODO(shreevatsa): Remove _init from these names
-  def __init__(self, known_metre_patterns_init, known_metre_regexes_init,
-               known_partial_patterns_init):
-    self.known_metre_patterns = known_metre_patterns_init
-    self.known_metre_regexes = known_metre_regexes_init
-    self.known_partial_patterns = known_partial_patterns_init
-
-
 known_metre_regexes = []
 known_metre_patterns = {}
 known_partial_regexes = []
 known_partial_patterns = {}
+pattern_for_metre = {}
 
 
 def _RemoveChars(input_string, chars):
@@ -48,10 +38,16 @@ def _CleanUpSimpleRegex(regex):
   return regex
 
 
+def GetPattern(metre):
+  return pattern_for_metre.get(metre)
+
+
 def _AddSamavrttaPattern(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = _CleanUpPattern(each_line_pattern)
   assert re.match(r'^[LG]*G$', clean), (each_line_pattern, metre_name)
+  assert metre_name not in pattern_for_metre
+  pattern_for_metre[metre_name] = [clean] * 4
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
   for (a, b, c, d) in itertools.product(patterns, repeat=4):
     assert (a + b + c + d) not in known_metre_patterns
@@ -454,7 +450,7 @@ _curated_vrtta_data = [
     # Raghuvamśa (hard to believe, but there it is)
     ('Nārācam', 'L L L L L L G L G G L G G L G G L G'),
 
-    # ('Bhujañgaprayātam', 'L G G L G G L G G L G G'),
+    ('Bhujañgaprayātam', 'L G G L G G L G G L G G'),
     # ('Toṭakam', 'L L G L L G L L G L L G'),
     # ('Sragviṇī', 'G L G G L G G L G G L G'),
     # ('Cārucāmaram', 'G L G L G L G L G L G L G L G'),

@@ -40,8 +40,10 @@ class InputHandler(object):
   def TransliterateAndClean(self, text):
     """Transliterates text to SLP1, removing all other characters."""
     orig_text = text
-    ignore = r""" 0123456789'".\/$&%{}|-!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-    (text, rejects) = transliterate.DetectAndTransliterate(text, ignore)
+    ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
+    pass_through = ' -?'
+    (text, rejects) = transliterate.DetectAndTransliterate(text, ignore,
+                                                           pass_through)
 
     recognized_text = ''
     for c in orig_text:
@@ -59,14 +61,15 @@ class InputHandler(object):
       self.error_output.append('recognized as')
       self.error_output.append(recognized_text)
 
-    assert not re.search('[^%s]' % slp1.ALPHABET, text), text
-    return text
+    def Clean(text):
+      return ''.join(c for c in text if c not in pass_through)
+    clean_text = Clean(text)
+    assert not re.search('[^%s]' % slp1.ALPHABET, clean_text), clean_text
+    return (text, clean_text)
 
   def CleanLines(self, lines):
     """Clean up the input lines (strip junk, transliterate, break verses)."""
-    cleaned_lines = []
-    for line in lines:
-      line = line.strip()
+    def NFKC(line):
       nfc = unicodedata.normalize('NFC', line)
       nfkc = unicodedata.normalize('NFKC', line)
       if not (line == nfc and line == nfkc):
@@ -74,29 +77,42 @@ class InputHandler(object):
                                  (' (itself different from %s)' % nfc
                                   if nfc != nfkc else ''))
         line = nfkc
-      # without_control = ''.join(c for c in line if
-      #                           not unicodedata.category(c).startswith('C'))
-      # if line != without_control:
-      #   self.error_output.append('Removed control characters in %s to get %s'
-      #                            % (line, without_control))
-      #   line = without_control
+      return line
+    def NoControlCharacters(line):
+      without_control = ''.join(c for c in line if
+                                not unicodedata.category(c).startswith('C'))
+      if line != without_control:
+        self.error_output.append('Removed control characters in %s to get %s'
+                                 % (line, without_control))
+        line = without_control
+      return line
+
+    cleaned_lines = []
+    display_lines = []
+    for line in lines:
+      line = line.strip()
+      line = NFKC(line)
+      line = NoControlCharacters(line)
       line = RemoveHTML(line).strip()
       if not line:
         continue
       (line, n) = RemoveVerseNumber(line)
-      line = self.TransliterateAndClean(line)
-      if not line:
+      (line, clean_line) = self.TransliterateAndClean(line)
+      if not clean_line:
         continue
-      cleaned_lines.append(line)
+      cleaned_lines.append(clean_line)
+      display_lines.append(line)
       # If verse number was removed, can separate from next verse by blank line.
       if n:
         cleaned_lines.append('')
+        display_lines.append('')
     while cleaned_lines and not cleaned_lines[-1]:
       cleaned_lines = cleaned_lines[:-1]
+      display_lines = display_lines[:-1]
 
     self.clean_output.append('Input read as:')
-    for (number, line) in enumerate(cleaned_lines):
+    for (number, line) in enumerate(display_lines):
       transliterated = transliterate.TransliterateForOutput(line)
       self.clean_output.append('Line %d: %s' % (number + 1, transliterated))
     self.clean_output.append('')
-    return cleaned_lines
+    return (display_lines, cleaned_lines)
