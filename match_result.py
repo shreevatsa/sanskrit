@@ -68,7 +68,8 @@ def Names(match_results):
   return ' AND '.join(m.Name() for m in match_results)
 
 
-def Description(match_results, indent_depth=0):
+# Used only by test
+def _Description(match_results, indent_depth=0):
   indent = ' ' * indent_depth
   s = ''
   for (i, result) in enumerate(match_results):
