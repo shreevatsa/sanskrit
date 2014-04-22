@@ -51,7 +51,15 @@ class IdentifyPage(webapp2.RequestHandler):
     identifier = common_identifier
     results = identifier.IdentifyFromLines(input_verse.split('\n'))
 
-    self.response.write('<html><body>')
+    self.response.write('<html>\n')
+    self.response.write('<head><style>\n')
+    self.response.write('abbr {border-bottom: 1px dotted black;}\n')
+    self.response.write('.sylL { } \n')
+    self.response.write('.sylG { font-weight:bold; } \n')
+    self.response.write('.syl- { } \n')
+    self.response.write('</style></head>\n')
+
+    self.response.write('<body>\n')
     self.response.write('<p>')
     self.response.write(InputForm(input_verse))
     self.response.write('</p>')
