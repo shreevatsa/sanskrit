@@ -70,6 +70,8 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
   assert re.match(r'^[LG]*G$', clean_odd)
   clean_even = _CleanUpPattern(even_line_pattern)
   assert re.match(r'^[LG]*G$', clean_even)
+  assert metre_name not in pattern_for_metre
+  pattern_for_metre[metre_name] = [clean_odd, clean_even] * 2
   patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
   patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
   for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2):
@@ -99,6 +101,8 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
   (pa, pb, pc, pd) = line_patterns
   assert pb.endswith('G')
   assert pd.endswith('G')
+  assert metre_name not in pattern_for_metre
+  pattern_for_metre[metre_name] = pa + pb + pc + pd
   patterns_a = [pa]
   patterns_b = [pb[:-1] + 'G', pb[:-1] + 'L']
   patterns_c = [pc]
