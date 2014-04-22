@@ -58,9 +58,8 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
     known_partial_patterns[a + b] = [match_result.MatchResult(
         metre_name, match_result.MATCH_TYPE.HALF)]
   for a in patterns:
-    assert a not in known_partial_patterns
-    known_partial_patterns[a] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.PADA)]
+    known_partial_patterns[a] = known_partial_patterns.get(a, []).append(
+        match_result.MatchResult(metre_name, match_result.MATCH_TYPE.PADA))
 
 
 def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
