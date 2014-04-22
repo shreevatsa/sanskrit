@@ -140,7 +140,7 @@ def HtmlTableFromAlignment(alignment):
       to_print = (printable_syllable if syllable[1] == syllable[2] else
                   '<abbr title="Should be %s">%s</abbr>' % (syllable[2],
                                                             printable_syllable))
-      v += '<span class="syl%s">%s</div>' % (syllable[1], to_print)
+      v += '<span class="syl%s">%s</span>' % (syllable[1], to_print)
     out.append('%s <br/>\n' % v)
   print('Returning output:')
   print(out)
