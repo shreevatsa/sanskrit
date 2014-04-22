@@ -6,6 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import slp1
+import transliterate
 
 _GAP_CHAR = '-'
 
@@ -137,9 +138,13 @@ def HtmlTableFromAlignment(alignment):
     m = ''
     for syllable in line:
       ok = syllable[1] == syllable[2]
-      v += '<td><div class=%s%s>%s</div></td> ' % (syllable[1], ok, syllable[0])
+      v += '<td><div class=%s%s>%s</div></td> ' % (
+          transliterate.TransliterateForTable(syllable[1]), ok, syllable[0])
       m += '<td>%s</td> ' % syllable[2]
     out.append('<tr> %s </tr>' % v)
     out.append('<tr> %s </tr>' % m)
+    out.append('<tr> </tr>')
   out.append('</table>')
+  print('Returning table:')
+  print(out)
   return out

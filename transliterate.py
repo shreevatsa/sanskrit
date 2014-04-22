@@ -156,3 +156,8 @@ def TransliterateForOutput(text):
                                       _DEFAULT_PASS_THROUGH)[0]
   deva = _CleanSLP1ToDevanagari(text)
   return '%s (%s)' % (iast, deva)
+
+
+def TransliterateForTable(text):
+  return transliterator.Transliterate(_SLP1_TO_IAST_STATE_MACHINE, text,
+                                      _DEFAULT_PASS_THROUGH)[0]
