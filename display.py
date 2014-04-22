@@ -139,7 +139,7 @@ def HtmlTableFromAlignment(alignment):
     for syllable in line:
       ok = syllable[1] == syllable[2]
       v += '<td><div class=%s%s>%s</div></td> ' % (
-          transliterate.TransliterateForTable(syllable[1]), ok, syllable[0])
+          syllable[1], ok, transliterate.TransliterateForTable(syllable[0]))
       m += '<td>%s</td> ' % syllable[2]
     out.append('<tr> %s </tr>' % v)
     out.append('<tr> %s </tr>' % m)
