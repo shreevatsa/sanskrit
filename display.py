@@ -113,15 +113,17 @@ def AlignVerseToMetre(display_verse, verse_pattern, metre_pattern_lines):
   num_aligned_syllables = 0
   out = [[]]
   for i in range(n):
-    ok = aligned_v[i] == aligned_m[i]
     if aligned_v[i] != _GAP_CHAR:
-      out[-1].append((syllables[num_aligned_syllables], aligned_m[i], ok))
+      out[-1].append(
+          (syllables[num_aligned_syllables], aligned_v[i], aligned_m[i]))
       num_aligned_syllables += 1
     else:
-      out[-1].append((aligned_v[i], aligned_m[i], ok))
+      out[-1].append((aligned_v[i], aligned_v[i], aligned_m[i]))
     num_aligned += (aligned_m[i] != _GAP_CHAR)
     if num_aligned == len(metre_pattern_lines[current_line]):
       current_line += 1
       num_aligned = 0
       out.append([])
+  # for s in out:
+  #   print(s)
   return out
