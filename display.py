@@ -105,7 +105,7 @@ def AlignVerseToMetre(display_verse, verse_pattern, metre_pattern_lines):
   metre_pattern = ''.join(metre_pattern_lines)
   (aligned_v, aligned_m) = _Align(verse_pattern, metre_pattern)
   assert len(aligned_v) == len(aligned_m)
-  syllables = _SyllabizeVisual('\n'.join(display_verse))
+  syllables = _SyllabizeVisual(' '.join(display_verse))
   assert len(syllables) == len(verse_pattern)
 
   n = len(aligned_m)
@@ -132,19 +132,16 @@ def AlignVerseToMetre(display_verse, verse_pattern, metre_pattern_lines):
 
 def HtmlTableFromAlignment(alignment):
   """Make a pretty HTML table out of the alignment."""
-  out = ['<table>']
+  out = []
   for line in alignment:
     v = ''
-    m = ''
     for syllable in line:
-      ok = syllable[1] == syllable[2]
-      v += '<td><div class=%s%s>%s</div></td> ' % (
-          syllable[1], ok, transliterate.TransliterateForTable(syllable[0]))
-      m += '<td>%s</td> ' % syllable[2]
-    out.append('<tr> %s </tr>' % v)
-    out.append('<tr> %s </tr>' % m)
-    out.append('<tr> </tr>')
-  out.append('</table>')
-  print('Returning table:')
+      printable_syllable = transliterate.TransliterateForTable(syllable[0])
+      to_print = (printable_syllable if syllable[1] == syllable[2] else
+                  '<abbr title="Should be %s">%s</abbr>' % (syllable[2],
+                                                            printable_syllable))
+      v += '<div class=%s>%s</div>' % (syllable[1], to_print)
+    out.append('%s <br/>' % v)
+  print('Returning output:')
   print(out)
   return out

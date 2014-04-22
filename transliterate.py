@@ -145,7 +145,8 @@ _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE = transliterator.MakeStateMachine(
 
 def _CleanSLP1ToDevanagari(text):
   (text, unparsed) = transliterator.Transliterate(
-      _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE, text, _DEFAULT_PASS_THROUGH)
+      _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE, text, ignore=None,
+      pass_through=_DEFAULT_PASS_THROUGH)
   assert not unparsed, (text, unparsed)
   assert isinstance(text, unicode), text
   return devanagari.UnMangle(text)
@@ -153,11 +154,13 @@ def _CleanSLP1ToDevanagari(text):
 
 def TransliterateForOutput(text):
   iast = transliterator.Transliterate(_SLP1_TO_IAST_STATE_MACHINE, text,
-                                      _DEFAULT_PASS_THROUGH)[0]
+                                      ignore=None,
+                                      pass_through=_DEFAULT_PASS_THROUGH)[0]
   deva = _CleanSLP1ToDevanagari(text)
   return '%s (%s)' % (iast, deva)
 
 
 def TransliterateForTable(text):
   return transliterator.Transliterate(_SLP1_TO_IAST_STATE_MACHINE, text,
-                                      _DEFAULT_PASS_THROUGH)[0]
+                                      ignore=None,
+                                      pass_through=_DEFAULT_PASS_THROUGH)[0]
