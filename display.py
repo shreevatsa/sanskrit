@@ -142,6 +142,4 @@ def HtmlTableFromAlignment(alignment):
                                                             printable_syllable))
       v += '<span class="syl%s">%s</span>' % (syllable[1], to_print)
     out.append('%s <br/>\n' % v)
-  print('Returning output:')
-  print(out)
   return out
