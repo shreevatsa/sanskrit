@@ -45,7 +45,6 @@ class SimpleIdentifier(object):
       self.output.extend(cleaner.clean_output)
     else:
       for m in result:
-        print('Aligning verse to %s' % m.MetreName())
         known_pattern = metrical_data.GetPattern(m.MetreName())
         if known_pattern:
           display.AlignVerseToMetre(display_lines, ''.join(pattern_lines),

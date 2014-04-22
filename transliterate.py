@@ -115,7 +115,6 @@ def _FixBadDevanagari(text):
   text = text.replace('ॆ', 'े')
   text = text.replace('ॊ', 'ो')
   text = text.replace('ळ', 'ल')
-  text = text.replace('s', 'ऽ')
   return text
 
 
@@ -127,6 +126,7 @@ def DetectAndTransliterate(text, ignore=None, pass_through=None):
   characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'
   characteristic_itrans = r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^|Sh'
   if re.search(characteristic_devanagari, text):
+    text = text.replace('s', 'ऽ')
     return _TransliterateDevanagari(text, ignore)
   if re.search(characteristic_iast, text):
     return transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE,

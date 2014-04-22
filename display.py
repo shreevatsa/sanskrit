@@ -5,6 +5,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import slp1
+
 _GAP_CHAR = '-'
 
 
@@ -58,19 +60,65 @@ def _Align(s, t):
   return (aligned_s, aligned_t)
 
 
+def _SyllabizeVisual(text):
+  """Break given text into syllables."""
+  syllables = []
+  # Everything until the first vowel is the first syllable
+  i = 0
+  while True:
+    syllable = ''
+    if i == len(text): break
+    while i < len(text):
+      c = text[i]
+      i += 1
+      syllable += c
+      if c in slp1.ANY_VOWEL[1:-1]:
+        # Peek ahead to capture all groups until the next vowel
+        groups = []
+        group = ''
+        j = i
+        while j < len(text):
+          c = text[j]
+          group += c
+          j += 1
+          if c in slp1.ANY_VOWEL[1:-1]:
+            # This group has a vowel, and shouldn't be consumed
+            break
+          if j == len(text) or c not in slp1.ALPHABET:
+            groups.append(group)
+            group = ''
+        to_add = ''.join(groups)
+        syllable += to_add
+        i += len(to_add)
+        syllables.append(syllable)
+        syllable = ''
+  assert ''.join(syllables) == text, (syllables, text)
+  return syllables
+
+
 # Take verse_pattern too, because of additional display chars in display_verse
-def AlignVerseToMetre(unused_display_verse, verse_pattern, metre_pattern_lines):
+def AlignVerseToMetre(display_verse, verse_pattern, metre_pattern_lines):
   """Match syllables of verse with those of metre."""
+  if not verse_pattern:
+    return
   metre_pattern = ''.join(metre_pattern_lines)
   (aligned_v, aligned_m) = _Align(verse_pattern, metre_pattern)
-
   assert len(aligned_v) == len(aligned_m)
+  syllables = _SyllabizeVisual('\n'.join(display_verse))
+  assert len(syllables) == len(verse_pattern)
+
   n = len(aligned_m)
   current_line = 0
   num_aligned = 0
+  num_aligned_syllables = 0
   out = [[]]
   for i in range(n):
-    out[-1].append((aligned_v[i], aligned_m[i]))
+    ok = aligned_v[i] == aligned_m[i]
+    if aligned_v[i] != _GAP_CHAR:
+      out[-1].append((syllables[num_aligned_syllables], aligned_m[i], ok))
+      num_aligned_syllables += 1
+    else:
+      out[-1].append((aligned_v[i], aligned_m[i], ok))
     num_aligned += (aligned_m[i] != _GAP_CHAR)
     if num_aligned == len(metre_pattern_lines[current_line]):
       current_line += 1
