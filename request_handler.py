@@ -85,8 +85,9 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('</pre>')
 
     if identifier.tables:
-      for line in identifier.tables:
-        self.response.write(line)
+      for table in identifier.tables:
+        for line in table:
+          self.response.write(line)
     self.response.write('</body></html>')
 
 
