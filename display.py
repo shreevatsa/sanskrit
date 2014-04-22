@@ -127,3 +127,19 @@ def AlignVerseToMetre(display_verse, verse_pattern, metre_pattern_lines):
   # for s in out:
   #   print(s)
   return out
+
+
+def HtmlTableFromAlignment(alignment):
+  """Make a pretty HTML table out of the alignment."""
+  out = ['<table>']
+  for line in alignment:
+    v = ''
+    m = ''
+    for syllable in line:
+      ok = syllable[1] == syllable[2]
+      v += '<td><div class=%s%s>%s</div></td> ' % (syllable[1], ok, syllable[0])
+      m += '<td>%s</td> ' % syllable[2]
+    out.append('<tr> %s </tr>' % v)
+    out.append('<tr> %s </tr>' % m)
+  out.append('</table>')
+  return out

@@ -26,6 +26,7 @@ class SimpleIdentifier(object):
   def _Reset(self):
     self.output = []
     self.cleaned_output = None
+    self.tables = []
 
   def IdentifyFromLines(self, input_lines):
     """Given bunch of lines of verse, clean-scan-identify-display."""
@@ -35,6 +36,7 @@ class SimpleIdentifier(object):
     (display_lines, cleaned_lines) = cleaner.CleanLines(input_lines)
     self.output.extend(cleaner.error_output)
     self.cleaned_output = cleaner.clean_output
+    self.output.extend(cleaner.clean_output)
 
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:
@@ -42,13 +44,16 @@ class SimpleIdentifier(object):
 
     result = self.identifier.IdentifyFromLines(pattern_lines)
     if not result:
-      self.output.extend(cleaner.clean_output)
+      pass
     else:
       for m in result:
         known_pattern = metrical_data.GetPattern(m.MetreName())
         if known_pattern:
-          display.AlignVerseToMetre(display_lines, ''.join(pattern_lines),
-                                    known_pattern)
+          alignment = display.AlignVerseToMetre(display_lines,
+                                                ''.join(pattern_lines),
+                                                known_pattern)
+          table = display.HtmlTableFromAlignment(alignment)
+          self.tables.append(table)
     return result
 
   def AllDebugOutput(self):

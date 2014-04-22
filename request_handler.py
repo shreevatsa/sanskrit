@@ -82,7 +82,12 @@ class IdentifyPage(webapp2.RequestHandler):
     if not ok:
       pass
     self.response.write(identifier.AllDebugOutput())
-    self.response.write('</pre></body></html>')
+    self.response.write('</pre>')
+
+    if identifier.tables:
+      for line in identifier.tables:
+        self.response.write(line)
+    self.response.write('</body></html>')
 
 
 application = webapp2.WSGIApplication([
