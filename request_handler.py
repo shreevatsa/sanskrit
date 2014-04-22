@@ -83,6 +83,7 @@ class IdentifyPage(webapp2.RequestHandler):
       pass
     self.response.write(identifier.AllDebugOutput())
     self.response.write('</pre>')
+    self.response.write('\n')
 
     if identifier.tables:
       for table in identifier.tables:
