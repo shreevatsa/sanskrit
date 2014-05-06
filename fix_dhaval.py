@@ -12,7 +12,7 @@ for line in lines:
   prefix3 = 'AddVishamavrtta'
   if re.match(prefix1, line):
     m = re.match(prefix1 + r"\('(?P<name>.*)', '(?P<line>.*)'\)", line)
-    assert m
+    assert m, line
     name = m.group('name')
     assert name == name.strip()
     each = m.group('line').strip()
