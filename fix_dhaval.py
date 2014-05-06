@@ -28,7 +28,9 @@ for line in lines:
     line = "('%s', ['%s', '%s'])," % (name, odd, even)
   else:
     assert re.match(prefix3, line)
-    m = re.match(prefix3 + r"\('(?P<name>.*)', '(?P<line1>.*)', '(?P<line2>.*)', '(?P<line3>.*)', '(?P<line4>.*)'\)", line)
+    m = re.match(prefix3 +
+                 r"\('(?P<name>.*)', '(?P<line1>.*)', '(?P<line2>.*)'," +
+                 r" '(?P<line3>.*)', '(?P<line4>.*)'\)", line)
     assert m
     name = m.group('name')
     assert name == name.strip()
