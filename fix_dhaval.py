@@ -27,5 +27,6 @@ for line in lines:
     assert re.match(prefix3, line)
     m = re.match(prefix3 + r"\('(?P<name>.*)', '(?P<line1>.*)', '(?P<line2>.*)', '(?P<line3>.*)', '(?P<line4>.*)'\)", line)
     assert m
+    name = m.group('name'); assert name == name.strip()
     line = "('%s', ['%s', '%s', '%s', '%s'])," % (name, m.group('line1'), m.group('line2'), m.group('line3'), m.group('line4'))
   print line
