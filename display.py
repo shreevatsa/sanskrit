@@ -105,26 +105,30 @@ def AlignVerseToMetre(display_verse, verse_pattern, metre_pattern_lines):
   metre_pattern = ''.join(metre_pattern_lines)
   (aligned_v, aligned_m) = _Align(verse_pattern, metre_pattern)
   assert len(aligned_v) == len(aligned_m)
+  assert len(aligned_v) >= len(verse_pattern)
+  assert len(aligned_m) >= len(metre_pattern)
   syllables = _SyllabizeVisual(' '.join(display_verse))
   assert len(syllables) == len(verse_pattern)
 
   n = len(aligned_m)
   current_line = 0
-  num_aligned = 0
-  num_aligned_syllables = 0
+  num_consumed_from_metre = 0
+  num_consumed_from_verse = 0
   out = [[]]
   for i in range(n):
     if aligned_v[i] != _GAP_CHAR:
       out[-1].append(
-          (syllables[num_aligned_syllables], aligned_v[i], aligned_m[i]))
-      num_aligned_syllables += 1
+          (syllables[num_consumed_from_verse], aligned_v[i], aligned_m[i]))
+      num_consumed_from_verse += 1
     else:
       out[-1].append((aligned_v[i], aligned_v[i], aligned_m[i]))
-    num_aligned += (aligned_m[i] != _GAP_CHAR)
-    if num_aligned == len(metre_pattern_lines[current_line]):
-      current_line += 1
-      num_aligned = 0
-      out.append([])
+    num_consumed_from_metre += (aligned_m[i] != _GAP_CHAR)
+    if num_consumed_from_metre == len(metre_pattern_lines[current_line]):
+      if (i == n - 1 or
+          not all(aligned_m[j] == _GAP_CHAR for j in range(i + 1, n))):
+        current_line += 1
+        num_consumed_from_metre = 0
+        out.append([])
   # for s in out:
   #   print(s)
   return out
