@@ -56,24 +56,24 @@ curated_vrtta_data = [
                 'L L L L L  G  L  G  L G',
                 ' G  L L L L L L  G  L L G',
                 'L L  G  L  G  L L L  G  L G L G']),
-    # Bhartṛhari
-    ('Dodhakam', 'G L L G L L G L L G G'),
+    # # Bhartṛhari
+    # ('Dodhakam', 'G L L G L L G L L G G'),  # In data_dhaval_vrttaratnakara
     # Bhāravi
     ('Matta-mayūram', 'G G G G – G L L G G – L L G G'),
     # Bhāravi
     ('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG'),
     # Bhāravi
     ('Prabhā (Mandākinī)', 'LLLLLLGLGGLG'),
-    # Bhāravi
-    ('Jaladharamālā', 'GGGGLLLLGGGG'),
+    # # Bhāravi
+    # ('Jaladharamālā', 'GGGGLLLLGGGG'),  # in data_dhaval_vrttaratnakara
     # Bhāravi
     ('Jaloddhatagatiḥ', 'LGLLLGLGLLLG'),
     # Bhāravi
     ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)',
      'G G G G L L L L L L G G G G'),
-    # Bhāravi
-    ('Vaṃśapatrapatitam (Vaṃśadala)',
-     'G L L G L G L L L G L L L L L L G'),
+    # # Bhāravi
+    # ('Vaṃśapatrapatitam (Vaṃśadala)',  # in data_dhaval_vrttaratnakara
+    #  'G L L G L G L L L G L L L L L L G'),
     # Māgha
     ('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G'),
     # Raghuvamśa (hard to believe, but there it is)
@@ -91,7 +91,7 @@ curated_vrtta_data = [
     ('Śivatāṇḍava',
      'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G'),
     # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
-    ('Mālatī', 'L L L L G L L G L G L G'),
+    # ('Mālatī', 'L L L L G L L G L G L G'),  # in data_dhaval_vrttaratnakara
     ('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G'),
-    ('Vidyunmālā', 'G G G G G G G G'),
+    # ('Vidyunmālā', 'G G G G G G G G'),  # in data_dhaval_vrttaratnakara
     ]
