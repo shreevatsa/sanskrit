@@ -49,7 +49,7 @@ class KnownValues(unittest.TestCase):
       if results is None:
         print('\tNo results')
       else:
-        print(match_result._Description(results, 4))
+        print(match_result.Description(results, 4))
       print('instead of')
       print('\tMetre name: %s' % metre_name)
       print('\tMatch type: %s' % match_type)
