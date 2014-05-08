@@ -121,11 +121,11 @@ def _MergeResults(results_lists):
     assert isinstance(results_list, list)
     for result in results_list:
       assert isinstance(result, match_result.MatchResult), result
-      nonempty_results.append(result)
+      if result not in nonempty_results:
+        nonempty_results.append(result)
   if len(nonempty_results) == 1:
     return nonempty_results
-
-  # TODO(shreevatsa): Do some uniq of the results here
+  # TODO(shreevatsa): Do some more uniq of the results here
   return nonempty_results
 
 
