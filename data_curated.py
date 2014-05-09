@@ -58,16 +58,16 @@ curated_vrtta_data = [
                 'L L  G  L  G  L L L  G  L G L G']),
     # # Bhartṛhari
     # ('Dodhakam', 'G L L G L L G L L G G'),  # In data_dhaval_vrttaratnakara
-    # Bhāravi
-    ('Matta-mayūram', 'G G G G – G L L G G – L L G G'),
+    # # Bhāravi
+    # ('Matta-mayūram', 'G G G G – G L L G G – L L G G'), # In vrttaratnakara
     # Bhāravi
     ('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG'),
     # Bhāravi
     ('Prabhā (Mandākinī)', 'LLLLLLGLGGLG'),
     # # Bhāravi
     # ('Jaladharamālā', 'GGGGLLLLGGGG'),  # in data_dhaval_vrttaratnakara
-    # Bhāravi
-    ('Jaloddhatagatiḥ', 'LGLLLGLGLLLG'),
+    # # Bhāravi
+    # ('Jaloddhatagatiḥ', 'LGLLLGLGLLLG'),  # in data_dhaval_vrttaratnakara
     # Bhāravi
     ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)',
      'G G G G L L L L L L G G G G'),
