@@ -88,3 +88,8 @@ Wed Apr 16 2014
         - Duplicates: Two metres named śrī? rukmavatī = campakamālā? upasthita =
           śikhaṇḍita? pramuditavadanā = prabhā? śaśikalā = maṇiguṇanikara =
           mālā? narkuṭaka = kokilaka? Is padacaturūrdhva a metre worth noting?
+
+    * We need to figure out a "related metres" info: e.g. there seems to be a
+      upacitrā-dodhaka-drutamadhyā-vegavatī-hariṇaplutā-Drutavilambitam complex
+      with various sorts of overlap. No point showing an overly specific metre;
+      better to say how it relates to more famous ones.

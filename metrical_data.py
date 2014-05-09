@@ -10,6 +10,8 @@ import itertools
 import re
 
 import data_curated
+# import data_dhaval
+import data_dhaval_vrttaratnakara
 
 import match_result
 
@@ -46,31 +48,48 @@ def GetPattern(metre):
 def _AddSamavrttaPattern(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = _CleanUpPattern(each_line_pattern)
+  if clean.endswith('L'):
+    print('Not adding %s for now, as %s ends with laghu' % (metre_name,
+                                                            each_line_pattern))
+    return
   assert re.match(r'^[LG]*G$', clean), (each_line_pattern, metre_name)
-  assert metre_name not in pattern_for_metre
+  assert metre_name not in pattern_for_metre, 'Metre name: #%s#' % metre_name
   pattern_for_metre[metre_name] = [clean] * 4
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
+
   for (a, b, c, d) in itertools.product(patterns, repeat=4):
-    assert (a + b + c + d) not in known_metre_patterns
+    assert a + b + c + d not in known_metre_patterns
     known_metre_patterns[a + b + c + d] = match_result.MatchResult(
         metre_name, match_result.MATCH_TYPE.FULL)
+
   for (a, b) in itertools.product(patterns, repeat=2):
-    assert a + b not in known_partial_patterns
-    known_partial_patterns[a + b] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.HALF)]
+    match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF)
+    if a + b in known_partial_patterns:
+      if match in known_partial_patterns[a + b]:
+        print('For %s, not adding match which already exists: %s' % (
+            a + b, match_result.Description([match])))
+        continue
+      print('For %s, currently known as %s, adding %s' % (
+          a + b, match_result.Description(known_partial_patterns[a + b]),
+          match_result.Description([match])))
+    known_partial_patterns[a + b] = known_partial_patterns.get(a + b, [])
+    known_partial_patterns[a + b].append(match)
+
   for a in patterns:
-    known_partial_patterns[a] = known_partial_patterns.get(a, []).append(
+    known_partial_patterns[a] = known_partial_patterns.get(a, [])
+    known_partial_patterns[a].append(
         match_result.MatchResult(metre_name, match_result.MATCH_TYPE.PADA))
+    assert known_partial_patterns[a] is not None
 
 
 def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
-  """Given an ardha-sama-vṛtta metres' pattern, add it."""
+  """Given an ardha-sama-vṛtta's pattern, add it."""
   (odd_line_pattern, even_line_pattern) = odd_and_even_line_patterns
   clean_odd = _CleanUpPattern(odd_line_pattern)
-  assert re.match(r'^[LG]*G$', clean_odd)
+  assert re.match(r'^[LG]*$', clean_odd)
   clean_even = _CleanUpPattern(even_line_pattern)
   assert re.match(r'^[LG]*G$', clean_even)
-  assert metre_name not in pattern_for_metre
+  assert metre_name not in pattern_for_metre, metre_name
   pattern_for_metre[metre_name] = [clean_odd, clean_even] * 2
   patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
   patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
@@ -83,13 +102,19 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
     known_partial_patterns[a + b] = [match_result.MatchResult(
         metre_name, match_result.MATCH_TYPE.HALF)]
   for a in patterns_odd:
-    assert a not in known_partial_patterns
-    known_partial_patterns[a] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.ODD_PADA)]
+    if a in known_partial_patterns:
+      print('%s being added as odd line for %s already known as %s' % (
+          a, metre_name, match_result.Description(known_partial_patterns[a])))
+    known_partial_patterns[a] = known_partial_patterns.get(a, [])
+    known_partial_patterns[a].append(match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.ODD_PADA))
   for a in patterns_even:
-    assert a not in known_partial_patterns
-    known_partial_patterns[a] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.EVEN_PADA)]
+    if a in known_partial_patterns:
+      print('%s being added as even line for %s already known as %s' % (
+          a, metre_name, match_result.Description(known_partial_patterns[a])))
+    known_partial_patterns[a] = known_partial_patterns.get(a, [])
+    known_partial_patterns[a].append(match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.EVEN_PADA))
 
 
 def _AddVishamavrttaPattern(metre_name, line_patterns):
@@ -393,7 +418,10 @@ def InitializeData():
 
   _AddKarambajati()
 
-  for (name, description) in data_curated.curated_vrtta_data:
+  vrtta_data = (data_curated.curated_vrtta_data +
+                data_dhaval_vrttaratnakara.dhaval_vrtta_data_small)
+
+  for (name, description) in vrtta_data:
     samatva = None
     need_regex = None
     if isinstance(description, list):

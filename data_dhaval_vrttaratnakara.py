@@ -37,8 +37,8 @@ dhaval_vrtta_data_small = [
     ('mattā', 'GGGG — LLLLGG'),
     ('manoramā', 'LLLGLGLGLG'),
     ('upasthitā', 'GG — LLGLLGLG'),
-    ('indravajrā', 'GGLGGLLGLGG'),
-    ('upendravajrā', 'LGLGGLLGLGG'),
+    # ('indravajrā', 'GGLGGLLGLGG'),  # covered by upajāti
+    # ('upendravajrā', 'LGLGGLLGLGG'),  # covered by upajāti
     ('sāndrapada', 'GLLGGLLLLGG'),
     ('sumukhī', 'LLLLG — LLGLLG'),
     ('dodhaka', 'GLLGLLGLLGG'),
@@ -140,8 +140,8 @@ dhaval_vrtta_data_small = [
     ('vegavatī', ['LLGLLGLLGLLGG', 'GLLGLLGLLGG']),
     ('bhadravirāṭ', ['GGLLGLGLGG', 'GGGLLGLGLG']),
     ('ketumatī', ['LLGLGLLLGG', 'GLLGLGLLLGG']),
-    ('ākhyānikī', ['GGLGGLLGLGG', 'LGLGGLLGLGG']),
-    ('viparītākhyānikī', ['LGLGGLLGLGG', 'GGLGGLLGLGG']),
+    # ('ākhyānikī', ['GGLGGLLGLGG', 'LGLGGLLGLGG']),  # covered by upajāti
+    # ('viparītākhyānikī', ['LGLGGLLGLGG', 'GGLGGLLGLGG']), # covered by upajāti
     ('hariṇaplutā', ['LLGLLGLLGLG', 'LLLGLLGLLGLG']),
     # ('aparavaktra', ['LLLLLLGLGLG', 'LLLLGLLGLGLG']), # in curated
     # ('puṣpitāgrā', ['LLLLLLGLGLGG', 'LLLLGLLGLGLGG']), # in curated
