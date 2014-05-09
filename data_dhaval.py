@@ -17,11 +17,11 @@ dhaval_vrtta_data = [
     ('vyāyogavatī', 'GGLLGLLLLLLG'),
     ('chidram', 'GGLLL'),
     ('parimalam', 'LLLLGGLLLLGLLGG'),
-    ('virāṭ', 'GGGLLGLGLG'),
+    # ('virāṭ', 'GGGLLGLGLG'),  # In other list as śuddhavirāṭ
     ('vikuṇṭhakaṇṭhaḥ', 'GLGLGLGLGLGLGLGLGLGLGLGLGG'),
     ('vinandinī', 'LLGLLGLLGLLGLG'),
     ('rāmābaddham', 'GGGGLLLLGGLLGGLLLLGGLLG'),
-    ('jaladharamālā', 'GGGGLLLLGGGG'),
+    # ('jaladharamālā', 'GGGGLLLLGGGG'),  # in other list
     ('abhīkam', 'LGGLGGG'),
     ('dūrāvalokaḥ', 'GGGGLGGLLLLLLGGGLGGLG'),
     ('purohitā', 'LGLGLGG'),
@@ -36,7 +36,7 @@ dhaval_vrtta_data = [
     ('vaṁśottaṁsā', 'GGLLGGLLGGGGGG'),
     ('karṇāṭakam', 'GGLGLLLGLGLLLGLGLLLLLLLLLG'),
     ('maru', 'LGLGLLLL'),
-    ('ardharutam', ['GLLLLLLGGLLLL', 'GLLLLLLGLLGLL']),
+    # ('ardharutam', ['GLLLLLLGGLLLL', 'GLLLLLLGLLGLL']), # Ends in laghu
     ('acalapaṅktiḥ', 'GLGLLLLLGG'),
     ('vṛndā', 'GGLGLGL'),
     ('lalitālabālam', 'LLGLGLLGGGG'),
@@ -137,7 +137,7 @@ dhaval_vrtta_data = [
     ('hindīram', 'GGGGGLG'),
     ('śukavanitā', 'LLGLLGGLLGLLLLLLG'),
     ('māyāvinī', 'LLGGGLG'),
-    ('mattakokilam', 'GLGLLGLGLLGLGLLGLG'),
+    # ('mattakokilam', 'GLGLLGLGLLGLGLLGLG'), # in curated
     ('puṣpaśakaṭikā', 'GLLLLGGGLGGLGG'),
     ('kuberakaṭikā', 'LLGLLGLGLLLGG'),
     ('narāvaliḥ', 'GGLGLLLLLLLLG'),
@@ -167,7 +167,7 @@ dhaval_vrtta_data = [
     ('bhastrānistaraṇam', 'GGGLLGGLLLLLLGLGLGLLGG'),
     ('indravimānam', 'GLLGGLLLLGGGGLLLLLLLLGG'),
     ('drutapadam', 'LLLGLLLGLLGG'),
-    ('mandākrāntā', 'GGGGLLLLLGGLGGLGG'),
+    # ('mandākrāntā', 'GGGGLLLLLGGLGGLGG'), # in curated
     ('cakitā', 'GLLLLGGGGGGLLLLG'),
     ('suvanamālikā', 'GGLLLGLGLLLG'),
     ('vajrālī', 'GGLLGGGGGGGGGGG'),
@@ -179,14 +179,14 @@ dhaval_vrtta_data = [
     ('bhasalamadam', 'GLLLLGLGLGGLG'),
     ('mihirā', 'LLLLLGLGGLGG'),
     ('hīralambi', 'GLLGLLGLGL'),
-    ('pṛthvī', 'LGLLLGLGLLLGLGGLG'),
+    # ('pṛthvī', 'LGLLLGLGLLLGLGGLG'), # in curated
     ('dolā', 'LLGG'),
     ('vidalā', 'LLLLLGGGLGLLG'),
     ('mukulitakalikāvalī', 'GLGLLLLLLGLG'),
     ('atiprativinītā', ['LLGGLLGLGLLLGG', 'LLLLGGLGLGLGG']),
     ('lalitapatākā', 'LLLLLGLGGLGGGG'),
     ('tilakā', 'LLGLLG'),
-    ('cūḍāpīḍam', 'GGGGLLLLLLGGGG'),
+    # ('cūḍāpīḍam', 'GGGGLLLLLLGGGG'), # in curated?
     ('drutamukham', 'LLLLLLLLLLLLGGGGLGLGGG'),
     ('kulacāri', 'LGLGLLGL'),
     ('varhāturā', 'GGLGLLGGLG'),
@@ -195,7 +195,7 @@ dhaval_vrtta_data = [
     ('rodhakam', 'LLLGLLGLLGG'),
     ('hāṭakaśāli', 'GGLLGL'),
     ('dantālikā', 'GGLGGGGLGGGGLGGL'),
-    ('mañjubhāṣiṇī', 'LLGLGLLLGLGLG'),
+    # ('mañjubhāṣiṇī', 'LLGLGLLLGLGLG'), # in curated
     ('jāhamukhī', 'GLLGLLGLLGLLGG'),
     ('nemadhāri', 'LGLGLLGLGL'),
     ('madanajavanikā', 'LLLLGGLLLLLLG'),
@@ -211,7 +211,7 @@ dhaval_vrtta_data = [
     ('badhirā', 'LLGGLLGLGLGG'),
     ('hariluptā', ['LLGLLGLLGLG', 'LLGGLLGLLGLG']),
     ('viyadvāṇī', ['LLGGLLGLGLGG', 'GGGLLGLGLGGG']),
-    ('aparavaktram', ['LLLLLLGLGLG', 'LLLLGLLGLGLG']),
+    # ('aparavaktram', ['LLLLLLGLGLG', 'LLLLGLLGLGLG']), # Aparavaktrā?
     ('avahitrā', ['GLLGLLGLLGG', 'LLGLLGLLGLL']),
     ('gaganagatikā', 'GLGLLGLGLLLLLG'),
     ('amṛtagatiḥ', 'LLLLGLLLLG'),
@@ -250,12 +250,12 @@ dhaval_vrtta_data = [
     ('naraśikhī', 'LLLGLLLGLLLGLLLG'),
     ('nīlagirikā', 'GLLLGLLLGLLG'),
     ('amitanagānikā', 'GLLLLGLGLLGLG'),
-    ('upacitrā', ['LLGLLGLLGLL', 'GLLGLLGLLGG']),
+    # ('upacitrā', ['LLGLLGLLGLL', 'GLLGLLGLLGG']), #different in vrttaratnakara
     ('bhārākrāntā', 'GGGGLLLLLGLGLLGLG'),
     ('kupyam', 'GLLLLGLGLG'),
     ('ahīnatālī', ['GGGLLLLGLGLG', 'LLGGLLLLGLGLGLGG']),
     ('vasanaviśālā', 'LLLLLLLGGGGG'),
-    ('kalahaṁsaḥ', 'LLGLGLLLGLLGG'),
+    # ('kalahaṁsaḥ', 'LLGLGLLLGLLGG'), # nandinī in vrttaratnakara
     ('pṛṣadvatī', 'GGLGLGGLGLGLG'),
     ('nirvādhikā', 'GGLGLLG'),
     ('anavīrā', 'LLGGLLLLG'),
@@ -287,7 +287,7 @@ dhaval_vrtta_data = [
     ('karmadā', 'GLGLLG'),
     ('sīdhuḥ', 'LLGGLLGLGLG'),
     ('cayanam', 'LGGLLLLL'),
-    ('hariṇīplutā', ['LLLGLLGLLGLG', 'LLGLLGLLGLG']),
+    ('hariṇīplutā', ['LLLGLLGLLGLG', 'LLGLLGLLGLG']),  # opposite below
     ('gallakam', 'LLLLLLLGGLG'),
     ('viṣṭambhaḥ', 'LLGLLGLLGGG'),
     ('prabhadrakam', 'LLLLGLGLLLGLGLG'),
@@ -328,7 +328,7 @@ dhaval_vrtta_data = [
     ('viṭ', 'GLLGL'),
     ('jananidhivelā', 'LLLLGGLLGGGGLLG'),
     ('candrāpīḍam', 'GGGGGGGGGGGGGGGG'),
-    ('adritanayā', 'LLLLGLGLLLGLGLLLGLGLLLG'),
+    # ('adritanayā', 'LLLLGLGLLLGLGLLLGLGLLLG'), # aśvalalita in vrttaratnakara
     ('amarāvatī', ['LGLGLGLGLGLGG', 'GLGLGLGLGLGL']),
     ('kalāpadīpakam', 'GLGLGLGLGLGLGLGLGLG'),
     ('vīravimānam', 'GLLGLLGLLGLLGLLGLLGG'),
@@ -353,10 +353,10 @@ dhaval_vrtta_data = [
     ('ciraruciḥ', 'LGGLLLG'),
     ('satketuḥ', 'GGGLLLLLLLGLGLGLGG'),
     ('aniloddhatamukhī', 'LLLGLGGLGLLLG'),
-    ('sitastavakaḥ', 'GGLGLLLGGLGLLLGGLGLLLG'),
+    # ('sitastavakaḥ', 'GGLGLLLGGLGLLLGGLGLLLG'), # Aśvadhāṭī in curated
     ('ṛtam', 'LLLLLLLLGL'),
     ('agarim', 'LLLLLLLLLLL'),
-    ('nayamālinī', 'LLLLGLGLLLGG'),
+    # ('nayamālinī', 'LLLLGLGLLLGG'), # navamālinī in vrttaratnakara
     ('mālyopastham', 'LLLLLLLLLLGGGGGG'),
     ('asudhā', ['LLGGLLGLGLG', 'GGGLLGLGLG']),
     ('kalaham', 'LLGGLLGGG'),
@@ -395,13 +395,14 @@ dhaval_vrtta_data = [
     ('kṛtamaṇitā', 'GLLLLLLLLG'),
     ('harikāntā', 'LLGGLLGGLLG'),
     ('anilohā', 'LLGGLLGGLLGGLLGG'),
-    ('hariṇīplutā', ['LLGLLGLLGLG', 'LLLGLLGLLGLG']),
+    # opposite above, hariṇaplutā in vrttaratnakara
+    # ('hariṇīplutā', ['LLGLLGLLGLG', 'LLLGLLGLLGLG']),
     ('sārāvanadā', 'GGLLGLGG'),
     ('śarahatiḥ', 'LLLLLLLLLLLLLLL'),
     ('prabodhaphalitā', 'GLGLLLGLGLLLG'),
     ('vāsaki', 'LLLLGLL'),
     ('plavaṅgamaḥ', 'GLLGLLGGLGLLGLG'),
-    ('narācaḥ', 'LGLGLGLGLGLGLGLG'),
+    # ('narācaḥ', 'LGLGLGLGLGLGLGLG'), # definitely wrong, same as Pañcacāmaram
     ('mālatī', 'LLLLGLLGLGLG'),
     ('kandaḥ', 'LGGLGGLGGLGGL'),
     ('puraṭi', 'LLLLGLG'),
@@ -455,8 +456,8 @@ dhaval_vrtta_data = [
     ('paṅkāvaliḥ', 'GLLLLLLGGLLLL'),
     ('vaiyālī', ['LLLLLLGLGLG', 'GGGLLGLGLG']),
     ('ibhabhrāntā', 'GGGLGGG'),
-    ('sragviṇī', 'GLGGLGGLGGLG'),
-    ('drutavilambitam', 'LLLGLLGLLGLG'),
+    # ('sragviṇī', 'GLGGLGGLGGLG'), # curated
+    # ('drutavilambitam', 'LLLGLLGLLGLG'), # curated
     ('mithunamālī', 'LLLLLLGGGGGG'),
     ('upakārikā', 'LLGLGLLGLGLLGL'),
     ('kusumitalatāvellitā', 'GGGGGLLLLLGGLGGLGG'),
@@ -487,13 +488,13 @@ dhaval_vrtta_data = [
     ('ayamānam', 'LLGLLGLLGLLGLLGLLGLLGG'),
     ('satī', 'LLLG'),
     ('atulapulakam', 'LLLLLLLLLLLLLLLLLLLLLLLG'),
-    ('mattākrīḍam', 'GGGGGGGGLLLLLLLLLLLLLLG'),
+    # ('mattākrīḍam', 'GGGGGGGGLLLLLLLLLLLLLLG'), # yati in vrttaratnakara
     ('sāravarohā', 'GLLGGLLLLGGLLLLG'),
     ('kaucamāraḥ', 'LLGGGLGG'),
     ('samudrakāntā', ['GGLLGLGLGG', 'GGGLLGLGLGG']),
     ('bhīmābhogaḥ', 'GGGGGLGGLGGGGGGGLGGLGG'),
     ('tanumadhyā', 'GGLLGG'),
-    ('kalasvanavaṁśaḥ', 'GLLGLLGGLLG'),
+    # ('kalasvanavaṁśaḥ', 'GLLGLLGGLLG'), # mauktikamālā in vrttaratnakara
     ('varāsikā', ['LGLGGLLGLGLG', 'GGLGGLLGLGLG',
                   'GGLGGLLGLGLG', 'GGLGGLLGLGLG']),
     ('vidhunidhuvanam', 'GGGLLLLLLGGLLLLGGGG'),

@@ -21,7 +21,7 @@ dhaval_vrtta_data_small = [
     ('kumāralalitā', 'LGLLLGG'),
     ('haṁsamālā', 'LLGGLGG'),
     ('vidyunmālā', 'GGGG — GGGG'),
-    ('chitrapadā', 'GLLGLLGG'),
+    # ('chitrapadā', 'GLLGLLGG'),  # Shouldn't this be citrapadā?
     ('māṇavaka', 'GLLGGLLG'),
     ('haṁsaruta', 'GGGLLLGG'),
     # ('samānikā', 'GLGLGLGL'),   # Ends in laghu, not adding for now
@@ -55,13 +55,13 @@ dhaval_vrtta_data_small = [
     # ('upasthita', 'LGLLLGGGLGG'),  # same as śikhaṇḍita below
     # ('śikhaṇḍita', 'LGLLLGGGLGG'),  # same as upasthita above
     ('śikhaṇḍita / upasthita', 'LGLLLGGGLGG'),  # added
-    ('mauktikamālā', 'GLLGLLGGLLG'),
+    ('mauktikamālā / kalasvanavaṁśaḥ', 'GLLGLLGGLLG'),  # name from other list
     ('candravartma', 'GLGLLLGLLLLG'),
     # ('vaṁśastha', 'LGLGGLLGLGLG'),  # in curated
     # ('indravaṁśā', 'GGLGGLLGLGLG'),  # in curated
     # ('toṭaka', 'LLGLLGLLGLLG'),  # in curated
     # ('drutavilambita', 'LLLGLLGLLGLG'),  # in curated
-    ('puṭa', 'LLLLLLGGGLGG'),
+    # ('puṭa', 'LLLLLLGGGLGG'),  # in data_dhaval with better name
     # ('pramuditavadanā', 'LLLLLLGLGGLG'), #  Same as prabhā below
     # ('mauktidadāma', 'LGLLGLLGLLGL'),  # Ends in laghu, not adding for now
     ('kusumavicitrā', 'LLLLGG — LLLLGG'),
@@ -75,7 +75,7 @@ dhaval_vrtta_data_small = [
     ('ujjvalā', 'LLLLLLGLLGLG'),
     ('vaiśvadevī', 'GGGGG — GLGGLGG'),
     ('jaladharamālā', 'GGGG — LLLLGGGG'),
-    ('navamālinī', 'LLLL — GLGLLLGG'),
+    ('navamālinī / nayamālinī', 'LLLL — GLGLLLGG'),  # nayamālinī in other list
     # ('prabhā', 'LLLLLLGLGGLG'),  # = pramuditavadanā above, also in curated.
     ('mālatī', 'LLLLGLLGLGLG'),
     ('pañcacāmara', 'LGLGLGLGLGLG'),
@@ -83,9 +83,9 @@ dhaval_vrtta_data_small = [
     # ('kṣamā', 'LLLLLLGGLGGLG'), # In curated (kept there for more names)
     # ('praharṣiṇī', 'GGGLLLLGLGLGG'),  # in curated
     # ('rucirā', 'LGLGLLLLGLGLG'),  # in curated (kept there for more names)
-    ('mattamayūra', 'GGGG — GLLGGLLGG'),
+    # ('mattamayūra', 'GGGG — GLLGGLLGG'), # better name
     # ('mañjubhāṣiṇī', 'LLGLGLLLGLGLG'),  # in curated
-    ('nandinī', 'LLGLGLLLGLLGG'),
+    ('kalahaṁsaḥ / nandinī', 'LLGLGLLLGLLGG'),  # kalahaṁsaḥ in other list
     ('candrikā', 'LLLL — LLGGLGLGG'),
     ('asambādhā', 'GGGGG — LLLLLLGGG'),
     ('aparājitā', 'LLLLLLG — LGLLGLG'),
@@ -98,14 +98,14 @@ dhaval_vrtta_data_small = [
     # ('mālā', 'LLLLLL — LLLLLLLLG'),
     # ('maṇiguṇanikara', 'LLLLLLLL — LLLLLLG'),
     # ('malinī', 'LLLLLLGG — GLGGLGG'),  # Already in curated
-    ('prabhadraka', 'LLLLGLGLLLGLGLG'),
+    # ('prabhadraka', 'LLLLGLGLLLGLGLG'), # better name
     ('elā', 'LLGLG — LLLLLLLLGG'),
     ('candralekhā', 'GGGGLGG — GGLGGLGG'),
     ('ṛṣabhagajavilasita', 'GLLGLG — LLLLLLLLLG'),
     ('vāṇinī', 'LLLLGLGLLLGLGLGG'),
     # ('śikhariṇī', 'LGGGGG — LLLLLGGLLLG'),  # in curated
     # ('pṛthvī', 'LGLLLGLG — LLLGLGGLG'),  # in curated
-    ('vaṁśapatrapatita', 'GLLGLGLLLGLL — LLLLG'),
+    # ('vaṁśapatrapatita', 'GLLGLGLLLGLL — LLLLG'), # better name
     # ('hariṇī', 'LLLLLG — GGGG — LGLLGLG'),  # in curated
     # ('mandākrāntā', 'GGGG — LLLLLG — GLGGLGG'),  # in curated
     # ('narkuṭaka', 'LLLLGLGLLLGLLGLLG'),  # same as kokilaka below
@@ -117,8 +117,8 @@ dhaval_vrtta_data_small = [
     # ('vṛtta', 'GLGLGLGLGLGLGLGLGLGL'),  # ends in laghu, not adding for now
     # ('sragdharā', 'GGGGLGG — LLLLLLG — GLGGLGG'),  # in curated
     ('madraka', 'GLLGLGLLLG — LGLLLGLGLLLG'),
-    ('aśvalalita', 'LLLLGLGLLLG — LGLLLGLGLLLG'),
-    ('mattākrīḍa', 'GGGGGGGG — LLLLL — LLLLLLLLLG'),
+    ('aśvalalita', 'LLLLGLGLLLG — LGLLLGLGLLLG'),  # adritanayā in other list
+    ('mattākrīḍam', 'GGGGGGGG—LLLLL—LLLLLLLLLG'),  # last 'm' from other list
     ('tanvī', 'GLLGG — LLLLLLG — GLLGLLLLLLGG'),
     ('krauñcapadā', 'GLLGG — GLLGGLLL — LLLLLLL —LLLLG'),
     ('bhujaṅgavijṛmbhita', 'GGGGGGGG — LLLLLLLLLLG —LGLLGLG'),
