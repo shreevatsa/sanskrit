@@ -79,7 +79,7 @@ class IdentifyPage(webapp2.RequestHandler):
                               all_metres.pop())
       else:
         self.response.write('<p>The metre may be one of: %s.' %
-                            ' OR '.join(m.Name() for m in all_metres))
+                            ' OR '.join(m for m in all_metres))
     else:
       self.response.write('<p>No metre recognized.</p>')
 
