@@ -185,8 +185,8 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
             (c + d, metre_name))
       Print(match_result.Description(known_partial_patterns[c + d]))
     known_partial_patterns[c + d] = known_partial_patterns.get(c + d, [])
-    known_partial_patterns[c + d] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.SECOND_HALF)]
+    known_partial_patterns[c + d].append(match_result.MatchResult(
+        metre_name, match_result.MATCH_TYPE.SECOND_HALF))
 
 
 def _AddMetreRegex(metre_name, line_regexes, simple=True):
@@ -460,9 +460,9 @@ def InitializeData():
 
   _AddKarambajati()
 
-  vrtta_data = (data_curated.curated_vrtta_data +
-                data_dhaval_vrttaratnakara.dhaval_vrtta_data_small +
-                data_dhaval.dhaval_vrtta_data)
+  vrtta_data = (data_curated.curated_vrtta_data
+                + data_dhaval_vrttaratnakara.dhaval_vrtta_data_small
+                + data_dhaval.dhaval_vrtta_data)
 
   for (name, description) in vrtta_data:
     samatva = None
