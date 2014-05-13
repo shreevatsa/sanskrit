@@ -129,8 +129,6 @@ def AlignVerseToMetre(display_verse, verse_pattern, metre_pattern_lines):
         current_line += 1
         num_consumed_from_metre = 0
         out.append([])
-  # for s in out:
-  #   print(s)
   return out
 
 

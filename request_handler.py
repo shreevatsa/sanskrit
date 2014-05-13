@@ -53,7 +53,7 @@ class IdentifyPage(webapp2.RequestHandler):
 
     self.response.write('<html>\n')
     self.response.write('<head><style>\n')
-    self.response.write('abbr {border-bottom: 1px dotted black;}\n')
+    self.response.write('abbr {border-bottom: 1px dotted black; color:red;}\n')
     self.response.write('.sylL { } \n')
     self.response.write('.sylG { font-weight:bold; } \n')
     self.response.write('.syl- { } \n')
