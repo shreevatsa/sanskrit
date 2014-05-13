@@ -337,12 +337,22 @@ def _PatternsOfLength(n):
 _patterns_memo = {0: [''], 1: ['L']}
 
 
+def _LoosePatternsOfLength(n):
+  if n in _loose_patterns_memo:
+    return _loose_patterns_memo[n]
+  _loose_patterns_memo[n] = (_PatternsOfLength(n) +
+                             [p for p in _PatternsOfLength(n - 1)
+                              if p.endswith('L')])
+  return _loose_patterns_memo[n]
+_loose_patterns_memo = {0: [''], 1: ['L']}
+
+
 def _AddAryaRegex():
   _AddMetreRegex('Āryā (matched from regex)',
-                 ['|'.join(_PatternsOfLength(12)),
-                  '|'.join([p + '[LG]' for p in _PatternsOfLength(16)]),
-                  '|'.join(_PatternsOfLength(12)),
-                  '|'.join([p + '[LG]' for p in _PatternsOfLength(13)])],
+                 ['|'.join(_LoosePatternsOfLength(12)),
+                  '|'.join(_LoosePatternsOfLength(18)),
+                  '|'.join(_LoosePatternsOfLength(12)),
+                  '|'.join(_LoosePatternsOfLength(15))],
                  simple=False)
 
 
