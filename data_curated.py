@@ -92,6 +92,6 @@ curated_vrtta_data = [
      'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G'),
     # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
     # ('Mālatī', 'L L L L G L L G L G L G'),  # in data_dhaval_vrttaratnakara
-    ('Madīrā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G'),
+    ('Madirā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G'),
     # ('Vidyunmālā', 'G G G G G G G G'),  # in data_dhaval_vrttaratnakara
     ]

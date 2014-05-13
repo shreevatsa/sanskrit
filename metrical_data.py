@@ -58,6 +58,10 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
     return
   assert re.match(r'^[LG]*G$', clean), (each_line_pattern, metre_name)
   if metre_name in pattern_for_metre:
+    if pattern_for_metre[metre_name] != [clean] * 4:
+      Print('Mismatch for %s' % metre_name)
+      Print(pattern_for_metre[metre_name])
+      Print([clean] * 4)
     assert pattern_for_metre[metre_name] == [clean] * 4
     Print('Not adding duplicate as already present: %s' % metre_name)
     return
@@ -172,6 +176,11 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
   patterns_d = [pd[:-1] + 'G', pd[:-1] + 'L']
   for (a, b, c, d) in itertools.product(patterns_a, patterns_b,
                                         patterns_c, patterns_d):
+    if a + b + c + d in known_metre_patterns:
+      Print('Error: pattern already present')
+      Print(metre_name)
+      Print(a + b + c + d)
+      Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
     assert (a + b + c + d) not in known_metre_patterns
     known_metre_patterns[a + b + c + d] = match_result.MatchResult(
         metre_name, match_result.MATCH_TYPE.FULL)
