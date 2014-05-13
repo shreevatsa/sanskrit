@@ -124,7 +124,7 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
   patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
   for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2):
     if a + b + c + d in known_metre_patterns:
-      Print('Error: already present')
+      Print('Error: pattern already present')
       Print(metre_name)
       Print(a + b + c + d)
       Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
@@ -168,6 +168,14 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
   (pa, pb, pc, pd) = line_patterns
   assert pb.endswith('G')
   assert pd.endswith('G')
+  if metre_name in pattern_for_metre:
+    if pattern_for_metre[metre_name] != pa + pb + pc + pd:
+      Print('Mismatch for %s' % metre_name)
+      Print(pattern_for_metre[metre_name])
+      Print(pa + pb + pc + pd)
+    assert pattern_for_metre[metre_name] == pa + pb + pc + pd
+    Print('Not adding duplicate as already present: %s' % metre_name)
+    return
   assert metre_name not in pattern_for_metre
   pattern_for_metre[metre_name] = pa + pb + pc + pd
   patterns_a = [pa]

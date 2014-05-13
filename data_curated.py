@@ -76,8 +76,8 @@ curated_vrtta_data = [
     #  'G L L G L G L L L G L L L L L L G'),
     # Māgha
     ('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G'),
-    # Raghuvamśa (hard to believe, but there it is)
-    ('Nārācam', 'L L L L L L G L G G L G G L G G L G'),
+    # # Raghuvamśa (hard to believe, but there it is)
+    # ('Nārācam', 'L L L L L L G L G G L G G L G G L G'),  # in DD
 
     ('Bhujañgaprayātam', 'L G G L G G L G G L G G'),
     ('Toṭakam', 'L L G L L G L L G L L G'),
