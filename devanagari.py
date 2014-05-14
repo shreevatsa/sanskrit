@@ -3,7 +3,7 @@
 
 The issue is that Unicode Devanāgari includes the "implicit a": for instance it
 represents 'ki' as 'ka + vowel sign i' and 'k' as 'ka + virāma'. This requires
-special handling of vowel signs, and also special handling when the vowel is a.
+special handling of vowel signs, and special handling when the vowel is 'a'.
 So for internal work, we "normalize" all Devanāgari text to a form we call
 "Mangled Devanāgari", wherein all (consonant + vowel sign) combinations are
 represented internally as (consonant + virāma + vowel) [not vowel sign], even
@@ -40,15 +40,11 @@ def Mangle(text):
   orig_text = text
 
   signs_to_vowels = dict(zip(_VOWEL_SIGNS, _VOWELS_NON_A))
-  # TODO(shreevatsa): Remove this assert; enough confidence
-  assert signs_to_vowels == dict(zip(_VOWEL_SIGNS_STR, _VOWELS_NON_A))
-
   # consonant + vowel sign -> consonant + virāma + vowel
   def Replacer(match):
     return match.group(1) + _VIRAMA + signs_to_vowels[match.group(2)]
-  text = re.sub('(%s)([%s])' % (_CONSONANT_RE, _VOWEL_SIGNS_STR),
-                Replacer,
-                text)
+  text = re.sub('(%s)(%s)' % (_CONSONANT_RE, _VOWEL_SIGNS_RE),
+                Replacer, text)
   # Check that no more vowel signs exist
   if re.search(_VOWEL_SIGNS_RE, text):
     logging.error('Error in Devanāgari text %s: Stray vowel signs.', orig_text)

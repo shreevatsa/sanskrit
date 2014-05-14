@@ -118,10 +118,6 @@ class KnownValues(unittest.TestCase):
         'Āryā (matched from regex)',
         match_result.MATCH_TYPE.FULL)
 
-  def testBreakUp(self):
-    """Test all the above by inserting random breaks in the list."""
-    raise self.failureException
-
   def testBadVerse(self):
     """Test a verse that has typos, and see if correct metre can be guessed."""
     verse = ['स्मराहुताशनमुर्मुरचूर्णतां दधुरिवाम्रवनस्य रजःकणाः ।',
