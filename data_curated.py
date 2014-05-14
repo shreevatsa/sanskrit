@@ -40,11 +40,11 @@ curated_vrtta_data = [
     ('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG'),
     ('Prabhā (Mandākinī)', 'LLLLLLGLGGLG'),
     ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)', 'GGGGLLLLLLGGGG'),
-    ('Vaṃśapatrapatitam (Vaṃśadala)', 'GLLGLGLLLGLLLLLLG'),  # in VR
+    # ('Vaṃśapatrapatitam (Vaṃśadala)', 'GLLGLGLLLGLLLLLLG'),  # in VR
     ('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G'),
     # ('Nārācam', 'L L L L L L G L G G L G G L G G L G'),  # in DD
 
-    ('Bhujañgaprayātam', 'L G G L G G L G G L G G'),
+    ('Bhujaṅgaprayātam', 'L G G L G G L G G L G G'),
     ('Toṭakam', 'L L G L L G L L G L L G'),
     ('Sragviṇī', 'G L G G L G G L G G L G'),
     ('Cārucāmaram', 'G L G L G L G L G L G L G L G'),

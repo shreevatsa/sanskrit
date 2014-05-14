@@ -19,11 +19,11 @@ data_vrttaratnakara = [
     ('madhumatī', 'LLLLLLG'),
     ('madalekhā', 'GGGLLGG'),
     ('kumāralalitā', 'LGLLLGG'),
-    # ('haṁsamālā', 'LLGGLGG'), # called bhūridhāmā in other list
+    # ('haṃsamālā', 'LLGGLGG'), # called bhūridhāmā in other list
     ('vidyunmālā', 'GGGG — GGGG'),
     # ('chitrapadā', 'GLLGLLGG'),  # Shouldn't this be citrapadā?
     # ('māṇavaka', 'GLLGGLLG'),  # in DD
-    # ('haṁsaruta', 'GGGLLLGG'),  # in other list too
+    # ('haṃsaruta', 'GGGLLLGG'),  # in other list too
     # ('samānikā', 'GLGLGLGL'),   # Ends in laghu, not adding for now
     ('pramāṇikā', 'LGLGLGLG'),
     ('campakamālā', 'GLLGGGLLGG'),
@@ -55,10 +55,10 @@ data_vrttaratnakara = [
     # ('upasthita', 'LGLLLGGGLGG'),  # same as śikhaṇḍita below
     # ('śikhaṇḍita', 'LGLLLGGGLGG'),  # same as upasthita above
     ('śikhaṇḍita / upasthita', 'LGLLLGGGLGG'),  # added
-    ('mauktikamālā / kalasvanavaṁśaḥ', 'GLLGLLGGLLG'),  # name from other list
+    ('mauktikamālā / kalasvanavaṃśaḥ', 'GLLGLLGGLLG'),  # name from other list
     ('candravartma', 'GLGLLLGLLLLG'),
-    # ('vaṁśastha', 'LGLGGLLGLGLG'),  # in curated
-    # ('indravaṁśā', 'GGLGGLLGLGLG'),  # in curated
+    # ('vaṃśastha', 'LGLGGLLGLGLG'),  # in curated
+    # ('indravaṃśā', 'GGLGGLLGLGLG'),  # in curated
     # ('toṭaka', 'LLGLLGLLGLLG'),  # in curated
     # ('drutavilambita', 'LLLGLLGLLGLG'),  # in curated
     # ('puṭa', 'LLLLLLGGGLGG'),  # in data_dhaval with better name
@@ -68,7 +68,7 @@ data_vrttaratnakara = [
     # ('jaloddhatagati', 'LGLLLGLGLLLG'), # better name in big list
     # ('bhujaṅgaprayāta', 'LGGLGGLGGLGG'),  # in curated
     # ('sragviṇī', 'GLGGLGGLGGLG'),  # in curated
-    ('priyaṁvadā', 'LLLGLLLGLGLG'),  # = priyaṁvadaḥ in DD
+    ('priyaṃvadā', 'LLLGLLLGLGLG'),  # = priyaṃvadaḥ in DD
     ('maṇimālā', 'GGLLGGGGLLGG'),
     ('lalitā', 'GGLGLLLGLGLG'),
     # ('pramitākṣarā', 'LLGLGLLLGLLG'),  # in curated
@@ -85,7 +85,7 @@ data_vrttaratnakara = [
     # ('rucirā', 'LGLGLLLLGLGLG'),  # in curated (kept there for more names)
     # ('mattamayūra', 'GGGG — GLLGGLLGG'), # better name
     # ('mañjubhāṣiṇī', 'LLGLGLLLGLGLG'),  # in curated
-    ('kalahaṁsaḥ / nandinī', 'LLGLGLLLGLLGG'),  # kalahaṁsaḥ in other list
+    ('kalahaṃsaḥ / nandinī', 'LLGLGLLLGLLGG'),  # kalahaṃsaḥ in other list
     ('candrikā1', 'LLLL — LLGGLGLGG'),          # different in DD
     ('asambādhā', 'GGGGG — LLLLLLGGG'),
     ('aparājitā', 'LLLLLLG — LGLLGLG'),
@@ -105,7 +105,7 @@ data_vrttaratnakara = [
     ('vāṇinī', 'LLLLGLGLLLGLGLGG'),
     # ('śikhariṇī', 'LGGGGG — LLLLLGGLLLG'),  # in curated
     # ('pṛthvī', 'LGLLLGLG — LLLGLGGLG'),  # in curated
-    # ('vaṁśapatrapatita', 'GLLGLGLLLGLL — LLLLG'), # better name
+    ('vaṃśapatrapatitam', 'GLLGLGLLLGLL — LLLLG'),  # 'm' from DD
     # ('hariṇī', 'LLLLLG — GGGG — LGLLGLG'),  # in curated
     # ('mandākrāntā', 'GGGG — LLLLLG — GLGGLGG'),  # in curated
     # ('narkuṭaka', 'LLLLGLGLLLGLLGLLG'),  # same as kokilaka below
