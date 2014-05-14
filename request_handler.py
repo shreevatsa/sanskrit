@@ -32,6 +32,7 @@ def _UniqList(expr):
 
 
 def _DisplayName(metre_name):
+  metre_name = '%s' % metre_name
   return transliterate.AddDevanagariToIast(metre_name)
 
 
