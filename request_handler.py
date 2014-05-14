@@ -105,7 +105,8 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('\n')
 
     if identifier.tables:
-      for table in identifier.tables:
+      for (name, table) in identifier.tables:
+        self.response.write('<p>Reading as %s:</p>' % _DisplayName(name))
         for line in table:
           self.response.write(line)
     self.response.write('</body></html>')

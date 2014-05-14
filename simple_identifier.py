@@ -53,7 +53,7 @@ class SimpleIdentifier(object):
                                                 ''.join(pattern_lines),
                                                 known_pattern)
           table = display.HtmlTableFromAlignment(alignment)
-          self.tables.append(table)
+          self.tables.append((m.MetreName(), table))
     return result
 
   def AllDebugOutput(self):
