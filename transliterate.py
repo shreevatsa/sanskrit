@@ -160,6 +160,12 @@ def TransliterateForOutput(text):
   return '%s (%s)' % (iast, deva)
 
 
+def AddDevanagariToIast(iast):
+  slp_text = transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE, iast)
+  deva = _CleanSLP1ToDevanagari(slp_text)
+  return '%s (%s)' % (iast, deva)
+
+
 def TransliterateForTable(text):
   return transliterator.Transliterate(_SLP1_TO_IAST_STATE_MACHINE, text,
                                       ignore=None,

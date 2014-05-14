@@ -7,10 +7,12 @@ from __future__ import unicode_literals
 
 import cgi
 import codecs
+import collections
 
 import webapp2
 
 import simple_identifier
+import transliterate
 
 
 def InputForm(default=''):
@@ -23,6 +25,14 @@ def InputForm(default=''):
 
 def StatsTable():
   return codecs.open('gretil_stats/stats_table.html', 'r', 'utf-8').read()
+
+
+def _UniqList(expr):
+  return list(collections.OrderedDict.fromkeys(expr))
+
+
+def _DisplayName(metre_name):
+  return transliterate.AddDevanagariToIast(metre_name)
 
 
 MAIN_PAGE_HTML = open('main_page_template.html').read()
@@ -67,19 +77,19 @@ class IdentifyPage(webapp2.RequestHandler):
     ok = False
     if results:
       assert isinstance(results, list)
-      all_metres = set(m.MetreNameOnlyBase() for m in results)
+      all_metres = _UniqList(m.MetreNameOnlyBase() for m in results)
       if len(all_metres) == 1:
         if len(results) == 1:
           ok = True
           self.response.write('<p>The metre is <font size="+2">%s</font>'
-                              % results[0])
+                              % _DisplayName(results[0]))
         else:
-          self.response.write('<p>The intended metre is probably '
-                              '<font size="+2">%s</font>' %
-                              all_metres.pop())
+          self.response.write(
+              '<p>The intended metre is probably <font size="+2">%s</font>' %
+              _DisplayName(all_metres[0]))
       else:
         self.response.write('<p>The metre may be one of: %s.' %
-                            ' OR '.join(m for m in all_metres))
+                            ' OR '.join(_DisplayName(m for m in all_metres)))
     else:
       self.response.write('<p>No metre recognized.</p>')
 
