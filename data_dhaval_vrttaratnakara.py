@@ -6,7 +6,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-dhaval_vrtta_data_small = [
+data_vrttaratnakara = [
     ('śrī', 'G'),
     ('strī', 'GG'),
     ('nārī', 'GGG'),

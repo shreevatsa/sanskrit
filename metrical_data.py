@@ -488,7 +488,7 @@ def InitializeData():
   _AddKarambajati()
 
   vrtta_data = (data_curated.curated_vrtta_data
-                + data_dhaval_vrttaratnakara.dhaval_vrtta_data_small
+                + data_dhaval_vrttaratnakara.data_vrttaratnakara
                 + data_dhaval.dhaval_vrtta_data)
 
   for (name, description) in vrtta_data:
