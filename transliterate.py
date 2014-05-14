@@ -115,6 +115,7 @@ def _FixBadDevanagari(text):
   text = text.replace('ॆ', 'े')
   text = text.replace('ॊ', 'ो')
   text = text.replace('ळ', 'ल')
+  text = text.replace('ॐ', 'ओं')
   return text
 
 
