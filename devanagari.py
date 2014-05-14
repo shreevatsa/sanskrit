@@ -23,9 +23,10 @@ _CONSONANTS = 'कखगघङचछजझञटठडढणतथदधनप�
 _CONSONANT_RE = '[%s]' % _CONSONANTS
 _VOWEL_A = 'अ'
 _VOWELS_NON_A = 'आइईउऊऋॠऌॡएऐओऔ'
+_VOWELS = _VOWEL_A + _VOWELS_NON_A
+_VOWEL_RE = '[%s]' % _VOWELS
 _VOWEL_SIGNS = ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ']
-_VOWEL_SIGNS_STR = ''.join(_VOWEL_SIGNS)
-_VOWEL_SIGNS_RE = '[%s]' % _VOWEL_SIGNS_STR
+_VOWEL_SIGNS_RE = '[%s]' % (''.join(_VOWEL_SIGNS))
 _ANUSVARA_VISARGA = 'ंः'
 _VIRAMA = '्'
 
@@ -40,35 +41,23 @@ def Mangle(text):
   orig_text = text
 
   signs_to_vowels = dict(zip(_VOWEL_SIGNS, _VOWELS_NON_A))
-  # consonant + vowel sign -> consonant + virāma + vowel
+  # consonant + vowel sign -> consonant + virāma + corresponding vowel
   def Replacer(match):
     return match.group(1) + _VIRAMA + signs_to_vowels[match.group(2)]
-  text = re.sub('(%s)(%s)' % (_CONSONANT_RE, _VOWEL_SIGNS_RE),
-                Replacer, text)
-  # Check that no more vowel signs exist
+  text = re.sub('(%s)(%s)' % (_CONSONANT_RE, _VOWEL_SIGNS_RE), Replacer, text)
   if re.search(_VOWEL_SIGNS_RE, text):
     logging.error('Error in Devanāgari text %s: Stray vowel signs.', orig_text)
-
   # consonant + [not virāma] -> consonant + virāma + 'a'
   text = re.sub('(%s)(?!%s)' % (_CONSONANT_RE, _VIRAMA),
-                r'\g<1>%s%s' % (_VIRAMA, _VOWEL_A),
-                text)
-  # Check that no more consonants exist that are not followed by virāma
-  for c in re.finditer(_CONSONANT_RE, text):
-    assert text[c.start() + 1] == _VIRAMA, (text, c.start())
-
-  assert orig_text == UnMangle(text), (orig_text, text, UnMangle(text))
-  logging.debug('Mangled to: %s', text)
+                r'\g<1>%s%s' % (_VIRAMA, _VOWEL_A), text)
+  # assert orig_text == UnMangle(text), (orig_text, text, UnMangle(text))
   return text
 
 
 def UnMangle(text):
   """Converts normalized (Mangled) Devanāgari to standard Devanāgari."""
-  # consonant + virāma + vowel -> consonant + vowel sign
-  vowels = _VOWEL_A + _VOWELS_NON_A
-  vowel_re = '[%s]' % vowels
-  vowels_to_signs = dict(zip(vowels, [''] + _VOWEL_SIGNS))
-  text = re.sub('(%s)%s(%s)' % (_CONSONANT_RE, _VIRAMA, vowel_re),
+  # consonant + virāma + vowel -> consonant + corresponding vowel sign
+  vowels_to_signs = dict(zip(_VOWELS, [''] + _VOWEL_SIGNS))
+  return re.sub('(%s)%s(%s)' % (_CONSONANT_RE, _VIRAMA, _VOWEL_RE),
                 lambda match: match.group(1) + vowels_to_signs[match.group(2)],
                 text)
-  return text
