@@ -161,8 +161,16 @@ def TransliterateForOutput(text):
 
 
 def AddDevanagariToIast(iast):
-  slp_text = transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE, iast)[0]
-  deva = _CleanSLP1ToDevanagari(slp_text)
+  """Given IAST text, include the Devanagari transliteration in brackets."""
+  stray = ' ()/'      # Non-IAST characters that appear in metre names
+  slp_text = transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE, iast,
+                                          ignore=None, pass_through=stray)[0]
+  (deva, unparsed) = transliterator.Transliterate(
+      _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE, slp_text, ignore=None,
+      pass_through=stray)
+  assert not unparsed, (deva, unparsed)
+  assert isinstance(deva, unicode), deva
+  deva = devanagari.UnMangle(deva)
   return '%s (%s)' % (iast, deva)
 
 
