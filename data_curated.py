@@ -6,77 +6,42 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+# TODO(shreevatsa): pādānta-lagu whitelist: metres until Vasantatilakā, -Śālinī
 curated_vrtta_data = [
-    # Bhartṛhari
     ('Upajāti', '. G L G G L L G L G .'),
-    # Bhartṛhari
     ('Rathoddhatā', 'G L G L L L G L G L G'),
-    # Bhāravi
     ('Svāgatā', 'G L G L L L G L L G G'),
-    # Bhartṛhari
     ('Drutavilambitam', 'L L L G L L G L L G L G'),
-    # Māgha
     ('Mañjubhāṣiṇī', 'L L G L G L L L G L G L G'),
-    # Bhartṛhari
     ('Śālinī', 'G G G G — G L G G L G G'),
-    # Bhāravi
     ('Praharṣiṇī', 'G G G L L L L G L G L G G'),
-    # Bhāravi
     ('Pramitākṣarā', 'L L G L G L L L G L L G'),
-    # Bhartṛhari
-    # TODO(shreevatsa): pādānta-lagu whitelist: +Vasantatilakā, -Śālinī
     ('Vasantatilakā', 'G G L G L L L G L L G L G G'),
-    # Bhartṛhari
     ('Mālinī', 'L L L L L L G G — G L G G L G G'),
-    # Meghadūta
     ('Mandākrāntā', 'G G G G — L L L L L G — G L G G L G G'),
-    # Bhartṛhari
     ('Śikhariṇī', 'L G G G G G – L L L L L G G — L L L G'),
-    # Bhartṛhari
     ('Hariṇī', 'L L L L L G — G G G G — L G L L G L G'),
-    # Bhartṛhari
     ('Pṛthvī', 'L G L L L G L G—L L L G L G G L G'),
-    # Bhartṛhari
-    ('Śārdūlavikrīḍitam',
-     'G G G L L G L G L L L G — G G L G G L G'),
-    # Bhartṛhari
-    ('Sragdharā',
-     'G G G G L G G — L L L L L L G — G L G G L G G'),
-    # Bhartṛhari
+    ('Śārdūlavikrīḍitam', 'G G G L L G L G L L L G — G G L G G L G'),
+    ('Sragdharā', 'G G G G L G G — L L L L L L G — G L G G L G G'),
     ('Viyoginī', ['L L G   L L G L G L G', 'L L G G L L G L G L G']),
-    # Bhāravi
-    ('Aupacchandasikam (Vasantamālikā) (Upodgatā)',
-     ['L L G   L L G L G L G G', 'L L G G L L G L G L G G']),
-    # Bhāravi
+    ('Aupacchandasikam (Vasantamālikā) (Upodgatā)', ['LLG LLGLGLGG',
+                                                     'LLGGLLGLGLGG']),
     ('Aparavaktrā', ['L L L L L L G — L G L G', 'L L L L G — L L G L G L G']),
-    # Bhartṛhari
-    ('Puṣpitāgrā', ['L L L L L L G L G L G G', 'L L L L G L L G L G L G G']),
-    # Bhāravi
+    ('Puṣpitāgrā', ['L L L L   L L G L G L G G',
+                    'L L L L G L L G L G L G G']),
     ('Udgatā', ['L L  G  L  G  L L L G L',
                 'L L L L L  G  L  G  L G',
                 ' G  L L L L L L  G  L L G',
                 'L L  G  L  G  L L L  G  L G L G']),
-    # # Bhartṛhari
-    # ('Dodhakam', 'G L L G L L G L L G G'),  # In data_dhaval_vrttaratnakara
-    # # Bhāravi
-    # ('Matta-mayūram', 'G G G G – G L L G G – L L G G'), # In vrttaratnakara
-    # Bhāravi
+
+    # ('Dodhakam', 'G L L G L L G L L G G'),  # In VR
+    # ('Matta-mayūram', 'G G G G – G L L G G – L L G G'), # In VR
     ('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG'),
-    # Bhāravi
     ('Prabhā (Mandākinī)', 'LLLLLLGLGGLG'),
-    # # Bhāravi
-    # ('Jaladharamālā', 'GGGGLLLLGGGG'),  # in data_dhaval_vrttaratnakara
-    # # Bhāravi
-    # ('Jaloddhatagatiḥ', 'LGLLLGLGLLLG'),  # in data_dhaval_vrttaratnakara
-    # Bhāravi
-    ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)',
-     'G G G G L L L L L L G G G G'),
-    # # Bhāravi
-    # ('Vaṃśapatrapatitam (Vaṃśadala)',  # in data_dhaval_vrttaratnakara
-    #  'G L L G L G L L L G L L L L L L G'),
-    # Māgha
+    ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)', 'GGGGLLLLLLGGGG'),
+    ('Vaṃśapatrapatitam (Vaṃśadala)', 'GLLGLGLLLGLLLLLLG'),  # in VR
     ('Rucirā (Prabhāvatī)', 'L G L G L L L L G L G L G'),
-    # # Raghuvamśa (hard to believe, but there it is)
     # ('Nārācam', 'L L L L L L G L G G L G G L G G L G'),  # in DD
 
     ('Bhujañgaprayātam', 'L G G L G G L G G L G G'),
@@ -86,12 +51,11 @@ curated_vrtta_data = [
     ('Pañcacāmaram', 'LGLGLGLGLGLGLGLG'),
     ('Kokilalam (Nardaṭakam)', 'L L L L G L G L L L G — L L G L L G'),
     ('Mallikāmālā (Matta-kokilā)', 'G L G L L G L G L L G L G L L G L G'),
-    ('Aśvadhāṭī (Sitastavakaḥ)',
-     'G G L G L L L – G G L G L L L – G G L G L L L G'),
-    ('Śivatāṇḍava',
-     'L G L L  L G L L  L G L L  L G L L  L G L L  L G L L  L G'),
-    # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
-    # ('Mālatī', 'L L L L G L L G L G L G'),  # in data_dhaval_vrttaratnakara
+    ('Aśvadhāṭī (Sitastavakaḥ)', 'GGLGLLL–GGLGLLL–GGLGLLLG'),
+    ('Śivatāṇḍava', 'LGLL LGLL LGLL LGLL LGLL LGLL LG'),
+    # ('Mālatī', 'L L L L G L L G L G L G'),  # in VR
     ('Madirā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G'),
-    # ('Vidyunmālā', 'G G G G G G G G'),  # in data_dhaval_vrttaratnakara
+    # ('Vidyunmālā', 'G G G G G G G G'),  # in VR
+
+    # # AddMatravrtta('Pādākulakam (and many other names)', ['4 * 4'] * 4)
     ]
