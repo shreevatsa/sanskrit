@@ -44,7 +44,7 @@ MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${METRE_STATISTICS}', StatsTable())
 common_identifier = simple_identifier.SimpleIdentifier()
 
 
-class InputPage(webapp2.RequestHandler):
+class MainPage(webapp2.RequestHandler):
 
   def get(self):
     self.response.write(MAIN_PAGE_HTML)
@@ -112,7 +112,8 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('</body></html>')
 
 
+# Handles all requests to sanskritmetres.appspot.com
 application = webapp2.WSGIApplication([
-    ('/', InputPage),
+    ('/', MainPage),
     ('/identify', IdentifyPage),
 ], debug=True)
