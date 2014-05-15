@@ -105,3 +105,8 @@ Wed Apr 16 2014
 
 c3d963e94f3d0e780e6e7c569a215c1d3b06b70c
 Thu 2014-05-14
+
+    Instead of returning a match_result.MatchResult object from identifier,
+    simply return a string. After all, even if it's only one line of four that
+    matches, it's still not right to say that the match type is a pāda. The
+    matches can be ranked by the aligner.
