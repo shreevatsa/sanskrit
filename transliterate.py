@@ -119,7 +119,7 @@ def _FixBadDevanagari(text):
   return text
 
 
-def DetectAndTransliterate(text, ignore=None, pass_through=None):
+def DetectAndTransliterate(text, pass_through=None, ignore=None):
   """Transliterates text to SLP1, after guessing what script it is."""
   text = _IsoToIast(text)
   text = _FixBadDevanagari(text)

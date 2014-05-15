@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-"""Utilities for normalizing Devanāgari.
+"""Utility for normalizing Devanāgari into a form easier to handle in code.
 
-The issue is that Unicode Devanāgari includes the "implicit a": for instance it
-represents 'ki' as 'ka + vowel sign i' and 'k' as 'ka + virāma'. This requires
-special handling of vowel signs, and special handling when the vowel is 'a'.
-So for internal work, we "normalize" all Devanāgari text to a form we call
-"Mangled Devanāgari", wherein all (consonant + vowel sign) combinations are
-represented internally as (consonant + virāma + vowel) [not vowel sign], even
-when the vowel is 'a'.
+The issue is that in Unicode, Devanāgari consonants include the "implicit a".
+For instance 'ki' is represented as 'ka + vowel sign i' and 'k' as 'ka +
+virāma'. This requires special handling of vowel signs, and special handling
+when the vowel is 'a'.  So for internal work, we "normalize" all Devanāgari text
+to a form we call "Mangled Devanāgari", wherein all (consonant + vowel sign)
+combinations are represented internally as (consonant + virāma + vowel), and
+this representation is used even when the vowel is 'a'.
 """
 
 from __future__ import absolute_import

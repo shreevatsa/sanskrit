@@ -29,7 +29,7 @@ class SimpleIdentifier(object):
     self.tables = []
 
   def IdentifyFromLines(self, input_lines):
-    """Given bunch of lines of verse, clean-scan-identify-display."""
+    """Given lines of verse, read-scan-identify-display."""
     self._Reset()
     logging.info('Got input:\n%s', '\n'.join(input_lines))
     cleaner = handle_input.InputHandler()

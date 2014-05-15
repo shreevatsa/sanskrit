@@ -89,5 +89,5 @@ def Transliterate(state_machine, text, ignore=None, pass_through=None):
       num_parsed += 1
   if unparsed_characters:
     logging.warning('Could not parse some characters (%s) in %s',
-                    unparsed_characters, text)
+                    ', '.join(unparsed_characters), text)
   return (transliterated, unparsed_characters)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Utils to clean up input."""
+"""Takes the input verse and produces verse lines in SLP1 transliteration."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -27,6 +27,7 @@ def RemoveVerseNumber(text):
 
 
 def UnicodeNotation(c):
+  assert isinstance(c, unicode)
   return 'U+%04x' % ord(c)
 
 
@@ -40,25 +41,19 @@ class InputHandler(object):
   def TransliterateAndClean(self, text):
     """Transliterates text to SLP1, removing all other characters."""
     orig_text = text
-    ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
     pass_through = ' -?'
-    (text, rejects) = transliterate.DetectAndTransliterate(text, ignore,
-                                                           pass_through)
-
-    recognized_text = ''
-    for c in orig_text:
-      if c in rejects:
-        recognized_text += '[%s]' % UnicodeNotation(c)
-      else:
-        recognized_text += c
+    ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
+    (text, rejects) = transliterate.DetectAndTransliterate(text, pass_through,
+                                                           ignore)
+    recognized_text = ''.join('[%s]' % UnicodeNotation(c) if c in rejects else c
+                              for c in orig_text)
 
     if rejects:
       self.error_output.append('Unknown characters are ignored: %s' % (
           ', '.join('%s (%s %s)' %
                     (c, UnicodeNotation(c), unicodedata.name(c, 'Unknown'))
                     for c in rejects)))
-      self.error_output.append(orig_text)
-      self.error_output.append('recognized as')
+      self.error_output.append('Input recognized as')
       self.error_output.append(recognized_text)
 
     def Clean(text):
