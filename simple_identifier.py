@@ -43,13 +43,13 @@ class SimpleIdentifier(object):
       pass
     else:
       for m in result:
-        known_pattern = metrical_data.GetPattern(m.MetreName())
+        known_pattern = metrical_data.GetPattern(m)
         if known_pattern:
           alignment = display.AlignVerseToMetre(display_lines,
                                                 ''.join(pattern_lines),
                                                 known_pattern)
           table = display.HtmlTableFromAlignment(alignment)
-          self.tables.append((m.MetreName(), table))
+          self.tables.append((m, table))
     return result
 
   def AllDebugOutput(self):

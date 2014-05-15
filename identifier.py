@@ -10,6 +10,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import collections
 import logging
 import re
 
@@ -54,7 +55,7 @@ class Identifier(object):
       lines_results = _MergeResults([lines_results, results])
 
     if global_results:
-      return global_results
+      return _MergeResults([global_results])
 
     halves_results = []
     quarters_results = []
@@ -93,7 +94,9 @@ class Identifier(object):
           pattern,
           self.metrical_data.known_partial_patterns,
           self.metrical_data.known_partial_regexes)
-    return _MergeResults([full_results, partial_results])
+    ret = full_results + partial_results
+    assert all(isinstance(result, match_result.MatchResult) for result in ret)
+    return ret
 
   def _IdentifyPatternFrom(self, pattern, known_patterns, known_regexes):
     """Identify pattern from given data."""
@@ -114,19 +117,15 @@ def _MatraCount(pattern):
 
 
 def _MergeResults(results_lists):
-  """Return all possible results."""
-  # print('Merging %s' % results_lists)
-  nonempty_results = []
+  """Returns a list of metre names without duplicates."""
+  def _UniqList(expr):
+    return list(collections.OrderedDict.fromkeys(expr))
+  names = []
   for results_list in results_lists:
-    assert isinstance(results_list, list)
     for result in results_list:
-      assert isinstance(result, match_result.MatchResult), result
-      if result not in nonempty_results:
-        nonempty_results.append(result)
-  if len(nonempty_results) == 1:
-    return nonempty_results
-  # TODO(shreevatsa): Do some more uniq of the results here
-  return nonempty_results
+      names.append(result.MetreName()
+                   if isinstance(result, match_result.MatchResult) else result)
+  return _UniqList(names)
 
 
 def _SplitHalves(full_pattern):

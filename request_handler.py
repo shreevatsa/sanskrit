@@ -32,8 +32,9 @@ def _UniqList(expr):
 
 
 def _DisplayName(metre_name):
-  metre_name = '%s' % metre_name
-  return transliterate.AddDevanagariToIast(metre_name)
+  assert isinstance(metre_name, unicode)
+  both_names = transliterate.AddDevanagariToIast(metre_name)
+  return '<font size="+2">%s</font>' % both_names
 
 
 MAIN_PAGE_HTML = open('main_page_template.html').read()
@@ -77,18 +78,8 @@ class IdentifyPage(webapp2.RequestHandler):
 
     if results:
       assert isinstance(results, list)
-      all_metres = _UniqList(m.MetreNameOnlyBase() for m in results)
-      if len(all_metres) == 1:
-        if len(results) == 1:
-          self.response.write('<p>The metre is <font size="+2">%s</font>'
-                              % _DisplayName(results[0]))
-        else:
-          self.response.write(
-              '<p>The intended metre is probably <font size="+2">%s</font>' %
-              _DisplayName(all_metres[0]))
-      else:
-        self.response.write('<p>The metre may be one of: %s.' %
-                            ' OR '.join(_DisplayName(m) for m in all_metres))
+      self.response.write('<p>The metre may be: %s.' %
+                          ' OR '.join(_DisplayName(m) for m in results))
     else:
       self.response.write('<p>No metre recognized.</p>')
 

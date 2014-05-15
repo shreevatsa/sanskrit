@@ -131,8 +131,8 @@ if __name__ == '__main__':
   table = {}
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]
-    metre = identifier.IdentifyFromLines(verse)
-    if not metre:
+    results = identifier.IdentifyFromLines(verse)
+    if not results:
       table['unknown'] = table.get('unknown', 0) + 1
       if args.print_unidentified_verses != 'none':
         Print('Verse %4d:' % (verse_number + 1))
@@ -143,24 +143,16 @@ if __name__ == '__main__':
       continue
 
     # We've dealt with the case where there are no results
-    assert metre
-    assert isinstance(metre, list)
-    metre_name = None
-    if len(metre) == 1:
-      # The best possible case
-      metre_name = metre[0].MetreName()
-      if args.print_identified_verses != 'none':
-        Print('Verse %4d is in %s' % (verse_number + 1, metre_name))
-        if args.print_identified_verses == 'full':
-          Print('\n'.join(verse))
-    else:
-      metre_name = metre[0].MetreNameOnlyBase()
-      if args.print_identified_verses != 'none':
-        Print('Verse %4d is in %s' % (verse_number + 1, metre_name))
-        if args.print_identified_verses == 'full':
-          Print('\n'.join(verse))
-    # Either way, metre_name should be set by now
-    assert metre_name is not None
+    assert results
+    assert isinstance(results, list)
+    metre_name = results[0]
+    if args.print_identified_verses != 'none':
+      Print('Verse %4d is%sin %s' % (
+          verse_number + 1,
+          ' ' if len(results) == 1 else ' probably ',
+          metre_name))
+      if args.print_identified_verses == 'full':
+        Print('\n'.join(verse))
     table[metre_name] = table.get(metre_name, 0) + 1
 
   sum_counts = sum(value for (key, value) in table.items())

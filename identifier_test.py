@@ -42,8 +42,7 @@ class KnownValues(unittest.TestCase):
       assert isinstance(results, list)
       assert len(results) == 1
       result = results[0]
-      assert result.metre_name == metre_name
-      assert result.match_type == match_type
+      assert result == metre_name
     except AssertionError:
       print('\n\nMismatch: Got results')
       if results is None:
