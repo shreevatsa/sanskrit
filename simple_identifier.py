@@ -25,7 +25,6 @@ class SimpleIdentifier(object):
 
   def _Reset(self):
     self.output = []
-    self.cleaned_output = None
     self.tables = []
 
   def IdentifyFromLines(self, input_lines):
@@ -34,9 +33,7 @@ class SimpleIdentifier(object):
     logging.info('Got input:\n%s', '\n'.join(input_lines))
     cleaner = handle_input.InputHandler()
     (display_lines, cleaned_lines) = cleaner.CleanLines(input_lines)
-    self.output.extend(cleaner.error_output)
-    self.cleaned_output = cleaner.clean_output
-    self.output.extend(cleaner.clean_output)
+    self.output.extend(cleaner.debug_output)
 
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:

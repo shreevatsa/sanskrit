@@ -133,9 +133,6 @@ if __name__ == '__main__':
     verse = [l.strip() for l in verse]
     metre = identifier.IdentifyFromLines(verse)
     if not metre:
-      clean = identifier.cleaned_output[1:]
-      if not ''.join(clean):
-        continue
       table['unknown'] = table.get('unknown', 0) + 1
       if args.print_unidentified_verses != 'none':
         Print('Verse %4d:' % (verse_number + 1))

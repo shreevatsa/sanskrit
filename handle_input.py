@@ -36,8 +36,7 @@ class InputHandler(object):
   """Class that takes arbitrary input and returns list of clean lines."""
 
   def __init__(self):
-    self.error_output = []
-    self.clean_output = []
+    self.debug_output = []
 
   def TransliterateAndClean(self, orig_text):
     """Transliterates text to SLP1, removing all other characters."""
@@ -48,22 +47,23 @@ class InputHandler(object):
     recognized_text = ''.join(_UnicodeNotation(c) if c in rejects else c
                               for c in orig_text)
     if rejects:
-      self.error_output.append('Unknown characters are ignored: %s' % (
+      self.debug_output.append('Unknown characters are ignored: %s' % (
           ', '.join('%s (%s %s)' %
                     (c, _UnicodeNotation(c), unicodedata.name(c, 'Unknown'))
                     for c in rejects)))
-      self.error_output.append('in input')
-      self.error_output.append(recognized_text)
+      self.debug_output.append('in input')
+      self.debug_output.append(recognized_text)
     clean_text = ''.join(c for c in text if c not in pass_through)
     assert all(c in slp1.ALPHABET for c in clean_text), clean_text
     return (text, clean_text)
 
   def CleanLines(self, lines):
     """Clean up the input lines (strip junk, transliterate, break verses)."""
+    # These two functions are here so that they can add to self.debug_output
     def NFKC(line):
       nfkc = unicodedata.normalize('NFKC', line)
       if line != nfkc:
-        self.error_output.append('%s normalized to %s' % (line, nfkc))
+        self.debug_output.append('%s normalized to %s' % (line, nfkc))
       if nfkc != unicodedata.normalize('NFC', line):
         logging.warning('NFC and NFKC normalizations differ for %s', line)
       return nfkc
@@ -72,10 +72,10 @@ class InputHandler(object):
       without_control = ''.join(c for c in line if
                                 not unicodedata.category(c).startswith('C'))
       if line != without_control:
-        self.error_output.append('Removed control characters in')
-        self.error_output.append('    %s' % line)
-        self.error_output.append('to get')
-        self.error_output.append('    %s' % without_control)
+        self.debug_output.append('Removed control characters in')
+        self.debug_output.append('    %s' % line)
+        self.debug_output.append('to get')
+        self.debug_output.append('    %s' % without_control)
       return without_control
     cleaned_lines = []
     display_lines = []
@@ -83,11 +83,11 @@ class InputHandler(object):
       line = NoControlCharacters(line)
       line = NFKC(line)
       line = RemoveHTML(line).strip()
-      if not line:
-        continue
       (line, n) = RemoveVerseNumber(line)
       (line, clean_line) = self.TransliterateAndClean(line)
       if not clean_line:
+        cleaned_lines.append('')
+        display_lines.append('')
         continue
       cleaned_lines.append(clean_line)
       display_lines.append(line)
@@ -99,9 +99,9 @@ class InputHandler(object):
       cleaned_lines = cleaned_lines[:-1]
       display_lines = display_lines[:-1]
 
-    self.clean_output.append('Input read as:')
+    self.debug_output.append('Input read as:')
     for (number, line) in enumerate(display_lines):
       transliterated = transliterate.TransliterateForOutput(line)
-      self.clean_output.append('Line %d: %s' % (number + 1, transliterated))
-    self.clean_output.append('')
+      self.debug_output.append('Line %d: %s' % (number + 1, transliterated))
+    self.debug_output.append('')
     return (display_lines, cleaned_lines)
