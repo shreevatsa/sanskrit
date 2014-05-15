@@ -7,6 +7,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import logging
 import re
 import unicodedata
 
@@ -26,9 +27,9 @@ def RemoveVerseNumber(text):
   return re.subn(r'(॥|([|।/])\2).*', '', text)
 
 
-def UnicodeNotation(c):
+def _UnicodeNotation(c):
   assert isinstance(c, unicode)
-  return 'U+%04x' % ord(c)
+  return '[U+%04x]' % ord(c)
 
 
 class InputHandler(object):
@@ -44,34 +45,30 @@ class InputHandler(object):
     ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
     (text, rejects) = transliterate.DetectAndTransliterate(orig_text,
                                                            pass_through, ignore)
-    recognized_text = ''.join('[%s]' % UnicodeNotation(c) if c in rejects else c
+    recognized_text = ''.join(_UnicodeNotation(c) if c in rejects else c
                               for c in orig_text)
     if rejects:
       self.error_output.append('Unknown characters are ignored: %s' % (
           ', '.join('%s (%s %s)' %
-                    (c, UnicodeNotation(c), unicodedata.name(c, 'Unknown'))
+                    (c, _UnicodeNotation(c), unicodedata.name(c, 'Unknown'))
                     for c in rejects)))
       self.error_output.append('in input')
       self.error_output.append(recognized_text)
-
-    def Clean(text):
-      return ''.join(c for c in text if c not in pass_through)
-    clean_text = Clean(text)
-    assert not re.search('[^%s]' % slp1.ALPHABET, clean_text), clean_text
+    clean_text = ''.join(c for c in text if c not in pass_through)
+    assert all(c in slp1.ALPHABET for c in clean_text), clean_text
     return (text, clean_text)
 
   def CleanLines(self, lines):
     """Clean up the input lines (strip junk, transliterate, break verses)."""
     def NFKC(line):
-      nfc = unicodedata.normalize('NFC', line)
       nfkc = unicodedata.normalize('NFKC', line)
-      if not (line == nfc and line == nfkc):
-        self.error_output.append('%s normalized to %s' % (line, nfkc) +
-                                 (' (itself different from %s)' % nfc
-                                  if nfc != nfkc else ''))
-        line = nfkc
-      return line
+      if line != nfkc:
+        self.error_output.append('%s normalized to %s' % (line, nfkc))
+      if nfkc != unicodedata.normalize('NFC', line):
+        logging.warning('NFC and NFKC normalizations differ for %s', line)
+      return nfkc
     def NoControlCharacters(line):
+      line = line.replace('\t', ' ')  # a tab is a control character too
       without_control = ''.join(c for c in line if
                                 not unicodedata.category(c).startswith('C'))
       if line != without_control:
@@ -79,15 +76,12 @@ class InputHandler(object):
         self.error_output.append('    %s' % line)
         self.error_output.append('to get')
         self.error_output.append('    %s' % without_control)
-        line = without_control
-      return line
-
+      return without_control
     cleaned_lines = []
     display_lines = []
     for line in lines:
-      line = line.strip()
-      line = NFKC(line)
       line = NoControlCharacters(line)
+      line = NFKC(line)
       line = RemoveHTML(line).strip()
       if not line:
         continue
