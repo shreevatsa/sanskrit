@@ -6,8 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 ALPHABET = 'aAiIuUfFxXeEoOMHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh'
-CONSONANT = '[MHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh]'
-SHORT_VOWEL = '[aiufx]'
-LONG_VOWEL = '[AIUFXeEoO]'
-ANY_VOWEL = '[aAiIuUfFxXeEoO]'
-
+CONSONANT_RE = '[MHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh]'
+LONG_VOWEL_RE = '[AIUFXeEoO]'
+VOWELS = 'aAiIuUfFxXeEoO'
+VOWEL_RE = '[%s]' % VOWELS

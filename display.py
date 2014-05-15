@@ -73,7 +73,7 @@ def _SyllabizeVisual(text):
       c = text[i]
       i += 1
       syllable += c
-      if c in slp1.ANY_VOWEL[1:-1]:
+      if c in slp1.VOWELS:
         # Peek ahead to capture all groups until the next vowel
         groups = []
         group = ''
@@ -82,7 +82,7 @@ def _SyllabizeVisual(text):
           c = text[j]
           group += c
           j += 1
-          if c in slp1.ANY_VOWEL[1:-1]:
+          if c in slp1.VOWELS:
             # This group has a vowel, and shouldn't be consumed
             break
           if j == len(text) or c not in slp1.ALPHABET:

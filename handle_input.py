@@ -98,7 +98,6 @@ class InputHandler(object):
     while cleaned_lines and not cleaned_lines[-1]:
       cleaned_lines = cleaned_lines[:-1]
       display_lines = display_lines[:-1]
-
     self.debug_output.append('Input read as:')
     for (number, line) in enumerate(display_lines):
       transliterated = transliterate.TransliterateForOutput(line)

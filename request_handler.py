@@ -75,13 +75,11 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write(InputForm(input_verse))
     self.response.write('</p>')
 
-    ok = False
     if results:
       assert isinstance(results, list)
       all_metres = _UniqList(m.MetreNameOnlyBase() for m in results)
       if len(all_metres) == 1:
         if len(results) == 1:
-          ok = True
           self.response.write('<p>The metre is <font size="+2">%s</font>'
                               % _DisplayName(results[0]))
         else:
@@ -97,8 +95,6 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('<hr/>')
     self.response.write('<p><i>Debugging output:</i></p>')
     self.response.write('<pre>')
-    if not ok:
-      pass
     self.response.write(identifier.AllDebugOutput())
     self.response.write('</pre>')
     self.response.write('\n')

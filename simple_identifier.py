@@ -24,7 +24,7 @@ class SimpleIdentifier(object):
     self.identifier = identifier.Identifier(metrical_data)
 
   def _Reset(self):
-    self.output = []
+    self.debug_output = []
     self.tables = []
 
   def IdentifyFromLines(self, input_lines):
@@ -33,8 +33,7 @@ class SimpleIdentifier(object):
     logging.info('Got input:\n%s', '\n'.join(input_lines))
     cleaner = handle_input.InputHandler()
     (display_lines, cleaned_lines) = cleaner.CleanLines(input_lines)
-    self.output.extend(cleaner.debug_output)
-
+    self.debug_output.extend(cleaner.debug_output)
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:
       return None
@@ -54,7 +53,7 @@ class SimpleIdentifier(object):
     return result
 
   def AllDebugOutput(self):
-    return '\n'.join(self.output +
+    return '\n'.join(self.debug_output +
                      ['Full:'] + self.identifier.global_info +
                      ['Lines:'] + self.identifier.lines_info +
                      ['Halves:'] + self.identifier.halves_info +
