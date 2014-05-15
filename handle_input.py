@@ -38,22 +38,20 @@ class InputHandler(object):
     self.error_output = []
     self.clean_output = []
 
-  def TransliterateAndClean(self, text):
+  def TransliterateAndClean(self, orig_text):
     """Transliterates text to SLP1, removing all other characters."""
-    orig_text = text
     pass_through = ' -?'
     ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-    (text, rejects) = transliterate.DetectAndTransliterate(text, pass_through,
-                                                           ignore)
+    (text, rejects) = transliterate.DetectAndTransliterate(orig_text,
+                                                           pass_through, ignore)
     recognized_text = ''.join('[%s]' % UnicodeNotation(c) if c in rejects else c
                               for c in orig_text)
-
     if rejects:
       self.error_output.append('Unknown characters are ignored: %s' % (
           ', '.join('%s (%s %s)' %
                     (c, UnicodeNotation(c), unicodedata.name(c, 'Unknown'))
                     for c in rejects)))
-      self.error_output.append('Input recognized as')
+      self.error_output.append('in input')
       self.error_output.append(recognized_text)
 
     def Clean(text):
@@ -77,8 +75,10 @@ class InputHandler(object):
       without_control = ''.join(c for c in line if
                                 not unicodedata.category(c).startswith('C'))
       if line != without_control:
-        self.error_output.append('Removed control characters in %s to get %s'
-                                 % (line, without_control))
+        self.error_output.append('Removed control characters in')
+        self.error_output.append('    %s' % line)
+        self.error_output.append('to get')
+        self.error_output.append('    %s' % without_control)
         line = without_control
       return line
 

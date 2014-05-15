@@ -36,8 +36,6 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import logging
-
 
 def MakeStateMachine(table):
   """Makes SM from a dict like {'a':'अ', 'A':'आ', 'ai':'ऐ', 'au':'औ'}."""
@@ -87,7 +85,4 @@ def Transliterate(state_machine, text, ignore=None, pass_through=None):
       elif ignore is None or char not in ignore:
         unparsed_characters.add(char)
       num_parsed += 1
-  if unparsed_characters:
-    logging.warning('Could not parse some characters (%s) in %s',
-                    ', '.join(unparsed_characters), text)
   return (transliterated, unparsed_characters)
