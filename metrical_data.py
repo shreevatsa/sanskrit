@@ -351,13 +351,13 @@ def _AddAryaRegex():
   """Add regex for Āryā metre."""
   odd_gana_re = '(GG|LLG|GLL|LLLL)'
   even_gana_re = '(GG|LLG|GLL|LLLL|LGL)'
-  pair_re = odd_gana_re + even_gana_re
-  first_line_re = (pair_re + pair_re + odd_gana_re +
-                   '(LLLL|LGL)' + odd_gana_re + '(L|G)')
-  second_line_re = (pair_re + pair_re + odd_gana_re +
-                    'L' + odd_gana_re + '(L|G)')
+  pada_1_re = odd_gana_re + even_gana_re + odd_gana_re
+  pada_2_re = even_gana_re + odd_gana_re + '(LLLL|LGL)' + odd_gana_re + '(L|G)'
+  pada_3_re = odd_gana_re + even_gana_re + odd_gana_re
+  pada_4_re = even_gana_re + odd_gana_re + 'L' + odd_gana_re + '(L|G)'
   _AddMetreRegex('Āryā (strict schema)',
-                 first_line_re + second_line_re, simple=False)
+                 [pada_1_re, pada_2_re, pada_3_re, pada_4_re],
+                 simple=False)
   _AddMetreRegex('Āryā (loose schema)',
                  ['|'.join(_LoosePatternsOfLength(12)),
                   '|'.join(_LoosePatternsOfLength(18)),

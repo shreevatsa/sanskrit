@@ -114,7 +114,7 @@ class KnownValues(unittest.TestCase):
              'svājñāna-jñānino viralāḥ']
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
-        'Āryā (matched from regex)',
+        'Āryā (strict schema)',
         match_result.MATCH_TYPE.FULL)
 
   def testBadVerse(self):

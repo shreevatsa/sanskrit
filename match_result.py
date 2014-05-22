@@ -73,7 +73,7 @@ def Description(match_results, indent_depth=0):
   s = ''
   for (i, result) in enumerate(match_results):
     s += indent + 'Result %d: ' % i
-    s += '\n' + indent + '\tMetre name: %s' % result.metre_name
-    s += '\n' + indent + '\tMatch type: %s' % result.match_type
+    s += '\n' + indent + '\tMetre name: %s' % result
+    # s += '\n' + indent + '\tMatch type: %s' % result.match_type
     s += '\n'
   return s
