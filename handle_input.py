@@ -80,7 +80,7 @@ class InputHandler(object):
     cleaned_lines = []
     display_lines = []
     for line in lines:
-      line = NoControlCharacters(line)
+      line = NoControlCharacters(line.strip())
       line = NFKC(line)
       line = RemoveHTML(line).strip()
       (line, n) = RemoveVerseNumber(line)
