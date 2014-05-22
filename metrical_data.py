@@ -282,52 +282,6 @@ def _MatraCount(pattern):
   return sum(2 if c == 'G' else 1 for c in pattern)
 
 
-def _AddArya(line_patterns):
-  """Add an example of Arya, with proper morae checking."""
-  assert len(line_patterns) == 4
-  expected = [12, 18, 12, 15]
-  for i in range(4):
-    allow_loose_ending = False
-    if i % 2 and line_patterns[i].endswith('L'):
-      allow_loose_ending = True
-      expected[i] -= 1
-    assert _MatraCount(line_patterns[i]) == expected[i]
-    if allow_loose_ending:
-      line_patterns[i] = line_patterns[i][:-1] + '.'
-  # TODO(shreevatsa): Should we just add (up to) 4 patterns instead?
-  _AddMetreRegex('Āryā', line_patterns, simple=False)
-
-
-def _AddAryaExamples():
-  """Add collected examples of the Āryā metre."""
-  # From Bhartṛhari (BharSt_1.3, ajñaḥ sukham ārādhyaḥ...)
-  _AddArya(['GGLLGGG', 'LLLLGGLGLGGG', 'GLLLGLGG', 'GGLLGLGLLL'])
-  # From Bhartṛhari (BharSt_1.37, siṃhaḥ śiśur api nipatati...)
-  _AddArya(['GGLLLLLLLL', 'LLLLLLGLGLLLGG', 'LLLLGGLLG', 'LLLLGGLGGL'])
-  # From Bhartṛhari (BharSt_1.43, dānaṃ bhogo nāśas...)
-  _AddArya(['GGGGGG', 'GGLLGLGLGGL', 'GLLGLLGG', 'GLLGGLGLLL'])
-  # From Bhartṛhari (BharSt_1.61, mṛga-mīna-sajjanānāṃ...)
-  _AddArya(['LLGLGLGG', 'LLLLGGLLLLGGG', 'GLLGLLLLG', 'GGLLGLGLLL'])
-  # From Bhartṛhari (BharSt_1.87, chinno 'pi rohati taruḥ...)
-  _AddArya(['GGLGLLLG', 'GGLLGLGLGGL', 'LLLLGGGG', 'GGGGLGGL'])
-  # From Bhartṛhari (BharSt_1.104, apriya-vacana-daridraiḥ...)
-  _AddArya(['GLLLLLLGG', 'LLLLGGLGLLLGG', 'LLLLGLLGG', 'LGLGGLGLLG'])
-  # From Bhartṛhari (BharSt_2.60, "kaś cumbati kula-puruṣo...")
-  _AddArya(['GGLLLLLLG', 'GGLLGLGLGLLL', 'GLLLGLGLL', 'LLLLGGLLLGL'])
-  # From Bhartṛhari ("virahe 'pi saṅgamaḥ khalu...", K48.328 (129))
-  _AddArya(['LLGLGLGLL', 'LGLGGLGLGGG', 'LLLLLLLLGG', 'LGLLLGLGLLL'])
-  # From Bhartṛhari ("sva-para-pratārako...", K48.120 (47))
-  _AddArya(['LLGLGLGG', 'GLLGGLGLGLLG', 'GGLLGLLG', 'GGGGLGLLL'])
-  # From Bhartṛhari ("prathitaḥ praṇayavatīnāṃ...", K48.274 (107))
-  _AddArya(['LLGLLLLGG', 'GGLLGLGLLLGG', 'LLLLGGGLL', 'LLLLGLLLLLGL'])
-  # From Bhartṛhari ("sahakāra-kusuma-kesara-...", K48.340 (132))
-  _AddArya(['LLGLLLLGLL', 'LLLLGGLGLLLGG', 'LLLLLLLLLLG', 'LGLGGLGGG'])
-  # From Bhartṛhari ("upari ghanaṃ...", K48.87 (34))
-  _AddArya(['LLLLGLLLLG', 'GGLLGLGLLLGG', 'LLLLGLLLLG', 'GGLLGLGLLL'])
-  # From Bhartṛhari ("yady asya..", K48.309 (121))
-  _AddArya(['GGLGLLLG', 'GGGGLGLGGL', 'LLGGLLGG', 'LLGGGLGGG'])
-
-
 def _PatternsOfLength(n):
   if n in _patterns_memo:
     return _patterns_memo[n]
@@ -490,8 +444,6 @@ def InitializeData():
   _AddAnustup()
   _AddAnustupExamples()
 
-  # AddMatravrtta('Āryā (mātrā)', [12, 18, 12, 15])
-  _AddAryaExamples()
   _AddAryaRegex()
   _AddGitiExamples()
 

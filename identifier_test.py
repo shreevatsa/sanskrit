@@ -103,7 +103,7 @@ class KnownValues(unittest.TestCase):
              'na khalu vayas tejaso hetuḥ ||']
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
-        'Āryā',
+        'Āryā (strict schema)',
         match_result.MATCH_TYPE.FULL)
 
   def testAryaUnknown(self):
