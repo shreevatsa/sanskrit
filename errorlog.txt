@@ -110,3 +110,8 @@ Thu 2014-05-14
     simply return a string. After all, even if it's only one line of four that
     matches, it's still not right to say that the match type is a pāda. The
     matches can be ranked by the aligner.
+
+9dccc11b04f5d696a58842705c43061798d5fdb7
+Thu May 22 2014
+
+    Found some clear constraints on Āryā.
