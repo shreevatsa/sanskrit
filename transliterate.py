@@ -119,9 +119,42 @@ def _FixBadDevanagari(text):
   return text
 
 
+_KANNADA_VOWEL_SIGNS = 'ಕಾ ಕಿ ಕೀ ಕು ಕೂ ಕೃ ಕೄ ಕೆ ಕೇ ಕೈ ಕೊ ಕೋ ಕೌ ಕಂ ಕಃ ಕ್'
+_KANNADA_VOWEL_SIGNS = ''.join(_KANNADA_VOWEL_SIGNS[i]
+                               for i in range(len(_KANNADA_VOWEL_SIGNS))
+                               if i % 3 == 1)
+_DEVANAGARI_VOWEL_SIGNS = 'का कि की कु कू कृ कॄ कॆ के कै कॊ को कौ कं कः क्'
+_DEVANAGARI_VOWEL_SIGNS = ''.join(_DEVANAGARI_VOWEL_SIGNS[i]
+                                  for i in range(len(_DEVANAGARI_VOWEL_SIGNS))
+                                  if i % 3 == 1)
+_KANNADA_CONSONANTS = 'ಕಖಗಘಙಚಛಜಝಞಟಠಡಢಣತಥದಧನಪಫಬಭಮಯರಲವಶಷಸಹಳಱೞ'
+_DEVANAGARI_CONSONANTS = 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसहळरळ'
+_KANNADA_VOWELS = 'ಅಆಇಈಉಊಋೠಎಏಐಒಓಔ'
+_DEVANAGARI_VOWELS = 'अआइईउऊऋॠऎएऐऒओऔ'
+_KANNADA_AV = 'ಅಂ ಅಃ'
+_KANNADA_AV = ''.join(_KANNADA_AV[i]
+                      for i in range(len(_KANNADA_AV)) if i % 3 == 1)
+_DEVANAGARI_AV = 'अं अः'
+_DEVANAGARI_AV = ''.join(_DEVANAGARI_AV[i]
+                         for i in range(len(_DEVANAGARI_AV)) if i % 3 == 1)
+_KANNADA_TO_DEVANAGARI = transliterator.MakeStateMachine(dict(zip(
+    _KANNADA_VOWELS + _KANNADA_AV + _KANNADA_CONSONANTS + _KANNADA_VOWEL_SIGNS,
+    _DEVANAGARI_VOWELS + _DEVANAGARI_AV + _DEVANAGARI_CONSONANTS +
+    _DEVANAGARI_VOWEL_SIGNS)))
+
+
+def KannadaToDevanagari(text):
+  return transliterator.Transliterate(_KANNADA_TO_DEVANAGARI, text,
+                                      pass_through=_DEFAULT_PASS_THROUGH)[0]
+
+
 def DetectAndTransliterate(text, pass_through=None, ignore=None):
   """Transliterates text to SLP1, after guessing what script it is."""
   text = _IsoToIast(text)
+  characteristic_kannada = '[%s]' % _KANNADA_CONSONANTS
+  if re.search(characteristic_kannada, text):
+    text = KannadaToDevanagari(text)
+
   text = _FixBadDevanagari(text)
   characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
   characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'

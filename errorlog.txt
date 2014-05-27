@@ -115,3 +115,8 @@ Thu 2014-05-14
 Thu May 22 2014
 
     Found some clear constraints on Āryā.
+
+574f2e3db11aad4aea170e50a23a4486ec283af4
+Tue May 27 22:09:47 IST 2014
+
+    Adding Kannada.
