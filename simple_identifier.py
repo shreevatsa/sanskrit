@@ -24,24 +24,27 @@ class SimpleIdentifier(object):
     self.identifier = identifier.Identifier(metrical_data)
 
   def _Reset(self):
-    self.debug_output = []
+    self.debug_read = []
+    self.debug_identify = []
     self.tables = []
 
   def IdentifyFromLines(self, input_lines):
     """Given lines of verse, read-scan-identify-display."""
     self._Reset()
     logging.info('Got input:\n%s', '\n'.join(input_lines))
-    cleaner = handle_input.InputHandler()
-    (display_lines, cleaned_lines) = cleaner.CleanLines(input_lines)
-    self.debug_output.extend(cleaner.debug_output)
+    input_handler = handle_input.InputHandler()
+    (display_lines, cleaned_lines) = input_handler.CleanLines(input_lines)
+    self.debug_read.extend(input_handler.debug_output)
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:
       return None
 
     result = self.identifier.IdentifyFromLines(pattern_lines)
-    if not result:
-      pass
-    else:
+    self.debug_identify = (['Full:'] + self.identifier.global_info +
+                           ['Lines:'] + self.identifier.lines_info +
+                           ['Halves:'] + self.identifier.halves_info +
+                           ['Quarters:'] + self.identifier.quarters_info)
+    if result:
       for m in result:
         known_pattern = metrical_data.GetPattern(m)
         if known_pattern:
@@ -53,8 +56,4 @@ class SimpleIdentifier(object):
     return result
 
   def AllDebugOutput(self):
-    return '\n'.join(self.debug_output +
-                     ['Full:'] + self.identifier.global_info +
-                     ['Lines:'] + self.identifier.lines_info +
-                     ['Halves:'] + self.identifier.halves_info +
-                     ['Quarters:'] + self.identifier.quarters_info)
+    return '\n'.join(self.debug_read + self.debug_identify)
