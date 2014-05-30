@@ -83,11 +83,21 @@ class IdentifyPage(webapp2.RequestHandler):
     else:
       self.response.write('<p>No metre recognized.</p>')
 
-    self.response.write('<hr/>')
-    self.response.write('<p><i>Debugging output:</i></p>')
-    self.response.write('<pre>')
-    self.response.write(identifier.AllDebugOutput())
-    self.response.write('</pre>')
+    self.response.write('\n'.join(['<hr/>',
+                                   '<p><i>Debugging output:</i></p>',
+                                   '<details>',
+                                   '<summary>Reading the input</summary>',
+                                   '<pre>',
+                                   identifier.DebugRead(),
+                                   '</pre>',
+                                   '</details>',
+                                   '<br/>',
+                                   '<details>',
+                                   '<summary>Identifying the metre</summary>',
+                                   '<pre>',
+                                   identifier.DebugIdentify(),
+                                   '</pre>',
+                                   '</details>']))
     self.response.write('\n')
 
     if identifier.tables:

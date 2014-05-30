@@ -55,5 +55,11 @@ class SimpleIdentifier(object):
           self.tables.append((m, table))
     return result
 
+  def DebugRead(self):
+    return '\n'.join(self.debug_read)
+
+  def DebugIdentify(self):
+    return '\n'.join(self.debug_identify)
+
   def AllDebugOutput(self):
-    return '\n'.join(self.debug_read + self.debug_identify)
+    return '\n'.join([self.debug_read, self.debug_identify])
