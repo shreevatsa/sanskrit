@@ -131,7 +131,7 @@ if __name__ == '__main__':
   table = {}
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]
-    results = identifier.IdentifyFromLines(verse)
+    (_, results) = identifier.IdentifyFromLines(verse)
     if not results:
       table['unknown'] = table.get('unknown', 0) + 1
       if args.print_unidentified_verses != 'none':

@@ -61,7 +61,7 @@ class IdentifyPage(webapp2.RequestHandler):
     input_verse = self.request.get('input_verse')
 
     identifier = common_identifier
-    results = identifier.IdentifyFromLines(input_verse.split('\n'))
+    identification = identifier.IdentifyFromLines(input_verse.split('\n'))
 
     self.response.write('<html>\n')
     self.response.write('<head><style>\n')
@@ -76,10 +76,17 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write(InputForm(input_verse))
     self.response.write('</p>')
 
-    if results:
+    if identification:
+      (full_match, results) = identification
       assert isinstance(results, list)
-      self.response.write('<p>The metre may be: %s.' %
-                          ' OR '.join(_DisplayName(m) for m in results))
+      self.response.write('<p>')
+      if full_match:
+        self.response.write('The metre is: ')
+      else:
+        self.response.write('The input does not perfectly match '
+                            'any known metre. </p>'
+                            '<p>Based on partial matches, it may be: ')
+      self.response.write('%s.' % ' OR '.join(_DisplayName(m) for m in results))
     else:
       self.response.write('<p>No metre recognized.</p>')
 
@@ -91,7 +98,6 @@ class IdentifyPage(webapp2.RequestHandler):
                                    identifier.DebugRead(),
                                    '</pre>',
                                    '</details>',
-                                   '<br/>',
                                    '<details>',
                                    '<summary>Identifying the metre</summary>',
                                    '<pre>',
@@ -102,7 +108,8 @@ class IdentifyPage(webapp2.RequestHandler):
 
     if identifier.tables:
       for (name, table) in identifier.tables:
-        self.response.write('<p>Reading as %s:</p>' % _DisplayName(name))
+        self.response.write('<p>Reading%s as %s:</p>' % (
+            ' ' if full_match else ' (note errors in red)', _DisplayName(name)))
         for line in table:
           self.response.write(line)
     self.response.write('</body></html>')

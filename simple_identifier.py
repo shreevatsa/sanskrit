@@ -39,7 +39,8 @@ class SimpleIdentifier(object):
     if not pattern_lines:
       return None
 
-    (_, results) = self.identifier.IdentifyFromPatternLines(pattern_lines)
+    (full_match,
+     results) = self.identifier.IdentifyFromPatternLines(pattern_lines)
     self.debug_identify = (['Full:'] + self.identifier.global_info +
                            ['Lines:'] + self.identifier.lines_info +
                            ['Halves:'] + self.identifier.halves_info +
@@ -53,7 +54,7 @@ class SimpleIdentifier(object):
                                                 known_pattern)
           table = display.HtmlTableFromAlignment(alignment)
           self.tables.append((m, table))
-    return results
+    return (full_match, results)
 
   def DebugRead(self):
     return '\n'.join(self.debug_read)

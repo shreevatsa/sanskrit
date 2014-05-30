@@ -138,7 +138,10 @@ def HtmlTableFromAlignment(alignment):
   for line in alignment:
     v = ''
     for syllable in line:
-      printable_syllable = transliterate.TransliterateForTable(syllable[0])
+      if syllable[0] == _GAP_CHAR:
+        printable_syllable = '[-]'
+      else:
+        printable_syllable = transliterate.TransliterateForTable(syllable[0])
       to_print = (printable_syllable if syllable[1] == syllable[2] else
                   '<abbr title="Should be %s">%s</abbr>' % (syllable[2],
                                                             printable_syllable))

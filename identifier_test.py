@@ -21,14 +21,15 @@ class BadInput(unittest.TestCase):
 
   def testEmpty(self):
     """Identifier should fail with empty input."""
-    # self.assertRaises(identifier.EmptyInputError,
-    #                   self.identifier.IdentifyFromLines, [])
     self.assertIsNone(self.identifier.IdentifyFromLines([]))
 
   def testNoSyllables(self):
     """Identifier should return no result, for input containing no syllabes."""
     # self.assertIsNone(self.identifier.IdentifyFromLines(['t', 't', 't', 't']))
-    self.assertFalse(self.identifier.IdentifyFromLines(['t', 't', 't', 't']))
+    (full_match,
+     results) = self.identifier.IdentifyFromLines(['t', 't', 't', 't'])
+    self.assertFalse(full_match)
+    self.assertFalse(results)
 
 
 class KnownValues(unittest.TestCase):
@@ -37,8 +38,11 @@ class KnownValues(unittest.TestCase):
     super(KnownValues, self).__init__(*args, **kwargs)
     self.identifier = simple_identifier.SimpleIdentifier()
 
-  def AssertSingleMatchResultEquals(self, results, metre_name, match_type):
+  def AssertSingleMatchResultEquals(self, identification, metre_name,
+                                    match_type):
     try:
+      (full_match, results) = identification
+      assert full_match
       assert isinstance(results, list)
       assert len(results) == 1
       result = results[0]
@@ -121,7 +125,9 @@ class KnownValues(unittest.TestCase):
     """Test a verse that has typos, and see if correct metre can be guessed."""
     verse = ['स्मराहुताशनमुर्मुरचूर्णतां दधुरिवाम्रवनस्य रजःकणाः ।',
              'निपातिताः परितः पथिकव्रजानुपरि ते परितेपुरतो भृशम् ॥']
-    assert self.identifier.IdentifyFromLines(verse) is not None
+    (full_match, results) = self.identifier.IdentifyFromLines(verse)
+    self.assertFalse(full_match)
+    self.assertIsNotNone(results)
 
 if __name__ == '__main__':
   unittest.main()
