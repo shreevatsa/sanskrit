@@ -39,13 +39,13 @@ class SimpleIdentifier(object):
     if not pattern_lines:
       return None
 
-    result = self.identifier.IdentifyFromLines(pattern_lines)
+    (_, results) = self.identifier.IdentifyFromPatternLines(pattern_lines)
     self.debug_identify = (['Full:'] + self.identifier.global_info +
                            ['Lines:'] + self.identifier.lines_info +
                            ['Halves:'] + self.identifier.halves_info +
                            ['Quarters:'] + self.identifier.quarters_info)
-    if result:
-      for m in result:
+    if results:
+      for m in results:
         known_pattern = metrical_data.GetPattern(m)
         if known_pattern:
           alignment = display.AlignVerseToMetre(display_lines,
@@ -53,7 +53,7 @@ class SimpleIdentifier(object):
                                                 known_pattern)
           table = display.HtmlTableFromAlignment(alignment)
           self.tables.append((m, table))
-    return result
+    return results
 
   def DebugRead(self):
     return '\n'.join(self.debug_read)

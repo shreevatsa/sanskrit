@@ -38,7 +38,7 @@ class Identifier(object):
     self.halves_info = []
     self.quarters_info = []
 
-  def IdentifyFromLines(self, pattern_lines):
+  def IdentifyFromPatternLines(self, pattern_lines):
     """Main function. Takes patterns of verse lines and identifies metres."""
     self._Reset()
 
@@ -55,7 +55,7 @@ class Identifier(object):
       lines_results = _MergeResults([lines_results, results])
 
     if global_results:
-      return _MergeResults([global_results])
+      return (True, _MergeResults([global_results]))
 
     halves_results = []
     quarters_results = []
@@ -72,8 +72,8 @@ class Identifier(object):
         self.quarters_info.append('  Quarter %d: %s' % (i + 1, info))
         all_results.extend(results)
       quarters_results = _MergeResults([quarters_results, all_results])
-    return _MergeResults([global_results, lines_results,
-                          halves_results, quarters_results])
+    return (False, _MergeResults([global_results, lines_results,
+                                  halves_results, quarters_results]))
 
   def _MetresAndInfo(self, pattern, try_partial=True):
     assert _IsPattern(pattern)
