@@ -204,6 +204,19 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
     known_partial_patterns[c + d] = known_partial_patterns.get(c + d, [])
     known_partial_patterns[c + d].append(match_result.MatchResult(
         metre_name, match_result.MATCH_TYPE.SECOND_HALF))
+  def AppendPattern(pattern, match_type):
+    result = match_result.MatchResult(metre_name, match_type)
+    known_partial_patterns[pattern] = known_partial_patterns.get(pattern, [])
+    if result not in known_partial_patterns[pattern]:
+      known_partial_patterns[pattern].append(result)
+  for a in patterns_a:
+    AppendPattern(a, match_result.MATCH_TYPE.PADA_1)
+  for b in patterns_b:
+    AppendPattern(b, match_result.MATCH_TYPE.PADA_2)
+  for c in patterns_c:
+    AppendPattern(c, match_result.MATCH_TYPE.PADA_3)
+  for d in patterns_d:
+    AppendPattern(d, match_result.MATCH_TYPE.PADA_4)
 
 
 def _AddMetreRegex(metre_name, line_regexes, simple=True):

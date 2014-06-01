@@ -45,7 +45,8 @@ dhaval_vrtta_data = [
     ('nagamahitā', 'LLGGLLGLLLLG'),
     ('bhājanaśīlā', 'GGLLGGGLGGLGG'),
     ('prabhāvatī', 'GGLGLLLLGLGLG'),
-    ('ārdrā', ['LGLGGLLGLGG', 'GGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('ārdrā', ['LGLGGLLGLGG', 'GGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG']),
     ('viṣāṇāśritam', 'LGGLLLGLGGLLLGLGGLLLGLGGLG'),
     ('ardhakusumitā', 'GLLLLGLLLLLLG'),
     ('bhāsitasaraṇiḥ', 'GLLLLLLLLLLG'),
@@ -153,7 +154,8 @@ dhaval_vrtta_data = [
     ('saurabhaśobhāsāraḥ', 'GLLGGGGGLLLLLLGLLLLG'),
     ('kaṭhinī', 'LLLLLGLGLGGLG'),
     ('ūhinī', 'GLGLLGLGGLGLLGL'),
-    ('māyā', ['LGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('māyā', ['LGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG']),
     ('vātormī', 'GGGGLLGGLGG'),
     ('nīranidhiḥ', 'LLLGGLLLLL'),
     ('madhu', 'LL'),
@@ -332,7 +334,8 @@ dhaval_vrtta_data = [
     ('amarāvatī', ['LGLGLGLGLGLGG', 'GLGLGLGLGLGL']),
     ('kalāpadīpakam', 'GLGLGLGLGLGLGLGLGLG'),
     ('vīravimānam', 'GLLGLLGLLGLLGLLGLLGG'),
-    ('viparītākhyānakī', ['LGLGGLLGLGG', 'GGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('viparītākhyānakī', ['LGLGGLLGLGG', 'GGLGGLLGLGG']),
     ('kṣaram', 'LGLLLLLL'),
     ('aruntudaḥ', ['LLGLLGLGLG', 'LLLLGLLGLGLG']),
     ('śaśikarī', 'LLGLLLGGL'),
@@ -598,7 +601,8 @@ dhaval_vrtta_data = [
     ('rasabhūma', 'LLGLGLLLGL'),
     ('upodgatā1', ['LLGGLLGLGLGG', 'LLGLLGLGLGG']),
     ('avoḍhā', 'GGGGLG'),
-    ('mālā', ['LGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG', 'GGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('mālā', ['LGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG', 'GGLGGLLGLGG']),
     ('somarājī', 'LGGLGG'),
     ('gūrṇikā', 'GLGGGLL'),
     ('paṅkavatī', 'GLLLLLLGLLGLL'),
@@ -647,7 +651,8 @@ dhaval_vrtta_data = [
     ('nūtanam', 'GLGLLLGLLGLLGLG'),
     # different upodgatā above, also this is Aupacchandasikam in curated.
     # ('upodgatā', ['LLGLLGLGLGG', 'LLGGLLGLGLGG']),
-    ('bhadrā', ['GGLGGLLGLGG', 'LGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('bhadrā', ['GGLGGLLGLGG', 'LGLGGLLGLGG']),
     ('strī', 'GG'),
     ('pathyā', 'LLGLGLLLGLGGLG'),
     ('sūrasūcakaḥ', 'GGGLLGLGLLLGLLGLLGLGGLGGLG'),
@@ -778,6 +783,7 @@ dhaval_vrtta_data = [
     ('nimagnakīlā', 'LGLGGLLGLGGL'),
     ('vāri', 'LGGL'),
     ('saubhagakalā', 'GLLLGLLLGLG'),
+    # same as viparītākhyānakī, also covered by upajāti
     # ('haṃsī', ['LGLGGLLGLGG', 'GGLGGLLGLGG']), # same as viparītākhyānakī
     ('śeṣāpīḍam', 'GGGGLLLLGLL'),
     ('viplutaśikhā', 'GLLLGLGLGGLG'),
@@ -882,7 +888,8 @@ dhaval_vrtta_data = [
     ('parabhṛtam', 'LLLGGLG'),
     ('pārthivam', 'LGLLLGLGLLLGLLLGLG'),
     ('visraṃsi', 'LLLLLGGGLL'),
-    ('śālā', ['GGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('śālā', ['GGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG']),
     ('hemarūpam', 'GLGGLGLG'),
     ('jaladarasitā', 'LLLLLGLGGLGGLG'),
     ('mālatikā', 'LGLLGL'),
@@ -927,7 +934,8 @@ dhaval_vrtta_data = [
     ('devalam', 'GGGLGGL'),
     ('vivaravilasitam', 'GGLLLLLLGGGG'),
     ('līlācandram', 'GGGGGGGGLLGGLLG'),
-    ('vāṇī', ['GGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG', 'GGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('vāṇī', ['GGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG', 'GGLGGLLGLGG']),
     ('kaṭhināsthi', 'GLLLLLLGL'),
     ('añcalavatī', 'GLLLGLLGLGLLLG'),
     ('ahatiḥ', 'LGGLLLL'),
@@ -950,7 +958,8 @@ dhaval_vrtta_data = [
     ('kāmarūpam', 'GGGGLGGLLLLLGGLGG'),
     ('celāñcalam', 'GGLGLLLLGLGLGG'),
     ('gambhāri', 'GLGGLGGLGGL'),
-    ('buddhiḥ', ['GGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('buddhiḥ', ['GGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG']),
     ('viśadacchāyaḥ', 'LLGGGLLGGG'),
     ('kalki', 'GLGLL'),
     ('kaṇikā', 'GGLLG'),
@@ -961,7 +970,8 @@ dhaval_vrtta_data = [
     ('kalpamukhī', 'GLLGGLG'),
     ('drutalambinī', 'LLGLLGLGLLGLG'),
     ('bimbam', 'LLLLLGLGG'),
-    ('rāmā', ['GGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('rāmā', ['GGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG']),
     ('lasadasu', 'LLLLLGLG'),
     ('vyāhāri', 'GLLGGGL'),
     ('dhīrāvarttaḥ2', ['GGGGLLLLGGGGG', 'GGGGGLLGGLLGG']),  # different above
@@ -1022,7 +1032,8 @@ dhaval_vrtta_data = [
     ('saṅgamavatī', 'GLLLGLLLLLLG'),
     ('abhidhātrī', 'LLGLLGLLGLGLGLGG'),
     ('alparutam', ['GLLLLLLGLLGLL', 'GLLLLLLGGLLLL']),
-    ('premā', ['LGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('premā', ['LGLGGLLGLGG', 'LGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG']),
     ('tanimā', 'LLLLLLLLGG'),
     ('śobhā', 'LGGGGGLLLLLLGGLGGLGG'),
     ('valīkendu', 'LLGGLGGL'),
@@ -1061,14 +1072,16 @@ dhaval_vrtta_data = [
     ('varatrā', 'GLLLGLLGLLGG'),
     ('lalitam', ['LLGLGLLLGL', 'LLLLLGLGLG', 'LLLLLLLLGLLG', 'LLGLGLLLGLGLG']),
     ('valīmukhī', 'LGLGLG'),
-    ('ṛddhiḥ', ['LGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('ṛddhiḥ', ['LGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG', 'LGLGGLLGLGG']),
     ('avanijā', 'LGLLGLGLG'),
     ('ākhrṭam', 'GLGLGLLL'),
     ('damanakam', 'LLLLLLLLLLG'),
     ('samayavatī', ['GGLLLLGGLLG', 'LLGGGGLLLLG']),
     ('akhaṇḍamaṇḍanam', 'LGLGLGGLGLGLG'),
     ('vyākośakośalam', 'GGLGLLLGGGLLLLGLLGLLGLGLG'),
-    ('bālā', ['GGLGGLLGLGG', 'GGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('bālā', ['GGLGGLLGLGG', 'GGLGGLLGLGG', 'GGLGGLLGLGG', 'LGLGGLLGLGG']),
     ('khaṭakā', 'LGLLGLLGLLG'),
     ('harit', 'LLLLLGGL'),
     ('ghaṭikā', ['GGLLLGLGLG', 'LLGLLGLGLG']),
@@ -1184,8 +1197,9 @@ dhaval_vrtta_data = [
     ('naragā', 'LLLLGGLLGG'),
     ('upendravajrā', 'LGLGGLLGLGG'),
     ('virājikarā', 'LGLLGGGG'),
-    ('kīrtiḥ', ['LGLGGLLGLGG', 'GGLGGLLGLGG',
-                'GGLGGLLGLGG', 'GGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('kīrtiḥ', ['LGLGGLLGLGG', 'GGLGGLLGLGG',
+    #             'GGLGGLLGLGG', 'GGLGGLLGLGG']),
     ('cārvaṭakam', 'GGGGLLGLLGGGGGG'),
     ('murajikā', 'LLLGGLL'),
     ('saṃsṛtaśobhāsāraḥ', 'LLGGGLLGGGG'),
@@ -1279,8 +1293,9 @@ dhaval_vrtta_data = [
     ('kumbhodhnī', 'GGGGLLLGLLGG'),
     ('muśaki', 'GGLLLLL'),
     ('bhūmadhārī', 'LGGLGGGG'),
-    ('jāyā', ['GGLGGLLGLGG', 'LGLGGLLGLGG',
-              'LGLGGLLGLGG', 'GGLGGLLGLGG']),
+    # # Covered by upajāti
+    # ('jāyā', ['GGLGGLLGLGG', 'LGLGGLLGLGG',
+    #           'LGLGGLLGLGG', 'GGLGGLLGLGG']),
     ('vāṇībhūṣā', 'GGGGGGGGLLLLGGG'),
     ('virodhinī', 'LLLGLLLLGLGLG'),
     ('bhujaṅgabhṛtā', ['LLGLLGLLGLLGG',
