@@ -169,15 +169,15 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
   assert pb.endswith('G')
   assert pd.endswith('G')
   if metre_name in pattern_for_metre:
-    if pattern_for_metre[metre_name] != pa + pb + pc + pd:
+    if pattern_for_metre[metre_name] != [pa, pb, pc, pd]:
       Print('Mismatch for %s' % metre_name)
       Print(pattern_for_metre[metre_name])
       Print(pa + pb + pc + pd)
-    assert pattern_for_metre[metre_name] == pa + pb + pc + pd
+    assert pattern_for_metre[metre_name] == [pa, pb, pc, pd]
     # Print('Not adding duplicate as already present: %s' % metre_name)
     return
   assert metre_name not in pattern_for_metre
-  pattern_for_metre[metre_name] = pa + pb + pc + pd
+  pattern_for_metre[metre_name] = [pa, pb, pc, pd]
   patterns_a = [pa]
   patterns_b = [pb[:-1] + 'G', pb[:-1] + 'L']
   patterns_c = [pc]

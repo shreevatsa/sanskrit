@@ -63,4 +63,4 @@ class SimpleIdentifier(object):
     return '\n'.join(self.debug_identify)
 
   def AllDebugOutput(self):
-    return '\n'.join([self.debug_read, self.debug_identify])
+    return '\n'.join([self.DebugRead(), self.DebugIdentify()])
