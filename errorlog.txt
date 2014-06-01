@@ -120,3 +120,20 @@ Thu May 22 2014
 Tue May 27 22:09:47 IST 2014
 
     Adding Kannada.
+
+5c729f334377b4fffc1ac7e87886c863124f7fa5
+Sun Jun 1 22:22:44 2014 +0530
+
+    Better distinguishing of whether input was a perfect match or not.
+
+    Added individual lines of viṣama vṛttas
+
+    For viṣama vṛttas, fixed bug of using single string instead of list of 4.
+
+    Removed the 2^4 variants of Upajāti (other than Indravajrā and
+    Upendravajrā).
+
+    Can publicize once stats are updated.
+
+    Future plans: "about this metre" (from whatever we have + explicit
+    additional data including audio and prevalence in canon).
