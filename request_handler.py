@@ -76,9 +76,8 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write(InputForm(input_verse))
     self.response.write('</p>')
 
-    if identification:
+    if identification and identification[1]:
       (full_match, results) = identification
-      assert isinstance(results, list)
       self.response.write('<p>')
       if full_match:
         self.response.write('The metre is: ')
