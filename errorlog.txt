@@ -76,8 +76,8 @@ Wed Apr 16 2014
       After going over just the shorter list, found some issues:
 
         - [Not a bug] Metres ending in laghu, like samānikā (GLGLGLGL = trochaic
-          tetrametre), mauktidadāma (LGLLGLLGLLGL = 4 ja-ganas = amphibrachic
-          tetrametre), vṛtta (GLGLGLGLGLGLGLGLGLGL = trochaic decametre),
+          tetrameter), mauktidadāma (LGLLGLLGLLGL = 4 ja-ganas = amphibrachic
+          tetrameter), vṛtta (GLGLGLGLGLGLGLGLGLGL = trochaic decameter),
           yavātparāmatīya (GLGLGLGLGLGL = trochaic hexameter). Need to look at
           examples of actual usage, to confirm whether they actually end even
           the sama-padas with laghu, or use guru there (in which case I can make
