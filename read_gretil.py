@@ -131,7 +131,7 @@ if __name__ == '__main__':
   table = {}
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]
-    (_, results) = identifier.IdentifyFromLines(verse)
+    (perfect, results) = identifier.IdentifyFromLines(verse)
     if not results:
       table['unknown'] = table.get('unknown', 0) + 1
       if args.print_unidentified_verses != 'none':
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     if args.print_identified_verses != 'none':
       Print('Verse %4d is%sin %s' % (
           verse_number + 1,
-          ' ' if len(results) == 1 else ' probably ',
+          ' ' if perfect else ' probably ',
           metre_name))
       if args.print_identified_verses == 'full':
         Print('\n'.join(verse))
