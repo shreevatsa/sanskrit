@@ -31,9 +31,9 @@ Given a verse,
 
 Simple usage from code:
 
-   import simple_identifier
-   identifier = simple_identifier.SimpleIdentifier()
-   match_results = identifier.IdentifyFromLines(verse_lines)
+    import simple_identifier
+    identifier = simple_identifier.SimpleIdentifier()
+    match_results = identifier.IdentifyFromLines(verse_lines)
 
 returns a list of MatchResults that the verse might be in.
 
