@@ -73,8 +73,6 @@ def AcceptVerse(v):
       return False
     if line.startswith('atha'):
       return False
-    if line == '***':
-      return False
   return True
 
 
@@ -126,8 +124,8 @@ if __name__ == '__main__':
     elif seen_separators == 2 and not l.startswith('<'):
       (l, n) = handle_input.RemoveVerseNumber(l)
       lines.append(l)
-      # if n:
-      #   lines.append('')
+      if n:
+        lines.append('')
 
   verses = SplitIntoVerses(lines)
   verses = [verse for verse in verses if AcceptVerse(verse)]
@@ -137,9 +135,8 @@ if __name__ == '__main__':
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]
     ok_and_results = identifier.IdentifyFromLines(verse)
-    if not ok_and_results:
-      Print('None for ')
-      Print(verse)
+    if not ok_and_results:      # None for lines that contain no syllables
+      continue
     (perfect, results) = ok_and_results
     if not results:
       table['unknown'] = table.get('unknown', 0) + 1

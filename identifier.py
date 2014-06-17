@@ -42,6 +42,9 @@ class Identifier(object):
     """Main function. Takes patterns of verse lines and identifies metres."""
     self._Reset()
 
+    # More than 10 lines is usually an indication of multiple verses.
+    assert len(pattern_lines) < 10
+
     full_verse = ''.join(pattern_lines)
     assert _IsPattern(full_verse)
     (global_results, self.global_info) = self._MetresAndInfo(full_verse,
