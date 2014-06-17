@@ -7,7 +7,8 @@ function scan() {
   fi
 }
 
-scan amaru_u.htm
+# Lots of footnotes etc. to remove in this yet.
+# scan amaru_u.htm
 scan bhakirpu.htm
 scan bhall_pu.htm
 ../read_gretil.py bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none

@@ -19,7 +19,7 @@ def Print(x):
 
 
 known_texts = {
-    'amaru_u.htm': 'Amaruśataka',
+    # 'amaru_u.htm': 'Amaruśataka',
     'bharst_u.htm': 'Bhartṛhari: Śatakatrakya',
     'meghdk_u.htm': 'Meghadūta',
     'bhakirpu.htm': 'Bhāravi: Kirātārjunīya',

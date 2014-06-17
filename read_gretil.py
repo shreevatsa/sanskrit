@@ -73,6 +73,8 @@ def AcceptVerse(v):
       return False
     if line.startswith('atha'):
       return False
+    if line == '***':
+      return False
   return True
 
 
@@ -94,6 +96,9 @@ if __name__ == '__main__':
                                help='What to print when a verse is not in any'
                                ' known metre: nothing, just a message,'
                                ' or the whole verse')
+  argument_parser.add_argument('--break_at_error', action='store_true',
+                               help='Whether to break as soon as one imperfect'
+                               ' verse is found.')
   args = argument_parser.parse_args()
   input_file_name = args.input_file
 
@@ -131,7 +136,11 @@ if __name__ == '__main__':
   table = {}
   for (verse_number, verse) in enumerate(verses):
     verse = [l.strip() for l in verse]
-    (perfect, results) = identifier.IdentifyFromLines(verse)
+    ok_and_results = identifier.IdentifyFromLines(verse)
+    if not ok_and_results:
+      Print('None for ')
+      Print(verse)
+    (perfect, results) = ok_and_results
     if not results:
       table['unknown'] = table.get('unknown', 0) + 1
       if args.print_unidentified_verses != 'none':
@@ -154,6 +163,11 @@ if __name__ == '__main__':
       if args.print_identified_verses == 'full':
         Print('\n'.join(verse))
     table[metre_name] = table.get(metre_name, 0) + 1
+    if not perfect and args.break_at_error:
+      Print('\n'.join(verse))
+      Print(identifier.AllDebugOutput())
+      Print('')
+      break
 
   sum_counts = sum(value for (key, value) in table.items())
   for (metre, count) in table.items():
