@@ -43,7 +43,10 @@ class Identifier(object):
     self._Reset()
 
     # More than 10 lines is usually an indication of multiple verses.
-    assert len(pattern_lines) < 10
+    if len(pattern_lines) > 10:
+      self.global_info.append('Error: too many lines in verse. '
+                              'Perhaps these are multiple verses?')
+      return (False, [])
 
     full_verse = ''.join(pattern_lines)
     assert _IsPattern(full_verse)
