@@ -42,8 +42,8 @@ class Identifier(object):
     """Main function. Takes patterns of verse lines and identifies metres."""
     self._Reset()
 
-    # More than 10 lines is usually an indication of multiple verses.
-    if len(pattern_lines) > 10:
+    # Too many lines => probably multiple verses.
+    if len(pattern_lines) > 12:
       self.global_info.append('Error: too many lines in verse. '
                               'Perhaps these are multiple verses?')
       return (False, [])

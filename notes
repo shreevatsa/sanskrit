@@ -2,7 +2,7 @@ Notes on the diff files for Bhartṛhari:
   48.9 (4) means Kosambi 1948, verse 9, page 4 (and 4+105=109, so 00000109.tif).
 
 Comparision with Heidelberg:
-- Fewer metres (#3)
+- <s>Fewer metres (#3)</s>
 - No information about metres (#5)
 + Can handle "ity api", "tvayy eva" and similar.
 + Recognizes metre even if only one line is correct.
