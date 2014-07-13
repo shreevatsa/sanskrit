@@ -84,8 +84,11 @@ class IdentifyPage(webapp2.RequestHandler):
       else:
         self.response.write('The input does not perfectly match '
                             'any known metre. </p>'
-                            '<p>Based on partial matches, it may be: ')
-      self.response.write('%s.' % ' OR '.join(_DisplayName(m) for m in results))
+                            '<p>Based on partial matches, it may be:</p>')
+        self.response.write('<ul>')
+        for m in results:
+          self.response.write('<li>%s</li>' % _DisplayName(m))
+        self.response.write('</ul>')
     else:
       self.response.write('<p>No metre recognized.</p>')
 
