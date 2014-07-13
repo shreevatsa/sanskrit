@@ -1,9 +1,5 @@
 {
-  "Matta-mayūram": [
-    1,
-    "0.10%"
-  ],
-  "Jaloddhatagatiḥ": [
+  "vaṃśapatrapatitam": [
     1,
     "0.10%"
   ],
@@ -12,8 +8,8 @@
     "0.10%"
   ],
   "Viyoginī": [
-    62,
-    "5.96%"
+    61,
+    "5.87%"
   ],
   "Pramitākṣarā": [
     51,
@@ -27,13 +23,13 @@
     69,
     "6.63%"
   ],
-  "Vaṃśastham/Indravaṃśā": [
-    214,
-    "20.58%"
-  ],
-  "Vaṃśapatrapatitam (Vaṃśadala)": [
+  "Āryā (loose schema)": [
     1,
     "0.10%"
+  ],
+  "Upajāti": [
+    132,
+    "12.69%"
   ],
   "Kṣamā (Candrikā, Utpalinī)": [
     1,
@@ -43,13 +39,17 @@
     3,
     "0.29%"
   ],
-  "Udgatā": [
-    53,
-    "5.10%"
+  "vaṃśastham": [
+    203,
+    "19.52%"
   ],
-  "Upajāti": [
-    176,
-    "16.92%"
+  "Udgatā": [
+    52,
+    "5.00%"
+  ],
+  "jaloddhatagatiḥ": [
+    1,
+    "0.10%"
   ],
   "Drutavilambitam": [
     33,
@@ -58,6 +58,10 @@
   "Rathoddhatā": [
     38,
     "3.65%"
+  ],
+  "mattamayūraḥ": [
+    1,
+    "0.10%"
   ],
   "Aupacchandasikam (Vasantamālikā) (Upodgatā)": [
     36,
@@ -79,15 +83,31 @@
     13,
     "1.25%"
   ],
-  "Jaladharamālā": [
-    1,
-    "0.10%"
+  "indravajrā": [
+    20,
+    "1.92%"
   ],
   "Anuṣṭup (Śloka)": [
     125,
     "12.02%"
   ],
+  "navanīlatā": [
+    1,
+    "0.10%"
+  ],
+  "śīlāturā": [
+    11,
+    "1.06%"
+  ],
   "Aparavaktrā": [
+    1,
+    "0.10%"
+  ],
+  "upendravajrā": [
+    24,
+    "2.31%"
+  ],
+  "jaladharamālā": [
     1,
     "0.10%"
   ],

@@ -13,9 +13,8 @@ scan bhakirpu.htm
 scan bhall_pu.htm
 ../read_gretil.py bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none
 scan kakumspu.htm
-../read_gretil.py kragh_pu.htm --print_identified_verses=none --print_unidentified_verses=none
+scan kragh_pu.htm
 scan maghspvu.htm
-scan meghdk_u.htm
 scan msubhs_u.htm
 scan nkalivpu.htm
 scan ramodtpu.htm

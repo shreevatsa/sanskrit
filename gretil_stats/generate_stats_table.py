@@ -20,21 +20,22 @@ def Print(x):
 
 known_texts = {
     'amaru_u.htm': 'Amaruśataka',
-    'bharst_u.htm': 'Bhartṛhari: Śatakatrakya',
-    'meghdk_u.htm': 'Meghadūta',
     'bhakirpu.htm': 'Bhāravi: Kirātārjunīya',
     'bhall_pu.htm': 'Bhallaṭaśataka',
+    'bharst_u.htm': 'Bhartṛhari: Śatakatrakya',
     'kakumspu.htm': 'Kālidāsa: Kumārasambhava',
+    'kmeghdpu.htm': 'Kālidāsa: Meghadūta',
     'kragh_pu.htm': 'Kālidāsa: Raghuvamśa',
     'maghspvu.htm': 'Māgha: Śiśupālavadha',
+    'msubhs_u.htm': 'Mahā-subhāṣita-saṅgraha',
     'nkalivpu.htm': 'Nīlakaṇṭha Dīkṣita: Kaliviḍambana',
     'ramodtpu.htm': 'Rāmodantam',
-    'msubhs_u.htm': 'Mahā-subhāṣita-saṅgraha',
     }
 
 if __name__ == '__main__':
   names = [os.path.basename(f) for f in glob.glob('*.stats')]
   names = [os.path.splitext(name)[0] for name in names]
+  names.sort()
   # names = [os.path.splitext(name)[0] for name in names]
   assert names == sorted(known_texts.keys()), names
 

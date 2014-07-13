@@ -1,19 +1,19 @@
 {
   "Upajāti": [
-    3,
-    "2.91%"
-  ],
-  "Āryā (matched from regex)": [
     2,
     "1.94%"
   ],
-  "Vasantatilakā": [
-    24,
-    "23.30%"
+  "Āryā (strict schema)": [
+    2,
+    "1.94%"
   ],
-  "unknown": [
+  "priyatilakā": [
     1,
     "0.97%"
+  ],
+  "Vasantatilakā": [
+    23,
+    "22.33%"
   ],
   "Śikhariṇī": [
     10,
@@ -26,6 +26,10 @@
   "Śārdūlavikrīḍitam": [
     36,
     "34.95%"
+  ],
+  "indravajrā": [
+    1,
+    "0.97%"
   ],
   "Anuṣṭup (Śloka)": [
     8,
@@ -50,5 +54,9 @@
   "Mandākrāntā": [
     2,
     "1.94%"
+  ],
+  "Āryā (loose schema)": [
+    1,
+    "0.97%"
   ]
 }
