@@ -81,6 +81,7 @@ class IdentifyPage(webapp2.RequestHandler):
       self.response.write('<p>')
       if full_match:
         self.response.write('The metre is: ')
+        self.response.write('%s.' % _DisplayName(results[0]))
       else:
         self.response.write('The input does not perfectly match '
                             'any known metre. </p>'
@@ -109,9 +110,15 @@ class IdentifyPage(webapp2.RequestHandler):
     self.response.write('\n')
 
     if identifier.tables:
+      self.response.write('<hr/><h2>About the results</h2>')
       for (name, table) in identifier.tables:
-        self.response.write('<p>Reading%s as %s:</p>' % (
-            ' ' if full_match else ' (note errors in red)', _DisplayName(name)))
+        if not full_match:
+          self.response.write('<p>The input verse imperfectly matches %s '
+                              '(note deviations in red):</p>'
+                              % _DisplayName(name))
+        else:
+          self.response.write('<p>The input verse matches %s:</p>'
+                              % _DisplayName(name))
         for line in table:
           self.response.write(line)
     self.response.write('</body></html>')
