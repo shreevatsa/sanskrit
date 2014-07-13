@@ -137,3 +137,17 @@ Sun Jun 1 22:22:44 2014 +0530
 
     Future plans: "about this metre" (from whatever we have + explicit
     additional data including audio and prevalence in canon).
+
+dab227e5290bbf7a5c804405a1d3e2d087a5ca8c
+Sun Jul 13 11:28:00 IST 2014
+
+    Sent email to sanskrit-programmers about 1e. Incremented version to 1f.
+    Added version information (and links to past versions) on main page.
+
+    Next steps:
+
+      * Add information about metre in results page (e.g. "this is a
+        sama-vṛtta, whose each line has...")
+      * Add mātra metres
+
+    Then, start working on metre database.
