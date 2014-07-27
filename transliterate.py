@@ -158,7 +158,8 @@ def DetectAndTransliterate(text, pass_through=None, ignore=None):
   text = _FixBadDevanagari(text)
   characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
   characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'
-  characteristic_itrans = r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^|Sh'
+  characteristic_itrans = (r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^'
+                           + r'|Sh|sh')
   if re.search(characteristic_devanagari, text):
     text = text.replace('s', 'ऽ')
     return _TransliterateDevanagari(text, ignore)
