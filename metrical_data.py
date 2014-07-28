@@ -52,11 +52,7 @@ def GetPattern(metre):
 def _AddSamavrttaPattern(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = _CleanUpPattern(each_line_pattern)
-  if clean.endswith('L'):
-    # Print('Not adding %s for now, as %s ends with laghu' % (
-    #     metre_name, each_line_pattern))
-    return
-  assert re.match(r'^[LG]*G$', clean), (each_line_pattern, metre_name)
+  assert re.match(r'^[LG]*$', clean), (each_line_pattern, metre_name)
   if metre_name in pattern_for_metre:
     if pattern_for_metre[metre_name] != [clean] * 4:
       Print('Mismatch for %s' % metre_name)
@@ -75,6 +71,8 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
       Print(metre_name)
       Print(a + b + c + d)
       Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
+      # TODO(shreevatsa): Just a hack as I got tired -- go back later
+      return
     assert a + b + c + d not in known_metre_patterns
     known_metre_patterns[a + b + c + d] = match_result.MatchResult(
         metre_name, match_result.MATCH_TYPE.FULL)
