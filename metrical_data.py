@@ -66,16 +66,16 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
 
   for (a, b, c, d) in itertools.product(patterns, repeat=4):
+    match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL)
     if a + b + c + d in known_metre_patterns:
+      # TODO(shreevatsa): Figure out what exactly to do in this case
       Print('Error: already present')
       Print(metre_name)
       Print(a + b + c + d)
       Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
-      # TODO(shreevatsa): Just a hack as I got tired -- go back later
       return
     assert a + b + c + d not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.FULL)
+    known_metre_patterns[a + b + c + d] = match
 
   for (a, b) in itertools.product(patterns, repeat=2):
     match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF)
@@ -312,17 +312,27 @@ def _LoosePatternsOfLength(n):
 _loose_patterns_memo = {0: [''], 1: ['L']}
 
 
-def _AddAryaRegex():
-  """Add regex for Āryā metre."""
-  odd_gana_re = '(GG|LLG|GLL|LLLL)'
-  even_gana_re = '(GG|LLG|GLL|LLLL|LGL)'
-  pada_1_re = odd_gana_re + even_gana_re + odd_gana_re
-  pada_2_re = even_gana_re + odd_gana_re + '(LLLL|LGL)' + odd_gana_re + '(L|G)'
-  pada_3_re = odd_gana_re + even_gana_re + odd_gana_re
-  pada_4_re = even_gana_re + odd_gana_re + 'L' + odd_gana_re + '(L|G)'
-  _AddMetreRegex('Āryā (strict schema)',
-                 [pada_1_re, pada_2_re, pada_3_re, pada_4_re],
-                 simple=False)
+def _AddAryaFamilyRegex():
+  """Add regexes for the Āryā family of metres."""
+  odd_ganas = ['GG', 'LLG', 'GLL', 'LLLL']
+  even_ganas = odd_ganas + ['LGL']
+  odd_gana_re = '(%s)' % '|'.join(odd_ganas)
+  even_gana_re = '(%s)' % '|'.join(even_ganas)
+  pada_12_re = odd_gana_re + even_gana_re + odd_gana_re
+  pada_15_re = even_gana_re + odd_gana_re + 'L' + odd_gana_re + '(L|G)'
+  pada_18_re = even_gana_re + odd_gana_re + '(LLLL|LGL)' + odd_gana_re + '(L|G)'
+  pada_20_re = (even_gana_re + odd_gana_re + '(LLLL|LGL)' + odd_gana_re +
+                '(%s)' % '|'.join(even_ganas + ['GL', 'LLL']))
+  _AddMetreRegex('Āryā',
+                 [pada_12_re, pada_18_re, pada_12_re, pada_15_re], simple=False)
+  _AddMetreRegex('Gīti',
+                 [pada_12_re, pada_18_re, pada_12_re, pada_18_re], simple=False)
+  _AddMetreRegex('Upagīti',
+                 [pada_12_re, pada_15_re, pada_12_re, pada_15_re], simple=False)
+  _AddMetreRegex('Udgīti',
+                 [pada_12_re, pada_15_re, pada_12_re, pada_18_re], simple=False)
+  _AddMetreRegex('Āryāgīti',
+                 [pada_12_re, pada_20_re, pada_12_re, pada_20_re], simple=False)
   _AddMetreRegex('Āryā (loose schema)',
                  ['|'.join(_LoosePatternsOfLength(12)),
                   '|'.join(_LoosePatternsOfLength(18)),
@@ -348,26 +358,12 @@ def _AddGiti(line_patterns):
   _AddMetreRegex('Gīti', line_patterns, simple=False)
 
 
-def _AddGitiExamples():
-  # From Bhartṛhari (BharSt_2.26, āmīlitanayanānāṃ...)
-  _AddGiti(['GGLLLLGG', 'GLLLLGLGLGGL', 'LLGLGLGLL', 'LLLLLLGLGLGLLL'])
-  # The version of the above in Kosambi
-  _AddGiti(['GGLLLLGG', 'GLLLLGLGLGLLG', 'LLGLGLGLL', 'GLLLLGLGLGLLG'])
-
-
 def _AddKarambajati():
   """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
-  # # Bhartṛhari
-  # _AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)',
-  #                      'L G L G G L L G L G L G')
-  # # Māgha
+  # _AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)', 'LGLGGLLGLGLG')
   # _AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
   # Also add all their Upajāti mixtures, with the above two 0000 and 1111
-  # Allow final laghu
-  # _AddSamavrttaRegex('Karambajāti (Vaṃśastham/Indravaṃśā)',
-  #                   '. G L G G L L G L G L .')
-  _AddSamavrttaRegex('Vaṃśastham/Indravaṃśā',
-                     '. G L G G L L G L G L .')
+  _AddSamavrttaRegex('Vaṃśastham/Indravaṃśā', '. G L G G L L G L G L .')
   # # 0001
   # AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
   #               ['LGLGGLLGLGLG',
@@ -455,9 +451,7 @@ def InitializeData():
   _AddAnustup()
   _AddAnustupExamples()
 
-  _AddAryaRegex()
-  _AddGitiExamples()
-
+  _AddAryaFamilyRegex()
   _AddKarambajati()
 
   vrtta_data = (data_curated.curated_vrtta_data
