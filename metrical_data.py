@@ -20,6 +20,7 @@ known_metre_patterns = {}
 known_partial_regexes = []
 known_partial_patterns = {}
 pattern_for_metre = {}
+all_data = {}
 
 
 def Print(x):
@@ -458,30 +459,63 @@ def InitializeData():
                 + data_dhaval_vrttaratnakara.data_vrttaratnakara
                 + data_dhaval.dhaval_vrtta_data)
 
+  assert not all_data
   for (name, description) in vrtta_data:
     samatva = None
-    need_regex = None
+    regex_or_pattern = None
     if isinstance(description, list):
       assert len(description) in [2, 4]
       samatva = 'ardhasama' if len(description) == 2 else 'viṣama'
-      need_regex = 'pattern'
+      regex_or_pattern = 'pattern'
     else:
       samatva = 'sama'
       if re.match(r'^[LG]*$', _RemoveChars(description, ' —–')):
-        need_regex = 'pattern'
+        regex_or_pattern = 'pattern'
       else:
-        need_regex = 'regex'
+        regex_or_pattern = 'regex'
 
     assert samatva in ['sama', 'ardhasama', 'viṣama']
-    assert need_regex in ['regex', 'pattern']
+    assert regex_or_pattern in ['regex', 'pattern']
+    all_data[name] = (samatva, regex_or_pattern, description)
 
-    if samatva == 'sama' and need_regex == 'regex':
+    if samatva == 'sama' and regex_or_pattern == 'regex':
       _AddSamavrttaRegex(name, description)
-    elif samatva == 'sama' and need_regex == 'pattern':
+    elif samatva == 'sama' and regex_or_pattern == 'pattern':
       _AddSamavrttaPattern(name, description)
-    elif samatva == 'ardhasama' and need_regex == 'pattern':
+    elif samatva == 'ardhasama' and regex_or_pattern == 'pattern':
       _AddArdhasamavrttaPattern(name, description)
-    elif samatva == 'viṣama' and need_regex == 'pattern':
+    elif samatva == 'viṣama' and regex_or_pattern == 'pattern':
       _AddVishamavrttaPattern(name, description)
     else:
       assert False, name
+
+
+def HtmlDescription(name):
+  if name not in all_data:
+    return '[No description currently for %s]' % name
+  (samatva, regex_or_pattern, description) = all_data[name]
+  if regex_or_pattern == 'regex':
+    return '[%s is given by the regex %s]' % (name, description)
+  assert regex_or_pattern == 'pattern'
+  if samatva == 'sama':
+    return ('%s is a sama-vṛtta. It contains 4 <i>pāda</i>s, each of which' +
+            '  has the pattern %s') % (name, description)
+  elif samatva == 'ardhasama':
+    assert isinstance(description, list)
+    assert len(description) == 2
+    return ('%s is an ardha-sama-vṛtta. It contains 4 <i>pāda</i>s, in which' +
+            ' the odd <i>pāda</i>s have pattern:<br/>' +
+            '%s<br/>'
+            ' and the even <i>pāda</i>s have pattern:<br/>' +
+            '%s') % (name, description[0], description[1])
+  else:
+    assert samatva == 'viṣama'
+    assert isinstance(description, list)
+    assert len(description) == 4
+    return ('%s is a viṣama-vṛtta. It contains 4 <i>pāda</i>s, which have' +
+            ' respectively the patterns:<br>' +
+            '%s<br/>' +
+            '%s<br/>' +
+            '%s<br/>' +
+            '%s') % (name, description[0], description[1],
+                     description[2], description[3])

@@ -11,6 +11,7 @@ import collections
 
 import webapp2
 
+import metrical_data
 import simple_identifier
 import transliterate
 
@@ -112,7 +113,7 @@ class IdentifyPage(webapp2.RequestHandler):
     if identifier.tables:
       self.response.write('<hr/><h2>About the results</h2>')
       for (name, table) in identifier.tables:
-        # self.response.write('<p>' + HtmlDescription(name))
+        self.response.write('<p>' + metrical_data.HtmlDescription(name))
         if not full_match:
           self.response.write('<p>The input verse imperfectly matches %s '
                               '(note deviations in red):</p>'
