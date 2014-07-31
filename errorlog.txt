@@ -153,3 +153,17 @@ Sun Jul 13 11:28:00 IST 2014
     Then, start working on metre database.
 
     Also: read-gretil.py needs some major cleanup. Will get to it later.
+
+a89a5ff59c2530fefe7d463b17d92570faed03f4
+Thu Jul 31 16:48:59 IST 2014
+
+    - Understood and added the family (Āryā, Gīti, Upagīti, Udgīti, Āryāgīti).
+    - Allowed laghu-ending metres. (Some conflicts show up... tracking as #45.)
+    - Updated stats a bit. Mentioned current version number and linked old ones.
+    - For now, added 'sh' to "characteristic ITRANS".
+
+    To add the metre information in the results page, looks like it will be
+    cleaner for the identifier to return a metre object (which can contain its
+    own "information" functions) than to just return a name, and look it up in
+    the data -- is this true? Or should we just keep it as names, and avoid
+    over-modelling?
