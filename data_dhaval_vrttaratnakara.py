@@ -58,7 +58,7 @@ data_vrttaratnakara = [
     ('mauktikamālā / kalasvanavaṃśaḥ', 'GLLGLLGGLLG'),  # name from other list
     ('candravartma', 'GLGLLLGLLLLG'),
     # ('vaṃśastha', 'LGLGGLLGLGLG'),  # in curated
-    # ('indravaṃśā', 'GGLGGLLGLGLG'),  # in curated
+    ('indravaṃśā', 'GGLGGLLGLGLG'),
     # ('toṭaka', 'LLGLLGLLGLLG'),  # in curated
     # ('drutavilambita', 'LLLGLLGLLGLG'),  # in curated
     # ('puṭa', 'LLLLLLGGGLGG'),  # in data_dhaval with better name
