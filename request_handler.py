@@ -19,7 +19,9 @@ import transliterate
 def InputForm(default=''):
   return """
     <form action="/identify" method="post">
-      <div><textarea name="input_verse" rows="6" cols="80">%s</textarea></div>
+      <div>
+        <textarea name="input_verse" rows="6" cols="80" autofocus>%s</textarea>
+      </div>
       <div><input type="submit" value="Identify verse"></div>
     </form>""" % cgi.escape(default)
 
