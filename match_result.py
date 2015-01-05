@@ -6,10 +6,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-
-# Poor man's enum for now. Python adds enum support in Python 3.4+.
-def Enum(**enums):
-  return type(str('Enum'), (), enums)
+from poor_enums import Enum
 
 MATCH_TYPE = Enum(UNKNOWN=0,
                   FULL=1,

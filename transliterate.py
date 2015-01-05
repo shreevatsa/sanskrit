@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 import re
 
 import devanagari
+from poor_enums import Enum
 import slp1
 import transliterator
 
@@ -148,30 +149,56 @@ def KannadaToDevanagari(text):
                                       pass_through=_DEFAULT_PASS_THROUGH)[0]
 
 
-def DetectAndTransliterate(text, pass_through=None, ignore=None):
-  """Transliterates text to SLP1, after guessing what script it is."""
-  text = _IsoToIast(text)
+TRANSLITERATION_SCHEME = Enum(HK=0,
+                              IAST=1,
+                              ITRANS=2,
+                              Devanagari=3,
+                              Kannada=4)
+
+
+def DetectTransliterationScheme(text):
+  """Returns which transliteration scheme the given text is in."""
   characteristic_kannada = '[%s]' % _KANNADA_CONSONANTS
   if re.search(characteristic_kannada, text):
-    text = KannadaToDevanagari(text)
-
-  text = _FixBadDevanagari(text)
+    return TRANSLITERATION_SCHEME.Kannada
   characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
+  if re.search(characteristic_devanagari, text):
+    return TRANSLITERATION_SCHEME.Devanagari
   characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'
+  if re.search(characteristic_iast, text):
+    return TRANSLITERATION_SCHEME.IAST
   characteristic_itrans = (r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^'
                            + r'|Sh|sh')
-  if re.search(characteristic_devanagari, text):
+  if re.search(characteristic_itrans, text):
+    return TRANSLITERATION_SCHEME.ITRANS
+  return TRANSLITERATION_SCHEME.HK
+
+
+def DetectAndTransliterate(input_text, pass_through=None, ignore=None):
+  """Transliterates text to SLP1, after guessing what script it is."""
+  input_text = _IsoToIast(input_text)
+
+  def ForKannada(text):
+    text = KannadaToDevanagari(text)
+    text = _FixBadDevanagari(text)
     text = text.replace('s', 'ऽ')
     return _TransliterateDevanagari(text, ignore)
-  if re.search(characteristic_iast, text):
-    return transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE,
-                                        text, ignore, pass_through)
-  if re.search(characteristic_itrans, text):
-    return transliterator.Transliterate(_ITRANS_TO_SLP1_STATE_MACHINE,
-                                        text, ignore, pass_through)
-  ret = transliterator.Transliterate(_HK_TO_SLP1_STATE_MACHINE, text,
-                                     ignore, pass_through)
-  return ret
+
+  transliteration_scheme = DetectTransliterationScheme(input_text)
+  actions = {
+      TRANSLITERATION_SCHEME.Kannada: ForKannada,
+      TRANSLITERATION_SCHEME.Devanagari:
+      lambda text: _TransliterateDevanagari(text, ignore),
+      TRANSLITERATION_SCHEME.IAST:
+      lambda text: transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE,
+                                                text, ignore, pass_through),
+      TRANSLITERATION_SCHEME.ITRANS:
+      lambda text: transliterator.Transliterate(_ITRANS_TO_SLP1_STATE_MACHINE,
+                                                text, ignore, pass_through),
+      TRANSLITERATION_SCHEME.HK:
+      lambda text: transliterator.Transliterate(_HK_TO_SLP1_STATE_MACHINE, text,
+                                                ignore, pass_through)}
+  return actions[transliteration_scheme](input_text)
 
 
 _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE = transliterator.MakeStateMachine(
