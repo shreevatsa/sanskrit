@@ -107,7 +107,7 @@ class KnownValues(unittest.TestCase):
              'na khalu vayas tejaso hetuḥ ||']
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
-        'Āryā (strict schema)',
+        'Āryā',
         match_result.MATCH_TYPE.FULL)
 
   def testAryaUnknown(self):
@@ -118,7 +118,7 @@ class KnownValues(unittest.TestCase):
              'svājñāna-jñānino viralāḥ']
     self.AssertSingleMatchResultEquals(
         self.identifier.IdentifyFromLines(verse),
-        'Āryā (strict schema)',
+        'Āryā',
         match_result.MATCH_TYPE.FULL)
 
   def testBadVerse(self):

@@ -9,9 +9,9 @@ from __future__ import unicode_literals
 import itertools
 import re
 
-import data_curated
-import data_dhaval
-import data_dhaval_vrttaratnakara
+import data.curated
+import data.dhaval
+import data.dhaval_vrttaratnakara
 import match_result
 import print_utils
 
@@ -455,9 +455,9 @@ def InitializeData():
   _AddAryaFamilyRegex()
   _AddKarambajati()
 
-  vrtta_data = (data_curated.curated_vrtta_data
-                + data_dhaval_vrttaratnakara.data_vrttaratnakara
-                + data_dhaval.dhaval_vrtta_data)
+  vrtta_data = (data.curated.curated_vrtta_data
+                + data.dhaval_vrttaratnakara.data_vrttaratnakara
+                + data.dhaval.dhaval_vrtta_data)
 
   assert not all_data
   for (name, description) in vrtta_data:
