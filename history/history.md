@@ -96,8 +96,8 @@ one `sscan` used for handling CSX:
 Another idea, still in use, is to treat _anusvāra_ and _visarga_ as consonants
 too. This makes perfect sense:
 
- - vowel + _anusvāra_ / _visarga_ + consonant is _guru_, just as  
-   vowel + consonant + consonant is _guru_.
+ - vowel + (_anusvāra_ or _visarga_) + consonant is _guru_, just as
+   vowel + (consonant) + consonant is _guru_.
 
 but I am not aware of any text on prosody treating them as such. This is a
 unique insight that the technological constraints (or laziness) have given us!
@@ -157,7 +157,8 @@ I refactored "IdentifyPattern" as another function; now there were 3 modules:
 handling the input, translating it to a metrical pattern (pattern of _laghu_-s
 and _guru_-s), and then identifying the pattern. So far, "identifying" the
 pattern only meant saying whether it matched that of _Mandākrāntā_ or
-not. Instead, the goal would be to say whether 
+not. Instead, the goal would be to say whether it matched _any_ of a
+list of known metres, and if so, which.
 
     b194fa3 2013-10-20 06:04:36 +0530 Table of known metres
     89106bd 2013-10-20 11:02:56 +0530 Check-fail on non-HK characters
@@ -195,22 +196,55 @@ will work if the metre is a _sama-vṛtta_.)
     known_metres = {
         'GGGGLLLLLGGLGGLG.' * 4: 'mandākrāntā'
     }
-    
+
     def IdentitfyPattern(pattern):
       ...
       return known_patterns.get(pattern)
-    
+
     def IdentifyMetre(verse):
       for known_pattern, known_metre in known_metres.iteritems():
         if re.match('^' + known_pattern + '$', full_verse):
           return known_metre
-    
+
       if len(verse) == 4:
         for i in range(4):
           line_i = verse[i]
           print 'Line %d: pattern %s is %s' % (i, line_i, IdentitfyPattern(line_i))
 
-In hindsight, I think it was a mistake 
+In hindsight, I think it was a mistake to have functions with
+side-effects (including details of display down to the level of
+indentation). Too much state.
+
+    5842d67 2013-10-20 17:09:38 +0530 IdentifyMetre on entire input
+    4459e2a 2013-10-21 07:50:40 +0530 Fewer global variables
+    8b9e4fb 2013-10-21 09:04:30 +0530 Lint fixes
+    1a0f6db 2013-10-21 09:52:44 +0530 Populate tables with "AddSamavrtta"
+
+    -known_patterns = {
+    -    'GGGGLLLLLGGLGGLGL': 'mandākrāntā_pāda',
+    -    'GGGGLLLLLGGLGGLGG': 'mandākrāntā_pāda'
+    -}
+    -known_metres = {
+    -    'GGGGLLLLLGGLGGLG.' * 4: 'mandākrāntā'
+    -}
+
+    +known_patterns = {}
+    +known_metres = {}
+    + ...
+    +  AddSamavrtta('mandākrāntā', 'GGGGLLLLLGGLGGLG.')
+
+Then I set about adding more metres, based on the ones recognized as important,
+from
+[my conversation with Dr. Ganesh](https://www.youtube.com/playlist?list=PLABJEFgj0PWVXr2ERGu2xtoSXrNdBs5xS).
+
+    3e09cc1 2013-10-21 09:55:24 +0530 Added Upajāti and Vaṃśastha
+    1845edd 2013-10-21 13:53:11 +0530 Added 13 more metres: Rathoddhatā...Mālinī
+    bf060da 2013-10-21 13:54:34 +0530 Added 2 more metres
+    6a0f523 2013-10-21 13:55:06 +0530 Added spaces including yati in Mandākrāntā
+    4a0f01e 2013-10-21 21:59:11 +0530 AddSamavrtta -> (AddVrtta, AddArdhasamvrtta)
+
+(Anuṣṭup was added as an Ardhasamavṛtta `('....LGGG', '....LGLG')`, with the
+dots expanding to all 2^8=256 options.)
 
 Note also
 [some trouble with pādānta-yati](https://github.com/shreevatsa/sanskrit/commit/ae1ca92b7b68d17ac82b42febbd6463bfb1f4d93)
@@ -223,18 +257,18 @@ on 2013-10-21, and
 to the sanskrit-programmers mailing list Tue, 22 Oct 2013 01:52:38 +0530:
 
 > I decided to try my hand at coding this. A rough version wasn't too hard to come up with (just required time and effort).
-> 
-> It is still very far from done, but the current version, in case anyone would like a preliminary look, is at http://sanskritmetres.appspot.com/ and source code at https://github.com/shreevatsa/sanskrit/tree/metrical-scan .  
+>
+> It is still very far from done, but the current version, in case anyone would like a preliminary look, is at http://sanskritmetres.appspot.com/ and source code at https://github.com/shreevatsa/sanskrit/tree/metrical-scan .
 > The Python script that does the actual work (and can be run from the commandline if desired, or imported as a library from other Python code) is https://github.com/shreevatsa/sanskrit/blob/metrical-scan/sscan.py .
-> 
+>
 > To use it, go to http://sanskritmetres.appspot.com/ , type a Sanskrit verse in the box (in Harvard-Kyoto convention), and click on the button. If your verse was in one of the known metres, it will (I hope) get recognized.
-> 
-> There is still a lot to do: the UI/frontend (what you see on the website) I have almost not worked on at all yet; it currently contains only just under 40 of the popular (and some not so popular) metres; there are some issues around dealing with the (rare) cases where the syllable at the end of a line is *intended* to be laghu instead of guru; the output can stand to be improved a lot; it will be useful (and simple) to support input transliteration schemes other than Harvard-Kyoto; there are some obvious performance improvements crying out to be done; the code can do with some refactoring, etc.  
+>
+> There is still a lot to do: the UI/frontend (what you see on the website) I have almost not worked on at all yet; it currently contains only just under 40 of the popular (and some not so popular) metres; there are some issues around dealing with the (rare) cases where the syllable at the end of a line is *intended* to be laghu instead of guru; the output can stand to be improved a lot; it will be useful (and simple) to support input transliteration schemes other than Harvard-Kyoto; there are some obvious performance improvements crying out to be done; the code can do with some refactoring, etc.
 > (But it already has one feature that I've often felt the absence of in sanskrit.sai.uni-heidelberg.de/Chanda/ -- if you type a verse in which some lines are in correct metre and some are off, there is a chance that this script will still recognize the conforming lines. As an example of the usefulness of having a script like this locally: running the text on the GRETIL text of Meghaduta uncovered 23 errors in the text (detected by the metre being incorrect), which I've notified the GRETIL maintainer about.)
-> 
+>
 > I've sent this update about this tool to this mailing list as it seems to have a relatively small membership but useful comments (or commits) might be forthcoming; please share the link widely (if you wish) only when it's in a somewhat usable state. :-)
-> 
-> Regards,  
+>
+> Regards,
 > Shreevatsa
 
 Looking back from 2015, I am impressed by how many things came up in the very
@@ -253,6 +287,18 @@ first thread that are still relevant:
 - I am not keen on adding theoretical-only metres.
 
 - Adding metre data should be in a simple format.
+
+Anyway, as I waited for replies, I continued work:
+
+    e0b42c7 2013-10-21 22:57:42 +0530
+
+    Known issues:
+         (1) Needs better treatment of pādānta-guru / pādānta-yati.
+         (2) Needs a lot more data (metres).
+         (3) Can improve description of metres.
+         (4) When analyzing line-by-line, would be nice to show all resolutions [instead of just the first one]
+
+
 
 Complete history of all 515 commits pre-2015:
 
@@ -288,16 +334,16 @@ Complete history of all 515 commits pre-2015:
     b194fa3 2013-10-20 06:04:36 +0530 Table of known metres (with 1 metre)
     89106bd 2013-10-20 11:02:56 +0530 Check-fail on non-HK characters (bad!)
     27df1df 2013-10-20 11:17:32 +0530 Refactor CheckHK as a function
-    fe72ff9 2013-10-20 17:00:56 +0530 IdentifyMetre(verse) vs IdentifyPattern
-    5842d67 2013-10-20 17:09:38 +0530 
-    4459e2a 2013-10-21 07:50:40 +0530
-    8b9e4fb 2013-10-21 09:04:30 +0530
-    1a0f6db 2013-10-21 09:52:44 +0530
-    3e09cc1 2013-10-21 09:55:24 +0530
-    1845edd 2013-10-21 13:53:11 +0530
-    bf060da 2013-10-21 13:54:34 +0530
-    6a0f523 2013-10-21 13:55:06 +0530
-    4a0f01e 2013-10-21 21:59:11 +0530
+    fe72ff9 2013-10-20 17:00:56 +0530 IdentifyMetre(verse) (vs IdentifyPattern)
+    5842d67 2013-10-20 17:09:38 +0530 IdentifyMetre on entire input
+    4459e2a 2013-10-21 07:50:40 +0530 Fewer global variables
+    8b9e4fb 2013-10-21 09:04:30 +0530 Lint fixes
+    1a0f6db 2013-10-21 09:52:44 +0530 Populate tables with "AddSamavrtta"
+    3e09cc1 2013-10-21 09:55:24 +0530 Added Upajāti and Vaṃśastha
+    1845edd 2013-10-21 13:53:11 +0530 Added 13 more metres: Rathoddhatā...Mālinī
+    bf060da 2013-10-21 13:54:34 +0530 Added 2 more metres
+    6a0f523 2013-10-21 13:55:06 +0530 Added spaces including yati in Mandākrāntā
+    4a0f01e 2013-10-21 21:59:11 +0530 AddSamavrtta -> (AddVrtta, AddArdhasamvrtta)
     e0b42c7 2013-10-21 22:57:42 +0530
     b7ed215 2013-10-21 23:07:02 +0530
     7b174c7 2013-10-21 23:16:11 +0530
