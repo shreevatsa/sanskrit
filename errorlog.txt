@@ -1,0 +1,169 @@
+61c498a4e977edef537a367ea4e624f95fc67d65
+Sun Apr 13 18:31:40 IST 2014
+
+    I've decided to use this file to record changes I *intend* to
+    make, before making them. The hope is that by describing them
+    beforehand, I'll be able to think more clearly.
+    As of now, I can think of multiple directions / changes:
+
+    1. Expand the inventory of metres. The code has recently been
+       cleaned up to make the metrical data cleaner, except the most
+       common metres, Anuṣṭup and Āryā (and mātra metres in general).
+       So it should be ready to incorporate the big lists compiled by
+       Dhaval and Vishvas.
+
+    2. Just figured out a good way to handle the display of syllables.
+       As every syllable contains exactly one vowel, syllables are in
+       1:1 correspondence with the vowels. So for the sake of display,
+       we can syllabize any way at all (e.g. retain the spaces in the
+       original, for one), and just mark the syllables from the
+       pattern after the fact. There is no need to pass the actual
+       syllables through the identifier; we can re-syllabize at
+       display time.
+       At display we can play with divs and CSS, or something —
+       retaining the spaces in the original, so that the verse is
+       readable.
+
+    3. Currently we attempt to identify the entire pattern, and also
+       each line in the input. We can additionally break the pattern
+       at half and quarter boundaries, to increase recognition.
+
+    As exciting as (2) is, (3) seems the simplest change, so let me
+    try that first.
+      
+
+c575b401f08a07394701411c14bccd51f621dfb1
+Wed Apr 16 2014
+
+    Done 3. The abstraction of
+        input --(read)--> slp1 --(scan)--> pattern --(identify)--> metres
+    has been really helpful in keeping the code clean.
+
+    The last "display" step can be one of "aligning" a potential metre to the
+    input.
+
+    So perhaps we don't need all the "issues" in MatchResult. All we need to
+    know is whether we got a perfect match for the whole verse, or not. If not,
+    then the aligning step will handle the mismatch.
+
+7c988d96101629e17f5b4598cf14d45229e24ca5
+
+    Got rid of "issues".
+
+    Seems to be in a reasonably OK state again, next it remains to handle the
+    alignment problem.
+
+
+2014 May.
+
+    This "literate programming" thing doesn't seem to be working; I have to
+    remember to edit this file. Anyway, so far:
+
+    * scan.py doesn't need to keep track of the original syllables; we'll have a
+      separate "display" later that redoes this.
+
+    * made identifier.py try all possible breaks into quarters
+
+    * Coded up a dynamic-programming alignment of the verse's metrical pattern,
+      and the metre's known metrical pattern. (See display._Align().)
+
+    * Keep spaces in the transliteration. This allows us to prefer syllable
+      breaks at word boundaries.
+
+    * Formatting the alignment in HTML, using <span>s and some styling.
+
+    * Wrote a program to incorporate Dhaval's lists.
+      After going over just the shorter list, found some issues:
+
+        - [Not a bug] Metres ending in laghu, like samānikā (GLGLGLGL = trochaic
+          tetrameter), mauktidadāma (LGLLGLLGLLGL = 4 ja-ganas = amphibrachic
+          tetrameter), vṛtta (GLGLGLGLGLGLGLGLGLGL = trochaic decameter),
+          yavātparāmatīya (GLGLGLGLGLGL = trochaic hexameter). Need to look at
+          examples of actual usage, to confirm whether they actually end even
+          the sama-padas with laghu, or use guru there (in which case I can make
+          these ardha-sama-vrttas).
+        - Oh actually, yavātparāmatīya is already ardhasama as expected. Let me
+          remove that check. (Done.)
+
+        - Duplicates: Two metres named śrī? rukmavatī = campakamālā? upasthita =
+          śikhaṇḍita? pramuditavadanā = prabhā? śaśikalā = maṇiguṇanikara =
+          mālā? narkuṭaka = kokilaka? Is padacaturūrdhva a metre worth noting?
+
+    * We need to figure out a "related metres" info: e.g. there seems to be a
+      upacitrā-dodhaka-drutamadhyā-vegavatī-hariṇaplutā-Drutavilambitam complex
+      with various sorts of overlap. No point showing an overly specific metre;
+      better to say how it relates to more famous ones.
+
+45416c62219f33ea5815778cc6bf0f747cf44b2c
+    - Resolved conflicts in big list from Heidelberg too. (Next stop V's list.)
+    - Added a lot of logging to detect conflicts (then later removed it).
+    - Even looser Arya: occasionally even odd-numbered lines had only 11 mātras
+      and needed the last L to be interpreted as G.
+    - Red colour in HTML alignment, for errant syllables.
+    - Devanagari version of the metre name too, in results.
+    - Code cleanup
+
+c3d963e94f3d0e780e6e7c569a215c1d3b06b70c
+Thu 2014-05-14
+
+    Instead of returning a match_result.MatchResult object from identifier,
+    simply return a string. After all, even if it's only one line of four that
+    matches, it's still not right to say that the match type is a pāda. The
+    matches can be ranked by the aligner.
+
+9dccc11b04f5d696a58842705c43061798d5fdb7
+Thu May 22 2014
+
+    Found some clear constraints on Āryā.
+
+574f2e3db11aad4aea170e50a23a4486ec283af4
+Tue May 27 22:09:47 IST 2014
+
+    Adding Kannada.
+
+5c729f334377b4fffc1ac7e87886c863124f7fa5
+Sun Jun 1 22:22:44 2014 +0530
+
+    Better distinguishing of whether input was a perfect match or not.
+
+    Added individual lines of viṣama vṛttas
+
+    For viṣama vṛttas, fixed bug of using single string instead of list of 4.
+
+    Removed the 2^4 variants of Upajāti (other than Indravajrā and
+    Upendravajrā).
+
+    Can publicize once stats are updated.
+
+    Future plans: "about this metre" (from whatever we have + explicit
+    additional data including audio and prevalence in canon).
+
+dab227e5290bbf7a5c804405a1d3e2d087a5ca8c
+Sun Jul 13 11:28:00 IST 2014
+
+    Sent email to sanskrit-programmers about 1e. Incremented version to 1f.
+    Added version information (and links to past versions) on main page.
+
+    Next steps:
+
+      * Add information about metre in results page (e.g. "this is a
+        sama-vṛtta, whose each line has...")
+      * Add mātra metres
+
+    Then, start working on metre database.
+
+    Also: read-gretil.py needs some major cleanup. Will get to it later.
+
+c63b57c63544b8e444a1aa9baeb0bb93b84033f4
+Thu Jul 31 16:48:59 IST 2014
+
+    - Understood and added the family (Āryā, Gīti, Upagīti, Udgīti, Āryāgīti).
+    - Allowed laghu-ending metres. (Some conflicts show up... tracking as #45.)
+    - Updated stats a bit. Mentioned current version number and linked old ones.
+    - For now, added 'sh' to "characteristic ITRANS".
+
+    To add the metre information in the results page, looks like it will be
+    cleaner for the identifier to return a metre object (which can contain its
+    own "information" functions) than to just return a name, and look it up in
+    the data -- is this true? Or should we just keep it as names, and avoid
+    over-modelling?

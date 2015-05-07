@@ -1,0 +1,50 @@
+Notes on the diff files for Bhartṛhari:
+  48.9 (4) means Kosambi 1948, verse 9, page 4 (and 4+105=109, so 00000109.tif).
+
+Comparision with Heidelberg:
+- <s>Fewer metres (#3)</s>
+- No information about metres (#5)
++ Can handle "ity api", "tvayy eva" and similar.
++ Recognizes metre even if only one line is correct.
++ Calls out viṣama-pādānta-laghu, doesn't just promote laghus to gurus when needed.
+
+Things discovered:
+- GRETIL texts are full of typos.
+  Positive view: we can use metrical analysis to detect many of them.
+
+- Viṣama-pādānta-laghu is more common in which metres, compared to which.
+- Even Kalidasa has one bug.
+
+Useful papers:
+* Andrew Olett, Moraic Feet in Prakrit Metres.
+  https://www.academia.edu/1530135/Moraic_Feet_in_Prakrit_Metrics
+  [Passing mention of traditional description of Āryā, with word boundaries.]
+
+* Ashwini S. Deo, The metrical organization of Classical Sanskrit verse.
+  http://pantheon.yale.edu/~asd49/meter.pdf
+  [Some insights on grouping metres into families]
+  [But her force-fitting metres to patterns seems unnatural and
+   stretched in many places.]
+
+    Deo defines her "Indravajrā family" by the regex (p. 23):
+    '(G|LL?)(GL?)(G|LL)(GL?|LL)(L?)(G|LL?)(GL)(G|LL)(GL?)'
+    [That matches 3*2*2*3*2*3*1*2*2 = 864 patterns.]
+    She bases this family on iambic tetrameter + constraints.
+    She also defines a bunch of "trochaic tetrameter" metres (p. 8):
+    '(G|LL)' * 8
+    [That matches 2^8 = 256 patterns.]
+    Check whether we find more matching metres in these families.
+
+    Questionable:
+    "the basic assumption in generative metrics that periodic rhythm underlies
+    all metrical verse."
+
+    1300+ metres and Deo's haṃsī (GGGGLLLLLG) is still not in our list.
+    Neither is *her* Mañjubhāṣiṇī, which is LGLGGLLLGLGLG.
+    Go through the metres mentioned in her paper.
+
+    "The traditionally documented description of Haṃsī specifies that
+     the meter is characterized by a caesura only after the fourth
+     syllable. bhramaravilasitā, the minimal pair for Haṃsī, lacks
+     such a caesura."
+     --> but in Vrttaratnakara list, it does have such a caesura?
