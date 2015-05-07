@@ -11,7 +11,7 @@ import collections
 
 import webapp2
 
-import metrical_data
+from data import metrical_data
 import simple_identifier
 from transliteration import transliterate
 

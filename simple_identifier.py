@@ -7,10 +7,10 @@ from __future__ import unicode_literals
 
 import logging
 
+from data import metrical_data
 import display
 import handle_input
 import identifier
-import metrical_data
 import scan
 
 
