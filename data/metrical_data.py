@@ -457,7 +457,8 @@ def InitializeData():
 
   vrtta_data = (data.curated.curated_vrtta_data
                 + data.dhaval_vrttaratnakara.data_vrttaratnakara
-                + data.dhaval.dhaval_vrtta_data)
+                # + data.dhaval.dhaval_vrtta_data
+                )
 
   assert not all_data
   for (name, description) in vrtta_data:
