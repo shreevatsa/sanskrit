@@ -12,7 +12,7 @@ import re
 import unicodedata
 
 import slp1
-import transliterate
+from transliteration import transliterate
 
 
 def RemoveHTML(text):

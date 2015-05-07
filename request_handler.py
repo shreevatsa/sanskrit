@@ -13,7 +13,7 @@ import webapp2
 
 import metrical_data
 import simple_identifier
-import transliterate
+from transliteration import transliterate
 
 
 def InputForm(default=''):

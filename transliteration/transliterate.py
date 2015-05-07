@@ -9,10 +9,10 @@ from __future__ import unicode_literals
 
 import re
 
-import devanagari
 from poor_enums import Enum
 import slp1
-import transliterator
+from transliteration import devanagari
+from transliteration import transliterator
 
 _DEFAULT_PASS_THROUGH = ' -?'
 

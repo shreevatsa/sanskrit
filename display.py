@@ -6,7 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import slp1
-import transliterate
+from transliteration import transliterate
 
 _GAP_CHAR = '-'
 
