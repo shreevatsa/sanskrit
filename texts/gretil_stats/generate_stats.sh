@@ -1,22 +1,25 @@
+# Needs to be run from the top-level directory (the one that contains texts/, etc.)
 function scan() {
-  if [ -f diff-$1.patch ];
+  if [ -f texts/gretil_stats/diff-$1.htm.patch ];
     then
-      patch ~/GRETIL/forme/$1 -o /tmp/$1 < diff-$1.patch && ../read_gretil.py /tmp/$1 --print_identified_verses=none --print_unidentified_verses=none
+      patch ~/GRETIL/forme/$1.htm -o /tmp/$1.htm < texts/gretil_stats/diff-$1.htm.patch
   else
-      ../read_gretil.py ~/GRETIL/forme/$1 --print_identified_verses=none --print_unidentified_verses=none
+      cp ~/GRETIL/forme/$1.htm /tmp/$1.htm
   fi
+  python -m texts.read_gretil /tmp/$1.htm --print_identified_verses=none --print_unidentified_verses=none
+  mv $1.htm.stats texts/gretil_stats/
 }
 
 # Lots of footnotes etc. to remove in these yet.
-scan amaru_u.htm
-scan bhakirpu.htm
-scan bhall_pu.htm
-../read_gretil.py bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none
-scan kakumspu.htm
-scan kragh_pu.htm
-scan maghspvu.htm
-scan msubhs_u.htm
-scan nkalivpu.htm
-scan ramodtpu.htm
+scan amaru_u
+scan bhakirpu
+scan bhall_pu
+python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none && mv bharst_u.htm.stats texts/gretil_stats
+scan kakumspu
+scan kragh_pu
+scan maghspvu
+scan msubhs_u
+scan nkalivpu
+scan ramodtpu
 
-PYTHONPATH=.. python generate_stats_table.py > stats_table.html
+python -m texts.gretil_stats.generate_stats_table > texts/gretil_stats/stats_table.html

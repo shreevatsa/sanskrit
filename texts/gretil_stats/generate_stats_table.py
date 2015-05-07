@@ -32,8 +32,10 @@ known_texts = {
     'ramodtpu.htm': 'Rāmodantam',
     }
 
+path_prefix = 'texts/gretil_stats/'
+
 if __name__ == '__main__':
-  names = [os.path.basename(f) for f in glob.glob('*.stats')]
+  names = [os.path.basename(f) for f in glob.glob(path_prefix + '*.stats')]
   names = [os.path.splitext(name)[0] for name in names]
   names.sort()
   # names = [os.path.splitext(name)[0] for name in names]
@@ -42,7 +44,7 @@ if __name__ == '__main__':
   total_count = {}
   individual_count = {}
   for name in names:
-    stats_file = codecs.open(name + '.stats', 'r', 'utf-8')
+    stats_file = codecs.open(path_prefix + name + '.stats', 'r', 'utf-8')
     table = json.load(stats_file, 'utf-8')
     individual_count[name] = table
     for (metre, (count, percent)) in table.items():
