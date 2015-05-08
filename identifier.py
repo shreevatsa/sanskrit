@@ -91,15 +91,10 @@ class Identifier(object):
 
   def _IdentifyPattern(self, pattern, try_partial=True):
     """Given metrical pattern (string of L's and G's), identifies metre."""
-    full_results = self._IdentifyPatternFrom(
-        pattern, self.metrical_data.known_metre_patterns,
-        self.metrical_data.known_metre_regexes)
+    full_results = self._IdentifyPatternFrom(pattern, self.metrical_data.known_metre_patterns, self.metrical_data.known_metre_regexes)
     partial_results = []
     if try_partial:
-      partial_results = self._IdentifyPatternFrom(
-          pattern,
-          self.metrical_data.known_partial_patterns,
-          self.metrical_data.known_partial_regexes)
+      partial_results = self._IdentifyPatternFrom(pattern, self.metrical_data.known_partial_patterns, self.metrical_data.known_partial_regexes)
     ret = full_results + partial_results
     assert all(isinstance(result, match_result.MatchResult) for result in ret)
     return ret
@@ -108,10 +103,11 @@ class Identifier(object):
     """Identify pattern from given data."""
     results = known_patterns.get(pattern)
     if results:
-      if isinstance(results, match_result.MatchResult):
-        return [results]
-      else:
+      if isinstance(results, list):
         return results
+      else:
+        return [results]
+    # TODO(shreevatsa): Maybe collect all matches, not just the first?
     for (known_regex, known_result) in known_regexes:
       if known_regex.match(pattern):
         return [known_result]
