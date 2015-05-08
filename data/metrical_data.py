@@ -68,7 +68,6 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
 
   for (a, b, c, d) in itertools.product(patterns, repeat=4):
-    match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL)
     if a + b + c + d in known_metre_patterns:
       # TODO(shreevatsa): Figure out what exactly to do in this case
       Print('Error: already present')
@@ -77,7 +76,7 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
       Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
       return
     assert a + b + c + d not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = match
+    known_metre_patterns[a + b + c + d] = metre_name
 
   for (a, b) in itertools.product(patterns, repeat=2):
     match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF)
@@ -128,8 +127,7 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
       Print(a + b + c + d)
       Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
     assert (a + b + c + d) not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.FULL)
+    known_metre_patterns[a + b + c + d] = metre_name
   for (a, b) in itertools.product(patterns_odd, patterns_even):
     match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF)
     if a + b in known_partial_patterns:
@@ -185,8 +183,7 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
       Print(a + b + c + d)
       Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
     assert (a + b + c + d) not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.FULL)
+    known_metre_patterns[a + b + c + d] = metre_name
   for (a, b) in itertools.product(patterns_a, patterns_b):
     assert a + b not in known_metre_patterns
     known_partial_patterns[a + b] = [match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FIRST_HALF)]
@@ -218,16 +215,14 @@ def _AddMetreRegex(metre_name, line_regexes, simple=True):
   if simple:
     line_regexes = [_CleanUpSimpleRegex(s) for s in line_regexes]
   full_verse_regex = ''.join('(%s)' % s for s in line_regexes)
-  match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL)
-  known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), match))
+  known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), metre_name))
 
 
 def _AddSamavrttaRegex(metre_name, line_regex):
   """Add a sama-vṛtta's regex (full, half, pāda). No variants."""
   line_regex = _CleanUpSimpleRegex(line_regex)
   full_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 4)
-  match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FULL)
-  known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), match))
+  known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), metre_name))
   half_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 2)
   match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF)
   known_partial_regexes.append((re.compile('^' + half_verse_regex + '$'),
@@ -243,9 +238,7 @@ def _AddAnustup():
   half_regex = regex_ac + regex_bd
   full_regex = half_regex * 2
 
-  match = match_result.MatchResult('Anuṣṭup (Śloka)',
-                                   match_result.MATCH_TYPE.FULL)
-  known_metre_regexes.append((re.compile('^' + full_regex + '$'), match))
+  known_metre_regexes.append((re.compile('^' + full_regex + '$'), 'Anuṣṭup (Śloka)'))
 
   match = match_result.MatchResult('Anuṣṭup (Śloka)',
                                    match_result.MATCH_TYPE.HALF)

@@ -96,7 +96,6 @@ class Identifier(object):
     if try_partial:
       partial_results = self._IdentifyPatternFrom(pattern, self.metrical_data.known_partial_patterns, self.metrical_data.known_partial_regexes)
     ret = full_results + partial_results
-    assert all(isinstance(result, match_result.MatchResult) for result in ret)
     return ret
 
   def _IdentifyPatternFrom(self, pattern, known_patterns, known_regexes):

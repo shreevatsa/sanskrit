@@ -62,7 +62,8 @@ class MatchResult(object):
 
 # Unless we want to create another type for a list of MatchResults
 def Names(match_results):
-  return ' AND '.join(m.Name() for m in match_results)
+  return ' AND '.join(m.Name() if isinstance(m, MatchResult) else m
+                      for m in match_results)
 
 
 def Description(match_results, indent_depth=0):
