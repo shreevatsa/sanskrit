@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 import itertools
 import re
 
+import data.ganesh
 import data.curated
 import data.dhaval
 import data.dhaval_vrttaratnakara
@@ -455,7 +456,8 @@ def InitializeData():
   _AddAryaFamilyRegex()
   _AddKarambajati()
 
-  vrtta_data = (data.curated.curated_vrtta_data
+  vrtta_data = (data.ganesh.data
+                + data.curated.curated_vrtta_data
                 + data.dhaval_vrttaratnakara.data_vrttaratnakara
                 # + data.dhaval.dhaval_vrtta_data
                 )
