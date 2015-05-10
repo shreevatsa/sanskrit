@@ -94,8 +94,7 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
 
   for a in patterns:
     known_partial_patterns[a] = known_partial_patterns.get(a, [])
-    known_partial_patterns[a].append(
-        match_result.MatchResult(metre_name, match_result.MATCH_TYPE.PADA))
+    known_partial_patterns[a].append(match_result.MatchResult(metre_name, match_result.MATCH_TYPE.PADA))
     assert known_partial_patterns[a] is not None
 
 
@@ -145,18 +144,14 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
     known_partial_patterns[a + b].append(match)
   for a in patterns_odd:
     # if a in known_partial_patterns:
-    #   Print('%s being added as odd line for %s already known as %s' % (
-    #       a, metre_name, match_result.Description(known_partial_patterns[a])))
+    #   Print('%s being added as odd line for %s already known as %s' % (a, metre_name, match_result.Description(known_partial_patterns[a])))
     known_partial_patterns[a] = known_partial_patterns.get(a, [])
-    known_partial_patterns[a].append(match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.ODD_PADA))
+    known_partial_patterns[a].append(match_result.MatchResult(metre_name, match_result.MATCH_TYPE.ODD_PADA))
   for a in patterns_even:
     # if a in known_partial_patterns:
-    #   Print('%s being added as even line for %s already known as %s' % (
-    #       a, metre_name, match_result.Description(known_partial_patterns[a])))
+    #   Print('%s being added as even line for %s already known as %s' % (a, metre_name, match_result.Description(known_partial_patterns[a])))
     known_partial_patterns[a] = known_partial_patterns.get(a, [])
-    known_partial_patterns[a].append(match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.EVEN_PADA))
+    known_partial_patterns[a].append(match_result.MatchResult(metre_name, match_result.MATCH_TYPE.EVEN_PADA))
 
 
 def _AddVishamavrttaPattern(metre_name, line_patterns):
@@ -194,16 +189,14 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
         metre_name, match_result.MATCH_TYPE.FULL)
   for (a, b) in itertools.product(patterns_a, patterns_b):
     assert a + b not in known_metre_patterns
-    known_partial_patterns[a + b] = [match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.FIRST_HALF)]
+    known_partial_patterns[a + b] = [match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FIRST_HALF)]
   for (c, d) in itertools.product(patterns_c, patterns_d):
     # if c + d in known_partial_patterns:
     #   Print('%s being added as second half of %s already known as:' %
     #         (c + d, metre_name))
     #   Print(match_result.Description(known_partial_patterns[c + d]))
     known_partial_patterns[c + d] = known_partial_patterns.get(c + d, [])
-    known_partial_patterns[c + d].append(match_result.MatchResult(
-        metre_name, match_result.MATCH_TYPE.SECOND_HALF))
+    known_partial_patterns[c + d].append(match_result.MatchResult(metre_name, match_result.MATCH_TYPE.SECOND_HALF))
   def AppendPattern(pattern, match_type):
     result = match_result.MatchResult(metre_name, match_type)
     known_partial_patterns[pattern] = known_partial_patterns.get(pattern, [])
@@ -352,8 +345,7 @@ def _AddGiti(line_patterns):
     if i % 2 and line_patterns[i].endswith('L'):
       allow_loose_ending = True
       expected[i] -= 1
-    assert _MatraCount(line_patterns[i]) == expected[i], (
-        i, line_patterns[i], _MatraCount(line_patterns[i]), expected[i])
+    assert _MatraCount(line_patterns[i]) == expected[i], (i, line_patterns[i], _MatraCount(line_patterns[i]), expected[i])
     if allow_loose_ending:
       line_patterns[i] = line_patterns[i][:-1] + '.'
   # TODO(shreevatsa): Should we just add (up to) 4 patterns instead?
