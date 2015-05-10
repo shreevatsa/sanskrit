@@ -13,7 +13,7 @@ MATCH_TYPE = Enum(UNKNOWN=0,
                   PADA=2,
                   ODD_PADA=3,
                   EVEN_PADA=4,
-                  HALF=5,
+                  # HALF=5,
                   # FIRST_HALF=6,
                   # SECOND_HALF=7,
                   PADA_1=8,
@@ -37,7 +37,7 @@ class MatchResult(object):
     assert self.match_type
     return {
         MATCH_TYPE.FULL: '%s',
-        MATCH_TYPE.HALF: 'Half of %s',
+        # MATCH_TYPE.HALF: 'Half of %s',
         MATCH_TYPE.PADA: 'One pāda of %s',
         MATCH_TYPE.ODD_PADA: 'Odd pāda of %s',
         MATCH_TYPE.EVEN_PADA: 'Even pāda of %s',
