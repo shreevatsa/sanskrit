@@ -16,8 +16,10 @@ import data.dhaval_vrttaratnakara
 import match_result
 import print_utils
 
-known_metre_regexes = []
-known_metre_patterns = {}
+known_metre_regexes = []  # Values are strings (metre names)
+known_metre_patterns = {}  # Values are strings (metre names)
+known_half_regexes = []  # Values are strings (metre names)
+known_half_patterns = {}  # Values are strings (metre names)
 known_partial_regexes = []
 known_partial_patterns = {}
 pattern_for_metre = {}
@@ -79,17 +81,12 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
     known_metre_patterns[a + b + c + d] = metre_name
 
   for (a, b) in itertools.product(patterns, repeat=2):
-    match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF)
-    if a + b in known_partial_patterns:
-      if match in known_partial_patterns[a + b]:
-        Print('For %s, not adding match which already exists: %s' % (
-            a + b, match_result.Description([match])))
+    if metre_name in known_half_patterns.setdefault(a + b, []):
+        Print('For %s, not adding match which already exists: %s' % (a + b, metre_name))
         continue
-      # Print('For %s, currently known as %s, adding %s' % (
-      #     a + b, match_result.Description(known_partial_patterns[a + b]),
-      #     match_result.Description([match])))
-    known_partial_patterns[a + b] = known_partial_patterns.get(a + b, [])
-    known_partial_patterns[a + b].append(match)
+    elif len(known_half_patterns[a + b]) > 1:
+      Print('For %s, currently known as %s, adding %s' % (a + b, known_half_patterns[a + b], metre_name))
+    known_half_patterns[a + b].append(metre_name)
 
   for a in patterns:
     known_partial_patterns[a] = known_partial_patterns.get(a, [])
@@ -129,17 +126,12 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
     assert (a + b + c + d) not in known_metre_patterns
     known_metre_patterns[a + b + c + d] = metre_name
   for (a, b) in itertools.product(patterns_odd, patterns_even):
-    match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF)
-    if a + b in known_partial_patterns:
-      if match in known_partial_patterns[a + b]:
-        Print('For %s, not adding match which already exists: %s' % (
-            a + b, match_result.Description([match])))
-        continue
-      # Print('For %s, currently known as %s, adding %s' % (
-      #     a + b, match_result.Description(known_partial_patterns[a + b]),
-      #     match_result.Description([match])))
-    known_partial_patterns[a + b] = known_partial_patterns.get(a + b, [])
-    known_partial_patterns[a + b].append(match)
+    if metre_name in known_half_patterns.setdefault(a + b, []):
+      Print('For %s, not adding match which already exists: %s' % (a + b, metre_name))
+      continue
+    elif len(known_half_patterns[a + b]) > 1:
+      Print('For %s, currently known as %s, adding %s' % (a + b, known_half_patterns[a + b], metre_name))
+    known_half_patterns[a + b].append(metre_name)
   for a in patterns_odd:
     # if a in known_partial_patterns:
     #   Print('%s being added as odd line for %s already known as %s' % (a, metre_name, match_result.Description(known_partial_patterns[a])))
@@ -224,9 +216,7 @@ def _AddSamavrttaRegex(metre_name, line_regex):
   full_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 4)
   known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), metre_name))
   half_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 2)
-  match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.HALF)
-  known_partial_regexes.append((re.compile('^' + half_verse_regex + '$'),
-                                match))
+  known_half_regexes.append((re.compile('^' + half_verse_regex + '$'), metre_name))
   match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.PADA)
   known_partial_regexes.append((re.compile('^' + line_regex + '$'), match))
 
@@ -240,9 +230,7 @@ def _AddAnustup():
 
   known_metre_regexes.append((re.compile('^' + full_regex + '$'), 'Anuṣṭup (Śloka)'))
 
-  match = match_result.MatchResult('Anuṣṭup (Śloka)',
-                                   match_result.MATCH_TYPE.HALF)
-  known_partial_regexes.append((re.compile('^' + half_regex + '$'), match))
+  known_half_regexes.append((re.compile('^' + half_regex + '$'), 'Anuṣṭup (Śloka)'))
 
   match = match_result.MatchResult('Anuṣṭup (Śloka)',
                                    match_result.MATCH_TYPE.ODD_PADA)

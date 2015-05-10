@@ -94,7 +94,8 @@ class Identifier(object):
     full_results = self._IdentifyPatternFrom(pattern, self.metrical_data.known_metre_patterns, self.metrical_data.known_metre_regexes)
     partial_results = []
     if try_partial:
-      partial_results = self._IdentifyPatternFrom(pattern, self.metrical_data.known_partial_patterns, self.metrical_data.known_partial_regexes)
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_half_patterns, self.metrical_data.known_half_regexes))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_partial_patterns, self.metrical_data.known_partial_regexes))
     ret = full_results + partial_results
     return ret
 
