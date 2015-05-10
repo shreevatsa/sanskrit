@@ -20,6 +20,8 @@ known_metre_regexes = []  # Values are strings (metre names)
 known_metre_patterns = {}  # Values are strings (metre names)
 known_half_regexes = []  # Values are strings (metre names)
 known_half_patterns = {}  # Values are strings (metre names)
+known_first_half_patterns = {}  # For viṣama-vṛtta-s.
+known_second_half_patterns = {} # For viṣama-vṛtta-s.
 known_partial_regexes = []
 known_partial_patterns = {}
 pattern_for_metre = {}
@@ -177,7 +179,11 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
     assert (a + b + c + d) not in known_metre_patterns
     known_metre_patterns[a + b + c + d] = metre_name
   for (a, b) in itertools.product(patterns_a, patterns_b):
-    assert a + b not in known_metre_patterns
+    if a + b in known_partial_patterns:
+      print('Already known as a partial pattern: ', a + b)
+      print(match_result.Names(known_partial_patterns[a + b]))
+      print('Now adding as first half of : ', metre_name)
+    assert a + b not in known_partial_patterns, (a + b, known_partial_patterns[a + b])
     known_partial_patterns[a + b] = [match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FIRST_HALF)]
   for (c, d) in itertools.product(patterns_c, patterns_d):
     # if c + d in known_partial_patterns:
