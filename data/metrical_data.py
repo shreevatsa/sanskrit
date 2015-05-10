@@ -186,10 +186,9 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
     assert a + b not in known_partial_patterns, (a + b, known_partial_patterns[a + b])
     known_partial_patterns[a + b] = [match_result.MatchResult(metre_name, match_result.MATCH_TYPE.FIRST_HALF)]
   for (c, d) in itertools.product(patterns_c, patterns_d):
-    # if c + d in known_partial_patterns:
-    #   Print('%s being added as second half of %s already known as:' %
-    #         (c + d, metre_name))
-    #   Print(match_result.Description(known_partial_patterns[c + d]))
+    if c + d in known_partial_patterns:
+      Print('%s being added as second half of %s already known as:' % c + d, metre_name)
+      Print(match_result.Description(known_partial_patterns[c + d]))
     known_partial_patterns[c + d] = known_partial_patterns.get(c + d, [])
     known_partial_patterns[c + d].append(match_result.MatchResult(metre_name, match_result.MATCH_TYPE.SECOND_HALF))
   def AppendPattern(pattern, match_type):
