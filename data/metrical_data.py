@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 
 import itertools
 import re
+import unicodedata
 
 import data.ganesh
 import data.curated
@@ -48,13 +49,13 @@ def _RemoveChars(input_string, chars):
 
 
 def _CleanUpPattern(pattern):
-  pattern = _RemoveChars(pattern, ' —–')
+  pattern = _RemoveChars(pattern, [unicodedata.lookup('SPACE'), unicodedata.lookup('EM DASH'), unicodedata.lookup('EN DASH')])
   assert re.match(r'^[LG]*$', pattern), pattern
   return pattern
 
 
 def _CleanUpSimpleRegex(regex):
-  regex = _RemoveChars(regex, ' —–')
+  regex = _RemoveChars(regex, [unicodedata.lookup('SPACE'), unicodedata.lookup('EM DASH'), unicodedata.lookup('EN DASH')])
   assert re.match(r'^[LG.]*$', regex), regex
   return regex
 
