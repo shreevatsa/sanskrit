@@ -88,35 +88,35 @@ class Identifier(object):
 
   def _IdentifyPattern(self, pattern, try_partial=True):
     """Given metrical pattern (string of L's and G's), identifies metre."""
-    full_results = self._IdentifyPatternFrom(pattern, self.metrical_data.known_metre_patterns, self.metrical_data.known_metre_regexes)
+    full_results = _IdentifyPatternFrom(pattern, self.metrical_data.known_metre_patterns, self.metrical_data.known_metre_regexes)
     partial_results = []
     if try_partial:
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_half_patterns, self.metrical_data.known_half_regexes))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_first_half_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_second_half_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, {}, self.metrical_data.known_odd_pada_regexes))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, {}, self.metrical_data.known_even_pada_regexes))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, {}, self.metrical_data.known_pada_regexes))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_odd_pada_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_even_pada_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_1_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_2_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_3_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_4_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_half_patterns, self.metrical_data.known_half_regexes))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_first_half_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_second_half_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, {}, self.metrical_data.known_odd_pada_regexes))
+      partial_results.extend(_IdentifyPatternFrom(pattern, {}, self.metrical_data.known_even_pada_regexes))
+      partial_results.extend(_IdentifyPatternFrom(pattern, {}, self.metrical_data.known_pada_regexes))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_pada_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_odd_pada_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_even_pada_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_pada_1_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_pada_2_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_pada_3_patterns, []))
+      partial_results.extend(_IdentifyPatternFrom(pattern, self.metrical_data.known_pada_4_patterns, []))
     ret = full_results + partial_results
     return ret
 
-  def _IdentifyPatternFrom(self, pattern, known_patterns, known_regexes):
-    """Identify pattern from given data."""
-    results = known_patterns.get(pattern)
-    if results:
-      return results
-    # Stop at the first match so that e.g. 'Āryā (strict schema)' hides 'Āryā (loose schema)'
-    for (regex, metre_name) in known_regexes:
-      if regex.match(pattern):
-        return [metre_name]
-    return []
+def _IdentifyPatternFrom(pattern, known_patterns, known_regexes):
+  """Identify pattern from given data."""
+  results = known_patterns.get(pattern)
+  if results:
+    return results
+  # Stop at the first match so that e.g. 'Āryā (strict schema)' hides 'Āryā (loose schema)'
+  for (regex, metre_name) in known_regexes:
+    if regex.match(pattern):
+      return [metre_name]
+  return []
 
 
 def _MatraCount(pattern):
