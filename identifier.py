@@ -23,13 +23,10 @@ class Identifier(object):
   def __init__(self, metrical_data):
     self._Reset()
     self.metrical_data = metrical_data
-    logging.info('Identifier is initialized. It knows %d metre regexes,'
-                 ' %d metre patterns, %d partial regexes, and'
-                 ' %d partial patterns',
+    logging.info('Identifier is initialized. It knows %d metre regexes, %d metre patterns, and %d pada patterns',
                  len(self.metrical_data.known_metre_regexes),
                  len(self.metrical_data.known_metre_patterns),
-                 len(self.metrical_data.known_partial_regexes),
-                 len(self.metrical_data.known_partial_patterns))
+                 len(self.metrical_data.known_pada_patterns))
 
   def _Reset(self):
     """Clear all parameters, for use again."""
@@ -97,7 +94,10 @@ class Identifier(object):
       partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_half_patterns, self.metrical_data.known_half_regexes))
       partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_first_half_patterns, []))
       partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_second_half_patterns, []))
-      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_partial_patterns, self.metrical_data.known_partial_regexes))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, {}, self.metrical_data.known_odd_pada_regexes))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, {}, self.metrical_data.known_even_pada_regexes))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, {}, self.metrical_data.known_pada_regexes))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_patterns, []))
     ret = full_results + partial_results
     return ret
 
