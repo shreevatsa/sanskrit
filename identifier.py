@@ -152,18 +152,18 @@ def _SplitHalves(full_pattern):
 
 def _SplitQuarters(full_pattern):
   """Attempt splits at quarters."""
-  splits = []
-  n = len(full_pattern)
-  mss = []
-
   def Cumulative(ns):
+    """Prefix sums. Example: [5, 4, 3] -> [5, 9, 12]."""
     s = 0
     out = []
     for n in ns:
-      out.append(n + s)
       s += n
+      out.append(s)
     return out
 
+  splits = []
+  mss = []
+  n = len(full_pattern)
   if n % 4 == 0:
     m = n // 4
     mss.append(Cumulative([m, m, m]))
