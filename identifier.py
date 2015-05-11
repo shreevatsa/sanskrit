@@ -98,6 +98,12 @@ class Identifier(object):
       partial_results.extend(self._IdentifyPatternFrom(pattern, {}, self.metrical_data.known_even_pada_regexes))
       partial_results.extend(self._IdentifyPatternFrom(pattern, {}, self.metrical_data.known_pada_regexes))
       partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_patterns, []))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_odd_pada_patterns, []))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_even_pada_patterns, []))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_1_patterns, []))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_2_patterns, []))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_3_patterns, []))
+      partial_results.extend(self._IdentifyPatternFrom(pattern, self.metrical_data.known_pada_4_patterns, []))
     ret = full_results + partial_results
     return ret
 

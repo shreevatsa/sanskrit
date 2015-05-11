@@ -26,6 +26,12 @@ known_pada_regexes = []
 known_odd_pada_regexes = [] # For ardha-sama-vṛtta-s.
 known_even_pada_regexes =[] # For ardha-sama-vṛtta-s.
 known_pada_patterns = {}
+known_odd_pada_patterns = {}
+known_even_pada_patterns = {}
+known_pada_1_patterns = {}
+known_pada_2_patterns = {}
+known_pada_3_patterns = {}
+known_pada_4_patterns = {}
 pattern_for_metre = {}
 all_data = {}
 
@@ -94,8 +100,7 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
 
   for a in patterns:
     known_pada_patterns[a] = known_pada_patterns.get(a, [])
-    known_pada_patterns[a].append(match_result.MatchResult(metre_name, match_result.MATCH_TYPE.PADA))
-    assert known_pada_patterns[a] is not None
+    known_pada_patterns[a].append(metre_name)
 
 
 def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
@@ -137,15 +142,15 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
       Print('For %s, currently known as %s, adding %s' % (a + b, known_half_patterns[a + b], metre_name))
     known_half_patterns[a + b].append(metre_name)
   for a in patterns_odd:
-    # if a in known_pada_patterns:
-    #   Print('%s being added as odd line for %s already known as %s' % (a, metre_name, match_result.Description(known_pada_patterns[a])))
-    known_pada_patterns[a] = known_pada_patterns.get(a, [])
-    known_pada_patterns[a].append(match_result.MatchResult(metre_name, match_result.MATCH_TYPE.ODD_PADA))
+    # if a in known_odd_pada_patterns:
+    #   Print('%s being added as odd pada for %s already known as %s' % (a, metre_name, match_result.Description(known_odd_pada_patterns[a])))
+    known_odd_pada_patterns[a] = known_odd_pada_patterns.get(a, [])
+    known_odd_pada_patterns[a].append(metre_name)
   for a in patterns_even:
-    # if a in known_pada_patterns:
-    #   Print('%s being added as even line for %s already known as %s' % (a, metre_name, match_result.Description(known_pada_patterns[a])))
-    known_pada_patterns[a] = known_pada_patterns.get(a, [])
-    known_pada_patterns[a].append(match_result.MatchResult(metre_name, match_result.MATCH_TYPE.EVEN_PADA))
+    # if a in known_even_pada_patterns:
+    #   Print('%s being added as even line for %s already known as %s' % (a, metre_name, match_result.Description(known_even_pada_patterns[a])))
+    known_even_pada_patterns[a] = known_even_pada_patterns.get(a, [])
+    known_even_pada_patterns[a].append(metre_name)
 
 
 def _AddVishamavrttaPattern(metre_name, line_patterns):
@@ -194,19 +199,14 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
       print('Now adding as second half of : ', metre_name)
     known_second_half_patterns[c + d] = known_second_half_patterns.get(c + d, [])
     known_second_half_patterns[c + d].append(metre_name)
-  def AppendPattern(pattern, match_type):
-    result = match_result.MatchResult(metre_name, match_type)
-    known_pada_patterns[pattern] = known_pada_patterns.get(pattern, [])
-    if result not in known_pada_patterns[pattern]:
-      known_pada_patterns[pattern].append(result)
-  for a in patterns_a:
-    AppendPattern(a, match_result.MATCH_TYPE.PADA_1)
-  for b in patterns_b:
-    AppendPattern(b, match_result.MATCH_TYPE.PADA_2)
-  for c in patterns_c:
-    AppendPattern(c, match_result.MATCH_TYPE.PADA_3)
-  for d in patterns_d:
-    AppendPattern(d, match_result.MATCH_TYPE.PADA_4)
+  def AppendPattern(pattern, known_patterns):
+    known_patterns[pattern] = known_patterns.get(pattern, [])
+    if metre_name not in known_patterns[pattern]:
+      known_patterns[pattern].append(metre_name)
+  for a in patterns_a: AppendPattern(a, known_pada_1_patterns)
+  for b in patterns_b: AppendPattern(b, known_pada_2_patterns)
+  for c in patterns_c: AppendPattern(c, known_pada_3_patterns)
+  for d in patterns_d: AppendPattern(d, known_pada_4_patterns)
 
 
 def _AddMetreRegex(metre_name, line_regexes, simple=True):
