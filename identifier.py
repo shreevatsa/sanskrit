@@ -111,14 +111,11 @@ class Identifier(object):
     """Identify pattern from given data."""
     results = known_patterns.get(pattern)
     if results:
-      if isinstance(results, list):
-        return results
-      else:
-        return [results]
-    # TODO(shreevatsa): Maybe collect all matches, not just the first?
-    for (known_regex, known_result) in known_regexes:
-      if known_regex.match(pattern):
-        return [known_result]
+      return results
+    # Stop at the first match so that e.g. 'Āryā (strict schema)' hides 'Āryā (loose schema)'
+    for (regex, metre_name) in known_regexes:
+      if regex.match(pattern):
+        return [metre_name]
     return []
 
 

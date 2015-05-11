@@ -80,15 +80,16 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
 
   for (a, b, c, d) in itertools.product(patterns, repeat=4):
-    if a + b + c + d in known_metre_patterns:
+    full_pattern = a + b + c + d
+    if full_pattern in known_metre_patterns:
       # TODO(shreevatsa): Figure out what exactly to do in this case
       Print('Error: already present')
       Print(metre_name)
-      Print(a + b + c + d)
-      Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
+      Print(full_pattern)
+      Print(match_result.Description([known_metre_patterns[full_pattern]]))
       return
-    assert a + b + c + d not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = metre_name
+    assert full_pattern not in known_metre_patterns
+    known_metre_patterns[full_pattern] = [metre_name]
 
   for (a, b) in itertools.product(patterns, repeat=2):
     if metre_name in known_half_patterns.setdefault(a + b, []):
@@ -133,7 +134,7 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
       Print(a + b + c + d)
       Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
     assert (a + b + c + d) not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = metre_name
+    known_metre_patterns[a + b + c + d] = [metre_name]
   for (a, b) in itertools.product(patterns_odd, patterns_even):
     if metre_name in known_half_patterns.setdefault(a + b, []):
       Print('For %s, not adding match which already exists: %s' % (a + b, metre_name))
@@ -184,7 +185,7 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
       Print(a + b + c + d)
       Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
     assert (a + b + c + d) not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = metre_name
+    known_metre_patterns[a + b + c + d] = [metre_name]
   for (a, b) in itertools.product(patterns_a, patterns_b):
     if a + b in known_first_half_patterns:
       print('Already known as a first half pattern: ', a + b)
