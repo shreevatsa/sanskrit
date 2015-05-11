@@ -26,8 +26,7 @@ class BadInput(unittest.TestCase):
   def testNoSyllables(self):
     """Identifier should return no result, for input containing no syllabes."""
     # self.assertIsNone(self.identifier.IdentifyFromLines(['t', 't', 't', 't']))
-    (full_match,
-     results) = self.identifier.IdentifyFromLines(['t', 't', 't', 't'])
+    (full_match, results) = self.identifier.IdentifyFromLines(['t', 't', 't', 't'])
     self.assertFalse(full_match)
     self.assertFalse(results)
 
@@ -38,8 +37,7 @@ class KnownValues(unittest.TestCase):
     super(KnownValues, self).__init__(*args, **kwargs)
     self.identifier = simple_identifier.SimpleIdentifier()
 
-  def AssertSingleMatchResultEquals(self, identification, metre_name,
-                                    match_type):
+  def AssertSingleMatchResultEquals(self, identification, metre_name):
     try:
       (full_match, results) = identification
       assert full_match
@@ -55,7 +53,6 @@ class KnownValues(unittest.TestCase):
         print(match_result.Description(results, 4))
       print('instead of')
       print('\tMetre name: %s' % metre_name)
-      print('\tMatch type: %s' % match_type)
       raise self.failureException
 
   def testFineAnustubh(self):
@@ -64,18 +61,13 @@ class KnownValues(unittest.TestCase):
              'mā phaleṣu kadācana |',
              'mā karmaphalahetur bhūr',
              'mā te saṅgo stvakarmaṇi ||47||']
-    self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse),
-                                       'Anuṣṭup (Śloka)',
-                                       match_result.MATCH_TYPE.FULL)
+    self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse), 'Anuṣṭup (Śloka)')
 
   def testFirstOffAnustubh(self):
     """Anuṣṭubh with first pāda wrong should be recognized."""
     verse = ['तपःस्वाध्यायनिरतं तपस्वी वाग्विदां वरम् ।',
              'नारदं परिपप्रच्छ वाल्मीकिर्मुनिपुङ्गवम् ।। 1.1.1 ।।']
-    self.AssertSingleMatchResultEquals(
-        self.identifier.IdentifyFromLines(verse),
-        'Anuṣṭup (Śloka)',
-        match_result.MATCH_TYPE.FULL)
+    self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse), 'Anuṣṭup (Śloka)')
 
   def testFineMandakranta(self):
     """A valid example of Mandākrāntā should be recognized."""
@@ -83,10 +75,7 @@ class KnownValues(unittest.TestCase):
              'zApenAstaMgamitamahimA varSabhogyeNa bhartuH &',
              'yakSaz cakre janakatanayAsnAnapuNyodakeSu %',
              'snigdhacchAyAtaruSu vasatiM rAmagiryAzrameSu // 1.1 //']
-    self.AssertSingleMatchResultEquals(
-        self.identifier.IdentifyFromLines(verse),
-        'Mandākrāntā',
-        match_result.MATCH_TYPE.FULL)
+    self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse), 'Mandākrāntā')
 
   def testMandakrantaWithVpl(self):
     """Mandākrāntā with viṣama-pādānta-laghu."""
@@ -94,10 +83,7 @@ class KnownValues(unittest.TestCase):
              'tasyAH sindhoH pRthum api tanuM dUrabhAvAt pravAham &',
              'prekSiSyante gaganagatayo nUnam Avarjya dRSTir %',
              'ekaM bhuktAguNam iva bhuvaH sthUlamadhyendranIlam // 1.49 //']
-    self.AssertSingleMatchResultEquals(
-        self.identifier.IdentifyFromLines(verse),
-        'Mandākrāntā',
-        match_result.MATCH_TYPE.FULL)
+    self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse), 'Mandākrāntā')
 
   def testAryaKnown(self):
     """A known example of Āryā should be recognized."""
@@ -105,10 +91,7 @@ class KnownValues(unittest.TestCase):
              'mada-malina-kapola-bhittiṣu gajeṣu |',
              'prakṛtir iyaṃ sattvavatāṃ',
              'na khalu vayas tejaso hetuḥ ||']
-    self.AssertSingleMatchResultEquals(
-        self.identifier.IdentifyFromLines(verse),
-        'Āryā',
-        match_result.MATCH_TYPE.FULL)
+    self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse), 'Āryā')
 
   def testAryaUnknown(self):
     """An example of Āryā that has not been explicitly added."""
@@ -116,10 +99,7 @@ class KnownValues(unittest.TestCase):
              'vādajñā api bhavanti vedajñāḥ',
              'brahmajñā api labhyā',
              'svājñāna-jñānino viralāḥ']
-    self.AssertSingleMatchResultEquals(
-        self.identifier.IdentifyFromLines(verse),
-        'Āryā',
-        match_result.MATCH_TYPE.FULL)
+    self.AssertSingleMatchResultEquals(self.identifier.IdentifyFromLines(verse), 'Āryā')
 
   def testBadVerse(self):
     """Test a verse that has typos, and see if correct metre can be guessed."""
