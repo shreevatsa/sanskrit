@@ -225,7 +225,6 @@ def _AddSamavrttaRegex(metre_name, line_regex):
   known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), metre_name))
   half_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 2)
   known_half_regexes.append((re.compile('^' + half_verse_regex + '$'), metre_name))
-  match = match_result.MatchResult(metre_name, match_result.MATCH_TYPE.PADA)
   known_pada_regexes.append((re.compile('^' + line_regex + '$'), metre_name))
 
 
