@@ -154,6 +154,7 @@ def _SplitQuarters(full_pattern):
   """Attempt splits at quarters."""
   def Cumulative(ns):
     """Prefix sums. Example: [5, 4, 3] -> [5, 9, 12]."""
+    # return [sum(ns[:i+1]) for i in range(len(ns))]
     s = 0
     out = []
     for n in ns:
