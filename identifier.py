@@ -2,7 +2,7 @@
 """Module to identify metre(s) from scanned verse.
 
 The input is a list of "pattern" lines, where a "pattern" is a sequence over the
-alphabet {'L', 'G'}. The output is a list of `MatchResult`s.
+alphabet {'L', 'G'}. The output is a list of metre names (strings).
 """
 
 from __future__ import absolute_import
@@ -133,8 +133,7 @@ def _MergeResults(results_lists):
   names = []
   for results_list in results_lists:
     for result in results_list:
-      names.append(result.MetreName()
-                   if isinstance(result, match_result.MatchResult) else result)
+      names.append(result)
   return _UniqList(names)
 
 
