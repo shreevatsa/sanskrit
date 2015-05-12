@@ -17,12 +17,14 @@ import data.dhaval_vrttaratnakara
 import match_result
 import print_utils
 
-known_metre_regexes = []  # Values are strings (metre names)
 known_metre_patterns = {}  # Values are strings (metre names)
-known_half_regexes = []  # Values are strings (metre names)
+known_metre_regexes = []  # Values are strings (metre names)
+
 known_half_patterns = {}  # Values are strings (metre names)
+known_half_regexes = []  # Values are strings (metre names)
 known_first_half_patterns = {}  # For viṣama-vṛtta-s.
 known_second_half_patterns = {} # For viṣama-vṛtta-s.
+
 known_pada_regexes = []
 known_odd_pada_regexes = [] # For ardha-sama-vṛtta-s.
 known_even_pada_regexes =[] # For ardha-sama-vṛtta-s.
@@ -33,6 +35,7 @@ known_pada_1_patterns = {}
 known_pada_2_patterns = {}
 known_pada_3_patterns = {}
 known_pada_4_patterns = {}
+
 pattern_for_metre = {}
 all_data = {}
 
