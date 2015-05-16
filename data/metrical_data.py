@@ -28,10 +28,6 @@ known_pada_patterns = {}
 known_pada_regexes = []
 known_odd_pada_regexes = []
 known_even_pada_regexes =[]
-known_pada_1_patterns = {}  # For viṣama-vṛtta-s.
-known_pada_2_patterns = {}
-known_pada_3_patterns = {}
-known_pada_4_patterns = {}
 
 pattern_for_metre = {}
 all_data = {}
@@ -165,14 +161,10 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
   for (a, b, c, d) in itertools.product(patterns_a, patterns_b, patterns_c, patterns_d): _AddFullPattern(a + b + c + d, metre_name)
   for (a, b) in itertools.product(patterns_a, patterns_b): _AddHalfPattern(a + b, metre_name, {1})
   for (c, d) in itertools.product(patterns_c, patterns_d): _AddHalfPattern(c + d, metre_name, {2})
-  def AppendPattern(pattern, known_patterns):
-    known_patterns[pattern] = known_patterns.get(pattern, [])
-    if metre_name not in known_patterns[pattern]:
-      known_patterns[pattern].append(metre_name)
-  for a in patterns_a: AppendPattern(a, known_pada_1_patterns)
-  for b in patterns_b: AppendPattern(b, known_pada_2_patterns)
-  for c in patterns_c: AppendPattern(c, known_pada_3_patterns)
-  for d in patterns_d: AppendPattern(d, known_pada_4_patterns)
+  for a in patterns_a: _AddPadaPattern(a, metre_name, {1})
+  for b in patterns_b: _AddPadaPattern(b, metre_name, {2})
+  for c in patterns_c: _AddPadaPattern(c, metre_name, {3})
+  for d in patterns_d: _AddPadaPattern(d, metre_name, {4})
 
 
 def _AddMetreRegex(metre_name, line_regexes, simple=True):
