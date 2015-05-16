@@ -23,9 +23,6 @@ known_full_regexes = []
 known_half_patterns = {}
 known_half_regexes = []
 
-known_first_half_patterns = {}  # For viṣama-vṛtta-s.
-known_second_half_patterns = {} # For viṣama-vṛtta-s.
-
 known_pada_patterns = {}
 known_pada_regexes = []
 known_odd_pada_patterns = {}  # For ardha-sama-vṛtta-s.
@@ -172,22 +169,9 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
   patterns_b = [pb[:-1] + 'G', pb[:-1] + 'L']
   patterns_c = [pc]
   patterns_d = [pd[:-1] + 'G', pd[:-1] + 'L']
-  for (a, b, c, d) in itertools.product(patterns_a, patterns_b, patterns_c, patterns_d):
-    _AddFullPattern(a + b + c + d, metre_name)
-  for (a, b) in itertools.product(patterns_a, patterns_b):
-    if a + b in known_first_half_patterns:
-      print('Already known as a first half pattern: ', a + b)
-      print(match_result.Names(known_first_half_patterns[a + b]))
-      print('Now adding as first half of : ', metre_name)
-    known_first_half_patterns[a + b] = known_first_half_patterns.get(a + b, [])
-    known_first_half_patterns[a + b].append(metre_name)
-  for (c, d) in itertools.product(patterns_c, patterns_d):
-    if c + d in known_second_half_patterns:
-      print('Already known as a second half pattern: ', c + d)
-      print(match_result.Names(known_second_half_patterns[c + d]))
-      print('Now adding as second half of : ', metre_name)
-    known_second_half_patterns[c + d] = known_second_half_patterns.get(c + d, [])
-    known_second_half_patterns[c + d].append(metre_name)
+  for (a, b, c, d) in itertools.product(patterns_a, patterns_b, patterns_c, patterns_d): _AddFullPattern(a + b + c + d, metre_name)
+  for (a, b) in itertools.product(patterns_a, patterns_b): _AddHalfPattern(a + b, metre_name, {1})
+  for (c, d) in itertools.product(patterns_c, patterns_d): _AddHalfPattern(c + d, metre_name, {2})
   def AppendPattern(pattern, known_patterns):
     known_patterns[pattern] = known_patterns.get(pattern, [])
     if metre_name not in known_patterns[pattern]:
