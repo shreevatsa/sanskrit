@@ -17,7 +17,7 @@ import data.dhaval_vrttaratnakara
 import match_result
 import print_utils
 
-known_metre_patterns = {}  # Values are strings (metre names)
+known_full_patterns = {}  # Values are strings (metre names)
 known_metre_regexes = []  # Values are strings (metre names)
 
 known_half_patterns = {}  # Values are strings (metre names)
@@ -67,6 +67,18 @@ def GetPattern(metre):
   return pattern_for_metre.get(metre)
 
 
+def _AddFullPattern(full_pattern, metre_name):
+  if full_pattern in known_full_patterns:
+    # TODO(shreevatsa): Figure out what exactly to do in this case
+    Print('Error: full pattern already present')
+    Print(metre_name)
+    Print(full_pattern)
+    Print(match_result.Description([known_full_patterns[full_pattern]]))
+    return False
+  assert full_pattern not in known_full_patterns
+  known_full_patterns[full_pattern] = {metre_name: True}
+  return True
+
 def _AddSamavrttaPattern(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = _CleanUpPattern(each_line_pattern)
@@ -84,16 +96,7 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
 
   for (a, b, c, d) in itertools.product(patterns, repeat=4):
-    full_pattern = a + b + c + d
-    if full_pattern in known_metre_patterns:
-      # TODO(shreevatsa): Figure out what exactly to do in this case
-      Print('Error: already present')
-      Print(metre_name)
-      Print(full_pattern)
-      Print(match_result.Description([known_metre_patterns[full_pattern]]))
-      return
-    assert full_pattern not in known_metre_patterns
-    known_metre_patterns[full_pattern] = [metre_name]
+    _AddFullPattern(a + b + c + d, metre_name)
 
   for (a, b) in itertools.product(patterns, repeat=2):
     if metre_name in known_half_patterns.setdefault(a + b, []):
@@ -132,13 +135,7 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
   patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
   patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
   for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2):
-    if a + b + c + d in known_metre_patterns:
-      Print('Error: pattern already present')
-      Print(metre_name)
-      Print(a + b + c + d)
-      Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
-    assert (a + b + c + d) not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = [metre_name]
+    _AddFullPattern(a + b + c + d, metre_name)
   for (a, b) in itertools.product(patterns_odd, patterns_even):
     if metre_name in known_half_patterns.setdefault(a + b, []):
       Print('For %s, not adding match which already exists: %s' % (a + b, metre_name))
@@ -181,15 +178,8 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
   patterns_b = [pb[:-1] + 'G', pb[:-1] + 'L']
   patterns_c = [pc]
   patterns_d = [pd[:-1] + 'G', pd[:-1] + 'L']
-  for (a, b, c, d) in itertools.product(patterns_a, patterns_b,
-                                        patterns_c, patterns_d):
-    if a + b + c + d in known_metre_patterns:
-      Print('Error: pattern already present')
-      Print(metre_name)
-      Print(a + b + c + d)
-      Print(match_result.Description([known_metre_patterns[a + b + c + d]]))
-    assert (a + b + c + d) not in known_metre_patterns
-    known_metre_patterns[a + b + c + d] = [metre_name]
+  for (a, b, c, d) in itertools.product(patterns_a, patterns_b, patterns_c, patterns_d):
+    _AddFullPattern(a + b + c + d, metre_name)
   for (a, b) in itertools.product(patterns_a, patterns_b):
     if a + b in known_first_half_patterns:
       print('Already known as a first half pattern: ', a + b)
