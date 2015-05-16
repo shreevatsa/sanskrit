@@ -30,6 +30,10 @@ pattern_for_metre = {}
 all_data = {}
 
 
+def GetPattern(metre):
+  return pattern_for_metre.get(metre)
+
+
 def _RemoveChars(input_string, chars):
   """Wrapper function because string.translate != unicode.translate."""
   for char in chars:
@@ -49,8 +53,17 @@ def _CleanUpSimpleRegex(regex):
   return regex
 
 
-def GetPattern(metre):
-  return pattern_for_metre.get(metre)
+def _AddPatternForMetre(metre_name, pada_patterns):
+  if metre_name in pattern_for_metre:
+    if pattern_for_metre[metre_name] != pada_patterns:
+      Print('Mismatch for %s' % metre_name)
+      Print(pattern_for_metre[metre_name])
+      Print('   vs   ')
+      Print([clean] * 4)
+      assert False
+    # Print('Not adding duplicate as already present: %s' % metre_name)
+    return
+  pattern_for_metre[metre_name] = pada_patterns
 
 
 def _AddFullPattern(full_pattern, metre_name):
@@ -71,82 +84,48 @@ def _AddHalfPattern(half_pattern, metre_name, which_halves):
 def _AddPadaPattern(pada_pattern, metre_name, which_padas):
   known_pada_patterns.setdefault(pada_pattern, {}).setdefault(metre_name, set()).update(which_padas)
 
-def _AddSamavrttaPattern(metre_name, each_line_pattern):
+def _AddSamavrttaPattern(metre_name, each_pada_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
-  clean = _CleanUpPattern(each_line_pattern)
-  assert re.match(r'^[LG]*$', clean), (each_line_pattern, metre_name)
-  if metre_name in pattern_for_metre:
-    if pattern_for_metre[metre_name] != [clean] * 4:
-      Print('Mismatch for %s' % metre_name)
-      Print(pattern_for_metre[metre_name])
-      Print([clean] * 4)
-    assert pattern_for_metre[metre_name] == [clean] * 4
-    # Print('Not adding duplicate as already present: %s' % metre_name)
-    return
-  assert metre_name not in pattern_for_metre, metre_name
-  pattern_for_metre[metre_name] = [clean] * 4
+  clean = _CleanUpPattern(each_pada_pattern)
+  assert re.match(r'^[LG]*G$', clean), (each_pada_pattern, metre_name)
+  _AddPatternForMetre(metre_name, [clean] * 4)
+
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
-
-  for (a, b, c, d) in itertools.product(patterns, repeat=4):
-    _AddFullPattern(a + b + c + d, metre_name)
-
-  for (a, b) in itertools.product(patterns, repeat=2):
-    _AddHalfPattern(a + b, metre_name, {1, 2})
-
-  for a in patterns:
-    _AddPadaPattern(a, metre_name, {1, 2, 3, 4})
+  for (a, b, c, d) in itertools.product(patterns, repeat=4): _AddFullPattern(a + b + c + d, metre_name)
+  for (a, b) in itertools.product(patterns, repeat=2): _AddHalfPattern(a + b, metre_name, {1, 2})
+  for a in patterns: _AddPadaPattern(a, metre_name, {1, 2, 3, 4})
 
 
-def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
+def _AddArdhasamavrttaPattern(metre_name, odd_and_even_pada_patterns):
   """Given an ardha-sama-vṛtta's pattern, add it."""
-  (odd_line_pattern, even_line_pattern) = odd_and_even_line_patterns
-  clean_odd = _CleanUpPattern(odd_line_pattern)
+  (odd_pada_pattern, even_pada_pattern) = odd_and_even_pada_patterns
+  clean_odd = _CleanUpPattern(odd_pada_pattern)
   assert re.match(r'^[LG]*$', clean_odd)
-  clean_even = _CleanUpPattern(even_line_pattern)
+  clean_even = _CleanUpPattern(even_pada_pattern)
   if clean_even.endswith('L'):
-    # Print('Not adding %s for now, as %s ends with laghu' % (metre_name,
-    #                                                         clean_even))
+    Print('Not adding %s for now, as %s ends with laghu' % (metre_name, clean_even))
     return
   assert re.match(r'^[LG]*G$', clean_even), (metre_name, clean_even)
-  if metre_name in pattern_for_metre:
-    if pattern_for_metre[metre_name] != [clean_odd, clean_even] * 2:
-      Print('Error: mismatch for %s' % metre_name)
-      Print(pattern_for_metre[metre_name])
-      Print([clean_odd, clean_even] * 2)
-    assert pattern_for_metre[metre_name] == [clean_odd, clean_even] * 2
-    # Print('Not adding duplicate as already present: %s' % metre_name)
-    return
-  assert metre_name not in pattern_for_metre, metre_name
-  pattern_for_metre[metre_name] = [clean_odd, clean_even] * 2
+  _AddPatternForMetre(metre_name, [clean_odd, clean_even] * 2)
+
   patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
   patterns_even = [clean_even[:-1] + 'G', clean_even[:-1] + 'L']
-  for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2):
-    _AddFullPattern(a + b + c + d, metre_name)
-  for (a, b) in itertools.product(patterns_odd, patterns_even):
-    _AddHalfPattern(a + b, metre_name, {1, 2})
+  for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2): _AddFullPattern(a + b + c + d, metre_name)
+  for (a, b) in itertools.product(patterns_odd, patterns_even): _AddHalfPattern(a + b, metre_name, {1, 2})
   for a in patterns_odd: _AddPadaPattern(a, metre_name, {1, 3})
   for b in patterns_even: _AddPadaPattern(b, metre_name, {2, 4})
 
 
-def _AddVishamavrttaPattern(metre_name, line_patterns):
-  """Given the four lines of a viṣama-vṛtta, add the metre."""
-  assert len(line_patterns) == 4
-  line_patterns = [_CleanUpPattern(p) for p in line_patterns]
-  for p in line_patterns:
-    assert re.match(r'^[LG]*$', p)
-  (pa, pb, pc, pd) = line_patterns
+def _AddVishamavrttaPattern(metre_name, pada_patterns):
+  """Given the four pāda-s of a viṣama-vṛtta, add the metre."""
+  assert len(pada_patterns) == 4
+  pada_patterns = [_CleanUpPattern(p) for p in pada_patterns]
+  for p in pada_patterns: assert re.match(r'^[LG]*$', p)
+  (pa, pb, pc, pd) = pada_patterns
   assert pb.endswith('G')
   assert pd.endswith('G')
-  if metre_name in pattern_for_metre:
-    if pattern_for_metre[metre_name] != [pa, pb, pc, pd]:
-      Print('Mismatch for %s' % metre_name)
-      Print(pattern_for_metre[metre_name])
-      Print(pa + pb + pc + pd)
-    assert pattern_for_metre[metre_name] == [pa, pb, pc, pd]
-    # Print('Not adding duplicate as already present: %s' % metre_name)
-    return
-  assert metre_name not in pattern_for_metre
-  pattern_for_metre[metre_name] = [pa, pb, pc, pd]
+  _AddPatternForMetre(metre_name, [pa, pb, pc, pd])
+
   patterns_a = [pa]
   patterns_b = [pb[:-1] + 'G', pb[:-1] + 'L']
   patterns_c = [pc]
@@ -160,12 +139,12 @@ def _AddVishamavrttaPattern(metre_name, line_patterns):
   for d in patterns_d: _AddPadaPattern(d, metre_name, {4})
 
 
-def _AddMetreRegex(metre_name, line_regexes, simple=True):
-  """Given regexes for the four lines of a metre, add it."""
-  assert len(line_regexes) == 4, (metre_name, line_regexes)
+def _AddMetreRegex(metre_name, pada_regexes, simple=True):
+  """Given regexes for the four padas of a metre, add it."""
+  assert len(pada_regexes) == 4, (metre_name, pada_regexes)
   if simple:
-    line_regexes = [_CleanUpSimpleRegex(s) for s in line_regexes]
-  full_verse_regex = ''.join('(%s)' % s for s in line_regexes)
+    pada_regexes = [_CleanUpSimpleRegex(s) for s in pada_regexes]
+  full_verse_regex = ''.join('(%s)' % s for s in pada_regexes)
   _AddFullRegex(full_verse_regex, metre_name)
 
 
@@ -181,12 +160,12 @@ def _AddPadaRegex(pada_regex, metre_name, which_padas):
   known_pada_regexes.append((re.compile('^' + pada_regex + '$'), {metre_name: which_padas}))
 
 
-def _AddSamavrttaRegex(metre_name, line_regex):
+def _AddSamavrttaRegex(metre_name, pada_regex):
   """Add a sama-vṛtta's regex (full, half, pāda). No variants."""
-  line_regex = _CleanUpSimpleRegex(line_regex)
-  _AddFullRegex(''.join('(%s)' % s for s in [line_regex] * 4), metre_name)
-  _AddHalfRegex(''.join('(%s)' % s for s in [line_regex] * 2), metre_name, {1, 2})
-  known_pada_regexes.append((re.compile('^' + line_regex + '$'), metre_name))
+  pada_regex = _CleanUpSimpleRegex(pada_regex)
+  _AddFullRegex(''.join('(%s)' % s for s in [pada_regex] * 4), metre_name)
+  _AddHalfRegex(''.join('(%s)' % s for s in [pada_regex] * 2), metre_name, {1, 2})
+  known_pada_regexes.append((re.compile('^' + pada_regex + '$'), metre_name))
 
 
 def _AddAnustup():
@@ -278,20 +257,20 @@ def _AddAryaFamilyRegex():
                  simple=False)
 
 
-def _AddGiti(line_patterns):
+def _AddGiti(pada_patterns):
   """Add an example of Gīti, with proper morae checking."""
-  assert len(line_patterns) == 4
+  assert len(pada_patterns) == 4
   expected = [12, 18, 12, 18]
   for i in range(4):
     allow_loose_ending = False
-    if i % 2 and line_patterns[i].endswith('L'):
+    if i % 2 and pada_patterns[i].endswith('L'):
       allow_loose_ending = True
       expected[i] -= 1
-    assert _MatraCount(line_patterns[i]) == expected[i], (i, line_patterns[i], _MatraCount(line_patterns[i]), expected[i])
+    assert _MatraCount(pada_patterns[i]) == expected[i], (i, pada_patterns[i], _MatraCount(pada_patterns[i]), expected[i])
     if allow_loose_ending:
-      line_patterns[i] = line_patterns[i][:-1] + '.'
+      pada_patterns[i] = pada_patterns[i][:-1] + '.'
   # TODO(shreevatsa): Should we just add (up to) 4 patterns instead?
-  _AddMetreRegex('Gīti', line_patterns, simple=False)
+  _AddMetreRegex('Gīti', pada_patterns, simple=False)
 
 
 def _AddKarambajati():
