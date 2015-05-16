@@ -24,10 +24,7 @@ known_half_patterns = {}
 known_half_regexes = []
 
 known_pada_patterns = {}
-
 known_pada_regexes = []
-known_odd_pada_regexes = []
-known_even_pada_regexes =[]
 
 pattern_for_metre = {}
 all_data = {}
@@ -180,8 +177,12 @@ def _AddFullRegex(full_verse_regex, metre_name):
   known_full_regexes.append((re.compile('^' + full_verse_regex + '$'), {metre_name : True}))
 
 
-def _AddHalfRegex(half_verse_pattern, metre_name, which_halves):
+def _AddHalfRegex(half_verse_regex, metre_name, which_halves):
   known_half_regexes.append((re.compile('^' + half_verse_regex + '$'), {metre_name: which_halves}))
+
+
+def _AddPadaRegex(pada_regex, metre_name, which_padas):
+  known_pada_regexes.append((re.compile('^' + pada_regex + '$'), {metre_name: which_padas}))
 
 
 def _AddSamavrttaRegex(metre_name, line_regex):
@@ -201,8 +202,8 @@ def _AddAnustup():
 
   _AddFullRegex(half_regex * 2, metre_name)
   _AddHalfRegex(half_regex, metre_name, {1, 2})
-  known_odd_pada_regexes.append((re.compile('^' + regex_ac + '$'), metre_name))
-  known_even_pada_regexes.append((re.compile('^' + regex_bd + '$'), metre_name))
+  _AddPadaRegex(regex_ac, metre_name, {1, 3})
+  _AddPadaRegex(regex_bd, metre_name, {2, 4})
 
 
 def _AddAnustupExamples():
