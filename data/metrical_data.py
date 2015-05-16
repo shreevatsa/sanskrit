@@ -26,9 +26,7 @@ known_half_regexes = []
 known_pada_patterns = {}
 
 known_pada_regexes = []
-known_odd_pada_patterns = {}  # For ardha-sama-vṛtta-s.
 known_odd_pada_regexes = []
-known_even_pada_patterns = {}
 known_even_pada_regexes =[]
 known_pada_1_patterns = {}  # For viṣama-vṛtta-s.
 known_pada_2_patterns = {}
@@ -137,16 +135,8 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
     _AddFullPattern(a + b + c + d, metre_name)
   for (a, b) in itertools.product(patterns_odd, patterns_even):
     _AddHalfPattern(a + b, metre_name, {1, 2})
-  for a in patterns_odd:
-    # if a in known_odd_pada_patterns:
-    #   Print('%s being added as odd pada for %s already known as %s' % (a, metre_name, match_result.Description(known_odd_pada_patterns[a])))
-    known_odd_pada_patterns[a] = known_odd_pada_patterns.get(a, [])
-    known_odd_pada_patterns[a].append(metre_name)
-  for a in patterns_even:
-    # if a in known_even_pada_patterns:
-    #   Print('%s being added as even line for %s already known as %s' % (a, metre_name, match_result.Description(known_even_pada_patterns[a])))
-    known_even_pada_patterns[a] = known_even_pada_patterns.get(a, [])
-    known_even_pada_patterns[a].append(metre_name)
+  for a in patterns_odd: _AddPadaPattern(a, metre_name, {1, 3})
+  for b in patterns_even: _AddPadaPattern(b, metre_name, {2, 4})
 
 
 def _AddVishamavrttaPattern(metre_name, line_patterns):
