@@ -17,8 +17,8 @@ import data.dhaval_vrttaratnakara
 import match_result
 import print_utils
 
-known_full_patterns = {}  # Values are strings (metre names)
-known_metre_regexes = []  # Values are strings (metre names)
+known_full_patterns = {}
+known_full_regexes = []
 
 known_half_patterns = {}  # Values are strings (metre names)
 known_half_regexes = []  # Values are strings (metre names)
@@ -210,14 +210,18 @@ def _AddMetreRegex(metre_name, line_regexes, simple=True):
   if simple:
     line_regexes = [_CleanUpSimpleRegex(s) for s in line_regexes]
   full_verse_regex = ''.join('(%s)' % s for s in line_regexes)
-  known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), metre_name))
+  _AddFullRegex(full_verse_regex, metre_name)
+
+
+def _AddFullRegex(full_verse_regex, metre_name):
+  known_full_regexes.append((re.compile('^' + full_verse_regex + '$'), {metre_name : True}))
 
 
 def _AddSamavrttaRegex(metre_name, line_regex):
   """Add a sama-vṛtta's regex (full, half, pāda). No variants."""
   line_regex = _CleanUpSimpleRegex(line_regex)
   full_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 4)
-  known_metre_regexes.append((re.compile('^' + full_verse_regex + '$'), metre_name))
+  _AddFullRegex(full_verse_regex, metre_name)
   half_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 2)
   known_half_regexes.append((re.compile('^' + half_verse_regex + '$'), metre_name))
   known_pada_regexes.append((re.compile('^' + line_regex + '$'), metre_name))
@@ -231,7 +235,7 @@ def _AddAnustup():
   half_regex = regex_ac + regex_bd
   full_regex = half_regex * 2
 
-  known_metre_regexes.append((re.compile('^' + full_regex + '$'), metre_name))
+  _AddFullRegex(full_regex, metre_name)
   known_half_regexes.append((re.compile('^' + half_regex + '$'), metre_name))
   known_odd_pada_regexes.append((re.compile('^' + regex_ac + '$'), metre_name))
   known_even_pada_regexes.append((re.compile('^' + regex_bd + '$'), metre_name))
