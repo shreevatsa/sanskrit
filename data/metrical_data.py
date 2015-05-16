@@ -21,8 +21,8 @@ known_full_patterns = {}
 known_full_regexes = []
 
 known_half_patterns = {}
+known_half_regexes = []
 
-known_half_regexes = []  # Values are strings (metre names)
 known_first_half_patterns = {}  # For viṣama-vṛtta-s.
 known_second_half_patterns = {} # For viṣama-vṛtta-s.
 
@@ -211,13 +211,15 @@ def _AddFullRegex(full_verse_regex, metre_name):
   known_full_regexes.append((re.compile('^' + full_verse_regex + '$'), {metre_name : True}))
 
 
+def _AddHalfRegex(half_verse_pattern, metre_name, which_halves):
+  known_half_regexes.append((re.compile('^' + half_verse_regex + '$'), {metre_name: which_halves}))
+
+
 def _AddSamavrttaRegex(metre_name, line_regex):
   """Add a sama-vṛtta's regex (full, half, pāda). No variants."""
   line_regex = _CleanUpSimpleRegex(line_regex)
-  full_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 4)
-  _AddFullRegex(full_verse_regex, metre_name)
-  half_verse_regex = ''.join('(%s)' % s for s in [line_regex] * 2)
-  known_half_regexes.append((re.compile('^' + half_verse_regex + '$'), metre_name))
+  _AddFullRegex(''.join('(%s)' % s for s in [line_regex] * 4), metre_name)
+  _AddHalfRegex(''.join('(%s)' % s for s in [line_regex] * 2), metre_name, {1, 2})
   known_pada_regexes.append((re.compile('^' + line_regex + '$'), metre_name))
 
 
@@ -227,10 +229,9 @@ def _AddAnustup():
   regex_ac = '....LGG.'
   regex_bd = '....LGL.'
   half_regex = regex_ac + regex_bd
-  full_regex = half_regex * 2
 
-  _AddFullRegex(full_regex, metre_name)
-  known_half_regexes.append((re.compile('^' + half_regex + '$'), metre_name))
+  _AddFullRegex(half_regex * 2, metre_name)
+  _AddHalfRegex(half_regex, metre_name, {1, 2})
   known_odd_pada_regexes.append((re.compile('^' + regex_ac + '$'), metre_name))
   known_even_pada_regexes.append((re.compile('^' + regex_bd + '$'), metre_name))
 
