@@ -139,15 +139,6 @@ def _AddVishamavrttaPattern(metre_name, pada_patterns):
   for d in patterns_d: _AddPadaPattern(d, metre_name, {4})
 
 
-def _AddMetreRegex(metre_name, pada_regexes, simple=True):
-  """Given regexes for the four padas of a metre, add it."""
-  assert len(pada_regexes) == 4, (metre_name, pada_regexes)
-  if simple:
-    pada_regexes = [_CleanUpSimpleRegex(s) for s in pada_regexes]
-  full_verse_regex = ''.join('(%s)' % s for s in pada_regexes)
-  _AddFullRegex(full_verse_regex, metre_name)
-
-
 def _AddFullRegex(full_verse_regex, metre_name):
   known_full_regexes.append((re.compile('^' + full_verse_regex + '$'), {metre_name : True}))
 
@@ -166,6 +157,15 @@ def _AddSamavrttaRegex(metre_name, pada_regex):
   _AddFullRegex(''.join('(%s)' % s for s in [pada_regex] * 4), metre_name)
   _AddHalfRegex(''.join('(%s)' % s for s in [pada_regex] * 2), metre_name, {1, 2})
   known_pada_regexes.append((re.compile('^' + pada_regex + '$'), metre_name))
+
+
+def _AddMetreRegex(metre_name, pada_regexes, simple=True):
+  """Given regexes for the four padas of a metre, add it."""
+  assert len(pada_regexes) == 4, (metre_name, pada_regexes)
+  if simple:
+    pada_regexes = [_CleanUpSimpleRegex(s) for s in pada_regexes]
+  full_verse_regex = ''.join('(%s)' % s for s in pada_regexes)
+  _AddFullRegex(full_verse_regex, metre_name)
 
 
 def _AddAnustup():
