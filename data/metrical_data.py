@@ -20,7 +20,8 @@ import print_utils
 known_full_patterns = {}
 known_full_regexes = []
 
-known_half_patterns = {}  # Values are strings (metre names)
+known_half_patterns = {}
+
 known_half_regexes = []  # Values are strings (metre names)
 known_first_half_patterns = {}  # For viṣama-vṛtta-s.
 known_second_half_patterns = {} # For viṣama-vṛtta-s.
@@ -79,6 +80,9 @@ def _AddFullPattern(full_pattern, metre_name):
   known_full_patterns[full_pattern] = {metre_name: True}
   return True
 
+def _AddHalfPattern(half_pattern, metre_name, which_halves):
+  known_half_patterns.setdefault(half_pattern, {}).setdefault(metre_name, set()).update(which_halves)
+
 def _AddSamavrttaPattern(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = _CleanUpPattern(each_line_pattern)
@@ -99,12 +103,7 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
     _AddFullPattern(a + b + c + d, metre_name)
 
   for (a, b) in itertools.product(patterns, repeat=2):
-    if metre_name in known_half_patterns.setdefault(a + b, []):
-        Print('For %s, not adding match which already exists: %s' % (a + b, metre_name))
-        continue
-    elif len(known_half_patterns[a + b]) > 1:
-      Print('For %s, currently known as %s, adding %s' % (a + b, known_half_patterns[a + b], metre_name))
-    known_half_patterns[a + b].append(metre_name)
+    _AddHalfPattern(a + b, metre_name, {1, 2})
 
   for a in patterns:
     known_pada_patterns[a] = known_pada_patterns.get(a, [])
@@ -137,12 +136,7 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
   for (a, b, c, d) in itertools.product(patterns_odd, patterns_even, repeat=2):
     _AddFullPattern(a + b + c + d, metre_name)
   for (a, b) in itertools.product(patterns_odd, patterns_even):
-    if metre_name in known_half_patterns.setdefault(a + b, []):
-      Print('For %s, not adding match which already exists: %s' % (a + b, metre_name))
-      continue
-    elif len(known_half_patterns[a + b]) > 1:
-      Print('For %s, currently known as %s, adding %s' % (a + b, known_half_patterns[a + b], metre_name))
-    known_half_patterns[a + b].append(metre_name)
+    _AddHalfPattern(a + b, metre_name, {1, 2})
   for a in patterns_odd:
     # if a in known_odd_pada_patterns:
     #   Print('%s being added as odd pada for %s already known as %s' % (a, metre_name, match_result.Description(known_odd_pada_patterns[a])))
