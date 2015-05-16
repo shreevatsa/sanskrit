@@ -15,7 +15,7 @@ import data.curated
 import data.dhaval
 import data.dhaval_vrttaratnakara
 import match_result
-import print_utils
+from print_utils import Print
 
 known_full_patterns = {}
 known_full_regexes = []
@@ -28,10 +28,6 @@ known_pada_regexes = []
 
 pattern_for_metre = {}
 all_data = {}
-
-
-def Print(x):
-  return print_utils.Print(x)
 
 
 def _RemoveChars(input_string, chars):
