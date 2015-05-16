@@ -24,6 +24,7 @@ known_half_patterns = {}
 known_half_regexes = []
 
 known_pada_patterns = {}
+
 known_pada_regexes = []
 known_odd_pada_patterns = {}  # For ardha-sama-vṛtta-s.
 known_odd_pada_regexes = []
@@ -80,6 +81,9 @@ def _AddFullPattern(full_pattern, metre_name):
 def _AddHalfPattern(half_pattern, metre_name, which_halves):
   known_half_patterns.setdefault(half_pattern, {}).setdefault(metre_name, set()).update(which_halves)
 
+def _AddPadaPattern(pada_pattern, metre_name, which_padas):
+  known_pada_patterns.setdefault(pada_pattern, {}).setdefault(metre_name, set()).update(which_padas)
+
 def _AddSamavrttaPattern(metre_name, each_line_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = _CleanUpPattern(each_line_pattern)
@@ -103,8 +107,7 @@ def _AddSamavrttaPattern(metre_name, each_line_pattern):
     _AddHalfPattern(a + b, metre_name, {1, 2})
 
   for a in patterns:
-    known_pada_patterns[a] = known_pada_patterns.get(a, [])
-    known_pada_patterns[a].append(metre_name)
+    _AddPadaPattern(a, metre_name, {1, 2, 3, 4})
 
 
 def _AddArdhasamavrttaPattern(metre_name, odd_and_even_line_patterns):
