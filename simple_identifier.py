@@ -19,7 +19,7 @@ class SimpleIdentifier(object):
 
   def __init__(self):
     """Initialize whichever of the parts need it."""
-    if not metrical_data.known_metre_patterns:
+    if not metrical_data.known_full_patterns:
       metrical_data.InitializeData()
     self.identifier = identifier.Identifier(metrical_data)
 
@@ -39,14 +39,9 @@ class SimpleIdentifier(object):
     if not pattern_lines:
       return None
 
-    (full_match,
-     results) = self.identifier.IdentifyFromPatternLines(pattern_lines)
-    self.debug_identify = (['Full:'] + self.identifier.global_info +
-                           ['Lines:'] + self.identifier.lines_info +
-                           ['Halves:'] + self.identifier.halves_info +
-                           ['Quarters:'] + self.identifier.quarters_info)
+    results = self.identifier.IdentifyFromPatternLines(pattern_lines)
     if results:
-      for m in results:
+      for m in list(results.get('exact', [])) + list(results.get('partial', [])) + list(results.get('accidental', [])):
         known_pattern = metrical_data.GetPattern(m)
         if known_pattern:
           alignment = display.AlignVerseToMetre(display_lines,
@@ -54,7 +49,7 @@ class SimpleIdentifier(object):
                                                 known_pattern)
           table = display.HtmlTableFromAlignment(alignment)
           self.tables.append((m, table))
-    return (full_match, results)
+    return ('exact' in results, [m for s in results.values() for m in s])
 
   def DebugRead(self):
     return '\n'.join(self.debug_read)
