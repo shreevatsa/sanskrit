@@ -46,6 +46,7 @@ class Identifier(object):
     for (part_type, part_patterns) in _Parts(pattern_lines).items():
       for pattern in part_patterns:
         self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras)' % (part_type, pattern, len(pattern), _MatraCount(pattern)))
+        last_debug_line_length = len(self.parts_debug[-1])
         # 1. Try full matches
         full_matches = self.metrical_data.known_full_patterns.get(pattern)
         if not full_matches:
@@ -61,7 +62,7 @@ class Identifier(object):
               match_type = 'exact'
             else:
               match_type = 'accidental'
-            self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras) has %s match %s %s' % (part_type, pattern, len(pattern), _MatraCount(pattern), match_type, metre_name, value))
+            self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
             ret.setdefault(match_type, set()).add(metre_name)
         # 2. Try half matches
         half_matches = self.metrical_data.known_half_patterns.get(pattern)
@@ -79,7 +80,7 @@ class Identifier(object):
               match_type = 'partial'
             else:
               match_type = 'accidental'
-            self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras) has %s match: %s %s' % (part_type, pattern, len(pattern), _MatraCount(pattern), match_type, metre_name, value))
+            self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
             ret.setdefault(match_type, set()).add(metre_name)
         # 3. Try pada matches
         pada_matches = self.metrical_data.known_pada_patterns.get(pattern)
@@ -101,7 +102,7 @@ class Identifier(object):
               match_type = 'partial'
             else:
               match_type = 'accidental'
-            self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras) has %s match %s %s' % (part_type, pattern, len(pattern), _MatraCount(pattern), match_type, metre_name, value))
+            self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
             ret.setdefault(match_type, set()).add(metre_name)
     # Done looping over all part types.
     return ret
@@ -208,7 +209,6 @@ def _Parts(pattern_lines):
     add('pada_2', b)
     add('pada_3', c)
     add('pada_4', d)
-  ret['lines'] = pattern_lines
   # Add groups of lines to 'half_*' and 'pada_*'
   n = len(pattern_lines)
   if n % 2 == 0:
@@ -227,6 +227,9 @@ def _Parts(pattern_lines):
     add('pada_2', ''.join(pattern_lines[n//4 : n//2]))
     add('pada_3', ''.join(pattern_lines[n//2 : 3*n//4]))
     add('pada_4', ''.join(pattern_lines[3*n//4 : ]))
+  if n not in [1, 2, 4]:
+    # When n is 1, 2, or 4, each line already accounted for as full/half/pada.
+    ret['lines'] = pattern_lines
   return ret
 
 def _MatraCount(pattern):
