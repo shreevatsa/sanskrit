@@ -40,6 +40,8 @@ class SimpleIdentifier(object):
       return None
 
     results = self.identifier.IdentifyFromPatternLines(pattern_lines)
+    self.debug_identify = (['Global:'] + self.identifier.global_debug +
+                           ['Parts:'] + self.identifier.parts_debug)
     if results:
       for m in list(results.get('exact', [])) + list(results.get('partial', [])) + list(results.get('accidental', [])):
         known_pattern = metrical_data.GetPattern(m)

@@ -30,15 +30,22 @@ class Identifier(object):
 
   def _Reset(self):
     """Clear all parameters, for use again."""
-    self.global_info = []
-    self.lines_info = []
-    self.halves_info = []
-    self.quarters_info = []
+    self.global_debug = []
+    self.parts_debug = []
 
   def IdentifyFromPatternLines(self, pattern_lines, input_type='full'):
+    self._Reset()
+    # Too many lines => probably multiple verses.
+    if len(pattern_lines) > 12:
+      self.global_debug.append('Error: too many lines in verse. '
+                               'Perhaps these are multiple verses?')
+      return {}
+
     ret = {}  # { 'exact': {..}, 'partial': {...}, 'accidental': {..} }
+
     for (part_type, part_patterns) in _Parts(pattern_lines).items():
       for pattern in part_patterns:
+        self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras)' % (part_type, pattern, len(pattern), _MatraCount(pattern)))
         # 1. Try full matches
         full_matches = self.metrical_data.known_full_patterns.get(pattern)
         if not full_matches:
@@ -54,6 +61,7 @@ class Identifier(object):
               match_type = 'exact'
             else:
               match_type = 'accidental'
+            self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras) has %s match %s %s' % (part_type, pattern, len(pattern), _MatraCount(pattern), match_type, metre_name, value))
             ret.setdefault(match_type, set()).add(metre_name)
         # 2. Try half matches
         half_matches = self.metrical_data.known_half_patterns.get(pattern)
@@ -71,6 +79,7 @@ class Identifier(object):
               match_type = 'partial'
             else:
               match_type = 'accidental'
+            self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras) has %s match: %s %s' % (part_type, pattern, len(pattern), _MatraCount(pattern), match_type, metre_name, value))
             ret.setdefault(match_type, set()).add(metre_name)
         # 3. Try pada matches
         pada_matches = self.metrical_data.known_pada_patterns.get(pattern)
@@ -92,9 +101,10 @@ class Identifier(object):
               match_type = 'partial'
             else:
               match_type = 'accidental'
+            self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras) has %s match %s %s' % (part_type, pattern, len(pattern), _MatraCount(pattern), match_type, metre_name, value))
             ret.setdefault(match_type, set()).add(metre_name)
-        # Done all kinds of matches. Return.
-        return ret
+    # Done looping over all part types.
+    return ret
 
 
 def _SplitHalves(full_pattern):
@@ -218,3 +228,6 @@ def _Parts(pattern_lines):
     add('pada_3', ''.join(pattern_lines[n//2 : 3*n//4]))
     add('pada_4', ''.join(pattern_lines[3*n//4 : ]))
   return ret
+
+def _MatraCount(pattern):
+  return sum(2 if c == 'G' else 1 for c in pattern)
