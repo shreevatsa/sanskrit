@@ -78,11 +78,6 @@ class Identifier(object):
     }
     return ret
 
-  @staticmethod
-  def union(d, e):
-    for key in e:
-      d.setdefault(key, set()).update(e[key])
-    return d
 
   def IdentifyFromPatternLines(self, pattern_lines, input_type='full'):
     self._Reset()
