@@ -14,7 +14,6 @@ import data.ganesh
 import data.curated
 import data.dhaval
 import data.dhaval_vrttaratnakara
-import match_result
 from print_utils import Print
 
 known_full_patterns = {}
@@ -72,7 +71,7 @@ def _AddFullPattern(full_pattern, metre_name):
     Print('Error: full pattern already present')
     Print(metre_name)
     Print(full_pattern)
-    Print(match_result.Description([known_full_patterns[full_pattern]]))
+    Print(known_full_patterns[full_pattern])
     return False
   assert full_pattern not in known_full_patterns
   known_full_patterns[full_pattern] = {metre_name: True}

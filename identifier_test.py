@@ -9,7 +9,6 @@ from __future__ import unicode_literals
 
 import unittest
 
-import match_result
 import simple_identifier
 
 
@@ -50,7 +49,7 @@ class KnownValues(unittest.TestCase):
       if results is None:
         print('\tNo results')
       else:
-        print(match_result.Description(results, 4))
+        print('\n'.join('        Metre name: %s' % result for result in results))
       print('instead of')
       print('\tMetre name: %s' % metre_name)
       raise
