@@ -33,15 +33,19 @@ class Identifier(object):
     self.global_debug = []
     self.parts_debug = []
 
-  def MatchesFor(self, pattern, input_type, part_type, last_debug_line_length):
+  @staticmethod
+  def MatchesIn(pattern, known_patterns, known_regexes):
+    result_matches = known_patterns.get(pattern)
+    if result_matches:
+      return result_matches
+    for (regex, matches) in known_regexes:
+      if regex.match(pattern):
+        return matches
+
+  def MatchesFor(self, pattern, input_type, part_type, debug_indentation_depth):
     ret = {}
     # 1. Try full matches
-    full_matches = self.metrical_data.known_full_patterns.get(pattern)
-    if not full_matches:
-      for (regex, matches) in self.metrical_data.known_full_regexes:
-        if regex.match(pattern):
-          full_matches = matches
-          break
+    full_matches = self.MatchesIn(pattern, self.metrical_data.known_full_patterns, self.metrical_data.known_full_regexes)
     if full_matches:
       for (metre_name, value) in full_matches.items():
         assert value == True, pattern
@@ -50,15 +54,10 @@ class Identifier(object):
           match_type = 'exact'
         else:
           match_type = 'accidental'
-        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
+        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * debug_indentation_depth, match_type, metre_name, value))
         ret.setdefault(match_type, set()).add(metre_name)
     # 2. Try half matches
-    half_matches = self.metrical_data.known_half_patterns.get(pattern)
-    if not half_matches:
-      for (regex, matches) in self.metrical_data.known_half_regexes:
-        if regex.match(pattern):
-          half_matches = matches
-          break
+    half_matches = self.MatchesIn(pattern, self.metrical_data.known_half_patterns, self.metrical_data.known_half_regexes)
     if half_matches:
       for (metre_name, value) in half_matches.items():
         match_type = None
@@ -68,15 +67,10 @@ class Identifier(object):
           match_type = 'partial'
         else:
           match_type = 'accidental'
-        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
+        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * debug_indentation_depth, match_type, metre_name, value))
         ret.setdefault(match_type, set()).add(metre_name)
     # 3. Try pada matches
-    pada_matches = self.metrical_data.known_pada_patterns.get(pattern)
-    if not pada_matches:
-      for (regex, matches) in self.metrical_data.known_pada_regexes:
-        if regex.match(pattern):
-          pada_matches = matches
-          break
+    pada_matches = self.MatchesIn(pattern, self.metrical_data.known_pada_patterns, self.metrical_data.known_pada_regexes)
     if pada_matches:
       for (metre_name, value) in pada_matches.items():
         match_type = None
@@ -90,7 +84,7 @@ class Identifier(object):
           match_type = 'partial'
         else:
           match_type = 'accidental'
-        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
+        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * debug_indentation_depth, match_type, metre_name, value))
         ret.setdefault(match_type, set()).add(metre_name)
     return ret
 
