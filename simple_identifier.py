@@ -42,6 +42,7 @@ class SimpleIdentifier(object):
     results = self.identifier.IdentifyFromPatternLines(pattern_lines)
     self.debug_identify = (['Global:'] + self.identifier.global_debug +
                            ['Parts:'] + self.identifier.parts_debug)
+    new_results = []
     if results:
       for m in list(results.get('exact', [])) + list(results.get('partial', [])) + list(results.get('accidental', [])):
         known_pattern = metrical_data.GetPattern(m)
@@ -51,7 +52,9 @@ class SimpleIdentifier(object):
                                                 known_pattern)
           table = display.HtmlTableFromAlignment(alignment)
           self.tables.append((m, table))
-    return ('exact' in results, [m for s in results.values() for m in s])
+        new_results.append(m)
+        break
+    return ('exact' in results, new_results)
 
   def DebugRead(self):
     return '\n'.join(self.debug_read)

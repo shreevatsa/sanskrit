@@ -53,7 +53,7 @@ class KnownValues(unittest.TestCase):
         print(match_result.Description(results, 4))
       print('instead of')
       print('\tMetre name: %s' % metre_name)
-      raise self.failureException
+      raise
 
   def testFineAnustubh(self):
     """Good anuṣṭubh should be recognized."""

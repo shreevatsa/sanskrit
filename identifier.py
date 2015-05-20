@@ -33,77 +33,87 @@ class Identifier(object):
     self.global_debug = []
     self.parts_debug = []
 
+  def MatchesFor(self, pattern, input_type, part_type, last_debug_line_length):
+    ret = {}
+    # 1. Try full matches
+    full_matches = self.metrical_data.known_full_patterns.get(pattern)
+    if not full_matches:
+      for (regex, matches) in self.metrical_data.known_full_regexes:
+        if regex.match(pattern):
+          full_matches = matches
+          break
+    if full_matches:
+      for (metre_name, value) in full_matches.items():
+        assert value == True, pattern
+        match_type = None
+        if input_type == 'full' and part_type == 'full':
+          match_type = 'exact'
+        else:
+          match_type = 'accidental'
+        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
+        ret.setdefault(match_type, set()).add(metre_name)
+    # 2. Try half matches
+    half_matches = self.metrical_data.known_half_patterns.get(pattern)
+    if not half_matches:
+      for (regex, matches) in self.metrical_data.known_half_regexes:
+        if regex.match(pattern):
+          half_matches = matches
+          break
+    if half_matches:
+      for (metre_name, value) in half_matches.items():
+        match_type = None
+        if (input_type == 'full' and (part_type == 'half_1' and 1 in value or
+                                      part_type == 'half_2' and 2 in value) or
+            input_type == 'half' and part_type == 'full'):
+          match_type = 'partial'
+        else:
+          match_type = 'accidental'
+        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
+        ret.setdefault(match_type, set()).add(metre_name)
+    # 3. Try pada matches
+    pada_matches = self.metrical_data.known_pada_patterns.get(pattern)
+    if not pada_matches:
+      for (regex, matches) in self.metrical_data.known_pada_regexes:
+        if regex.match(pattern):
+          pada_matches = matches
+          break
+    if pada_matches:
+      for (metre_name, value) in pada_matches.items():
+        match_type = None
+        if (input_type == 'full' and (part_type == 'pada_1' and 1 in value or
+                                      part_type == 'pada_2' and 2 in value or
+                                      part_type == 'pada_3' and 3 in value or
+                                      part_type == 'pada_4' and 4 in value) or
+           (input_type == 'half' and (part_type == 'half_1' and (1 in value or 3 in value) or
+                                      part_type == 'half_2' and (2 in value or 4 in value))) or
+            input_type == 'pada' and part_type == 'full'):
+          match_type = 'partial'
+        else:
+          match_type = 'accidental'
+        self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
+        ret.setdefault(match_type, set()).add(metre_name)
+    return ret
+
+  @staticmethod
+  def union(d, e):
+    for key in e:
+      d.setdefault(key, set()).update(e[key])
+    return d
+
   def IdentifyFromPatternLines(self, pattern_lines, input_type='full'):
     self._Reset()
     # Too many lines => probably multiple verses.
     if len(pattern_lines) > 12:
-      self.global_debug.append('Error: too many lines in verse. '
-                               'Perhaps these are multiple verses?')
+      self.global_debug.append('Error: too many lines in verse. Perhaps these are multiple verses?')
       return {}
 
     ret = {}  # { 'exact': {..}, 'partial': {...}, 'accidental': {..} }
 
-    for (part_type, part_patterns) in _Parts(pattern_lines).items():
+    for (part_type, part_patterns) in _Parts(pattern_lines):
       for pattern in part_patterns:
         self.parts_debug.append('  %s pattern %s (%d syllables, %d mātras)' % (part_type, pattern, len(pattern), _MatraCount(pattern)))
         last_debug_line_length = len(self.parts_debug[-1])
-        # 1. Try full matches
-        full_matches = self.metrical_data.known_full_patterns.get(pattern)
-        if not full_matches:
-          for (regex, matches) in self.metrical_data.known_full_regexes:
-            if regex.match(pattern):
-              full_matches = matches
-              break
-        if full_matches:
-          for (metre_name, value) in full_matches.items():
-            assert value == True, pattern_lines
-            match_type = None
-            if input_type == 'full' and part_type == 'full':
-              match_type = 'exact'
-            else:
-              match_type = 'accidental'
-            self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
-            ret.setdefault(match_type, set()).add(metre_name)
-        # 2. Try half matches
-        half_matches = self.metrical_data.known_half_patterns.get(pattern)
-        if not half_matches:
-          for (regex, matches) in self.metrical_data.known_half_regexes:
-            if regex.match(pattern):
-              half_matches = matches
-              break
-        if half_matches:
-          for (metre_name, value) in half_matches.items():
-            match_type = None
-            if (input_type == 'full' and (part_type == 'half_1' and 1 in value or
-                                          part_type == 'half_2' and 2 in value) or
-                input_type == 'half' and part_type == 'full'):
-              match_type = 'partial'
-            else:
-              match_type = 'accidental'
-            self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
-            ret.setdefault(match_type, set()).add(metre_name)
-        # 3. Try pada matches
-        pada_matches = self.metrical_data.known_pada_patterns.get(pattern)
-        if not pada_matches:
-          for (regex, matches) in self.metrical_data.known_pada_regexes:
-            if regex.match(pattern):
-              pada_matches = matches
-              break
-        if pada_matches:
-          for (metre_name, value) in pada_matches.items():
-            match_type = None
-            if (input_type == 'full' and (part_type == 'pada_1' and 1 in value or
-                                          part_type == 'pada_2' and 2 in value or
-                                          part_type == 'pada_3' and 3 in value or
-                                          part_type == 'pada_4' and 4 in value) or
-               (input_type == 'half' and (part_type == 'half_1' and (1 in value or 3 in value) or
-                                          part_type == 'half_2' and (2 in value or 4 in value))) or
-                input_type == 'pada' and part_type == 'full'):
-              match_type = 'partial'
-            else:
-              match_type = 'accidental'
-            self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
-            ret.setdefault(match_type, set()).add(metre_name)
+        ret = self.union(ret, self.MatchesFor(pattern, input_type, part_type, last_debug_line_length))
     # Done looping over all part types.
     return ret
 
@@ -194,7 +204,7 @@ def _Parts(pattern_lines):
     'pada_3': [...],
     'pada_4': [...],
     'lines': [...] (can overlap with pada_n / half_n)
-  }
+  }.items() (ordered)
   """
   pattern_lines = [line for line in pattern_lines if _IsPattern(line)]
   full_pattern = ''.join(pattern_lines)
@@ -230,7 +240,16 @@ def _Parts(pattern_lines):
   if n not in [1, 2, 4]:
     # When n is 1, 2, or 4, each line already accounted for as full/half/pada.
     ret['lines'] = pattern_lines
-  return ret
+  return [
+           ('full', ret.get('full', set())),
+           ('half_1', ret.get('half_1', set())),
+           ('half_2', ret.get('half_2', set())),
+           ('pada_1', ret.get('pada_1', set())),
+           ('pada_2', ret.get('pada_2', set())),
+           ('pada_3', ret.get('pada_3', set())),
+           ('pada_3', ret.get('pada_4', set())),
+           ('lines', ret.get('lines', set()))
+         ]
 
 def _MatraCount(pattern):
   return sum(2 if c == 'G' else 1 for c in pattern)
