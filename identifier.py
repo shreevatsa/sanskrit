@@ -31,54 +31,6 @@ class Identifier(object):
     self.global_debug = []
     self.parts_debug = []
 
-  @staticmethod
-  def _MatchesIn(pattern, known_patterns, known_regexes):
-    if pattern in known_patterns:
-      return known_patterns[pattern]
-    for (regex, matches) in known_regexes:
-      if regex.match(pattern):
-        return matches
-    return {}
-
-  @staticmethod
-  def _MatchTypeFull(input_type, part_type):
-    if input_type == 'full' and part_type == 'full':
-      return 'exact'
-    else:
-      return 'accidental'
-
-  @staticmethod
-  def _MatchTypeHalf(input_type, part_type, value):
-    if (input_type == 'full' and (part_type == 'half_1' and 1 in value or
-                                  part_type == 'half_2' and 2 in value) or
-        input_type == 'half' and part_type == 'full'):
-      return 'partial'
-    else:
-      return 'accidental'
-
-  @staticmethod
-  def _MatchTypePada(input_type, part_type, value):
-    if (input_type == 'full' and (part_type == 'pada_1' and 1 in value or
-                                  part_type == 'pada_2' and 2 in value or
-                                  part_type == 'pada_3' and 3 in value or
-                                  part_type == 'pada_4' and 4 in value) or
-       (input_type == 'half' and (part_type == 'half_1' and (1 in value or 3 in value) or
-                                  part_type == 'half_2' and (2 in value or 4 in value))) or
-        input_type == 'pada' and part_type == 'full'):
-      return 'partial'
-    else:
-      return 'accidental'
-
-
-  def _MatchesFor(self, pattern, input_type, part_type, debug_indentation_depth):
-    ret = {
-      'full': self._MatchesIn(pattern, self.metrical_data.known_full_patterns, self.metrical_data.known_full_regexes),
-      'half': self._MatchesIn(pattern, self.metrical_data.known_half_patterns, self.metrical_data.known_half_regexes),
-      'pada': self._MatchesIn(pattern, self.metrical_data.known_pada_patterns, self.metrical_data.known_pada_regexes)
-    }
-    return ret
-
-
   def IdentifyFromPatternLines(self, pattern_lines, input_type='full'):
     self._Reset()
     # Too many lines => probably multiple verses.
@@ -96,19 +48,65 @@ class Identifier(object):
         # Loop over full, half, pada
         for (metre_name, value) in matches_for_part.get('full', {}).items():
           assert value == True
-          match_type = self._MatchTypeFull(input_type, part_type)
+          match_type = _MatchTypeFull(input_type, part_type)
           self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
           ret.setdefault(match_type, set()).add(metre_name)
         for (metre_name, value) in matches_for_part.get('half', {}).items():
-          match_type = self._MatchTypeHalf(input_type, part_type, value)
+          match_type = _MatchTypeHalf(input_type, part_type, value)
           self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
           ret.setdefault(match_type, set()).add(metre_name)
         for (metre_name, value) in matches_for_part.get('pada', {}).items():
-          match_type = self._MatchTypePada(input_type, part_type, value)
+          match_type = _MatchTypePada(input_type, part_type, value)
           self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
           ret.setdefault(match_type, set()).add(metre_name)
     # Done looping over all part types.
     return ret
+
+  def _MatchesFor(self, pattern, input_type, part_type, debug_indentation_depth):
+    ret = {
+      'full': _MatchesIn(pattern, self.metrical_data.known_full_patterns, self.metrical_data.known_full_regexes),
+      'half': _MatchesIn(pattern, self.metrical_data.known_half_patterns, self.metrical_data.known_half_regexes),
+      'pada': _MatchesIn(pattern, self.metrical_data.known_pada_patterns, self.metrical_data.known_pada_regexes)
+    }
+    return ret
+
+
+def _MatchesIn(pattern, known_patterns, known_regexes):
+  if pattern in known_patterns:
+    return known_patterns[pattern]
+  for (regex, matches) in known_regexes:
+    if regex.match(pattern):
+      return matches
+  return {}
+
+
+def _MatchTypeFull(input_type, part_type):
+  if input_type == 'full' and part_type == 'full':
+    return 'exact'
+  else:
+    return 'accidental'
+
+
+def _MatchTypeHalf(input_type, part_type, value):
+  if (input_type == 'full' and (part_type == 'half_1' and 1 in value or
+                                part_type == 'half_2' and 2 in value) or
+      input_type == 'half' and part_type == 'full'):
+    return 'partial'
+  else:
+    return 'accidental'
+
+
+def _MatchTypePada(input_type, part_type, value):
+  if (input_type == 'full' and (part_type == 'pada_1' and 1 in value or
+                                part_type == 'pada_2' and 2 in value or
+                                part_type == 'pada_3' and 3 in value or
+                                part_type == 'pada_4' and 4 in value) or
+     (input_type == 'half' and (part_type == 'half_1' and (1 in value or 3 in value) or
+                                part_type == 'half_2' and (2 in value or 4 in value))) or
+      input_type == 'pada' and part_type == 'full'):
+    return 'partial'
+  else:
+    return 'accidental'
 
 
 def _SplitHalves(full_pattern):
