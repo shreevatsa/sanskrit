@@ -7,7 +7,6 @@ from __future__ import unicode_literals
 
 import cgi
 import codecs
-import collections
 
 import webapp2
 
@@ -28,10 +27,6 @@ def InputForm(default=''):
 
 def StatsTable():
   return codecs.open('texts/gretil_stats/stats_table.html', 'r', 'utf-8').read()
-
-
-def _UniqList(expr):
-  return list(collections.OrderedDict.fromkeys(expr))
 
 
 def _DisplayName(metre_name):
