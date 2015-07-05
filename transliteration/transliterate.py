@@ -117,6 +117,10 @@ def _FixBadDevanagari(text):
   text = text.replace('ॊ', 'ो')
   text = text.replace('ळ', 'ल')
   text = text.replace('ॐ', 'ओं')
+  text = text.replace(u'\u1CF2', 'ः')  # VEDIC SIGN ARDHAVISARGA
+  text = text.replace(u'\u1CF3', 'ः')  # VEDIC SIGN ROTATED ARDHAVISARGA
+  text = text.replace(u'\u1CF5', 'ः')  # VEDIC SIGN JIHVAMULIYA
+  text = text.replace(u'\u1CF6', 'ः')  # VEDIC SIGN UPADHMANIYA
   return text
 
 
