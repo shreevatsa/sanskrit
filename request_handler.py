@@ -65,66 +65,42 @@ class IdentifyPage(webapp2.RequestHandler):
     identifier = common_identifier
     identification = identifier.IdentifyFromLines(input_verse.split('\n'))
 
-    self.response.write('<html>\n')
-    self.response.write('<head><style>\n')
-    self.response.write('abbr {border-bottom: 1px dotted black; color:red;}\n')
-    self.response.write('.sylL { } \n')
-    self.response.write('.sylG { font-weight:bold; } \n')
-    self.response.write('.syl- { } \n')
-    self.response.write('</style></head>\n')
-
-    self.response.write('<body>\n')
-    self.response.write('<p>')
-    self.response.write(InputForm(input_verse))
-    self.response.write('</p>')
-
+    full_match = None
+    results = None
+    first_result_display_name = None
+    result_display_names = None
     if identification and identification[1]:
       (full_match, results) = identification
-      self.response.write('<p>')
       if full_match:
-        self.response.write('The metre is: ')
-        self.response.write('%s.' % _DisplayName(results[0]))
+        first_result_display_name = _DisplayName(results[0])
       else:
-        self.response.write('The input does not perfectly match '
-                            'any known metre. </p>'
-                            '<p>Based on partial matches, it may be:</p>')
-        self.response.write('<ul>')
+        result_display_names = []
         for m in results:
-          self.response.write('<li>%s</li>' % _DisplayName(m))
-        self.response.write('</ul>')
-    else:
-      self.response.write('<p>No metre recognized.</p>')
+          result_display_names.append(_DisplayName(m))
 
-    self.response.write('\n'.join(['<hr/>',
-                                   '<p><i>Debugging output:</i></p>',
-                                   '<details>',
-                                   '<summary>Reading the input</summary>',
-                                   '<pre>',
-                                   identifier.DebugRead(),
-                                   '</pre>',
-                                   '</details>',
-                                   '<details>',
-                                   '<summary>Identifying the metre</summary>',
-                                   '<pre>',
-                                   identifier.DebugIdentify(),
-                                   '</pre>',
-                                   '</details>']))
-    self.response.write('\n')
-
+    metre_blocks = []
     if identifier.tables:
-      self.response.write('<hr/><h2>About the results</h2>')
       for (name, table) in identifier.tables:
-        self.response.write('<p>' + MetreHtmlDescription(name))
-        if not full_match:
-          self.response.write('<p>The input verse imperfectly matches %s '
-                              '(note deviations in red):</p>'
-                              % _DisplayName(name))
-        else:
-          self.response.write('<p>The input verse matches %s:</p>'
-                              % _DisplayName(name))
-        for line in table:
-          self.response.write(line)
-    self.response.write('</body></html>')
+        metre_block = {
+          'metre_description' : MetreHtmlDescription(name),
+          'metre_name': _DisplayName(name),
+          'block': table,
+        }
+        metre_blocks.append(metre_block)
+
+
+    out = template.render('templates/results.html',
+                          {
+                            'input_form' : InputForm(input_verse),
+                            'results': results,
+                            'full_match': full_match,
+                            'first_result_display_name': first_result_display_name,
+                            'result_display_names': result_display_names,
+                            'debug_read': identifier.DebugRead(),
+                            'debug_identify': identifier.DebugIdentify(),
+                            'metre_blocks': metre_blocks,
+                          })
+    self.response.write(out)
 
 
 # Handles all requests to sanskritmetres.appspot.com

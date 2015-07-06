@@ -1,0 +1,66 @@
+<html>
+<head><style>
+abbr {border-bottom: 1px dotted black; color:red;}
+.sylL { }
+.sylG { font-weight:bold; }
+.syl- { }
+</style></head>
+<body>
+
+{% autoescape off %}
+
+<p>
+{{ input_form|safe }}
+</p>
+
+{% if results %}
+    {% if full_match %}
+      <p>The metre is: {{first_result_display_name|safe}}</p>
+    {% else %}
+      <p>The input does <strong><font size="+2">not</font></strong> perfectly match any known metre.</p>
+      <p>Based on partial matches, it may be:</p>
+      <ul>
+          {% for m in result_display_names %}
+          <li>{{ m }}</li>
+          {% endfor %}
+      </ul>
+    {% endif %}
+{% else %}
+    <p> No metre recognized.</p>
+{% endif %}
+
+<hr/>
+<p><i>Debugging output:</i></p>
+<details>
+<summary>Reading the input</summary>
+<pre>
+{{ debug_read }}
+</pre>
+</details>
+<details>
+<summary>Identifying the metre</summary>
+<pre>
+{{ debug_identify }}
+</pre>
+</details>
+
+{% if metre_blocks %}
+  <hr/>
+  <h2>About the results</h2>
+  {% for metre_block in metre_blocks %}
+    <p>{{ metre_block.metre_description }}</p>
+    {% if full_match %}
+      <p>The input verse matches {{ metre_block.metre_name }}:</p>
+    {% else %}
+      <p>The input verse imperfectly matches {{ metre_block.metre_name }} (note deviations in red):</p>
+    {% endif %}
+    {% for line in metre_block.block %}
+      {{ line }}
+    {% endfor %}
+  {% endfor %}
+{% endif %}
+
+{% endautoescape %}
+
+</body>
+</html>
