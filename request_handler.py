@@ -89,6 +89,16 @@ class IdentifyPage(webapp2.RequestHandler):
         metre_blocks.append(metre_block)
 
 
+    bug_title = 'User feedback'
+    bug_body = '''
+I have an issue to report about the results for the following input:
+```
+%s
+```
+
+The issue is:
+[Please input the issue here]
+''' % input_verse
     out = template.render('templates/results.html',
                           {
                             'input_form' : InputForm(input_verse),
@@ -99,6 +109,8 @@ class IdentifyPage(webapp2.RequestHandler):
                             'debug_read': identifier.DebugRead(),
                             'debug_identify': identifier.DebugIdentify(),
                             'metre_blocks': metre_blocks,
+                            'bug_title': bug_title,
+                            'bug_body': bug_body,
                           })
     self.response.write(out)
 
