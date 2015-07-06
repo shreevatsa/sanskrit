@@ -9,6 +9,7 @@ import cgi
 import codecs
 
 import webapp2
+from google.appengine.ext.webapp import template
 
 from data.metrical_data import HtmlDescription as MetreHtmlDescription
 import simple_identifier
@@ -35,24 +36,27 @@ def _DisplayName(metre_name):
   return '<font size="+2">%s</font>' % both_names
 
 
-MAIN_PAGE_HTML = open('main_page_template.html').read()
-MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${INPUT_FORM}', InputForm())
-MAIN_PAGE_HTML = MAIN_PAGE_HTML.replace('${METRE_STATISTICS}', StatsTable())
-
-
 common_identifier = simple_identifier.SimpleIdentifier()
 
 
 class MainPage(webapp2.RequestHandler):
 
   def get(self):
-    self.response.write(MAIN_PAGE_HTML)
+    self.response.write(template.render('templates/main_page.html',
+                                        {
+                                          'INPUT_FORM': InputForm(),
+                                          'METRE_STATISTICS' : StatsTable()
+                                        }))
 
 
 class IdentifyPage(webapp2.RequestHandler):
 
   def get(self):
-    self.response.write(MAIN_PAGE_HTML)
+    self.response.write(template.render('templates/main_page.html',
+                                        {
+                                          'INPUT_FORM': InputForm(),
+                                          'METRE_STATISTICS' : StatsTable()
+                                        }))
 
   def post(self):
     """What to do with the posted input string (verse)."""
