@@ -7,6 +7,11 @@ Web version currently serving at http://sanskritmetres.appspot.com/
 
 Attempts to identifies metre of Sanskrit verse.
 
+--------------------------------------------------------------------------------
+
+(Everything below is out of date. I need to rewrite this.)
+
+
 (Data, Input) → Read–Scan–Identify–Display
 
 Given a verse,
