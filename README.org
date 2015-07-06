@@ -1,0 +1,204 @@
+* What
+
+Code to identify the metre of a Sanskrit verse.
+
+Web version currently serving at http://sanskritmetres.appspot.com/
+
+Can also be used as a Python library.
+
+** Examples
+
+In the web version, try the following inputs.
+
+#+BEGIN_EXAMPLE
+kāṣṭhād agnir jāyate mathya-mānād-
+bhūmis toyaṃ khanya-mānā dadāti|
+sotsāhānāṃ nāsty asādhyaṃ narāṇāṃ
+mārgārabdhāḥ sarva-yatnāḥ phalanti||
+#+END_EXAMPLE
+
+or (note that this one intentionally has many typos):
+
+#+BEGIN_EXAMPLE
+काष्ठाद् अग्नि जायते
+मथ्यमानाद्भूमिस्तोय खन्यमाना ददाति।
+सोत्साहानां नास्त्यसाध्यं
+नराणां मार्गारब्धाः सर्वयत्नाः फलन्ति॥
+#+END_EXAMPLE
+
+If using as a library (TODO: document this better):
+
+#+BEGIN_SRC python
+import simple_identifier
+
+verse_lines = r'''kāṣṭhād agnir jāyate mathya-mānād-
+bhūmis toyaṃ khanya-mānā dadāti|
+sotsāhānāṃ nāsty asādhyaṃ narāṇāṃ
+mārgārabdhāḥ sarva-yatnāḥ phalanti||'''.splitlines()
+
+identifier = simple_identifier.SimpleIdentifier()
+match_results = identifier.IdentifyFromLines(verse_lines)
+#+END_SRC
+
+
+* How
+
+The design of the program is as follows.
+
+** Transform the input (Read, Scan)
+
+   The input passes through the following representations.
+
+  1. The raw input
+
+     For the web form, whatever is typed into the textarea. Consider the examples above.
+
+  2. The input in slp1
+
+     Whatever the input script (transliteration scheme) used, the input is cleaned up and "read" into a limited Sanskrit alphabet (slp1). For instance, the examples above are read as the following (without the spaces, which have only been added here for clarity):
+     #+BEGIN_EXAMPLE
+     kAzWAd agnir jAyate maTyamAnAd
+     BUmis toyaM KanyamAnA dadAti
+     sotsAhAnAM nAsty asADyaM narARAM
+     mArgArabDAH sarvayatnAH Palanti
+     #+END_EXAMPLE
+
+     and
+
+     #+BEGIN_EXAMPLE
+     kAzWAd agni jAyate
+     maTyamAnAdBUmistoya KanyamAnA dadAti
+     sotsAhAnAM nAstyasADyaM
+     narARAM mArgArabDAH sarvayatnAH Palanti
+     #+END_EXAMPLE
+
+     respectively.
+
+  3. The metrical signature of the input
+
+     We next [[https://en.wikipedia.org/wiki/Scansion][scan]] the input, to reduce it to a pattern of /laghu/ (denoted L) and /guru/ (denoted G) syllables.
+
+     Our two examples above are scanned into the lists:
+
+     #+BEGIN_EXAMPLE
+     ['GGGGGLGGLGG',
+      'GGGGGLGGLGL',
+      'GGGGGLGGLGG',
+      'GGGGGLGGLGL']
+     #+END_EXAMPLE
+
+     and
+
+     #+BEGIN_EXAMPLE
+     ['GGGLGLG',
+      'GLGGGGGLGLGGLGL',
+      'GGGGGLGG',
+      'LGGGGGGGLGGLGL']
+     #+END_EXAMPLE
+
+     respectively.
+
+** Identify
+
+   Finally, we compare this metrical signature (or "pattern lines") against a database of known patterns.
+
+   For example, in our database have the information that *Śālinī* is a /sama-vṛtta/ metre consisting of 4 lines (/pāda/-s / quarters) each having the pattern
+
+   #+BEGIN_EXAMPLE
+   GGGG—GLGGLGG
+   #+END_EXAMPLE
+
+   Thus Śālinī is recognized as the (probable, best-guess) metre of the input verse.
+
+   Note that in the second example, even though no line matches a line of Śālinī, the program is still clever enough to detect a match.
+
+   TODO: Describe the matching heuristics in more detail here.
+
+** Display
+
+   The detected metre is displayed, along with how the verse fits the metre, and information about the metre.
+
+   TODO: Describe this.
+
+--------------------------------------------------------------------------------
+(Everything below this line needs even more rewriting.)
+
+* Design choices
+
+  Explanation of some of them.
+
+  1. The reason for using verse *lines* as input, rather than a single blob of
+     text as a string, is to improve detection of partial matches: if there are
+     metrical errors in the verse, but some lines are in some metre, then that
+     metre could still be recognized.
+
+     (Even when the line breaks aren't correctly given, we detect partial
+     matches by breaking the verse into halves and quarters.)
+
+  2. Similarly, the reason for returning a list of results is that we sometimes
+     have multiple metres guessed, such as when different lines are in different
+     metres.
+
+* Code organization
+
+See deps.png for the dependency graph.
+
+** Read
+
+Covered by handle_input.py and its dependencies.
+
+Detecting the transliteration format of the input, removing junk characters that
+are not part of the verse, and transliterating the input to SLP1 (the encoding
+we use internally).
+
+** Scan
+
+Determining the pattern of gurus and laghus.
+
+The functions in scan.py take this cleaned-up verse, and convert it to a pattern
+of laghus and gurus. A "pattern" means a sequence over the alphabet {'L', 'G'}.
+
+** Identify
+
+   Identification algorithm: Given a verse,
+
+        1. Look for the full verse's pattern in ~known_metre_patterns~.
+
+        2. Loop through ~known_metre_regexes~ and see if any match the full
+           verses's pattern.
+
+        3. Look in ~known_partial_patterns~ (then ~known_partial_regexes~) for:
+            -- whole verse,
+            -- each line,
+            -- each half,
+            -- each quarter.
+
+        4. [TODO/Maybe] Look for substrings, find closest match, etc.?
+           Would have to restrict to the popular metres on the web version.
+
+** Metrical data
+
+    * A "pattern" means a sequence over the alphabet {'L', 'G'}.
+    * A "regex" (for us) is a regular expression that matches some patterns.
+
+    (TODO: This is obsolete.)
+    We use the following data structures:
+    * ~known_metre_patterns~, a dict mapping a pattern to a MatchResult.
+    * ~known_metre_regexes~, a list of pairs (regex, MatchResult).
+    * ~known_partial_patterns~, a dict mapping a pattern to ~MatchResult~-s.
+    * ~known_partial_regexes~, a list of pairs (regex, MatchResult).
+
+     A MatchResult is usually arrived at by looking at a pattern (or list of
+     patterns), and can be seen as a tuple (metre_name, match_type):
+
+     metre_name - name of the metre,
+     match_type - used to distinguish between matching one pāda (quarter) or one
+                  ardha (half) of a metre. Or, in ardha-sama metres, it can
+                  distinguish between odd and even pādas.
+
+** Display
+
+Display the list of metres found as possible guesses. For vrtta metres, we also
+try to "align" the input verse to the metre, so that it's more clear where to
+break it, etc. (And when the input verse has metrical errors, it's clear what
+they are.)
