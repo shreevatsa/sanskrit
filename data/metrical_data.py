@@ -58,7 +58,7 @@ def _AddPatternForMetre(metre_name, pada_patterns):
       Print('Mismatch for %s' % metre_name)
       Print(pattern_for_metre[metre_name])
       Print('   vs   ')
-      Print([clean] * 4)
+      Print(pada_patterns)
       assert False
     # Print('Not adding duplicate as already present: %s' % metre_name)
     return

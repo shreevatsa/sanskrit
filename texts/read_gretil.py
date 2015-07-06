@@ -133,7 +133,7 @@ if __name__ == '__main__':
   identifier = simple_identifier.SimpleIdentifier()
   table = {}
   for (verse_number, verse) in enumerate(verses):
-    verse = [l.strip() for l in verse]
+    verse = [verse_line.strip() for verse_line in verse]
     ok_and_results = identifier.IdentifyFromLines(verse)
     if not ok_and_results:      # None for lines that contain no syllables
       continue
