@@ -7,40 +7,10 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import io
-import logging
-
 import read.filters
 import slp1
 from transliteration import transliterate
-
-
-def call_with_log_capture(function, *args, **kwargs):
-  """Call the function with args and kwargs, and return both its result and logging."""
-  logger = logging.getLogger()
-  original_logger_level = logger.level
-  original_handler_levels = [handler.level for handler in logger.handlers]
-  for handler in logger.handlers:
-    handler.setLevel(max(handler.level, original_logger_level))
-  logger.setLevel(logging.DEBUG)
-  log_capturer_stream = io.StringIO()
-  log_capture_handler = logging.StreamHandler(log_capturer_stream)
-  log_capture_handler.setLevel(logging.DEBUG)
-  logger.addHandler(log_capture_handler)
-
-  return_value = function(*args, **kwargs)
-
-  log_contents = log_capturer_stream.getvalue()
-  log_capturer_stream.close()
-  logger.removeHandler(log_capture_handler)
-  for (i, handler) in enumerate(logger.handlers):
-    handler.setLevel(original_handler_levels[i])
-  logger.setLevel(original_logger_level)
-
-  if log_contents:
-    assert log_contents[-1] == '\n'
-    log_contents = log_contents[:-1]
-  return (return_value, log_contents)
+from utils.utils import call_with_log_capture
 
 
 class InputHandler(object):
@@ -54,9 +24,7 @@ class InputHandler(object):
     pass_through = ' -?'
     ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
     (text, rejects) = transliterate.DetectAndTransliterate(orig_text, pass_through, ignore)
-
     (_, debug) = call_with_log_capture(read.filters.process_rejected_characters, orig_text, rejects)
-
     self.debug_output.append(debug)
     clean_text = ''.join(c for c in text if c not in pass_through)
     assert all(c in slp1.ALPHABET for c in clean_text), clean_text
