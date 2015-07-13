@@ -18,8 +18,8 @@ import os.path
 import re
 import tempfile
 
-import handle_input
 import print_utils
+import read.filters
 import simple_identifier
 
 
@@ -115,14 +115,14 @@ if __name__ == '__main__':
   seen_separators = 0
   for l in codecs.open(input_file_name, 'r', 'utf-8'):
     assert isinstance(l, unicode)
-    l = handle_input.RemoveHTML(l)
+    l = read.filters.process_html(l)
     l = l.strip()
     if IgnoreLine(l):
       continue
     if seen_separators < 2 and re.search('<![-]{50,}->', l):
       seen_separators += 1
     elif seen_separators == 2 and not l.startswith('<'):
-      (l, n) = handle_input.RemoveVerseNumber(l)
+      (l, n) =  read.filters.remove_verse_number(l)
       lines.append(l)
       if n:
         lines.append('')

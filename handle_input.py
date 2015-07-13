@@ -8,23 +8,11 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import logging
-import re
 import unicodedata
 
+import read.filters
 import slp1
 from transliteration import transliterate
-
-
-def RemoveHTML(text):
-  text = re.sub('<BR>', '', text)
-  text = re.sub('<br>', '', text)
-  text = re.sub('&nbsp;', ' ', text)
-  return text.strip()
-
-
-def RemoveVerseNumber(text):
-  # return re.subn(r'[/|]{2}[ \d.a-zA-z}_*\-]*[/|]{2}$', '', text)
-  return re.subn(r'(॥|([|।/])\2).*', '', text)
 
 
 def _UnicodeNotation(c):
@@ -82,8 +70,8 @@ class InputHandler(object):
     for line in lines:
       line = NoControlCharacters(line.strip())
       line = NFKC(line)
-      line = RemoveHTML(line).strip()
-      (line, n) = RemoveVerseNumber(line)
+      line = read.filters.process_html(line).strip()
+      (line, n) =  read.filters.remove_verse_number(line)
       (line, clean_line) = self.TransliterateAndClean(line)
       if not clean_line:
         cleaned_lines.append('')
