@@ -8,6 +8,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import re
+import unicodedata
 
 
 def process_html_line_breaks(text):
@@ -39,3 +40,22 @@ def remove_verse_number(line):
     if count:
       return (line, count)
   return (line, 0)
+
+
+def process_rejected_characters(orig_text, rejects):
+  """Debug output about rejected characters, with their unicode codepoints and names."""
+  def _unicode_notation(char):
+    """The U+92ef etc. notation for a character."""
+    assert isinstance(char, unicode)
+    return '[U+%04x]' % ord(char)
+  recognized_text = ''.join(_unicode_notation(c) if c in rejects else c
+                            for c in orig_text)
+  if rejects:
+    rejects = [(c, _unicode_notation(c), unicodedata.name(c, 'Unknown'))
+               for c in rejects]
+    rejects = ', '.join('%s (%s %s)' % reject for reject in rejects)
+    debug_log = '''Unknown characters are ignored: %s
+in input
+%s''' % (rejects, recognized_text)
+    # logging.debug(debug_log)
+    return debug_log

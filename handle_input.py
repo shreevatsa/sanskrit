@@ -15,11 +15,6 @@ import slp1
 from transliteration import transliterate
 
 
-def _UnicodeNotation(c):
-  assert isinstance(c, unicode)
-  return '[U+%04x]' % ord(c)
-
-
 class InputHandler(object):
   """Class that takes arbitrary input and returns list of clean lines."""
 
@@ -32,15 +27,8 @@ class InputHandler(object):
     ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
     (text, rejects) = transliterate.DetectAndTransliterate(orig_text,
                                                            pass_through, ignore)
-    recognized_text = ''.join(_UnicodeNotation(c) if c in rejects else c
-                              for c in orig_text)
-    if rejects:
-      self.debug_output.append('Unknown characters are ignored: %s' % (
-          ', '.join('%s (%s %s)' %
-                    (c, _UnicodeNotation(c), unicodedata.name(c, 'Unknown'))
-                    for c in rejects)))
-      self.debug_output.append('in input')
-      self.debug_output.append(recognized_text)
+    debug_rejected = read.filters.process_rejected_characters(orig_text, rejects)
+    self.debug_output.append(debug_rejected)
     clean_text = ''.join(c for c in text if c not in pass_through)
     assert all(c in slp1.ALPHABET for c in clean_text), clean_text
     return (text, clean_text)
@@ -71,7 +59,7 @@ class InputHandler(object):
       line = NoControlCharacters(line.strip())
       line = NFKC(line)
       line = read.filters.process_html(line).strip()
-      (line, n) =  read.filters.remove_verse_number(line)
+      (line, n) = read.filters.remove_verse_number(line)
       (line, clean_line) = self.TransliterateAndClean(line)
       if not clean_line:
         cleaned_lines.append('')
