@@ -35,7 +35,6 @@ class SimpleIdentifier(object):
     logging.info('Got input:\n%s', '\n'.join(input_lines))
     input_handler = handle_input.InputHandler()
     ((display_lines, cleaned_lines), debug_read) = call_with_log_capture(input_handler.CleanLines, input_lines)
-    self.debug_read.extend(input_handler.debug_output)
     self.debug_read.append(debug_read)
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:

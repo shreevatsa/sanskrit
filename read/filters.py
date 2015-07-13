@@ -55,7 +55,7 @@ def process_rejected_characters(orig_text, rejects):
   text_read_as = ''.join(_unicode_notation(c) if c in rejects else c for c in orig_text)
   rejects = [(c, _unicode_notation(c), unicodedata.name(c, 'Unknown')) for c in rejects]
   rejects = ', '.join('%s (%s %s)' % reject for reject in rejects)
-  logging.debug('Unknown characters are ignored: %s\nin input\n%s', rejects, text_read_as)
+  logging.debug('Unknown characters are ignored: %s\nin input\n```%s```', rejects, text_read_as)
 
 
 def normalize_nfkc(text):

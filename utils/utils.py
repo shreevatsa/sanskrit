@@ -14,6 +14,7 @@ import logging
 def call_with_log_capture(function, *args, **kwargs):
   """Call the function with args and kwargs, and return both its result and logging."""
   logger = logging.getLogger()
+  # NOTE: logger.level, logger.handlers, handler.level are all undocumented API.
   original_logger_level = logger.level
   original_handler_levels = [handler.level for handler in logger.handlers]
   for handler in logger.handlers:
