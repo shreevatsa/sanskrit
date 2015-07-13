@@ -17,6 +17,7 @@ from transliteration import transliterate
 
 
 def call_with_log_capture(function, *args, **kwargs):
+  """Call the function with args and kwargs, and return both its result and logging."""
   logger = logging.getLogger()
   original_logger_level = logger.level
   original_handler_levels = [handler.level for handler in logger.handlers]
@@ -56,8 +57,9 @@ class InputHandler(object):
     (text, rejects) = transliterate.DetectAndTransliterate(orig_text,
                                                            pass_through, ignore)
 
-    (returned_debug, captured_debug) = call_with_log_capture(read.filters.process_rejected_characters, orig_text, rejects)
-    assert captured_debug == returned_debug, ('\n#%s#\n vs \n#%s#\n' % (returned_debug, captured_debug))
+    (returned_debug, captured_debug) = call_with_log_capture(
+        read.filters.process_rejected_characters, orig_text, rejects)
+    assert captured_debug == returned_debug, ('\n#%s# vs #%s#\n' % (returned_debug, captured_debug))
 
     self.debug_output.append(captured_debug)
     clean_text = ''.join(c for c in text if c not in pass_through)
