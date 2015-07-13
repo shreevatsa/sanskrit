@@ -9,7 +9,6 @@ from __future__ import unicode_literals
 
 import io
 import logging
-import unicodedata
 
 import read.filters
 import slp1
@@ -65,21 +64,12 @@ class InputHandler(object):
 
   def CleanLines(self, lines):
     """Clean up the input lines (strip junk, transliterate, break verses)."""
-    # These two functions are here so that they can add to self.debug_output
-    def NoControlCharacters(line):
-      line = line.replace('\t', ' ')  # a tab is a control character too
-      without_control = ''.join(c for c in line if
-                                not unicodedata.category(c).startswith('C'))
-      if line != without_control:
-        self.debug_output.append('Removed control characters in')
-        self.debug_output.append('    %s' % line)
-        self.debug_output.append('to get')
-        self.debug_output.append('    %s' % without_control)
-      return without_control
     cleaned_lines = []
     display_lines = []
     for line in lines:
-      line = NoControlCharacters(line.strip())
+      line = line.strip()
+      (line, debug) = call_with_log_capture(read.filters.remove_control_characters, line)
+      self.debug_output.append(debug)
       (line, debug) = call_with_log_capture(read.filters.normalize_nfkc, line)
       self.debug_output.append(debug)
       line = read.filters.process_html(line).strip()
