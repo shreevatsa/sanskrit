@@ -29,7 +29,7 @@ class InputHandler(object):
     (text, rejects) = transliterate.DetectAndTransliterate(orig_text,
                                                            pass_through, ignore)
 
-    logger = logging.getLogger('read.filters')
+    logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     log_capturer_stream = io.StringIO()
     log_capture_handler = logging.StreamHandler(log_capturer_stream)

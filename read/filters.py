@@ -59,6 +59,5 @@ def process_rejected_characters(orig_text, rejects):
     debug_log = '''Unknown characters are ignored: %s
 in input
 %s''' % (rejects, recognized_text)
-    logger = logging.getLogger('read.filters')
-    logger.debug(debug_log)
+    logging.debug(debug_log)
   return debug_log
