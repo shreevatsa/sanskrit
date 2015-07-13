@@ -54,14 +54,11 @@ class InputHandler(object):
     """Transliterates text to SLP1, removing all other characters."""
     pass_through = ' -?'
     ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-    (text, rejects) = transliterate.DetectAndTransliterate(orig_text,
-                                                           pass_through, ignore)
+    (text, rejects) = transliterate.DetectAndTransliterate(orig_text, pass_through, ignore)
 
-    (returned_debug, captured_debug) = call_with_log_capture(
-        read.filters.process_rejected_characters, orig_text, rejects)
-    assert captured_debug == returned_debug, ('\n#%s# vs #%s#\n' % (returned_debug, captured_debug))
+    (_, debug) = call_with_log_capture(read.filters.process_rejected_characters, orig_text, rejects)
 
-    self.debug_output.append(captured_debug)
+    self.debug_output.append(debug)
     clean_text = ''.join(c for c in text if c not in pass_through)
     assert all(c in slp1.ALPHABET for c in clean_text), clean_text
     return (text, clean_text)
@@ -69,13 +66,6 @@ class InputHandler(object):
   def CleanLines(self, lines):
     """Clean up the input lines (strip junk, transliterate, break verses)."""
     # These two functions are here so that they can add to self.debug_output
-    def NFKC(line):
-      nfkc = unicodedata.normalize('NFKC', line)
-      if line != nfkc:
-        self.debug_output.append('%s normalized to %s' % (line, nfkc))
-      if nfkc != unicodedata.normalize('NFC', line):
-        logging.warning('NFC and NFKC normalizations differ for %s', line)
-      return nfkc
     def NoControlCharacters(line):
       line = line.replace('\t', ' ')  # a tab is a control character too
       without_control = ''.join(c for c in line if
@@ -90,7 +80,8 @@ class InputHandler(object):
     display_lines = []
     for line in lines:
       line = NoControlCharacters(line.strip())
-      line = NFKC(line)
+      (line, debug) = call_with_log_capture(read.filters.normalize_nfkc, line)
+      self.debug_output.append(debug)
       line = read.filters.process_html(line).strip()
       (line, n) = read.filters.remove_verse_number(line)
       (line, clean_line) = self._transliterate_and_clean(line)
