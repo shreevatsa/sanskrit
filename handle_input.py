@@ -16,6 +16,33 @@ import slp1
 from transliteration import transliterate
 
 
+def call_with_log_capture(function, *args, **kwargs):
+  logger = logging.getLogger()
+  original_logger_level = logger.level
+  original_handler_levels = [handler.level for handler in logger.handlers]
+  for handler in logger.handlers:
+    handler.setLevel(max(handler.level, original_logger_level))
+  logger.setLevel(logging.DEBUG)
+  log_capturer_stream = io.StringIO()
+  log_capture_handler = logging.StreamHandler(log_capturer_stream)
+  log_capture_handler.setLevel(logging.DEBUG)
+  logger.addHandler(log_capture_handler)
+
+  return_value = function(*args, **kwargs)
+
+  log_contents = log_capturer_stream.getvalue()
+  log_capturer_stream.close()
+  logger.removeHandler(log_capture_handler)
+  for (i, handler) in enumerate(logger.handlers):
+    handler.setLevel(original_handler_levels[i])
+  logger.setLevel(original_logger_level)
+
+  if log_contents:
+    assert log_contents[-1] == '\n'
+    log_contents = log_contents[:-1]
+  return (return_value, log_contents)
+
+
 class InputHandler(object):
   """Class that takes arbitrary input and returns list of clean lines."""
 
@@ -29,26 +56,10 @@ class InputHandler(object):
     (text, rejects) = transliterate.DetectAndTransliterate(orig_text,
                                                            pass_through, ignore)
 
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    log_capturer_stream = io.StringIO()
-    log_capture_handler = logging.StreamHandler(log_capturer_stream)
-    log_capture_handler.setLevel(logging.DEBUG)
-    logger.addHandler(log_capture_handler)
+    (returned_debug, captured_debug) = call_with_log_capture(read.filters.process_rejected_characters, orig_text, rejects)
+    assert captured_debug == returned_debug, ('\n#%s#\n vs \n#%s#\n' % (returned_debug, captured_debug))
 
-    debug_rejected = read.filters.process_rejected_characters(orig_text, rejects)
-
-    log_contents = log_capturer_stream.getvalue()
-    log_capturer_stream.close()
-    logger.removeHandler(log_capture_handler)
-    if log_contents:
-      assert log_contents[-1] == '\n'
-      log_contents = log_contents[:-1]
-
-    if log_contents or debug_rejected:
-      assert log_contents == debug_rejected, ('\n#%s#\n vs \n#%s#\n' % (log_contents, debug_rejected))
-
-    self.debug_output.append(debug_rejected)
+    self.debug_output.append(captured_debug)
     clean_text = ''.join(c for c in text if c not in pass_through)
     assert all(c in slp1.ALPHABET for c in clean_text), clean_text
     return (text, clean_text)
