@@ -7,6 +7,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import logging
 import re
 import unicodedata
 
@@ -50,6 +51,7 @@ def process_rejected_characters(orig_text, rejects):
     return '[U+%04x]' % ord(char)
   recognized_text = ''.join(_unicode_notation(c) if c in rejects else c
                             for c in orig_text)
+  debug_log = ''
   if rejects:
     rejects = [(c, _unicode_notation(c), unicodedata.name(c, 'Unknown'))
                for c in rejects]
@@ -57,5 +59,6 @@ def process_rejected_characters(orig_text, rejects):
     debug_log = '''Unknown characters are ignored: %s
 in input
 %s''' % (rejects, recognized_text)
-    # logging.debug(debug_log)
-    return debug_log
+    logger = logging.getLogger('read.filters')
+    logger.debug(debug_log)
+  return debug_log

@@ -7,6 +7,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import io
 import logging
 import unicodedata
 
@@ -21,13 +22,32 @@ class InputHandler(object):
   def __init__(self):
     self.debug_output = []
 
-  def TransliterateAndClean(self, orig_text):
+  def _transliterate_and_clean(self, orig_text):
     """Transliterates text to SLP1, removing all other characters."""
     pass_through = ' -?'
     ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
     (text, rejects) = transliterate.DetectAndTransliterate(orig_text,
                                                            pass_through, ignore)
+
+    logger = logging.getLogger('read.filters')
+    logger.setLevel(logging.DEBUG)
+    log_capturer_stream = io.StringIO()
+    log_capture_handler = logging.StreamHandler(log_capturer_stream)
+    log_capture_handler.setLevel(logging.DEBUG)
+    logger.addHandler(log_capture_handler)
+
     debug_rejected = read.filters.process_rejected_characters(orig_text, rejects)
+
+    log_contents = log_capturer_stream.getvalue()
+    log_capturer_stream.close()
+    logger.removeHandler(log_capture_handler)
+    if log_contents:
+      assert log_contents[-1] == '\n'
+      log_contents = log_contents[:-1]
+
+    if log_contents or debug_rejected:
+      assert log_contents == debug_rejected, ('\n#%s#\n vs \n#%s#\n' % (log_contents, debug_rejected))
+
     self.debug_output.append(debug_rejected)
     clean_text = ''.join(c for c in text if c not in pass_through)
     assert all(c in slp1.ALPHABET for c in clean_text), clean_text
@@ -60,7 +80,7 @@ class InputHandler(object):
       line = NFKC(line)
       line = read.filters.process_html(line).strip()
       (line, n) = read.filters.remove_verse_number(line)
-      (line, clean_line) = self.TransliterateAndClean(line)
+      (line, clean_line) = self._transliterate_and_clean(line)
       if not clean_line:
         cleaned_lines.append('')
         display_lines.append('')
