@@ -23,18 +23,9 @@ def _transliterate_and_clean(orig_text):
 
   ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
   read.filters.process_rejected_characters(orig_text, rejects - set(ignore))
-  clean_text = ''.join(c for c in text if c not in pass_through)
-  assert all(c in slp1.ALPHABET for c in clean_text), clean_text
-  return (text, clean_text)
-
-
-def _cleaned_lines_and_display_lines(cleaned_and_display_lines):
-  """Separate into two separate lists."""
-  while cleaned_and_display_lines and not cleaned_and_display_lines[-1][0]:
-    cleaned_and_display_lines = cleaned_and_display_lines[:-1]
-  cleaned_lines = [cleaned for (cleaned, display) in cleaned_and_display_lines]
-  display_lines = [display for (cleaned, display) in cleaned_and_display_lines]
-  return (cleaned_lines, display_lines)
+  cleaned_text = ''.join(c for c in text if c not in pass_through)
+  assert all(c in slp1.ALPHABET for c in cleaned_text), cleaned_text
+  return (text, cleaned_text)
 
 
 def _preprocess_for_transliteration(text):
@@ -50,11 +41,15 @@ def _preprocess_for_transliteration(text):
 def clean_text(text):
   """The transliterated text from arbitrary input."""
   text = _preprocess_for_transliteration(text)
-  cleaned_and_display_lines = []
+  cleaned_lines = []
+  display_lines = []
   for line in text.splitlines():
-    (line, clean_line) = _transliterate_and_clean(line)
-    cleaned_and_display_lines.append((clean_line, line))
-  (cleaned_lines, display_lines) = _cleaned_lines_and_display_lines(cleaned_and_display_lines)
+    (display_line, cleaned_line) = _transliterate_and_clean(line)
+    cleaned_lines.append(cleaned_line)
+    display_lines.append(display_line)
+  while cleaned_lines and not cleaned_lines[-1]:
+    cleaned_lines = cleaned_lines[:-1]
+    display_lines = display_lines[:-1]
 
   debug_output = ['Input read as:']
   for (number, display_line) in enumerate(display_lines):
