@@ -26,29 +26,30 @@ def _transliterate_and_clean(orig_text):
 
 
 def _preprocess_for_transliteration(lines):
-  lines_and_had_verses = []
+  found_lines = []
   for line in lines:
     line = line.strip()
     (line, n) = read.filters.remove_verse_number(line)
-    lines_and_had_verses.append((line, n))
-  return lines_and_had_verses
+    found_lines.append(line)
+    # If verse number was removed, can separate from next verse by blank line.
+    if n:
+      found_lines.append('')
+  return found_lines
 
 
 def _process_breaks(cleaned_and_display_lines):
   """What to do with blank lines or lines that contained verse numbers."""
   cleaned_lines = []
   display_lines = []
-  for (clean_line, line, n) in cleaned_and_display_lines:
+  for (clean_line, line) in cleaned_and_display_lines:
     if not clean_line:
+      assert clean_line == ''
+      # Zero-out lines containing only punctuation. (Is this necessary, though?)
       cleaned_lines.append('')
       display_lines.append('')
       continue
     cleaned_lines.append(clean_line)
     display_lines.append(line)
-    # If verse number was removed, can separate from next verse by blank line.
-    if n:
-      cleaned_lines.append('')
-      display_lines.append('')
   while cleaned_lines and not cleaned_lines[-1]:
     cleaned_lines = cleaned_lines[:-1]
     display_lines = display_lines[:-1]
@@ -62,11 +63,12 @@ def clean_text(text):
   text = read.filters.process_html(text)
   text = text.strip()
   lines = text.splitlines()
-  lines_and_had_verses = _preprocess_for_transliteration(lines)
+  lines = _preprocess_for_transliteration(lines)
+
   cleaned_and_display_lines = []
-  for (line, n) in lines_and_had_verses:
+  for line in lines:
     (line, clean_line) = _transliterate_and_clean(line)
-    cleaned_and_display_lines.append((clean_line, line, n))
+    cleaned_and_display_lines.append((clean_line, line))
   (display_lines, cleaned_lines) = _process_breaks(cleaned_and_display_lines)
 
   debug_output = ['Input read as:']
