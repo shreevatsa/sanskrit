@@ -9,8 +9,8 @@ import logging
 
 from data import metrical_data
 import display
-import handle_input
 import identifier
+from read import read
 import scan
 from utils.utils import call_with_log_capture
 
@@ -37,7 +37,7 @@ class IdentifierPipeline(object):
     """Given text of verse, read-scan-identify-display."""
     self._Reset()
     logging.info('Got input:\n%s', input_text)
-    ((cleaned_lines, display_lines), self.debug_read) = call_with_log_capture(handle_input.read_text, input_text)
+    ((cleaned_lines, display_lines), self.debug_read) = call_with_log_capture(read.read_text, input_text)
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:
       return None

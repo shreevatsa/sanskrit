@@ -154,7 +154,7 @@ See deps.png for the dependency graph.
 
 ** Read
 
-Covered by handle_input.py and its dependencies.
+Covered by the files in ~read~ and their dependencies.
 
 Detecting the transliteration format of the input, removing junk characters that
 are not part of the verse, and transliterating the input to SLP1 (the encoding
