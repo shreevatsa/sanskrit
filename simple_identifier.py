@@ -25,7 +25,7 @@ class SimpleIdentifier(object):
     self.identifier = identifier.Identifier(metrical_data)
 
   def _Reset(self):
-    self.debug_read = []
+    self.debug_read = None
     self.debug_identify = []
     self.tables = []
 
@@ -37,8 +37,7 @@ class SimpleIdentifier(object):
     """Given text of verse, read-scan-identify-display."""
     self._Reset()
     logging.info('Got input:\n%s', input_text)
-    ((cleaned_lines, display_lines), debug_read) = call_with_log_capture(handle_input.read_text, input_text)
-    self.debug_read.append(debug_read)
+    ((cleaned_lines, display_lines), self.debug_read) = call_with_log_capture(handle_input.read_text, input_text)
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:
       return None
@@ -61,7 +60,7 @@ class SimpleIdentifier(object):
     return ('exact' in results, new_results)
 
   def DebugRead(self):
-    return '\n'.join(self.debug_read)
+    return '\n'.join(self.debug_read or [])
 
   def DebugIdentify(self):
     return '\n'.join(self.debug_identify)
