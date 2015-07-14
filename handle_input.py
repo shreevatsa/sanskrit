@@ -15,10 +15,9 @@ import transliteration.detect
 from transliteration import transliterate
 
 
-def _transliterate_and_clean(orig_text):
+def _transliterate_and_clean(orig_text, input_scheme):
   """Transliterates text to SLP1, removing all other characters."""
   pass_through = ' -?'
-  input_scheme = transliteration.detect.detect_transliteration_scheme(orig_text)
   (text, rejects) = transliterate.TransliterateFrom(orig_text, input_scheme, pass_through)
 
   ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
@@ -41,10 +40,11 @@ def _preprocess_for_transliteration(text):
 def read_text(text):
   """The transliterated text from arbitrary input."""
   text = _preprocess_for_transliteration(text)
+  input_scheme = transliteration.detect.detect_transliteration_scheme(text)
   cleaned_lines = []
   display_lines = []
   for line in text.splitlines():
-    (display_line, cleaned_line) = _transliterate_and_clean(line)
+    (display_line, cleaned_line) = _transliterate_and_clean(line, input_scheme)
     cleaned_lines.append(cleaned_line)
     display_lines.append(display_line)
   while cleaned_lines and not cleaned_lines[-1]:
