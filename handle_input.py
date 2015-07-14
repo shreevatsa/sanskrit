@@ -38,7 +38,7 @@ def _preprocess_for_transliteration(text):
   text = text.strip('\n')
   return text
 
-def clean_text(text):
+def read_text(text):
   """The transliterated text from arbitrary input."""
   text = _preprocess_for_transliteration(text)
   cleaned_lines = []

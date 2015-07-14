@@ -37,7 +37,7 @@ class SimpleIdentifier(object):
     """Given text of verse, read-scan-identify-display."""
     self._Reset()
     logging.info('Got input:\n%s', input_text)
-    ((cleaned_lines, display_lines), debug_read) = call_with_log_capture(handle_input.clean_text, input_text)
+    ((cleaned_lines, display_lines), debug_read) = call_with_log_capture(handle_input.read_text, input_text)
     self.debug_read.append(debug_read)
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:
