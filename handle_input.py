@@ -25,8 +25,8 @@ def _transliterate_and_clean(orig_text):
   return (text, clean_text)
 
 
-def _process_breaks(cleaned_and_display_lines):
-  """What to do with blank lines or lines that contained verse numbers."""
+def _process_blanks(cleaned_and_display_lines):
+  """What to do with blank lines."""
   cleaned_lines = []
   display_lines = []
   for (clean_line, line) in cleaned_and_display_lines:
@@ -57,7 +57,7 @@ def clean_text(text):
   for line in lines:
     (line, clean_line) = _transliterate_and_clean(line)
     cleaned_and_display_lines.append((clean_line, line))
-  (display_lines, cleaned_lines) = _process_breaks(cleaned_and_display_lines)
+  (display_lines, cleaned_lines) = _process_blanks(cleaned_and_display_lines)
 
   debug_output = ['Input read as:']
   for (number, line) in enumerate(display_lines):
