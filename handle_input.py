@@ -18,7 +18,7 @@ from transliteration import transliterate
 def _transliterate_and_clean(orig_text):
   """Transliterates text to SLP1, removing all other characters."""
   pass_through = ' -?'
-  input_scheme = transliteration.detect.DetectTransliterationScheme(orig_text)
+  input_scheme = transliteration.detect.detect_transliteration_scheme(orig_text)
   (text, rejects) = transliterate.TransliterateFrom(orig_text, input_scheme, pass_through)
 
   ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'

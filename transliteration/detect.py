@@ -20,7 +20,7 @@ TRANSLITERATION_SCHEME = Enum(HK=0,
                               Kannada=4)
 
 
-def DetectTransliterationScheme(text):
+def detect_transliteration_scheme(text):
   """Returns which transliteration scheme the given text is in."""
   characteristic_kannada = '[%s]' % KANNADA_CONSONANTS
   if re.search(characteristic_kannada, text):
