@@ -15,7 +15,7 @@ import scan
 from utils.utils import call_with_log_capture
 
 
-class SimpleIdentifier(object):
+class IdentifierPipeline(object):
   """A single interface to read-scan-data-identify-display."""
 
   def __init__(self):

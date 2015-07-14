@@ -43,15 +43,15 @@ or (note that this one intentionally has many typos):
 If using as a library (TODO: document this better):
 
 #+BEGIN_SRC python
-import simple_identifier
+import identifier_pipeline
 
-verse_lines = r'''kāṣṭhād agnir jāyate mathya-mānād-
+verse = r'''kāṣṭhād agnir jāyate mathya-mānād-
 bhūmis toyaṃ khanya-mānā dadāti|
 sotsāhānāṃ nāsty asādhyaṃ narāṇāṃ
-mārgārabdhāḥ sarva-yatnāḥ phalanti||'''.splitlines()
+mārgārabdhāḥ sarva-yatnāḥ phalanti||'''
 
-identifier = simple_identifier.SimpleIdentifier()
-match_results = identifier.IdentifyFromLines(verse_lines)
+identifier = identifier_pipeline.IdentifierPipeline()
+match_results = identifier.IdentifyFromText(verse)
 #+END_SRC
 
 * How

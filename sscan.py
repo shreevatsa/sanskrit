@@ -24,12 +24,12 @@ import logging
 import sys
 
 import print_utils
-import simple_identifier
+import identifier_pipeline
 
 
 if __name__ == '__main__':
   logging.getLogger().setLevel(logging.WARNING)
   from_stdin = sys.stdin.read().decode('utf8')
-  identifier = simple_identifier.SimpleIdentifier()
+  identifier = identifier_pipeline.IdentifierPipeline()
   identifier.IdentifyFromText(from_stdin)
   print_utils.Print(identifier.AllDebugOutput())

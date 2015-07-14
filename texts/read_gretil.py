@@ -20,7 +20,7 @@ import tempfile
 
 import print_utils
 import read.filters
-import simple_identifier
+import identifier_pipeline
 
 
 def Print(x):
@@ -128,7 +128,7 @@ if __name__ == '__main__':
   verses = SplitIntoVerses(lines)
   verses = [verse for verse in verses if AcceptVerse(verse)]
 
-  identifier = simple_identifier.SimpleIdentifier()
+  identifier = identifier_pipeline.IdentifierPipeline()
   table = {}
   for (verse_number, verse) in enumerate(verses):
     verse = [verse_line.strip() for verse_line in verse]

@@ -12,7 +12,7 @@ import webapp2
 from google.appengine.ext.webapp import template
 
 from data.metrical_data import HtmlDescription as MetreHtmlDescription
-import simple_identifier
+import identifier_pipeline
 from transliteration import transliterate
 
 
@@ -36,7 +36,7 @@ def _DisplayName(metre_name):
   return '<font size="+2">%s</font>' % both_names
 
 
-common_identifier = simple_identifier.SimpleIdentifier()
+common_identifier = identifier_pipeline.IdentifierPipeline()
 
 
 class MainPage(webapp2.RequestHandler):
