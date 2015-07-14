@@ -25,14 +25,13 @@ def _transliterate_and_clean(orig_text):
   return (text, clean_text)
 
 
-def _preprocess_and_transliterate(lines):
-  cleaned_and_display_lines = []
+def _preprocess_for_transliteration(lines):
+  lines_and_had_verses = []
   for line in lines:
     line = line.strip()
     (line, n) = read.filters.remove_verse_number(line)
-    (line, clean_line) = _transliterate_and_clean(line)
-    cleaned_and_display_lines.append((clean_line, line, n))
-  return cleaned_and_display_lines
+    lines_and_had_verses.append((line, n))
+  return lines_and_had_verses
 
 
 def _process_breaks(cleaned_and_display_lines):
@@ -63,7 +62,12 @@ def clean_text(text):
   text = read.filters.process_html(text)
   text = text.strip()
   lines = text.splitlines()
-  (display_lines, cleaned_lines) = _process_breaks(_preprocess_and_transliterate(lines))
+  lines_and_had_verses = _preprocess_for_transliteration(lines)
+  cleaned_and_display_lines = []
+  for (line, n) in lines_and_had_verses:
+    (line, clean_line) = _transliterate_and_clean(line)
+    cleaned_and_display_lines.append((clean_line, line, n))
+  (display_lines, cleaned_lines) = _process_breaks(cleaned_and_display_lines)
 
   debug_output = ['Input read as:']
   for (number, line) in enumerate(display_lines):
