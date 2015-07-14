@@ -15,6 +15,17 @@ import transliteration.detect
 from transliteration import transliterate
 
 
+def _preprocess_for_transliteration(text):
+  """Clean up text before transliterating."""
+  text = read.filters.normalize_nfkc(text)
+  text = read.filters.remove_control_characters(text)
+  text = read.filters.process_html(text)
+  # TODO(shreevatsa): Replace with a placeholder instead of removing entirely.
+  text = read.filters.remove_verse_numbers(text)
+  text = text.strip('\n')
+  return text
+
+
 def _transliterate_into_lines(orig_text, input_scheme):
   """Transliterates text to SLP1, removing all other characters."""
   pass_through = ' -?'
@@ -33,16 +44,6 @@ def _transliterate_into_lines(orig_text, input_scheme):
   #   display_lines = display_lines[:-1]
   return (cleaned_lines, display_lines)
 
-
-def _preprocess_for_transliteration(text):
-  """Clean up text before transliterating."""
-  text = read.filters.normalize_nfkc(text)
-  text = read.filters.remove_control_characters(text)
-  text = read.filters.process_html(text)
-  # TODO(shreevatsa): Replace with a placeholder instead of removing entirely.
-  text = read.filters.remove_verse_numbers(text)
-  text = text.strip('\n')
-  return text
 
 def read_text(text):
   """The transliterated text from arbitrary input."""
