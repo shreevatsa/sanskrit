@@ -122,10 +122,8 @@ if __name__ == '__main__':
     if seen_separators < 2 and re.search('<![-]{50,}->', l):
       seen_separators += 1
     elif seen_separators == 2 and not l.startswith('<'):
-      (l, n) =  read.filters.remove_verse_number(l)
-      lines.append(l)
-      if n:
-        lines.append('')
+      l =  read.filters.remove_verse_numbers(l)
+      lines.extend(l.splitlines())
 
   verses = SplitIntoVerses(lines)
   verses = [verse for verse in verses if AcceptVerse(verse)]
