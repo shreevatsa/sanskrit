@@ -7,11 +7,10 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import re
-
-from poor_enums import Enum
 import slp1
+from transliteration.detect import TRANSLITERATION_SCHEME, DetectTransliterationScheme
 from transliteration import devanagari
+from transliteration.transliteration_data import KANNADA_CONSONANTS
 from transliteration import transliterator
 
 _DEFAULT_PASS_THROUGH = ' -?'
@@ -132,7 +131,6 @@ _DEVANAGARI_VOWEL_SIGNS = 'का कि की कु कू कृ कॄ क�
 _DEVANAGARI_VOWEL_SIGNS = ''.join(_DEVANAGARI_VOWEL_SIGNS[i]
                                   for i in range(len(_DEVANAGARI_VOWEL_SIGNS))
                                   if i % 3 == 1)
-_KANNADA_CONSONANTS = 'ಕಖಗಘಙಚಛಜಝಞಟಠಡಢಣತಥದಧನಪಫಬಭಮಯರಲವಶಷಸಹಳಱೞ'
 _DEVANAGARI_CONSONANTS = 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसहळरळ'
 _KANNADA_VOWELS = 'ಅಆಇಈಉಊಋೠಎಏಐಒಓಔ'
 _DEVANAGARI_VOWELS = 'अआइईउऊऋॠऎएऐऒओऔ'
@@ -143,7 +141,7 @@ _DEVANAGARI_AV = 'अं अः'
 _DEVANAGARI_AV = ''.join(_DEVANAGARI_AV[i]
                          for i in range(len(_DEVANAGARI_AV)) if i % 3 == 1)
 _KANNADA_TO_DEVANAGARI = transliterator.MakeStateMachine(dict(zip(
-    _KANNADA_VOWELS + _KANNADA_AV + _KANNADA_CONSONANTS + _KANNADA_VOWEL_SIGNS,
+    _KANNADA_VOWELS + _KANNADA_AV + KANNADA_CONSONANTS + _KANNADA_VOWEL_SIGNS,
     _DEVANAGARI_VOWELS + _DEVANAGARI_AV + _DEVANAGARI_CONSONANTS +
     _DEVANAGARI_VOWEL_SIGNS)))
 
@@ -151,31 +149,6 @@ _KANNADA_TO_DEVANAGARI = transliterator.MakeStateMachine(dict(zip(
 def KannadaToDevanagari(text):
   return transliterator.Transliterate(_KANNADA_TO_DEVANAGARI, text,
                                       pass_through=_DEFAULT_PASS_THROUGH)[0]
-
-
-TRANSLITERATION_SCHEME = Enum(HK=0,
-                              IAST=1,
-                              ITRANS=2,
-                              Devanagari=3,
-                              Kannada=4)
-
-
-def DetectTransliterationScheme(text):
-  """Returns which transliteration scheme the given text is in."""
-  characteristic_kannada = '[%s]' % _KANNADA_CONSONANTS
-  if re.search(characteristic_kannada, text):
-    return TRANSLITERATION_SCHEME.Kannada
-  characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
-  if re.search(characteristic_devanagari, text):
-    return TRANSLITERATION_SCHEME.Devanagari
-  characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'
-  if re.search(characteristic_iast, text):
-    return TRANSLITERATION_SCHEME.IAST
-  characteristic_itrans = (r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^'
-                           + r'|Sh|sh')
-  if re.search(characteristic_itrans, text):
-    return TRANSLITERATION_SCHEME.ITRANS
-  return TRANSLITERATION_SCHEME.HK
 
 
 def DetectAndTransliterate(input_text, pass_through=None):
