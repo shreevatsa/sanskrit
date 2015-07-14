@@ -18,8 +18,8 @@ def _transliterate_and_clean(orig_text):
   """Transliterates text to SLP1, removing all other characters."""
   pass_through = ' -?'
   ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-  (text, rejects) = transliterate.DetectAndTransliterate(orig_text, pass_through, ignore)
-  read.filters.process_rejected_characters(orig_text, rejects)
+  (text, rejects) = transliterate.DetectAndTransliterate(orig_text, pass_through)
+  read.filters.process_rejected_characters(orig_text, rejects - set(ignore))
   clean_text = ''.join(c for c in text if c not in pass_through)
   assert all(c in slp1.ALPHABET for c in clean_text), clean_text
   return (text, clean_text)
@@ -34,16 +34,21 @@ def _cleaned_lines_and_display_lines(cleaned_and_display_lines):
   return (cleaned_lines, display_lines)
 
 
-def clean_text(text):
-  """The transliterated text from arbitrary input."""
+def _preprocess_for_transliteration(text):
+  """Clean up text before transliterating."""
   text = read.filters.normalize_nfkc(text)
   text = read.filters.remove_control_characters(text)
   text = read.filters.process_html(text)
   # TODO(shreevatsa): Replace with a placeholder instead of removing entirely.
   text = read.filters.remove_verse_numbers(text)
+  text = text.strip('\n')
+  return text
 
+def clean_text(text):
+  """The transliterated text from arbitrary input."""
+  text = _preprocess_for_transliteration(text)
   cleaned_and_display_lines = []
-  for line in text.strip('\n').splitlines():
+  for line in text.splitlines():
     (line, clean_line) = _transliterate_and_clean(line)
     cleaned_and_display_lines.append((clean_line, line))
   (cleaned_lines, display_lines) = _cleaned_lines_and_display_lines(cleaned_and_display_lines)
