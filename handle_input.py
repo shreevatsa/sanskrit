@@ -41,10 +41,9 @@ def clean_text(text):
   text = read.filters.process_html(text)
   # TODO(shreevatsa): Replace with a placeholder instead of removing entirely.
   text = read.filters.remove_verse_numbers(text)
-  lines = text.strip().splitlines()
 
   cleaned_and_display_lines = []
-  for line in lines:
+  for line in text.strip('\n').splitlines():
     (line, clean_line) = _transliterate_and_clean(line)
     cleaned_and_display_lines.append((clean_line, line))
   (cleaned_lines, display_lines) = _cleaned_lines_and_display_lines(cleaned_and_display_lines)
