@@ -29,7 +29,7 @@ import simple_identifier
 
 if __name__ == '__main__':
   logging.getLogger().setLevel(logging.WARNING)
-  lines = [l.decode('utf8') for l in sys.stdin]
+  from_stdin = sys.stdin.read().decode('utf8')
   identifier = simple_identifier.SimpleIdentifier()
-  identifier.IdentifyFromLines(lines)
+  identifier.IdentifyFromText(from_stdin)
   print_utils.Print(identifier.AllDebugOutput())
