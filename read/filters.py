@@ -43,13 +43,15 @@ def remove_verse_number(line):
   return (line, 0)
 
 
+def _unicode_notation(char):
+  """The U+92ef etc. notation for a character."""
+  assert isinstance(char, unicode)
+  return '[U+%04x]' % ord(char)
+
+
 def process_rejected_characters(orig_text, rejects):
   """Debug output about rejected characters, with their unicode codepoints and names."""
   assert isinstance(orig_text, unicode)
-  def _unicode_notation(char):
-    """The U+92ef etc. notation for a character."""
-    assert isinstance(char, unicode)
-    return '[U+%04x]' % ord(char)
   if not rejects:
     return
   text_read_as = ''.join(_unicode_notation(c) if c in rejects else c for c in orig_text)
@@ -71,11 +73,11 @@ def normalize_nfkc(text):
 def remove_control_characters(text):
   """Remove non-printable (control) characters in text, and warn."""
   text = text.replace('\t', ' ')  # a tab is a control character too
-  without_control = ''.join(c for c in text if
+  # TODO(shreevatsa): I shouldn't have to do this myself
+  text = text.replace('\r\n', '\n')
+  without_control = ''.join(c for c in text if c == '\n' or
                             not unicodedata.category(c).startswith('C'))
   if text != without_control:
-    logging.info('''Removed control characters in
-    %s
-to get
-    %s''', text, without_control)
+    logging.info('''Removed control characters in ```\n%s```
+    to get ```\n%s```''', text, without_control)
   return without_control

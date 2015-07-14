@@ -32,10 +32,18 @@ def clean_text(text):
   text = read.filters.process_html(text)
   text = text.strip()
   lines = text.splitlines()
-  return clean_lines(lines)
+  (display_lines, cleaned_lines) = _clean_lines(lines)
 
+  debug_output = ['Input read as:']
+  for (number, line) in enumerate(display_lines):
+    transliterated = transliterate.TransliterateForOutput(line)
+    debug_output.append('Line %d: %s' % (number + 1, transliterated))
+  debug_output.append('')
+  logging.debug('\n'.join(debug_output))
 
-def clean_lines(lines):
+  return (display_lines, cleaned_lines)
+
+def _clean_lines(lines):
   """Clean up the input lines (strip junk, transliterate, break verses)."""
   cleaned_lines = []
   display_lines = []
@@ -56,11 +64,4 @@ def clean_lines(lines):
   while cleaned_lines and not cleaned_lines[-1]:
     cleaned_lines = cleaned_lines[:-1]
     display_lines = display_lines[:-1]
-
-  debug_output = ['Input read as:']
-  for (number, line) in enumerate(display_lines):
-    transliterated = transliterate.TransliterateForOutput(line)
-    debug_output.append('Line %d: %s' % (number + 1, transliterated))
-  debug_output.append('')
-  logging.debug('\n'.join(debug_output))
   return (display_lines, cleaned_lines)
