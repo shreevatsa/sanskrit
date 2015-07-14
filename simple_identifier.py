@@ -30,10 +30,14 @@ class SimpleIdentifier(object):
     self.tables = []
 
   def IdentifyFromLines(self, input_lines):
-    """Given lines of verse, read-scan-identify-display."""
+    """Given lines of verse, read-scan-identify-display"""
+    return self.IdentifyFromText('\n'.join(input_lines))
+
+  def IdentifyFromText(self, input_text):
+    """Given text of verse, read-scan-identify-display."""
     self._Reset()
-    logging.info('Got input:\n%s', '\n'.join(input_lines))
-    ((display_lines, cleaned_lines), debug_read) = call_with_log_capture(handle_input.clean_lines, input_lines)
+    logging.info('Got input:\n%s', input_text)
+    ((display_lines, cleaned_lines), debug_read) = call_with_log_capture(handle_input.clean_text, input_text)
     self.debug_read.append(debug_read)
     pattern_lines = scan.ScanVerse(cleaned_lines)
     if not pattern_lines:

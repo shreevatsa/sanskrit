@@ -25,15 +25,22 @@ def _transliterate_and_clean(orig_text):
   return (text, clean_text)
 
 
+def clean_text(text):
+  """Runs some cleaning functions on the text (strip junk, etc.)"""
+  text = read.filters.normalize_nfkc(text)
+  text = read.filters.remove_control_characters(text)
+  text = read.filters.process_html(text)
+  text = text.strip()
+  lines = text.splitlines()
+  return clean_lines(lines)
+
+
 def clean_lines(lines):
   """Clean up the input lines (strip junk, transliterate, break verses)."""
   cleaned_lines = []
   display_lines = []
   for line in lines:
     line = line.strip()
-    line = read.filters.remove_control_characters(line)
-    line = read.filters.normalize_nfkc(line)
-    line = read.filters.process_html(line).strip()
     (line, n) = read.filters.remove_verse_number(line)
     (line, clean_line) = _transliterate_and_clean(line)
     if not clean_line:
