@@ -15,16 +15,16 @@ import transliteration.detect
 from transliteration import transliterate
 
 
-def _transliterate_and_clean(orig_text, input_scheme):
+def _transliterate_and_clean(orig_line, input_scheme):
   """Transliterates text to SLP1, removing all other characters."""
   pass_through = ' -?'
-  (text, rejects) = transliterate.TransliterateFrom(orig_text, input_scheme, pass_through)
+  (display_line, rejects) = transliterate.TransliterateFrom(orig_line, input_scheme, pass_through)
 
   ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-  read.filters.debug_rejected_characters(orig_text, rejects - set(ignore))
-  cleaned_text = ''.join(c for c in text if c not in pass_through)
-  assert all(c in slp1.ALPHABET for c in cleaned_text), cleaned_text
-  return (text, cleaned_text)
+  read.filters.debug_rejected_characters(orig_line, rejects - set(ignore))
+  cleaned_line = ''.join(c for c in display_line if c not in pass_through)
+  assert all(c in slp1.ALPHABET for c in cleaned_line), cleaned_line
+  return (display_line, cleaned_line)
 
 
 def _preprocess_for_transliteration(text):
