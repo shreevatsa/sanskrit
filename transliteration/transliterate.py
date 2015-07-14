@@ -8,7 +8,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import slp1
-from transliteration.detect import TRANSLITERATION_SCHEME, DetectTransliterationScheme
+from transliteration.detect import TRANSLITERATION_SCHEME
 from transliteration import devanagari
 from transliteration.transliteration_data import KANNADA_CONSONANTS
 from transliteration import transliterator
@@ -151,8 +151,8 @@ def KannadaToDevanagari(text):
                                       pass_through=_DEFAULT_PASS_THROUGH)[0]
 
 
-def DetectAndTransliterate(input_text, pass_through=None):
-  """Transliterates text to SLP1, after guessing what script it is."""
+def TransliterateFrom(input_text, input_scheme, pass_through=None):
+  """Transliterates text to SLP1, after being told what script it is."""
   input_text = _IsoToIast(input_text)
 
   def ForKannada(text):
@@ -161,7 +161,6 @@ def DetectAndTransliterate(input_text, pass_through=None):
     text = text.replace('s', 'ऽ')
     return _TransliterateDevanagari(text)
 
-  transliteration_scheme = DetectTransliterationScheme(input_text)
   actions = {
       TRANSLITERATION_SCHEME.Kannada: ForKannada,
       TRANSLITERATION_SCHEME.Devanagari:
@@ -172,7 +171,7 @@ def DetectAndTransliterate(input_text, pass_through=None):
       lambda text: transliterator.Transliterate(_ITRANS_TO_SLP1_STATE_MACHINE, text, pass_through),
       TRANSLITERATION_SCHEME.HK:
       lambda text: transliterator.Transliterate(_HK_TO_SLP1_STATE_MACHINE, text, pass_through)}
-  return actions[transliteration_scheme](input_text)
+  return actions[input_scheme](input_text)
 
 
 _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE = transliterator.MakeStateMachine(

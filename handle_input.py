@@ -11,14 +11,17 @@ import logging
 
 import read.filters
 import slp1
+import transliteration.detect
 from transliteration import transliterate
 
 
 def _transliterate_and_clean(orig_text):
   """Transliterates text to SLP1, removing all other characters."""
   pass_through = ' -?'
+  input_scheme = transliteration.detect.DetectTransliterationScheme(orig_text)
+  (text, rejects) = transliterate.TransliterateFrom(orig_text, input_scheme, pass_through)
+
   ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-  (text, rejects) = transliterate.DetectAndTransliterate(orig_text, pass_through)
   read.filters.process_rejected_characters(orig_text, rejects - set(ignore))
   clean_text = ''.join(c for c in text if c not in pass_through)
   assert all(c in slp1.ALPHABET for c in clean_text), clean_text
