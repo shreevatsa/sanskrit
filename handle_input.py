@@ -15,16 +15,23 @@ import transliteration.detect
 from transliteration import transliterate
 
 
-def _transliterate_and_clean(orig_line, input_scheme):
+def _transliterate_into_lines(orig_text, input_scheme):
   """Transliterates text to SLP1, removing all other characters."""
   pass_through = ' -?'
-  (display_line, rejects) = transliterate.TransliterateFrom(orig_line, input_scheme, pass_through)
-
-  ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-  read.filters.debug_rejected_characters(orig_line, rejects - set(ignore))
-  cleaned_line = ''.join(c for c in display_line if c not in pass_through)
-  assert all(c in slp1.ALPHABET for c in cleaned_line), cleaned_line
-  return (display_line, cleaned_line)
+  cleaned_lines = []
+  display_lines = []
+  for orig_line in orig_text.splitlines():
+    (display_line, rejects) = transliterate.TransliterateFrom(orig_line, input_scheme, pass_through)
+    ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
+    read.filters.debug_rejected_characters(orig_line, rejects - set(ignore))
+    cleaned_line = ''.join(c for c in display_line if c not in pass_through)
+    assert all(c in slp1.ALPHABET for c in cleaned_line), cleaned_line
+    cleaned_lines.append(cleaned_line)
+    display_lines.append(display_line)
+  while cleaned_lines and not cleaned_lines[-1]:
+    cleaned_lines = cleaned_lines[:-1]
+    display_lines = display_lines[:-1]
+  return (cleaned_lines, display_lines)
 
 
 def _preprocess_for_transliteration(text):
@@ -41,15 +48,7 @@ def read_text(text):
   """The transliterated text from arbitrary input."""
   text = _preprocess_for_transliteration(text)
   input_scheme = transliteration.detect.detect_transliteration_scheme(text)
-  cleaned_lines = []
-  display_lines = []
-  for line in text.splitlines():
-    (display_line, cleaned_line) = _transliterate_and_clean(line, input_scheme)
-    cleaned_lines.append(cleaned_line)
-    display_lines.append(display_line)
-  while cleaned_lines and not cleaned_lines[-1]:
-    cleaned_lines = cleaned_lines[:-1]
-    display_lines = display_lines[:-1]
+  (cleaned_lines, display_lines) = _transliterate_into_lines(text, input_scheme)
 
   debug_output = ['Input read as:']
   for (number, display_line) in enumerate(display_lines):
