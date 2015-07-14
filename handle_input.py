@@ -21,7 +21,7 @@ def _transliterate_and_clean(orig_text, input_scheme):
   (text, rejects) = transliterate.TransliterateFrom(orig_text, input_scheme, pass_through)
 
   ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
-  read.filters.process_rejected_characters(orig_text, rejects - set(ignore))
+  read.filters.debug_rejected_characters(orig_text, rejects - set(ignore))
   cleaned_text = ''.join(c for c in text if c not in pass_through)
   assert all(c in slp1.ALPHABET for c in cleaned_text), cleaned_text
   return (text, cleaned_text)

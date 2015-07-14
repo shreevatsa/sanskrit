@@ -53,15 +53,15 @@ def _unicode_notation(char):
   return '[U+%04x]' % ord(char)
 
 
-def process_rejected_characters(orig_text, rejects):
+def debug_rejected_characters(orig_line, rejects):
   """Debug output about rejected characters, with their unicode codepoints and names."""
-  assert isinstance(orig_text, unicode)
+  assert isinstance(orig_line, unicode)
   if not rejects:
     return
-  text_read_as = ''.join(_unicode_notation(c) if c in rejects else c for c in orig_text)
+  line_read_as = ''.join(_unicode_notation(c) if c in rejects else c for c in orig_line)
   rejects = [(c, _unicode_notation(c), unicodedata.name(c, 'Unknown')) for c in rejects]
   rejects = ', '.join('%s (%s %s)' % reject for reject in rejects)
-  logging.debug('Unknown characters are ignored: %s\nin input\n```%s```', rejects, text_read_as)
+  logging.debug('Unknown characters are ignored: %s\nin line:\n%s', rejects, line_read_as)
 
 
 def normalize_nfkc(text):
