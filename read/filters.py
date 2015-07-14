@@ -32,15 +32,19 @@ def process_html(text):
   return text
 
 
-def remove_verse_number(line):
-  """Strips everything after ॥, ।।, // or || in the line."""
+def remove_verse_numbers(text):
+  """Strips everything after ॥, ।।, // or || in each line."""
   # return re.subn(r'[/|]{2}[ \d.a-zA-z}_*\-]*[/|]{2}$', '', line)
-  for marker in ['॥', '।।', '//', '||']:
-    (line, count) = re.subn(re.escape(marker) + '.*', '', line)
-    # Don't expect text to have more than one verse-end marker. Break at first.
-    if count:
-      return (line, count)
-  return (line, 0)
+  lines = []
+  for line in text.splitlines():
+    for marker in ['॥', '।।', '//', '||']:
+      # If verse number was removed, can separate from next verse by blank line.
+      (line, count) = re.subn(re.escape(marker) + '.*', '\n', line)
+      # Don't expect text to have more than one verse-end marker. Break at first.
+      if count:
+        break
+    lines.append(line)
+  return '\n'.join(lines)
 
 
 def _unicode_notation(char):

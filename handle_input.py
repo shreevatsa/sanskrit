@@ -25,18 +25,6 @@ def _transliterate_and_clean(orig_text):
   return (text, clean_text)
 
 
-def _preprocess_for_transliteration(lines):
-  found_lines = []
-  for line in lines:
-    line = line.strip()
-    (line, n) = read.filters.remove_verse_number(line)
-    found_lines.append(line)
-    # If verse number was removed, can separate from next verse by blank line.
-    if n:
-      found_lines.append('')
-  return found_lines
-
-
 def _process_breaks(cleaned_and_display_lines):
   """What to do with blank lines or lines that contained verse numbers."""
   cleaned_lines = []
@@ -61,9 +49,9 @@ def clean_text(text):
   text = read.filters.normalize_nfkc(text)
   text = read.filters.remove_control_characters(text)
   text = read.filters.process_html(text)
-  text = text.strip()
-  lines = text.splitlines()
-  lines = _preprocess_for_transliteration(lines)
+  # TODO(shreevatsa): Replace with a placeholder instead of removing entirely.
+  text = read.filters.remove_verse_numbers(text)
+  lines = text.strip().splitlines()
 
   cleaned_and_display_lines = []
   for line in lines:
