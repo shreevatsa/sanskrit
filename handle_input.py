@@ -28,9 +28,9 @@ def _transliterate_into_lines(orig_text, input_scheme):
     assert all(c in slp1.ALPHABET for c in cleaned_line), cleaned_line
     cleaned_lines.append(cleaned_line)
     display_lines.append(display_line)
-  while cleaned_lines and not cleaned_lines[-1]:
-    cleaned_lines = cleaned_lines[:-1]
-    display_lines = display_lines[:-1]
+  # while cleaned_lines and not cleaned_lines[-1]:
+  #   cleaned_lines = cleaned_lines[:-1]
+  #   display_lines = display_lines[:-1]
   return (cleaned_lines, display_lines)
 
 
