@@ -85,11 +85,19 @@ def normalize_nfkc(text):
 def remove_control_characters(text):
   """Remove non-printable (control) characters in text, and warn."""
   text = text.replace('\t', ' ')  # a tab is a control character too
-  # TODO(shreevatsa): I shouldn't have to do this myself
-  text = text.replace('\r\n', '\n')
-  without_control = ''.join(c for c in text if c == '\n' or
-                            not unicodedata.category(c).startswith('C'))
+  control = set(c for c in text if unicodedata.category(c).startswith('C') and c != '\n')
+  without_control = ''.join(c for c in text if c not in control)
   if text != without_control:
-    logging.info('''Removed control characters in ```\n%s```
-    to get ```\n%s```''', text, without_control)
+    logging.info('''Removed control characters %s in ```\n%s```
+    to get ```\n%s```''', control, text, without_control)
   return without_control
+
+
+def after_second_comment_line(text):
+  """Assuming text starts after second <!----...--><BR> line."""
+  split = '<!---------------------------------------------------------><BR>\n'
+  parts = text.split(split)
+  if len(parts) == 3:
+    return parts[2]
+  logging.debug('Splitting at comment line gave %d parts.', len(parts))
+  return text
