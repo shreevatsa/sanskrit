@@ -107,7 +107,7 @@ if __name__ == '__main__':
   Print('Logging to %s' % log_file.name)
   handler = logging.FileHandler(log_file.name)
   handler.setFormatter(logging.Formatter(
-      '%(levelname)s	%(asctime)s %(filename)s:%(lineno)d] %(message)s'))
+      '%(levelname)s\t%(asctime)s %(filename)s:%(lineno)d] %(message)s'))
   logger.addHandler(handler)
   logger.setLevel(logging.DEBUG)
 
