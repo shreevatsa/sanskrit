@@ -18,13 +18,9 @@ import os.path
 import re
 import tempfile
 
-import print_utils
+from print_utils import Print
 import read.filters
 import identifier_pipeline
-
-
-def Print(x):
-  return print_utils.Print(x)
 
 
 def Timestamp():
@@ -53,15 +49,6 @@ def SplitIntoVerses(input_lines):
   return verses_found
 
 
-def IgnoreLine(text):
-  # Line enclosed in round brackets
-  if re.match('^[(].*[)]$', text):
-    return True
-  if text.startswith(r'\footnote'):
-    return True
-  return False
-
-
 def AcceptVerse(v):
   """Checks that the verse is not in one of a number of known bad patterns."""
   if len(v) == 1:
@@ -76,7 +63,8 @@ def AcceptVerse(v):
   return True
 
 
-if __name__ == '__main__':
+def get_args():
+  """Setting up argument parser and parsing passed arguments."""
   argument_parser = argparse.ArgumentParser(description='Read a GRETIL file, '
                                             'identify verses and their metres, '
                                             'and generate statistics.')
@@ -97,9 +85,10 @@ if __name__ == '__main__':
   argument_parser.add_argument('--break_at_error', action='store_true',
                                help='Whether to break as soon as one imperfect'
                                ' verse is found.')
-  args = argument_parser.parse_args()
-  input_file_name = args.input_file
+  return argument_parser.parse_args()
 
+
+def set_up_logger(input_file_name):
   logger = logging.getLogger()
   log_file = tempfile.NamedTemporaryFile(prefix='read_gretil_%s_' %
                                          os.path.basename(input_file_name),
@@ -111,28 +100,52 @@ if __name__ == '__main__':
   logger.addHandler(handler)
   logger.setLevel(logging.DEBUG)
 
-  lines = []
-  seen_separators = 0
-  for l in codecs.open(input_file_name, 'r', 'utf-8'):
-    assert isinstance(l, unicode)
-    l = read.filters.process_html(l)
-    l = l.strip()
-    if IgnoreLine(l):
-      continue
-    if seen_separators < 2 and re.search('<![-]{50,}->', l):
-      seen_separators += 1
-    elif seen_separators == 2 and not l.startswith('<'):
-      l =  read.filters.remove_verse_numbers(l)
-      lines.extend(l.splitlines())
+if __name__ == '__main__':
+  args = get_args()
+  input_file_name = args.input_file
+  set_up_logger(input_file_name)
 
-  verses = SplitIntoVerses(lines)
-  verses = [verse for verse in verses if AcceptVerse(verse)]
+  text = codecs.open(input_file_name, 'r', 'utf-8').read()
+
+  text = read.filters.process_crlf(text)
+  text = read.filters.normalize_nfkc(text)
+  text = read.filters.remove_control_characters(text)
+  text = read.filters.process_html_spaces(text)
+
+  text = read.filters.after_second_comment_line(text)
+
+  verses = read.filters.split_verses_at_br(text)
+  verses = read.filters.split_further_at_verse_numbers(verses)
+
+  verses = [verse for verse in verses if
+            not read.filters.is_parenthesized_line(verse) and
+            not read.filters.is_empty(verse) and
+            not read.filters.is_header_line(verse) and
+            not read.filters.is_footnote_line(verse) and
+            not read.filters.is_asterisked_variant_line(verse) and
+            not read.filters.is_footnote_followed_by_parenthesized_line(verse) and
+            not read.filters.is_html_footer_line(verse) and
+            not read.filters.is_verses_found_elsewhere_line(verse) and
+            not read.filters.starts_with_br(verse) and
+            not read.filters.is_edition_info(verse) and
+            not read.filters.is_abbreviation_block(verse)]
+
+  verses = map(read.filters.clean_leading_br, verses)
+  verses = map(read.filters.clean_leading_parenthesized_line, verses)
+  verses = map(read.filters.clean_leading_footnote, verses)
+
+  # Print('These are verses:')
+  # for (i, verse) in enumerate(verses):
+  #   # if not re.match(r'^(.*<BR>\n){3}.*<BR>$', verse) and not re.match(r'^.*<BR>\n.*<BR>$', verse):
+  #     Print('\nVerse %d is:' % i)
+  #     Print('\n    '.join(('    ' + verse).splitlines()))
+  #     Print('End Verse %d\n' % i)
+
 
   identifier = identifier_pipeline.IdentifierPipeline()
   table = {}
   for (verse_number, verse) in enumerate(verses):
-    verse = [verse_line.strip() for verse_line in verse]
-    ok_and_results = identifier.IdentifyFromLines(verse)
+    ok_and_results = identifier.IdentifyFromText(verse)
     if not ok_and_results:      # None for lines that contain no syllables
       continue
     (perfect, results) = ok_and_results
@@ -141,7 +154,7 @@ if __name__ == '__main__':
       if args.print_unidentified_verses != 'none':
         Print('Verse %4d:' % (verse_number + 1))
         if args.print_unidentified_verses == 'full':
-          Print('\n'.join(verse))
+          Print(verse)
           Print(identifier.AllDebugOutput())
           Print('')
       continue
@@ -156,10 +169,10 @@ if __name__ == '__main__':
           ' ' if perfect else ' probably ',
           metre_name))
       if args.print_identified_verses == 'full':
-        Print('\n'.join(verse))
+        Print(verse)
     table[metre_name] = table.get(metre_name, 0) + 1
     if not perfect and args.break_at_error:
-      Print('\n'.join(verse))
+      Print(verse)
       Print(identifier.AllDebugOutput())
       Print('')
       break

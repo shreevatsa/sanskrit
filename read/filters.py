@@ -7,6 +7,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from collections import Counter
 import logging
 import re
 import unicodedata
@@ -46,7 +47,7 @@ def remove_verse_numbers(text):
   """Strips everything after ॥, ।।, // or || in each line."""
   # return re.subn(r'[/|]{2}[ \d.a-zA-z}_*\-]*[/|]{2}$', '', line)
   lines = []
-  for line in text.splitlines():
+  for line in text.split('\n'):
     for marker in ['॥', '।।', '//', '||']:
       # If verse number was removed, can separate from next verse by blank line.
       (line, count) = re.subn(re.escape(marker) + '.*', '\n', line)
@@ -85,14 +86,30 @@ def normalize_nfkc(text):
 def remove_control_characters(text):
   """Remove non-printable (control) characters in text, and warn."""
   text = text.replace('\t', ' ')  # a tab is a control character too
-  control = set(c for c in text if unicodedata.category(c).startswith('C') and c != '\n')
+  control = Counter(c for c in text if unicodedata.category(c).startswith('C') and c != '\n')
   without_control = ''.join(c for c in text if c not in control)
   if text != without_control:
-    logging.info('''Removed control characters %s in ```\n%s```
-    to get ```\n%s```''', control, text, without_control)
+    logging.info('Removed control characters: %s', control)
   return without_control
 
 
+def split_further_at_verse_numbers(verses):
+  """Detect verses containing verse-end markers in them, and split them further."""
+  new_verses = []
+  for verse in verses:
+    current_verse_lines = []
+    lines = verse.split('\n')
+    for line in lines:
+      current_verse_lines.append(line)
+      if remove_verse_numbers(line) != line:
+        new_verses.append('\n'.join(current_verse_lines))
+        current_verse_lines = []
+    if current_verse_lines:
+      new_verses.append('\n'.join(current_verse_lines))
+  return new_verses
+
+
+# Gretil-specific filters below this line
 def after_second_comment_line(text):
   """Assuming text starts after second <!----...--><BR> line."""
   split = '<!---------------------------------------------------------><BR>\n'
@@ -101,3 +118,106 @@ def after_second_comment_line(text):
     return parts[2]
   logging.debug('Splitting at comment line gave %d parts.', len(parts))
   return text
+
+
+def is_parenthesized_line(text):
+  return bool(re.match(r'^[(].*[)] ?<BR>$', text))
+
+
+def is_empty(text):
+  return text == '<BR>' or text == '***<BR>'
+
+def starts_with_br(text):
+  if text.startswith('<BR>'):
+    print(('Rejecting this verse br: {{{\n%s\n}}}' % text).encode('utf-8'))
+  return text.startswith('<BR>')
+
+
+def is_header_line(text):
+  return bool(re.match(r'^Main Text<BR>$', text))
+
+
+def is_footnote_line(text):
+  return bool(re.match(r'^\\footnote{.*<BR>$', text))
+
+
+def is_asterisked_variant_line(text):
+  if re.match(r'^[*].*<BR>\n.*<BR>$', text):
+    return True
+
+
+def is_html_footer_line(text):
+  return text == '</font></body></html>'
+
+
+def is_edition_info(text):
+  if text.startswith('This edition is based on') and text == remove_verse_numbers(text):
+    print(('Rejecting this verse ei: {{{\n%s\n}}}' % text).encode('utf-8'))
+    return True
+
+
+def is_footnote_followed_by_parenthesized_line(text):
+  lines = text.splitlines()
+  return len(lines) == 2 and is_footnote_line(lines[0]) and is_parenthesized_line(lines[1])
+
+
+def clean_leading_br(text):
+  lines = text.split('\n')
+  if len(lines) == 5 and lines[0] == '... <BR>':
+    return '\n'.join(lines[1:])
+  else:
+    return text
+
+
+def clean_leading_parenthesized_line(text):
+  lines = text.split('\n')
+  if len(lines) == 5 and is_parenthesized_line(lines[0]):
+    return '\n'.join(lines[1:])
+  else:
+    return text
+
+
+def clean_leading_footnote(text):
+  lines = text.split('\n')
+  if len(lines) == 5 and is_footnote_line(lines[0]):
+    return '\n'.join(lines[1:])
+  else:
+    return text
+
+
+def is_verses_found_elsewhere_line(text):
+  return bool(re.match(r'Verses found in .* not found here<BR>$', text))
+
+
+def _is_abbreviation_line(line):
+  """Lines like these:
+su. = subhāṣitaratnakoṣa, <BR>
+sad. = saduktikarṇāmṛta,<BR>
+subh. = subhāṣitāvalī, <BR>
+sū. = sūktimuktāvalī, <BR>
+pad. = padyāvalī, <BR>
+śā. = śārṅgadharapaddhati<BR>
+  """
+  return re.match(r'[^ \n]*\. = [^ \n]*(, )?<BR>$', line)
+
+
+def is_abbreviation_block(text):
+  lines = text.split('\n')
+  return all(_is_abbreviation_line(line) for line in lines)
+
+
+def split_verses_at_br(text):
+  """Assume that <BR> by itself on a line is what separates verses."""
+  lines = text.split('\n')
+  verses = []
+  current_verse_lines = []
+  for line in lines:
+    if line == '<BR>':
+      if current_verse_lines:
+        verses.append('\n'.join(current_verse_lines))
+      current_verse_lines = []
+    else:
+      current_verse_lines.append(line)
+  if current_verse_lines:
+    verses.append('\n'.join(current_verse_lines))
+  return verses
