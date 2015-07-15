@@ -17,6 +17,7 @@ from transliteration import transliterate
 
 def _preprocess_for_transliteration(text):
   """Clean up text before transliterating."""
+  text = read.filters.process_crlf(text)
   text = read.filters.normalize_nfkc(text)
   text = read.filters.remove_control_characters(text)
   text = read.filters.process_html(text)

@@ -60,7 +60,7 @@ class IdentifierPipeline(object):
     return ('exact' in results, new_results)
 
   def DebugRead(self):
-    return '\n'.join(self.debug_read or [])
+    return self.debug_read or ''
 
   def DebugIdentify(self):
     return '\n'.join(self.debug_identify)

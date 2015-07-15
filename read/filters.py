@@ -12,17 +12,27 @@ import re
 import unicodedata
 
 
+def process_crlf(text):
+  """Removes occurences of the chr(13) character."""
+  text = text.replace('\r\n', '\n')
+  text = text.replace('\r', '\n')
+  assert '\r' not in text
+  return text
+
+
 def process_html_line_breaks(text):
   """Turns <br> and <BR> into line breaks."""
   # Not using flags=re.IGNORECASE: <bR> <Br> rare, so prefer being conservative.
-  text = re.sub('<BR>', '\n', text)
-  text = re.sub('<br>', '\n', text)
+  text = text.replace('<BR>\n', '\n')
+  text = text.replace('<br>\n', '\n')
+  text = text.replace('<BR>', '\n')
+  text = text.replace('<br>', '\n')
   return text
 
 
 def process_html_spaces(text):
   """Replaces each &nbsp; with a space."""
-  return re.sub('&nbsp;', ' ', text)
+  return text.replace('&nbsp;', ' ')
 
 
 def process_html(text):
