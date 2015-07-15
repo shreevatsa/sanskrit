@@ -67,14 +67,19 @@ class Identifier(object):
       'half': _MatchesIn(pattern, self.metrical_data.known_half_patterns, self.metrical_data.known_half_regexes),
       'pada': _MatchesIn(pattern, self.metrical_data.known_pada_patterns, self.metrical_data.known_pada_regexes)
     }
+    assert type(ret.get('full', {})) == dict
+    assert type(ret.get('half', {})) == dict
+    assert type(ret.get('pada', {})) == dict
     return ret
 
 
 def _MatchesIn(pattern, known_patterns, known_regexes):
   if pattern in known_patterns:
+    assert type(known_patterns[pattern]) == dict
     return known_patterns[pattern]
   for (regex, matches) in known_regexes:
     if regex.match(pattern):
+      assert type(matches) == dict
       return matches
   return {}
 

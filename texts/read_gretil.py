@@ -18,6 +18,8 @@ import os.path
 import re
 import tempfile
 
+# from IPython.core.debugger import Tracer
+
 from print_utils import Print
 import read.filters
 import identifier_pipeline
@@ -117,34 +119,45 @@ if __name__ == '__main__':
   verses = read.filters.split_verses_at_br(text)
   verses = read.filters.split_further_at_verse_numbers(verses)
 
+  verses = [verse.strip('\n') for verse in verses]
   verses = [verse for verse in verses if
             not read.filters.is_parenthesized_line(verse) and
             not read.filters.is_empty(verse) and
             not read.filters.is_header_line(verse) and
             not read.filters.is_footnote_line(verse) and
             not read.filters.is_asterisked_variant_line(verse) and
-            not read.filters.is_footnote_followed_by_parenthesized_line(verse) and
+            not read.filters.is_footnote_followed_by_variant_line(verse) and
             not read.filters.is_html_footer_line(verse) and
             not read.filters.is_verses_found_elsewhere_line(verse) and
-            not read.filters.starts_with_br(verse) and
+            # not read.filters.starts_with_br(verse) and
             not read.filters.is_edition_info(verse) and
+            not read.filters.is_text_abbreviation_header(verse) and
+            not read.filters.is_parentheses_info(verse) and
+            not read.filters.is_trailing_work_name_junk(verse) and
             not read.filters.is_abbreviation_block(verse)]
 
   verses = map(read.filters.clean_leading_br, verses)
   verses = map(read.filters.clean_leading_parenthesized_line, verses)
   verses = map(read.filters.clean_leading_footnote, verses)
 
+  # Tracer()()
+
+
   # Print('These are verses:')
   # for (i, verse) in enumerate(verses):
   #   # if not re.match(r'^(.*<BR>\n){3}.*<BR>$', verse) and not re.match(r'^.*<BR>\n.*<BR>$', verse):
-  #     Print('\nVerse %d is:' % i)
+  #     Print('\nVerse %d is:' % (i + 1))
   #     Print('\n    '.join(('    ' + verse).splitlines()))
-  #     Print('End Verse %d\n' % i)
+  #     Print('End Verse %d\n' % (i + 1))
 
 
   identifier = identifier_pipeline.IdentifierPipeline()
   table = {}
   for (verse_number, verse) in enumerate(verses):
+    verse_number += 1
+    Print('\nVerse %d is:' % verse_number)
+    Print('\n    '.join(('    ' + verse).splitlines()))
+    Print('End Verse %d' % verse_number)
     ok_and_results = identifier.IdentifyFromText(verse)
     if not ok_and_results:      # None for lines that contain no syllables
       continue
@@ -152,7 +165,7 @@ if __name__ == '__main__':
     if not results:
       table['unknown'] = table.get('unknown', 0) + 1
       if args.print_unidentified_verses != 'none':
-        Print('Verse %4d:' % (verse_number + 1))
+        Print('Verse %4d:' % verse_number)
         if args.print_unidentified_verses == 'full':
           Print(verse)
           Print(identifier.AllDebugOutput())
@@ -165,7 +178,7 @@ if __name__ == '__main__':
     metre_name = results[0]
     if args.print_identified_verses != 'none':
       Print('Verse %4d is%sin %s' % (
-          verse_number + 1,
+          verse_number,
           ' ' if perfect else ' probably ',
           metre_name))
       if args.print_identified_verses == 'full':

@@ -101,7 +101,7 @@ def split_further_at_verse_numbers(verses):
     lines = verse.split('\n')
     for line in lines:
       current_verse_lines.append(line)
-      if remove_verse_numbers(line) != line:
+      if len(current_verse_lines) >= 4 and remove_verse_numbers(line) != line:
         new_verses.append('\n'.join(current_verse_lines))
         current_verse_lines = []
     if current_verse_lines:
@@ -127,10 +127,23 @@ def is_parenthesized_line(text):
 def is_empty(text):
   return text == '<BR>' or text == '***<BR>'
 
-def starts_with_br(text):
-  if text.startswith('<BR>'):
-    print(('Rejecting this verse br: {{{\n%s\n}}}' % text).encode('utf-8'))
-  return text.startswith('<BR>')
+
+def _print_rejection(reason):
+  """When one of our rejection functions below return True, print it."""
+  def decorated(func):
+    """Returns what the function will actually be after this decorator."""
+    def real(text, *args, **kwargs):
+      """What the function will be, etc."""
+      ret = func(text, *args, **kwargs)
+      if ret:
+        print(('\nRejecting this verse (%s): {{{\n%s\n}}}\n' % (reason, text)).encode('utf-8'))
+      return ret
+    return real
+  return decorated
+
+# @_print_rejection(reason='starts with BR')
+# def starts_with_br(text):
+#   return text.startswith('<BR>')
 
 
 def is_header_line(text):
@@ -150,15 +163,22 @@ def is_html_footer_line(text):
   return text == '</font></body></html>'
 
 
+@_print_rejection(reason='edition info')
 def is_edition_info(text):
-  if text.startswith('This edition is based on') and text == remove_verse_numbers(text):
-    print(('Rejecting this verse ei: {{{\n%s\n}}}' % text).encode('utf-8'))
-    return True
+  return text.startswith('This edition is based on') and text == remove_verse_numbers(text)
 
 
-def is_footnote_followed_by_parenthesized_line(text):
+@_print_rejection(reason='parentheses info')
+def is_parentheses_info(text):
+  return (text.startswith('The parentheses in between verses contain') and
+          text == remove_verse_numbers(text))
+
+
+def is_footnote_followed_by_variant_line(text):
   lines = text.splitlines()
-  return len(lines) == 2 and is_footnote_line(lines[0]) and is_parenthesized_line(lines[1])
+  return (len(lines) == 2 and is_footnote_line(lines[0]) and
+          (is_parenthesized_line(lines[1]) or
+           lines[1] == 'nāryo mugdhaśaṭhā haranti ramaṇaṃ tiṣṭhanti no vāritās<BR>'))
 
 
 def clean_leading_br(text):
@@ -221,3 +241,14 @@ def split_verses_at_br(text):
   if current_verse_lines:
     verses.append('\n'.join(current_verse_lines))
   return verses
+
+
+def is_text_abbreviation_header(verse):
+  return verse in ['Text<BR>\nAbbreviations <BR>', 'Text<BR>\nābbreviations<BR>']
+
+
+def is_trailing_work_name_junk(verse):
+  return verse == '''amaruśatakam}<BR>
+āmaruśatakam<BR>
+amarukaviracitam}<BR>
+āmarukaviracitam}}<BR>'''

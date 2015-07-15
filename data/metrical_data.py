@@ -155,7 +155,7 @@ def _AddSamavrttaRegex(metre_name, pada_regex):
   pada_regex = _CleanUpSimpleRegex(pada_regex)
   _AddFullRegex(''.join('(%s)' % s for s in [pada_regex] * 4), metre_name)
   _AddHalfRegex(''.join('(%s)' % s for s in [pada_regex] * 2), metre_name, {1, 2})
-  known_pada_regexes.append((re.compile('^' + pada_regex + '$'), metre_name))
+  _AddPadaRegex(pada_regex, metre_name, {1, 2, 3, 4})
 
 
 def _AddMetreRegex(metre_name, pada_regexes, simple=True):
