@@ -57,14 +57,12 @@ def remove_verse_numbers(text):
   return '\n'.join(lines)
 
 
-def _unicode_notation(char):
-  """The U+92ef etc. notation for a character."""
-  assert isinstance(char, unicode)
-  return '[U+%04x]' % ord(char)
-
-
 def debug_rejected_characters(orig_line, rejects):
   """Debug output about rejected characters, with their unicode codepoints and names."""
+  def _unicode_notation(char):
+    """The U+92ef etc. notation for a character."""
+    assert isinstance(char, unicode)
+    return '[U+%04x]' % ord(char)
   assert isinstance(orig_line, unicode)
   if not rejects:
     return
