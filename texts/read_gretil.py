@@ -10,7 +10,6 @@ from __future__ import unicode_literals
 
 import argparse
 import codecs
-import datetime
 import itertools
 import json
 import logging
@@ -23,11 +22,6 @@ import tempfile
 from print_utils import Print
 import read.filters
 import identifier_pipeline
-
-
-def Timestamp():
-  return datetime.datetime.strftime(datetime.datetime.now(),
-                                    '%Y-%m-%d.%H:%M:%S')
 
 
 def SplitIntoVerses(input_lines):
