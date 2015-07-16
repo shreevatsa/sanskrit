@@ -101,7 +101,7 @@ def split_further_at_verse_numbers(verses):
     lines = verse.split('\n')
     for line in lines:
       current_verse_lines.append(line)
-      if len(current_verse_lines) >= 4 and remove_verse_numbers(line) != line:
+      if len(current_verse_lines) == 4 and remove_verse_numbers(line) != line:
         new_verses.append('\n'.join(current_verse_lines))
         current_verse_lines = []
     if current_verse_lines:
@@ -209,6 +209,13 @@ def clean_leading_parenthesized_line(text):
     return '\n'.join(lines[1:])
   else:
     return text
+
+
+def remove_trailing_parenthesized_line(verse):
+  lines = verse.split('\n')
+  if is_parenthesized_line(lines[-1]):
+    lines = lines[:-1]
+  return '\n'.join(lines)
 
 
 def clean_leading_footnote(text):

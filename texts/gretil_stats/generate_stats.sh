@@ -15,13 +15,13 @@ scan amaru_u
 scan nkalivpu
 
 # Lots of footnotes etc. to remove in these yet.
-scan bhakirpu
-scan bhall_pu
-python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none && mv bharst_u.htm.stats texts/gretil_stats
-scan kakumspu
-scan kragh_pu
-scan maghspvu
-scan msubhs_u
-scan ramodtpu
+# scan ramodtpu
+# scan bhakirpu
+# scan bhall_pu
+# python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none && mv bharst_u.htm.stats texts/gretil_stats
+# scan kakumspu
+# scan kragh_pu
+# scan maghspvu
+# scan msubhs_u
 
 python -m texts.gretil_stats.generate_stats_table > texts/gretil_stats/stats_table.html

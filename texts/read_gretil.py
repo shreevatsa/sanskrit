@@ -111,6 +111,8 @@ if __name__ == '__main__':
   text = read.filters.after_second_comment_line(text)
 
   verses = read.filters.split_verses_at_br(text)
+  verses = map(read.filters.remove_trailing_parenthesized_line, verses)
+  verses = map(read.filters.clean_leading_footnote, verses)
   verses = read.filters.split_further_at_verse_numbers(verses)
 
   verses = [verse.strip('\n') for verse in verses]
@@ -135,7 +137,6 @@ if __name__ == '__main__':
 
   verses = map(read.filters.clean_leading_br, verses)
   verses = map(read.filters.clean_leading_parenthesized_line, verses)
-  verses = map(read.filters.clean_leading_footnote, verses)
   verses = map(read.filters.remove_trailing_variant_line, verses)
 
   # Tracer()()
