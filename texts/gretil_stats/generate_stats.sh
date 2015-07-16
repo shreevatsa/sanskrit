@@ -10,12 +10,12 @@ function scan() {
   mv $1.htm.stats texts/gretil_stats/
 }
 
-# Working fine
-scan amaru_u
+# Every verse perfectly metrical
 scan nkalivpu
 scan ramodtpu
 
 # Some "probably"s
+scan amaru_u
 scan bhall_pu
 
 # Lots of footnotes etc. to remove in these yet.
