@@ -130,6 +130,7 @@ if __name__ == '__main__':
             not read.filters.is_trailing_work_name_junk(verse) and
             not read.filters.is_section_header_line(verse) and
             not read.filters.is_work_footer_line(verse) and
+            not read.filters.is_work_header_line(verse) and
             not read.filters.is_abbreviation_block(verse)]
 
   verses = map(read.filters.clean_leading_br, verses)

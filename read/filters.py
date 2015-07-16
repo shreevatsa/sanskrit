@@ -125,8 +125,8 @@ def is_parenthesized_line(text):
 
 
 def is_empty(text):
-  return re.match(r'^[ \t]*$', text) or text in [
-      '<BR>', '***<BR>', '__________________________________________________<BR>']
+  return (re.match(r'^[ \t]*$', text) or text in ['<BR>', '***<BR>'] or
+          re.match(r'^[_]{50,65}<BR>', text))
 
 
 def _print_rejection(reason, if_different=False):
@@ -166,7 +166,7 @@ def is_asterisked_variant_line(text):
 
 
 def is_work_footer_line(text):
-  return bool(re.match(r'iti .*<BR>', text))
+  return bool(re.match(r'^[ \t]*iti .*<BR>', text) or text == 'śrīrāmodantaṃ samāptam |<BR>')
 
 
 def is_section_header_line(text):
@@ -275,3 +275,7 @@ def remove_trailing_variant_line(verse):
   if len(lines) == 3 and re.match(r'^\*VAR.:? [0-9]{1,2}b', lines[2]):
     return '\n'.join(lines[:2])
   return verse
+
+
+def is_work_header_line(verse):
+  return verse == 'śrīrāmodantam |<BR>'
