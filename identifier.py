@@ -10,8 +10,13 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import collections
 import logging
 import re
+
+class OrderedSet(collections.OrderedDict):
+  def add(self, x):
+    self[x] = None
 
 
 class Identifier(object):
@@ -49,15 +54,15 @@ class Identifier(object):
           assert value == True
           match_type = _MatchTypeFull(input_type, part_type)
           self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
-          ret.setdefault(match_type, set()).add(metre_name)
+          ret.setdefault(match_type, OrderedSet()).add(metre_name)
         for (metre_name, value) in matches_for_part.get('half', {}).items():
           match_type = _MatchTypeHalf(input_type, part_type, value)
           self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
-          ret.setdefault(match_type, set()).add(metre_name)
+          ret.setdefault(match_type, OrderedSet()).add(metre_name)
         for (metre_name, value) in matches_for_part.get('pada', {}).items():
           match_type = _MatchTypePada(input_type, part_type, value)
           self.parts_debug.append(' %s %s match for: %s %s' % (' ' * last_debug_line_length, match_type, metre_name, value))
-          ret.setdefault(match_type, set()).add(metre_name)
+          ret.setdefault(match_type, OrderedSet()).add(metre_name)
     # Done looping over all part types.
     return ret
 

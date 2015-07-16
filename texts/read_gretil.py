@@ -18,7 +18,7 @@ import re
 import tempfile
 
 from IPython.core.debugger import Tracer
-assert Tracer
+assert Tracer  # to slience Pyflakes
 
 from print_utils import Print
 import read.filters

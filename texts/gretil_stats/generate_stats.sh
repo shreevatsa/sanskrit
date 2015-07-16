@@ -15,9 +15,11 @@ scan amaru_u
 scan nkalivpu
 scan ramodtpu
 
+# Some "probably"s
+scan bhall_pu
+
 # Lots of footnotes etc. to remove in these yet.
 # scan bhakirpu
-# scan bhall_pu
 # python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none && mv bharst_u.htm.stats texts/gretil_stats
 # scan kakumspu
 # scan kragh_pu
