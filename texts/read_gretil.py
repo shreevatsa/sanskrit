@@ -17,7 +17,8 @@ import os.path
 import re
 import tempfile
 
-# from IPython.core.debugger import Tracer
+from IPython.core.debugger import Tracer
+assert Tracer
 
 from print_utils import Print
 import read.filters
@@ -106,13 +107,20 @@ if __name__ == '__main__':
   text = read.filters.process_crlf(text)
   text = read.filters.normalize_nfkc(text)
   text = read.filters.remove_control_characters(text)
-  text = read.filters.process_html_spaces(text)
 
   text = read.filters.after_second_comment_line(text)
 
   verses = read.filters.split_verses_at_br(text)
+
   verses = map(read.filters.remove_trailing_parenthesized_line, verses)
   verses = map(read.filters.clean_leading_footnote, verses)
+  verses = map(read.filters.remove_trailing_variant_line, verses)
+  verses = map(read.filters.remove_leading_section_header_line, verses)
+
+  verses = map(read.filters.process_html_spaces, verses)
+
+  # Tracer()()
+
   verses = read.filters.split_further_at_verse_numbers(verses)
 
   verses = [verse.strip('\n') for verse in verses]
@@ -137,10 +145,6 @@ if __name__ == '__main__':
 
   verses = map(read.filters.clean_leading_br, verses)
   verses = map(read.filters.clean_leading_parenthesized_line, verses)
-  verses = map(read.filters.remove_trailing_variant_line, verses)
-
-  # Tracer()()
-
 
   # Print('These are verses:')
   # for (i, verse) in enumerate(verses):

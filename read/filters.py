@@ -8,6 +8,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from collections import Counter
+from functools import wraps
 import logging
 import re
 import unicodedata
@@ -101,7 +102,7 @@ def split_further_at_verse_numbers(verses):
     lines = verse.split('\n')
     for line in lines:
       current_verse_lines.append(line)
-      if len(current_verse_lines) == 4 and remove_verse_numbers(line) != line:
+      if len(current_verse_lines) in [2, 4] and remove_verse_numbers(line) != line:
         new_verses.append('\n'.join(current_verse_lines))
         current_verse_lines = []
     if current_verse_lines:
@@ -133,6 +134,7 @@ def _print_rejection(reason, if_different=False):
   """When one of our rejection functions below return True, print it."""
   def decorated(func):
     """Returns what the function will actually be after this decorator."""
+    @wraps(func)
     def real(text, *args, **kwargs):
       """What the function will be, etc."""
       ret = func(text, *args, **kwargs)
@@ -171,6 +173,13 @@ def is_work_footer_line(text):
 
 def is_section_header_line(text):
   return bool(re.match(r'^\[[^ ]*\]<BR>', text))
+
+
+def remove_leading_section_header_line(verse):
+  lines = verse.split('\n')
+  if re.match(r'^(&nbsp;){5}atha ', lines[0]) and remove_verse_numbers(lines[0]) != lines[0]:
+    lines = lines[1:]
+  return '\n'.join(lines)
 
 
 def is_html_footer_line(text):
@@ -279,7 +288,7 @@ amarukaviracitam}<BR>
 def remove_trailing_variant_line(verse):
   """If 2-line verse has a '*VAR' line appended, trim it."""
   lines = verse.split('\n')
-  if len(lines) == 3 and re.match(r'^\*VAR.:? [0-9]{1,2}b', lines[2]):
+  if len(lines) == 3 and re.match(r'^\*VAR.:?[ ]*[0-9]{1,2}b', lines[2]):
     return '\n'.join(lines[:2])
   return verse
 

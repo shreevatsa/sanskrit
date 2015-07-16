@@ -13,9 +13,9 @@ function scan() {
 # Working fine
 scan amaru_u
 scan nkalivpu
+scan ramodtpu
 
 # Lots of footnotes etc. to remove in these yet.
-# scan ramodtpu
 # scan bhakirpu
 # scan bhall_pu
 # python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none && mv bharst_u.htm.stats texts/gretil_stats
