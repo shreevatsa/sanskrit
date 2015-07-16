@@ -102,7 +102,7 @@ def split_further_at_verse_numbers(verses):
     lines = verse.split('\n')
     for line in lines:
       current_verse_lines.append(line)
-      if len(current_verse_lines) in [2, 4] and remove_verse_numbers(line) != line:
+      if len(current_verse_lines) >= 2 and remove_verse_numbers(line) != line:
         new_verses.append('\n'.join(current_verse_lines))
         current_verse_lines = []
     if current_verse_lines:
@@ -127,7 +127,7 @@ def is_parenthesized_line(text):
 
 def is_empty(text):
   return (re.match(r'^[ \t]*$', text) or text in ['<BR>', '***<BR>'] or
-          re.match(r'^[_]{50,65}<BR>', text))
+          re.match(r'^[_]{50,78}<BR>', text))
 
 
 def _print_rejection(reason, if_different=False):
