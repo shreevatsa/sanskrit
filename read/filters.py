@@ -288,10 +288,10 @@ amarukaviracitam}<BR>
 def remove_trailing_variant_line(verse):
   """If 2-line verse has a '*VAR' line appended, trim it."""
   lines = verse.split('\n')
-  if len(lines) == 3 and re.match(r'^\*VAR.:?[ ]*[0-9]{1,2}b', lines[2]):
+  if len(lines) == 3 and re.match(r'^\*VAR.:?[ ]*(\{|[0-9]{1,2}b)', lines[2]):
     return '\n'.join(lines[:2])
   return verse
 
 
 def is_work_header_line(verse):
-  return verse == 'śrīrāmodantam |<BR>'
+  return verse == 'śrīrāmodantam |<BR>' or verse == 'Bhallaṭaśataka<BR>'
