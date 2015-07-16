@@ -128,11 +128,14 @@ if __name__ == '__main__':
             not read.filters.is_text_abbreviation_header(verse) and
             not read.filters.is_parentheses_info(verse) and
             not read.filters.is_trailing_work_name_junk(verse) and
+            not read.filters.is_section_header_line(verse) and
+            not read.filters.is_work_footer_line(verse) and
             not read.filters.is_abbreviation_block(verse)]
 
   verses = map(read.filters.clean_leading_br, verses)
   verses = map(read.filters.clean_leading_parenthesized_line, verses)
   verses = map(read.filters.clean_leading_footnote, verses)
+  verses = map(read.filters.remove_trailing_variant_line, verses)
 
   # Tracer()()
 

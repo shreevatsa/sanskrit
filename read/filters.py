@@ -125,18 +125,24 @@ def is_parenthesized_line(text):
 
 
 def is_empty(text):
-  return text == '<BR>' or text == '***<BR>'
+  return re.match(r'^[ \t]*$', text) or text in [
+      '<BR>', '***<BR>', '__________________________________________________<BR>']
 
 
-def _print_rejection(reason):
+def _print_rejection(reason, if_different=False):
   """When one of our rejection functions below return True, print it."""
   def decorated(func):
     """Returns what the function will actually be after this decorator."""
     def real(text, *args, **kwargs):
       """What the function will be, etc."""
       ret = func(text, *args, **kwargs)
-      if ret:
-        print(('\nRejecting this verse (%s): {{{\n%s\n}}}\n' % (reason, text)).encode('utf-8'))
+      must_print = False
+      if if_different:
+        must_print = text != ret
+      else:
+        must_print = bool(ret)
+      if must_print:
+        print(('\nRejecting/changing verse (%s): {{{\n%s\n}}}\n' % (reason, text)).encode('utf-8'))
       return ret
     return real
   return decorated
@@ -157,6 +163,14 @@ def is_footnote_line(text):
 def is_asterisked_variant_line(text):
   if re.match(r'^[*].*<BR>\n.*<BR>$', text):
     return True
+
+
+def is_work_footer_line(text):
+  return bool(re.match(r'iti .*<BR>', text))
+
+
+def is_section_header_line(text):
+  return bool(re.match(r'^\[[^ ]*\]<BR>', text))
 
 
 def is_html_footer_line(text):
@@ -252,3 +266,12 @@ def is_trailing_work_name_junk(verse):
 āmaruśatakam<BR>
 amarukaviracitam}<BR>
 āmarukaviracitam}}<BR>'''
+
+
+@_print_rejection('variant line', if_different=True)
+def remove_trailing_variant_line(verse):
+  """If 2-line verse has a '*VAR' line appended, trim it."""
+  lines = verse.split('\n')
+  if len(lines) == 3 and re.match(r'^\*VAR.:? [0-9]{1,2}b', lines[2]):
+    return '\n'.join(lines[:2])
+  return verse
