@@ -3,6 +3,9 @@ function scan() {
   if [ -f texts/gretil_stats/diff-$1.htm.patch ];
     then
       patch ~/GRETIL/forme/$1.htm -o /tmp/$1.htm < texts/gretil_stats/diff-$1.htm.patch
+  elif [ -f texts/gretil_stats/$1.htm ];
+    then
+      cp texts/gretil_stats/$1.htm /tmp/$1.htm
   else
       cp ~/GRETIL/forme/$1.htm /tmp/$1.htm
   fi
@@ -13,6 +16,7 @@ function scan() {
 # Every verse perfectly metrical
 scan nkalivpu
 scan ramodtpu
+scan kmeghdpu
 
 # Some "probably"s
 scan amaru_u
