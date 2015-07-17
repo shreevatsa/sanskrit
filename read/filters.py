@@ -13,6 +13,9 @@ import logging
 import re
 import unicodedata
 
+def _match(regex, text):
+  return re.match('^' + regex + '$', text)
+
 
 def process_crlf(text):
   """Removes occurences of the chr(13) character."""
@@ -122,12 +125,12 @@ def after_second_comment_line(text):
 
 
 def is_parenthesized_line(text):
-  return bool(re.match(r'^[(].*[)] ?<BR>$', text))
+  return bool(_match(r'^[(].*[)] ?<BR>$', text))
 
 
 def is_empty(text):
-  return (re.match(r'^[ \t]*$', text) or text in ['<BR>', '***<BR>', ' <BR>'] or
-          re.match(r'^[_]{50,78}<BR>', text))
+  return (_match(r'^[ \t]*$', text) or text in ['<BR>', '***<BR>', ' <BR>'] or
+          _match(r'^[_]{50,78}<BR>', text))
 
 
 def _print_rejection(reason, if_different=False):
@@ -155,32 +158,32 @@ def _print_rejection(reason, if_different=False):
 
 
 def is_header_line(text):
-  return bool(re.match(r'^Main Text<BR>$', text))
+  return bool(_match(r'^Main Text<BR>$', text))
 
 
 def is_footnote_line(text):
-  return bool(re.match(r'^\\footnote{.*<BR>$', text))
+  return bool(_match(r'^\\footnote{.*<BR>$', text))
 
 
 def is_asterisked_variant_line(text):
-  if re.match(r'^[*].*<BR>\n.*<BR>$', text):
+  if _match(r'^[*].*<BR>\n.*<BR>$', text):
     return True
 
 
 @_print_rejection('iti samAptam')
 def is_work_footer_line(text):
-  return bool(re.match(r'^[ \t]*(\|\| )?iti .* (samāptam|saṃpūrṇam|samāptaḥ).*<BR>$', text)
+  return bool(_match(r'^[ \t]*(\|\| )?iti .* (samāptam|saṃpūrṇam|samāptaḥ).*<BR>$', text)
               or text == 'śrīrāmodantaṃ samāptam |<BR>')
 
 
 def is_section_header_line(text):
-  return bool(re.match(r'^\[[^ ]*\]<BR>', text))
+  return bool(_match(r'^\[[^ ]*\]<BR>', text))
 
 
 def remove_leading_section_header_line(verse):
   """A header at the top of a section."""
   lines = verse.split('\n')
-  if re.match(r'^(&nbsp;){5}atha ', lines[0]) and remove_verse_numbers(lines[0]) != lines[0]:
+  if _match(r'^(&nbsp;){5}atha ', lines[0]) and remove_verse_numbers(lines[0]) != lines[0]:
     lines = lines[1:]
   if lines[0] == 'nīti-śatakam<BR>' and lines[1] == 'bhartṛhareḥ<BR>':
     lines = lines[2:]
@@ -241,7 +244,7 @@ def clean_leading_footnote(text):
 
 
 def is_verses_found_elsewhere_line(text):
-  return bool(re.match(r'Verses found in .* not found here<BR>$', text))
+  return bool(_match(r'Verses found in .* not found here<BR>$', text))
 
 
 def _is_abbreviation_line(line):
@@ -253,7 +256,7 @@ sū. = sūktimuktāvalī, <BR>
 pad. = padyāvalī, <BR>
 śā. = śārṅgadharapaddhati<BR>
   """
-  return re.match(r'[^ \n]*\. = [^ \n]*(, )?<BR>$', line)
+  return _match(r'[^ \n]*\. = [^ \n]*(, )?<BR>$', line)
 
 
 def is_abbreviation_block(text):
@@ -300,4 +303,4 @@ def remove_trailing_variant_line(verse):
 
 def is_work_header_line(verse):
   return (verse in ['śrīrāmodantam |<BR>', 'Bhallaṭaśataka<BR>'] or
-          re.match('^Bhatṛhari: Śatakatraya.*<BR>$', verse))
+          _match('^Bhatṛhari: Śatakatraya.*<BR>$', verse))
