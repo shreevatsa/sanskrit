@@ -10,11 +10,9 @@ from __future__ import unicode_literals
 
 import argparse
 import codecs
-import itertools
 import json
 import logging
 import os.path
-import re
 import tempfile
 
 from IPython.core.debugger import Tracer
@@ -25,39 +23,39 @@ import read.filters
 import identifier_pipeline
 
 
-def SplitIntoVerses(input_lines):
-  """Try to return a list of verses, from the lines."""
-  lines_new = []
-  last_seen_verse_number = -1
-  for line in input_lines:
-    match = re.match(r'^MSS_(\d+)-\d+', line)
-    if match:
-      current_verse_number = match.group(1)
-      if current_verse_number != last_seen_verse_number:
-        last_seen_verse_number = current_verse_number
-        lines_new.append('')
-      # line = line[len(match.group(0)):]
-    lines_new.append(line)
+# def SplitIntoVerses(input_lines):
+#   """Try to return a list of verses, from the lines."""
+#   lines_new = []
+#   last_seen_verse_number = -1
+#   for line in input_lines:
+#     match = re.match(r'^MSS_(\d+)-\d+', line)
+#     if match:
+#       current_verse_number = match.group(1)
+#       if current_verse_number != last_seen_verse_number:
+#         last_seen_verse_number = current_verse_number
+#         lines_new.append('')
+#       # line = line[len(match.group(0)):]
+#     lines_new.append(line)
 
-  verses_found = []
-  for key, group in itertools.groupby(lines_new, bool):
-    if key:
-      verses_found.append(list(group))
-  return verses_found
+#   verses_found = []
+#   for key, group in itertools.groupby(lines_new, bool):
+#     if key:
+#       verses_found.append(list(group))
+#   return verses_found
 
 
-def AcceptVerse(v):
-  """Checks that the verse is not in one of a number of known bad patterns."""
-  if len(v) == 1:
-    line = v[0]
-    assert isinstance(line, unicode)
-    if line in ['{ūttarameghaḥ}', 'iti śubhaṃ bhūyāt |']:
-      return False
-    if line.startswith('iti'):
-      return False
-    if line.startswith('atha'):
-      return False
-  return True
+# def AcceptVerse(v):
+#   """Checks that the verse is not in one of a number of known bad patterns."""
+#   if len(v) == 1:
+#     line = v[0]
+#     assert isinstance(line, unicode)
+#     if line in ['{ūttarameghaḥ}', 'iti śubhaṃ bhūyāt |']:
+#       return False
+#     if line.startswith('iti'):
+#       return False
+#     if line.startswith('atha'):
+#       return False
+#   return True
 
 
 def get_args():
