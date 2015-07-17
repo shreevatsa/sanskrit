@@ -176,9 +176,12 @@ def is_section_header_line(text):
 
 
 def remove_leading_section_header_line(verse):
+  """A header at the top of a section."""
   lines = verse.split('\n')
   if re.match(r'^(&nbsp;){5}atha ', lines[0]) and remove_verse_numbers(lines[0]) != lines[0]:
     lines = lines[1:]
+  if lines[0] == 'nīti-śatakam<BR>' and lines[1] == 'bhartṛhareḥ<BR>':
+    lines = lines[2:]
   return '\n'.join(lines)
 
 
@@ -294,4 +297,5 @@ def remove_trailing_variant_line(verse):
 
 
 def is_work_header_line(verse):
-  return verse == 'śrīrāmodantam |<BR>' or verse == 'Bhallaṭaśataka<BR>'
+  return (verse in ['śrīrāmodantam |<BR>', 'Bhallaṭaśataka<BR>'] or
+          re.match('^Bhatṛhari: Śatakatraya.*<BR>$', verse))
