@@ -126,7 +126,7 @@ def is_parenthesized_line(text):
 
 
 def is_empty(text):
-  return (re.match(r'^[ \t]*$', text) or text in ['<BR>', '***<BR>'] or
+  return (re.match(r'^[ \t]*$', text) or text in ['<BR>', '***<BR>', ' <BR>'] or
           re.match(r'^[_]{50,78}<BR>', text))
 
 
