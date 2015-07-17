@@ -167,8 +167,10 @@ def is_asterisked_variant_line(text):
     return True
 
 
+@_print_rejection('iti samAptam')
 def is_work_footer_line(text):
-  return bool(re.match(r'^[ \t]*iti .*<BR>', text) or text == 'śrīrāmodantaṃ samāptam |<BR>')
+  return bool(re.match(r'^[ \t]*(\|\| )?iti .* (samāptam|saṃpūrṇam|samāptaḥ).*<BR>$', text)
+              or text == 'śrīrāmodantaṃ samāptam |<BR>')
 
 
 def is_section_header_line(text):
