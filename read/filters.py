@@ -173,7 +173,7 @@ def is_asterisked_variant_line(text):
 @_print_rejection('iti samAptam')
 def is_work_footer_line(text):
   return bool(_match(r'^[ \t]*(\|\| )?iti .* (samāptam|saṃpūrṇam|samāptaḥ).*<BR>$', text)
-              or text == 'śrīrāmodantaṃ samāptam |<BR>')
+              or text == 'śrīrāmodantaṃ samāptam |<BR>' or text == 'iti śubhaṃ bhūyāt |<BR>')
 
 
 def is_section_header_line(text):
@@ -185,7 +185,8 @@ def remove_leading_section_header_line(verse):
   lines = verse.split('\n')
   if _match(r'^(&nbsp;){5}atha ', lines[0]) and remove_verse_numbers(lines[0]) != lines[0]:
     lines = lines[1:]
-  if lines[0] == 'nīti-śatakam<BR>' and lines[1] == 'bhartṛhareḥ<BR>':
+  if (lines[0] in ['nīti-śatakam<BR>', 'vairāgya-śatakam<BR>', 'śṛṅgāra-śatakam<BR>']
+      and lines[1] == 'bhartṛhareḥ<BR>'):
     lines = lines[2:]
   return '\n'.join(lines)
 

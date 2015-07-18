@@ -109,9 +109,9 @@ if __name__ == '__main__':
   table = {}
   for (verse_number, verse) in enumerate(verses):
     verse_number += 1
-    # Print('\nVerse %d is:' % verse_number)
-    # Print('\n    '.join(('    ' + verse).splitlines()))
-    # Print('End Verse %d' % verse_number)
+    Print('\nVerse %d is:' % verse_number)
+    Print('\n    '.join(('    ' + verse).splitlines()))
+    Print('End Verse %d' % verse_number)
     ok_and_results = identifier.IdentifyFromText(verse)
     if not ok_and_results:      # None for lines that contain no syllables
       continue
