@@ -237,7 +237,7 @@ def _Parts(pattern_lines):
            ('pada_1', ret.get('pada_1', set())),
            ('pada_2', ret.get('pada_2', set())),
            ('pada_3', ret.get('pada_3', set())),
-           ('pada_3', ret.get('pada_4', set())),
+           ('pada_4', ret.get('pada_4', set())),
            ('lines', ret.get('lines', set()))
          ]
 
