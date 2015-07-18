@@ -12,13 +12,13 @@ curated_vrtta_data = [
     ('Aupacchandasikam (Vasantamālikā) (Upodgatā)', ['LLG LLGLGLGG',
                                                      'LLGGLLGLGLGG']),
     # ('Dodhakam', 'G L L G L L G L L G G'),  # In VR
-    # ('Matta-mayūram', 'G G G G – G L L G G – L L G G'), # In VR
+    ('Matta-mayūram', 'G G G G – G L L G G – L L G G'), # Kalidasa: Raghuv. 9.75
     ('Kṣamā (Candrikā, Utpalinī)', 'LLLLLLGGLGGLG'),
     ('Prabhā (Mandākinī)', 'LLLLLLGLGGLG'),
     ('Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)', 'GGGGLLLLLLGGGG'),
     # ('Vaṃśapatrapatitam (Vaṃśadala)', 'GLLGLGLLLGLLLLLLG'),  # in VR
     ('Rucirā', 'L G L G L L L L G L G L G'),
-    # ('Nārācam', 'L L L L L L G L G G L G G L G G L G'),  # in DD
+    ('Nārācam', 'L L L L L L G L G G L G G L G G L G'),  # Kalidasa: end of Raghuv. 12
 
     # ('Mālatī', 'L L L L G L L G L G L G'),  # in VR
     ('Madirā', 'G L L  G L L  G L L  G L L  G L L  G L L  G L L  G'),

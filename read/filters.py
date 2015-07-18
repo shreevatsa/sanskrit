@@ -166,7 +166,7 @@ def is_footnote_line(text):
 
 
 def is_asterisked_variant_line(text):
-  if _match(r'^[*].*<BR>\n.*<BR>$', text):
+  if _match(r'^[*].*<BR>\n.*<BR>$', text) or text == 'c: (^d guru^ C)<BR>':
     return True
 
 
