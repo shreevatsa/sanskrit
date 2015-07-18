@@ -14,6 +14,7 @@ from google.appengine.ext.webapp import template
 from data.metrical_data import HtmlDescription as MetreHtmlDescription
 import identifier_pipeline
 from transliteration import transliterate
+import views.show_split
 
 
 def InputForm(default=''):
@@ -115,8 +116,11 @@ The issue is:
     self.response.write(out)
 
 
+template.register_template_library('templates.filters')
+
 # Handles all requests to sanskritmetres.appspot.com
 application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/identify', IdentifyPage),
+    ('/split', views.show_split.ShowBlocks),
 ], debug=True)
