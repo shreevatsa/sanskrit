@@ -65,7 +65,7 @@ data_vrttaratnakara = [
     # ('pramuditavadanā', 'LLLLLLGLGGLG'), #  Same as prabhā below
     # ('mauktidadāma', 'LGLLGLLGLLGL'),  # Ends in laghu, not adding for now
     ('kusumavicitrā', 'LLLLGG — LLLLGG'),
-    # ('jaloddhatagati', 'LGLLLGLGLLLG'), # better name in big list
+    ('jaloddhatagati', 'LGLLLGLGLLLG'), # Used by Bharavi: BhKir_5.27
     # ('bhujaṅgaprayāta', 'LGGLGGLGGLGG'),  # in curated
     # ('sragviṇī', 'GLGGLGGLGGLG'),  # in curated
     ('priyaṃvadā', 'LLLGLLLGLGLG'),  # = priyaṃvadaḥ in DD
