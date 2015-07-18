@@ -18,16 +18,13 @@ def mss_splitter(text):
   lines_of_current_verse = []
   last_seen_verse_id = None
   ok_lines = [line for line in text.split('\n')
-              if not read.filters.is_html_footer_line(line)]
+              if not read.filters.is_html_footer_line(line)
+              and not read.filters.is_empty(line)]
   for line in ok_lines:
-    if line == '<BR>' or line == '':
-      assert (lines_of_current_verse == [] or
-              lines_of_current_verse[0].startswith('MSS_9979-1'))
-      continue
     match = re.match(r'^MSS_([0-9ABCD\-]+)-[1-5]', line)
     assert match, (line, 'line is #%s#' % line)
     current_verse_id = match.group(1)
-    # line = line[len(match.group(0)):]
+    line = line[len(match.group(0)):]
     if current_verse_id == last_seen_verse_id:
       lines_of_current_verse.append(line)
     else:
