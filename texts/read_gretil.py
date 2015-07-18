@@ -19,7 +19,7 @@ from IPython.core.debugger import Tracer
 assert Tracer  # to slience Pyflakes
 
 from print_utils import Print
-import read.filters
+import read.split_gretil
 import identifier_pipeline
 
 
@@ -101,56 +101,8 @@ if __name__ == '__main__':
   set_up_logger(input_file_name)
 
   text = codecs.open(input_file_name, 'r', 'utf-8').read()
-
-  text = read.filters.process_crlf(text)
-  text = read.filters.normalize_nfkc(text)
-  text = read.filters.remove_control_characters(text)
-
-  text = read.filters.after_second_comment_line(text)
-
-  verses = read.filters.split_verses_at_br(text)
-
-  verses = map(read.filters.remove_trailing_parenthesized_line, verses)
-  verses = map(read.filters.clean_leading_footnote, verses)
-  verses = map(read.filters.remove_trailing_variant_line, verses)
-  verses = map(read.filters.remove_leading_section_header_line, verses)
-
-  verses = map(read.filters.process_html_spaces, verses)
-
-  # Tracer()()
-
-  verses = read.filters.split_further_at_verse_numbers(verses)
-
-  verses = [verse.strip('\n') for verse in verses]
-  verses = [verse for verse in verses if
-            not read.filters.is_parenthesized_line(verse) and
-            not read.filters.is_empty(verse) and
-            not read.filters.is_header_line(verse) and
-            not read.filters.is_footnote_line(verse) and
-            not read.filters.is_asterisked_variant_line(verse) and
-            not read.filters.is_footnote_followed_by_variant_line(verse) and
-            not read.filters.is_html_footer_line(verse) and
-            not read.filters.is_verses_found_elsewhere_line(verse) and
-            # not read.filters.starts_with_br(verse) and
-            not read.filters.is_edition_info(verse) and
-            not read.filters.is_text_abbreviation_header(verse) and
-            not read.filters.is_parentheses_info(verse) and
-            not read.filters.is_trailing_work_name_junk(verse) and
-            not read.filters.is_section_header_line(verse) and
-            not read.filters.is_work_footer_line(verse) and
-            not read.filters.is_work_header_line(verse) and
-            not read.filters.is_abbreviation_block(verse)]
-
-  verses = map(read.filters.clean_leading_br, verses)
-  verses = map(read.filters.clean_leading_parenthesized_line, verses)
-
-  # Print('These are verses:')
-  # for (i, verse) in enumerate(verses):
-  #   # if not re.match(r'^(.*<BR>\n){3}.*<BR>$', verse) and not re.match(r'^.*<BR>\n.*<BR>$', verse):
-  #     Print('\nVerse %d is:' % (i + 1))
-  #     Print('\n    '.join(('    ' + verse).splitlines()))
-  #     Print('End Verse %d\n' % (i + 1))
-
+  (verses, text) = read.split_gretil.split(text)
+  blocks = list(read.split_gretil.blocks_of_verses_in_text(verses, text))
 
   identifier = identifier_pipeline.IdentifierPipeline()
   table = {}
