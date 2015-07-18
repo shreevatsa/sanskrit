@@ -21,15 +21,15 @@ scan kmeghdpu
 # Some "probably"s
 scan amaru_u
 scan bhall_pu
+scan kakumspu
 
 # Errors for sure
 scan kragh_pu
 scan bhakirpu
-scan bharst_u
+# scan bharst_u
 python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none && mv bharst_u.htm.stats texts/gretil_stats
 
 # Lots of footnotes etc. to remove in these yet.
-# scan kakumspu
 # scan maghspvu
 # scan msubhs_u
 
