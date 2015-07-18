@@ -130,7 +130,7 @@ def is_parenthesized_line(text):
 
 def is_empty(text):
   return (_match(r'^[ \t]*$', text) or text in ['<BR>', '***<BR>', ' <BR>'] or
-          _match(r'^[_]{50,78}<BR>', text))
+          _match(r'^[_]{50,}<BR>', text))
 
 
 def _print_rejection(reason, if_different=False):
@@ -158,7 +158,7 @@ def _print_rejection(reason, if_different=False):
 
 
 def is_header_line(text):
-  return bool(_match(r'^Main Text<BR>$', text))
+  return text in ['Main Text<BR>', 'ADDITIONAL VERSES (KṢEPAKA)<BR>']
 
 
 def is_footnote_line(text):
