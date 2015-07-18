@@ -102,7 +102,8 @@ if __name__ == '__main__':
 
   text = codecs.open(input_file_name, 'r', 'utf-8').read()
   (verses, text) = read.split_gretil.split(text)
-  blocks = list(read.split_gretil.blocks_of_verses_in_text(verses, text))
+  # blocks = list(read.split_gretil.blocks_of_verses_in_text(verses, text))
+  Print('There are %d verses.' % len(verses))
 
   identifier = identifier_pipeline.IdentifierPipeline()
   table = {}
