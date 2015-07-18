@@ -34,8 +34,13 @@ _HK_ALPHABET = (list('aAiIuUR') + ['RR', 'lR', 'lRR', 'e', 'ai', 'o', 'au'] +
                  't', 'th', 'd', 'dh', 'n',
                  'p', 'ph', 'b', 'bh', 'm'] +
                 list('yrlvzSsh'))
-_HK_TO_SLP1_STATE_MACHINE = transliterator.MakeStateMachine(
-    _AlphabetToSLP1(_HK_ALPHABET))
+def _HKToSLP1StateMachine():
+  table = _AlphabetToSLP1(_HK_ALPHABET)
+  alternatives = [('e', 'E'), ('o', 'O')]
+  for (letter, alternative) in alternatives:
+    table[alternative] = table[letter]
+  return transliterator.MakeStateMachine(table)
+_HK_TO_SLP1_STATE_MACHINE = _HKToSLP1StateMachine()
 
 
 _IAST_ALPHABET_LOWER = (list('aāiīuūṛṝḷḹe') + ['ai', 'o', 'au', 'ṃ', 'ḥ'] +
