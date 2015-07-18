@@ -31,6 +31,6 @@ python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_v
 
 # Lots of footnotes etc. to remove in these yet.
 scan maghspvu
-# scan msubhs_u
+scan msubhs_u
 
 python -m texts.gretil_stats.generate_stats_table > texts/gretil_stats/stats_table.html

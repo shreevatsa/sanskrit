@@ -23,41 +23,6 @@ import read.split_gretil
 import identifier_pipeline
 
 
-# def SplitIntoVerses(input_lines):
-#   """Try to return a list of verses, from the lines."""
-#   lines_new = []
-#   last_seen_verse_number = -1
-#   for line in input_lines:
-#     match = re.match(r'^MSS_(\d+)-\d+', line)
-#     if match:
-#       current_verse_number = match.group(1)
-#       if current_verse_number != last_seen_verse_number:
-#         last_seen_verse_number = current_verse_number
-#         lines_new.append('')
-#       # line = line[len(match.group(0)):]
-#     lines_new.append(line)
-
-#   verses_found = []
-#   for key, group in itertools.groupby(lines_new, bool):
-#     if key:
-#       verses_found.append(list(group))
-#   return verses_found
-
-
-# def AcceptVerse(v):
-#   """Checks that the verse is not in one of a number of known bad patterns."""
-#   if len(v) == 1:
-#     line = v[0]
-#     assert isinstance(line, unicode)
-#     if line in ['{ūttarameghaḥ}', 'iti śubhaṃ bhūyāt |']:
-#       return False
-#     if line.startswith('iti'):
-#       return False
-#     if line.startswith('atha'):
-#       return False
-#   return True
-
-
 def get_args():
   """Setting up argument parser and parsing passed arguments."""
   argument_parser = argparse.ArgumentParser(description='Read a GRETIL file, '
@@ -101,7 +66,8 @@ if __name__ == '__main__':
   set_up_logger(input_file_name)
 
   text = codecs.open(input_file_name, 'r', 'utf-8').read()
-  (verses, text) = read.split_gretil.split(text)
+  custom_splitter = read.split_gretil.mss_splitter if 'msubhs_u.htm' in input_file_name else None
+  (verses, text) = read.split_gretil.split(text, custom_splitter=custom_splitter)
   # blocks = list(read.split_gretil.blocks_of_verses_in_text(verses, text))
   Print('There are %d verses.' % len(verses))
 
