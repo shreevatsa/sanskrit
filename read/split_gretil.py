@@ -12,6 +12,8 @@ import re
 # from print_utils import Print
 import read.filters
 
+MSS_LINE_INITIAL_REGEX = re.compile(r'^MSS_([0-9ABCD\-]+)-[1-5]')
+
 def mss_splitter(text):
   """Split by matching MSS-* id."""
   verses = []
@@ -21,10 +23,9 @@ def mss_splitter(text):
               if not read.filters.is_html_footer_line(line)
               and not read.filters.is_empty(line)]
   for line in ok_lines:
-    match = re.match(r'^MSS_([0-9ABCD\-]+)-[1-5]', line)
+    match = MSS_LINE_INITIAL_REGEX.match(line)
     assert match, (line, 'line is #%s#' % line)
     current_verse_id = match.group(1)
-    line = line[len(match.group(0)):]
     if current_verse_id == last_seen_verse_id:
       lines_of_current_verse.append(line)
     else:

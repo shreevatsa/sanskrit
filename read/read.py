@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 import logging
 
 import read.filters
+import read.split_gretil
 import slp1
 import transliteration.detect
 from transliteration import transliterate
@@ -33,7 +34,13 @@ def _transliterate_into_lines(orig_text, input_scheme):
   cleaned_lines = []
   display_lines = []
   for orig_line in orig_text.splitlines():
+    leading_verse_id = None
+    match = read.split_gretil.MSS_LINE_INITIAL_REGEX.match(orig_line)
+    if match:
+      leading_verse_id = match.group(0)
+      orig_line = orig_line[len(leading_verse_id):]
     (display_line, rejects) = transliterate.TransliterateFrom(orig_line, input_scheme, pass_through)
+
     ignore = r"""0123456789'".\/$&%{}|!’‘(),""" + 'ऽ।॥०१२३४५६७८९'
     read.filters.debug_rejected_characters(orig_line, rejects - set(ignore))
     cleaned_line = ''.join(c for c in display_line if c not in pass_through)

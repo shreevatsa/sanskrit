@@ -31,6 +31,6 @@ scan maghspvu
 python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_verses=none --print_unidentified_verses=none && mv bharst_u.htm.stats texts/gretil_stats
 
 # The monster test case
-# scan msubhs_u
+scan msubhs_u
 
 python -m texts.gretil_stats.generate_stats_table > texts/gretil_stats/stats_table.html
