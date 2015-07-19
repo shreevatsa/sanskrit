@@ -20,11 +20,13 @@ import read.split_gretil
 
 
 class ShowBlocks(webapp2.RequestHandler):
+  """Given either a file or a url, retrieves text and splits into verses."""
   def get(self):
     out = template.render('templates/split.html', {})
     self.response.write(out)
 
   def post(self):
+    """Handles post: either a file is uploaded or a url."""
     blocks = []
     action = self.request.POST.get('submit_action')
     assert action in ['Upload', 'Retrieve'], action
@@ -35,16 +37,15 @@ class ShowBlocks(webapp2.RequestHandler):
       try:
         url = self.request.POST.get('url_of_htm_file')
         text = urllib2.urlopen(url).read().decode('utf8')
-      except Exception as e:
-        logging.error(e)
-        self.response.write(template.render('templates/split.html', {}))
-        return
+      except Exception as error: # pylint: disable=broad-except
+        logging.error(error)
+        return self.get()
 
-    try:
-      (verses, text) = read.split_gretil.split(text)
-      blocks = list(read.split_gretil.blocks_of_verses_in_text(verses, text))
-    except Exception as e:
-      logging.error(e)
+    if not text:
+      return self.get()
+
+    (verses, text) = read.split_gretil.split(text)
+    blocks = list(read.split_gretil.blocks_of_verses_in_text(verses, text))
 
     out = template.render('templates/split.html', {'blocks': blocks})
     self.response.write(out)

@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 
 from google.appengine.ext.webapp import template
 
-register = template.create_template_register()
+register = template.create_template_register() # pylint: disable=invalid-name
 
 @register.filter
 def pre_fixed(content):

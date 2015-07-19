@@ -33,4 +33,4 @@ python -m texts.read_gretil texts/gretil_stats/bharst_u.htm --print_identified_v
 # The monster test case
 scan msubhs_u
 
-python -m texts.gretil_stats.generate_stats_table > texts/gretil_stats/stats_table.html
+python -m texts.gretil_stats.generate_stats_table > templates/gretil_stats_table.html
