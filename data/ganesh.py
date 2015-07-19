@@ -4,10 +4,7 @@
 See https://www.youtube.com/playlist?list=PLABJEFgj0PWVXr2ERGu2xtoSXrNdBs5xS
 and [TODO(shreevatsa): Vitasta video]."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 data = [# TODO(shreevatsa): AnushtupShloka
         # TODO(shreevatsa): Arya
