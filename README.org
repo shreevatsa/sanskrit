@@ -64,11 +64,14 @@ The design of the program is as follows.
 
 *** The raw input
 
-     For the web form, whatever is typed into the textarea. Consider the examples above.
+     This is whatever is typed into the textarea (for the web interface) or given as input to `IdentifierPipeline`.
+     Consider the examples above.
 
 *** The input in slp1
 
-     Whatever the input script (transliteration scheme) used, the input is cleaned up and "read" into a limited Sanskrit alphabet (slp1). For instance, the examples above are read as the following:
+     Whatever the input script (transliteration scheme) used,
+     the input is cleaned up and "read" into a limited Sanskrit alphabet (slp1).
+     For instance, the examples above are read as the following:
      #+BEGIN_EXAMPLE
      kAzWAdagnirjAyatemaTyamAnAd
      BUmistoyaMKanyamAnAdadAti
@@ -115,7 +118,7 @@ The design of the program is as follows.
 
    Finally, we compare this metrical signature (or "pattern lines") against a database of known patterns.
 
-   For example, in our database have the information that *Śālinī* is a /sama-vṛtta/ metre consisting of 4 lines (/pāda/-s / quarters) each having the pattern
+   For example, in our database we have the information that *Śālinī* is a /sama-vṛtta/ metre consisting of 4 lines (/pāda/-s / quarters) each having the pattern
 
    #+BEGIN_EXAMPLE
    GGGG—GLGGLGG
