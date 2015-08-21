@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Identify."""
+"""Views for the identify page."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -63,7 +63,8 @@ The issue is:
                               'default_identify_input' : input_verse,
                               'results': results,
                               'full_match': full_match,
-                              'first_result_display_name': result_display_names[0],
+                              'first_result_display_name': (result_display_names[0]
+                                                            if result_display_names else None),
                               'result_display_names': result_display_names,
                               'debug_read': identifier.DebugRead(),
                               'debug_identify': identifier.DebugIdentify(),
