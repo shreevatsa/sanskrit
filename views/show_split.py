@@ -29,7 +29,7 @@ class ShowBlocks(webapp2.RequestHandler):
     assert action in ['Upload', 'Retrieve'], action
     if action == 'Upload':
       uploaded_file = self.request.POST.get('uploaded_htm_file')
-      text = uploaded_file.file.read().decode('utf8')
+      text = uploaded_file.file.read().decode('utf8', 'replace')
     else:
       try:
         url = self.request.POST.get('url_of_htm_file')
