@@ -1,22 +1,12 @@
---- /Users/shreevatsa/GRETIL/forme/nkalivpu.htm	2003-11-19 13:12:54.000000000 +0530
-+++ nkalivpu.htm	2013-12-30 23:55:37.000000000 +0530
-@@ -101,7 +101,6 @@
- <BR>
- uccair udghoṣya jetavyaṃ madhyasthaś ced apaṇḍitas  /<BR>
- paṇḍito yadi tatraiva pakṣapāto 'dhiropyatām  // NKv_3 //<BR>
--*VAR. 3b: udghoṣya; ed.: udghuṣya (L)<BR>
- <BR>
- lobho hetur dhanaṃ sādhyaṃ dṛṣṭāntas tu purohitas  /<BR>
- ātmotkarṣo nigamanam anumāneṣv ayaṃ vidhis  // NKv_4 //<BR>
-@@ -129,7 +128,6 @@
- <BR>
- sukhaṃ sukhiṣu duḥkhe 'pi jīvanaṃ duḥkhaśāliṣu  /<BR>
- anugrahāyate yeṣāṃ te dhanyāḥ khalu māntrikās  // NKv_12 //<BR>
--*VAR.:  12b em: sukhe sukhiṣu<BR>
+--- /Users/srajagopalan/GRETIL/forme/nkalivpu.htm	2014-06-16 06:47:47.000000000 -0700
++++ /tmp/nkalivpu.htm	2015-07-15 17:42:55.000000000 -0700
+@@ -132,12 +132,12 @@
+ *VAR.:  12b em: sukhe sukhiṣu<BR>
  <BR>
  yāvad ajñānato maunam ācāro vā vilakṣaṇas  /<BR>
- tāvan māhātmyarūpeṇa paryavasyati māntrike aḥ  // NKv_13 //<BR>
-@@ -137,7 +135,7 @@
+-tāvan māhātmyarūpeṇa paryavasyati māntrike aḥ  // NKv_13 //<BR>
++tāvan māhātmyarūpeṇa paryavasyati māntrike // NKv_13 //<BR>
+ <BR>
  cārān vicārya daivajñair vaktavyaṃ bhūbhujāṃ phalam  /<BR>
  grahacāraparijñānaṃ teṣām āvaśyakaṃ yatas  // NKv_14 //<BR>
  <BR>
@@ -25,13 +15,7 @@
  garbhapraśneṣu kathayan daivajño vijayī bhavet  // NKv_15 //<BR>
  <BR>
  āyuspraśne dīrgham āyur vācyaṃ mauhūrtikair janais  /<BR>
-@@ -217,13 +215,12 @@
- <BR>
- __________________________________________________<BR>
- <BR>
--[bandhavaḥ]<BR>
- <BR>
- gṛhiṇī bhaginī tasyāḥ śvaśurau śyāla ity api  /<BR>
+@@ -223,7 +223,7 @@
  prāṇinām kalinā sṛṣṭāḥ pañca prāṇā ime 'pare  // NKv_41 //<BR>
  <BR>
  jāmātaro bhāgineyā mātulā dārabāndhavās  /<BR>
@@ -40,67 +24,30 @@
  <BR>
  mātulasya balaṃ mātā jāmātur duhitā balam  /<BR>
  śvaśurasya balaṃ bhāryā svayam evātither balam  // NKv_43 //<BR>
-@@ -248,7 +245,6 @@
- <BR>
- __________________________________________________<BR>
- <BR>
--[uttamaṛṇāḥ]<BR>
+@@ -251,7 +251,7 @@
+ [uttamaṛṇāḥ]<BR>
  <BR>
  smṛte sīdanti gātrāṇi dṛṣṭe prajñā vinaśyati  /<BR>
- aho mahad idaṃ bhūtam uttamaṛṇābhiśābdhitam  // NKv_50 //<BR>
-@@ -261,7 +257,6 @@
+-aho mahad idaṃ bhūtam uttamaṛṇābhiśābdhitam  // NKv_50 //<BR>
++aho mahad idaṃ bhūtam uttamarṇābhiśābdhitam  // NKv_50 //<BR>
  <BR>
- __________________________________________________<BR>
+ antako 'pi hi jantūnām antakālam apekṣate  /<BR>
+ na kālaniyamaḥ kaś cid uttamārṇasya vidyate  // NKv_51 //<BR>
+@@ -354,7 +354,7 @@
+ dhanapālaḥ piśāco hi datte svāminy upasthite  /<BR>
+ dhanalubdhaḥ piśācas tu na kasmai cana ditsate  // NKv_78 //<BR>
  <BR>
--[dāridryam]<BR>
+-dātāro 'rthibhir arthyante dātṛbhiḥ puno 'rthinas  /<BR>
++dātāro 'rthibhir arthyante dātṛbhiḥ punar arthinas  /<BR>
+ kartṛkarmavyatīhārād aho nimnonnataṃ kiyat  // NKv_79 //<BR>
  <BR>
- śatrau sāntvaṃ pratīkāraḥ sarvarogeṣu bheṣajam  /<BR>
- mṛtyau mṛtyuñjayadhyānaṃ dāridrye tu na kiṃ cana  // NKv_53 //<BR>
-@@ -271,7 +266,6 @@
+ svasminn asati nārthasya rakṣakaḥ saṃbhaved iti  /<BR>
+@@ -395,7 +395,7 @@
+ sarvaṃ brahmeti vādaś ca sadyaspratyayahetavas  // NKv_90 //<BR>
  <BR>
- giraṃ skhalantīṃ mīlantīṃ dṛṣṭiṃ pādau visaṃsthulau  /<BR>
- protsāhayati yācñāyāṃ rājājñeva daridratā  // NKv_55 //<BR>
--*VAR. 55b:  em.: visaṃsthulau; ed.: visaṃsphuṭau<BR>
+ āmadhyāhnaṃ nadīvāsaḥ samāje devatārcanam  /<BR>
+-satataṃ śuciveṣaś ca ity etad dambhasya jīvitam  // NKv_91 //<BR>
++satataṃ śuciveṣaś cety etad dambhasya jīvitam  // NKv_91 //<BR>
  <BR>
- jīryanti rājavidveṣā jīryanty avihitāny api  /<BR>
- ākiṃcanyabalāḍhyānām antato 'śmāpi jīryati  // NKv_56 //<BR>
-@@ -281,7 +275,6 @@
- <BR>
- __________________________________________________<BR>
- <BR>
--[dhaninaḥ]<BR>
- <BR>
- prakāśayaty ahaṃkāraṃ pravartayati taskarān  /<BR>
- protsāhayati dāyādāṃl lākṣmīḥ kiṃ cid upasthitā  // NKv_58 //<BR>
-@@ -321,7 +314,6 @@
- <BR>
- __________________________________________________<BR>
- <BR>
--[piśunāḥ]<BR>
- <BR>
- dhanabhāro hi lokasya piśunair eva dhāryate  /<BR>
- kathaṃ te taṃ laghūkartuṃ yatante 'parathā svatas  // NKv_70 //<BR>
-@@ -340,7 +332,6 @@
- <BR>
- __________________________________________________<BR>
- <BR>
--[lobhinaḥ]<BR>
- <BR>
- śuṣkopavāso dharmeṣu bhaiṣajyeṣu ca laṅghanam  /<BR>
- japayajñaś ca yajñeṣu rocate lobhaśālinām  // NKv_75 //<BR>
-@@ -365,7 +356,6 @@
- <BR>
- __________________________________________________<BR>
- <BR>
--[dhārmikāḥ]<BR>
- <BR>
- pradīyate viduṣy ekaṃ kavau daśa naṭe śatam  /<BR>
- sahasraṃ dāmbhike loke śrotriye tu na kimcana  // NKv_82 //<BR>
-@@ -405,7 +395,6 @@
- <BR>
- __________________________________________________<BR>
- <BR>
--[durjanāḥ]<BR>
- <BR>
- daṇḍyamānā vikurvanti lālyamānās tatas tarām  /<BR>
- durjanānām ato nyāyyaṃ dūrād eva visarjanam  // NKv_94 //<BR>
+ tāvad dīrghaṃ nityakarma yāvat syād draṣṭṛmelanam  /<BR>
+ tāvatsaṃkṣipyate sarvaṃ yāvad draṣṭā na vidyate  // NKv_92 //<BR>

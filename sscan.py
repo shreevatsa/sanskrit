@@ -15,21 +15,18 @@ Known issues:
      See https://github.com/shreevatsa/sanskrit/issues?state=open
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
 import sys
 
 import print_utils
-import simple_identifier
+import identifier_pipeline
 
 
 if __name__ == '__main__':
   logging.getLogger().setLevel(logging.WARNING)
-  lines = [l.decode('utf8') for l in sys.stdin]
-  identifier = simple_identifier.SimpleIdentifier()
-  identifier.IdentifyFromLines(lines)
+  from_stdin = sys.stdin.read().decode('utf8')
+  identifier = identifier_pipeline.IdentifierPipeline()
+  identifier.IdentifyFromText(from_stdin)
   print_utils.Print(identifier.AllDebugOutput())

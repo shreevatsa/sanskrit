@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>File split into verses</title>
+  <style type="text/css">
+    h1 { text-align: center; }
+    pre { display: inline; }
+    .selected { color: green; }
+    .rejected { color: red; }
+  </style>
+</head>
+
+<body>
+{% if errors %}
+<p>Had the following errors.</p>
+<pre>
+  {{ errors }}
+</pre>
+{% endif %}
+
+{% for block_content, block_selected in blocks %}
+  {% if block_selected %}
+<span class="selected">
+  {% else %}
+<span class="rejected">
+  {% endif %}
+  <pre>{{ block_content|pre_fixed }}</pre>
+</span>
+{% if block_selected %}
+<hr/>
+{% endif %}
+{% endfor %}
+
+<ul>
+  <li>
+  <form method="post" enctype="multipart/form-data">
+  <input type="file" name="uploaded_htm_file" />
+  <input type="submit" name="submit_action" value="Upload" />
+  </form>
+  </li>
+  or
+  <li>
+  <form method="post">
+  <input type="text" size="100" name="url_of_htm_file" />
+  <input type="submit" name="submit_action" value="Retrieve" />
+  </form></li>
+</body>
+</html>

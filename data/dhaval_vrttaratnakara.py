@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """List of metres from Vrtta-ratnakara, input by Dr. Dhaval Patel."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 data_vrttaratnakara = [
     ('śrī', 'G'),
@@ -35,7 +32,7 @@ data_vrttaratnakara = [
     ('mayūrasāriṇī', 'GLGLGLGLGG'),
     # ('rukmavatī', 'GLLGGGLLGG'),  # Same as campakamālā above
     ('mattā', 'GGGG — LLLLGG'),
-    ('manoramā', 'LLLGLGLGLG'),
+    ('manoramā', 'LLLGLGLGLG'), # TODO(shreevatsa): Could be mistake for Viyogini
     # ('upasthitā', 'GG — LLGLLGLG'), # Additional 'G' in big list
     ('indravajrā', 'GGLGGLLGLGG'),  # covered by upajāti
     ('upendravajrā', 'LGLGGLLGLGG'),  # covered by upajāti
@@ -65,7 +62,7 @@ data_vrttaratnakara = [
     # ('pramuditavadanā', 'LLLLLLGLGGLG'), #  Same as prabhā below
     # ('mauktidadāma', 'LGLLGLLGLLGL'),  # Ends in laghu, not adding for now
     ('kusumavicitrā', 'LLLLGG — LLLLGG'),
-    # ('jaloddhatagati', 'LGLLLGLGLLLG'), # better name in big list
+    ('jaloddhatagati', 'LGLLLGLGLLLG'), # Used by Bharavi: BhKir_5.27
     # ('bhujaṅgaprayāta', 'LGGLGGLGGLGG'),  # in curated
     # ('sragviṇī', 'GLGGLGGLGGLG'),  # in curated
     ('priyaṃvadā', 'LLLGLLLGLGLG'),  # = priyaṃvadaḥ in DD
@@ -142,7 +139,7 @@ data_vrttaratnakara = [
     ('ketumatī', ['LLGLGLLLGG', 'GLLGLGLLLGG']),
     # ('ākhyānikī', ['GGLGGLLGLGG', 'LGLGGLLGLGG']),  # covered by upajāti
     # ('viparītākhyānikī', ['LGLGGLLGLGG', 'GGLGGLLGLGG']), # covered by upajāti
-    ('hariṇaplutā', ['LLGLLGLLGLG', 'LLLGLLGLLGLG']),
+    ('hariṇaplutā', ['LLGLLGLLGLG', 'LLLGLLGLLGLG']), # TODO(shreevatsa): could be mistake for Drutavilambita
     # ('aparavaktra', ['LLLLLLGLGLG', 'LLLLGLLGLGLG']), # in curated
     # ('puṣpitāgrā', ['LLLLLLGLGLGG', 'LLLLGLLGLGLGG']), # in curated
     ('yavātparāmatīya', ['GLGLGLGLGLGL', 'LGLGLGLGLGLG']),

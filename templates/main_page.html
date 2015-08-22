@@ -27,7 +27,7 @@ Type a Sanskrit verse into the box below and click the button.<br/>
 </p>
 
 <p>
-{{INPUT_FORM|safe}}
+{% include "input_form.html" %}
 </p>
 
 <p>This is version 1h. Older versions are still available at
@@ -50,7 +50,7 @@ errors in the GRETIL text. Most of the obscure metres in the table are not
 actually present in the texts: a verse in some other metre is getting recognized
 as such because of errors. Need to go through the texts and clean them up.)</p>
 
-{{METRE_STATISTICS|safe}}
+{% include "gretil_stats_table.html" %}
 
 <h2>The most important Sanskrit metres</h2>
 <p>

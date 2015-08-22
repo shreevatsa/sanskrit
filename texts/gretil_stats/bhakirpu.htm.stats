@@ -1,4 +1,8 @@
 {
+  "Matta-mayūram": [
+    1,
+    "0.10%"
+  ],
   "vaṃśapatrapatitam": [
     1,
     "0.10%"
@@ -55,6 +59,10 @@
     38,
     "3.65%"
   ],
+  "jaloddhatagati": [
+    1,
+    "0.10%"
+  ],
   "Aupacchandasikam (Vasantamālikā) (Upodgatā)": [
     36,
     "3.46%"
@@ -98,9 +106,5 @@
   "Prabhā (Mandākinī)": [
     6,
     "0.58%"
-  ],
-  "unknown": [
-    2,
-    "0.19%"
   ]
 }

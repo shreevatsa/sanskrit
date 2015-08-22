@@ -21,20 +21,17 @@ Another solution (which we use) is to create and run a state machine. When you
 see 'e' when in the default state, output <e> and return to the default state,
 but when you see 'k', go into a state where
 
-- if the next character is 'h', output 'kh' and go to the default state (having
+- if the next character is 'h', output <kh> and go to the default state (having
   consumed both characters)
 
-- if the next character is anything else, output 'k', and go to the default
+- if the next character is anything else, output <k>, and go to the default
   state (having consumed only the 'k').
 
 So each "state" is a dict containing two values for every "key" (character): on
 seeing that character, which state to go to, and how many characters to consume.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 
 def MakeStateMachine(table):
@@ -66,7 +63,7 @@ def _LongestRead(state_machine, text):
   return (num_matched, replacement)
 
 
-def Transliterate(state_machine, text, ignore=None, pass_through=None):
+def Transliterate(state_machine, text, pass_through=None):
   """Transliterates text using the state machine."""
   transliterated = ''
   unparsed_characters = set()
@@ -82,7 +79,7 @@ def Transliterate(state_machine, text, ignore=None, pass_through=None):
       char = text[num_parsed]
       if pass_through and char in pass_through:
         transliterated += char
-      elif ignore is None or char not in ignore:
+      else:
         unparsed_characters.add(char)
       num_parsed += 1
   return (transliterated, unparsed_characters)

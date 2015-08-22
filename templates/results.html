@@ -10,7 +10,7 @@ abbr {border-bottom: 1px dotted black; color:red;}
 {% autoescape off %}
 
 <p>
-{{ input_form|safe }}
+{% include "input_form.html" %}
 </p>
 
 {% if results %}

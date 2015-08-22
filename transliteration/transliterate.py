@@ -2,16 +2,12 @@
 
 """Transliteration data."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import re
-
-from poor_enums import Enum
 import slp1
+from transliteration.detect import TRANSLITERATION_SCHEME
 from transliteration import devanagari
+from transliteration.transliteration_data import KANNADA_CONSONANTS
 from transliteration import transliterator
 
 _DEFAULT_PASS_THROUGH = ' -?'
@@ -97,9 +93,9 @@ _MANGLED_DEVANAGARI_TO_SLP1_STATE_MACHINE = transliterator.MakeStateMachine(
     _AlphabetToSLP1(devanagari.Alphabet()))
 
 
-def _TransliterateDevanagari(text, ignore=None):
+def _TransliterateDevanagari(text):
   return transliterator.Transliterate(_MANGLED_DEVANAGARI_TO_SLP1_STATE_MACHINE,
-                                      devanagari.Mangle(text), ignore,
+                                      devanagari.Mangle(text),
                                       _DEFAULT_PASS_THROUGH)
 
 
@@ -137,7 +133,6 @@ _DEVANAGARI_VOWEL_SIGNS = 'का कि की कु कू कृ कॄ क�
 _DEVANAGARI_VOWEL_SIGNS = ''.join(_DEVANAGARI_VOWEL_SIGNS[i]
                                   for i in range(len(_DEVANAGARI_VOWEL_SIGNS))
                                   if i % 3 == 1)
-_KANNADA_CONSONANTS = 'ಕಖಗಘಙಚಛಜಝಞಟಠಡಢಣತಥದಧನಪಫಬಭಮಯರಲವಶಷಸಹಳಱೞ'
 _DEVANAGARI_CONSONANTS = 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसहळरळ'
 _KANNADA_VOWELS = 'ಅಆಇಈಉಊಋೠಎಏಐಒಓಔ'
 _DEVANAGARI_VOWELS = 'अआइईउऊऋॠऎएऐऒओऔ'
@@ -148,7 +143,7 @@ _DEVANAGARI_AV = 'अं अः'
 _DEVANAGARI_AV = ''.join(_DEVANAGARI_AV[i]
                          for i in range(len(_DEVANAGARI_AV)) if i % 3 == 1)
 _KANNADA_TO_DEVANAGARI = transliterator.MakeStateMachine(dict(zip(
-    _KANNADA_VOWELS + _KANNADA_AV + _KANNADA_CONSONANTS + _KANNADA_VOWEL_SIGNS,
+    _KANNADA_VOWELS + _KANNADA_AV + KANNADA_CONSONANTS + _KANNADA_VOWEL_SIGNS,
     _DEVANAGARI_VOWELS + _DEVANAGARI_AV + _DEVANAGARI_CONSONANTS +
     _DEVANAGARI_VOWEL_SIGNS)))
 
@@ -158,56 +153,27 @@ def KannadaToDevanagari(text):
                                       pass_through=_DEFAULT_PASS_THROUGH)[0]
 
 
-TRANSLITERATION_SCHEME = Enum(HK=0,
-                              IAST=1,
-                              ITRANS=2,
-                              Devanagari=3,
-                              Kannada=4)
-
-
-def DetectTransliterationScheme(text):
-  """Returns which transliteration scheme the given text is in."""
-  characteristic_kannada = '[%s]' % _KANNADA_CONSONANTS
-  if re.search(characteristic_kannada, text):
-    return TRANSLITERATION_SCHEME.Kannada
-  characteristic_devanagari = '[%s]' % ''.join(devanagari.Alphabet())
-  if re.search(characteristic_devanagari, text):
-    return TRANSLITERATION_SCHEME.Devanagari
-  characteristic_iast = '[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]'
-  if re.search(characteristic_iast, text):
-    return TRANSLITERATION_SCHEME.IAST
-  characteristic_itrans = (r'aa|ii|uu|[RrLl]\^[Ii]|RR[Ii]|LL[Ii]|~N|Ch|~n|N\^'
-                           + r'|Sh|sh')
-  if re.search(characteristic_itrans, text):
-    return TRANSLITERATION_SCHEME.ITRANS
-  return TRANSLITERATION_SCHEME.HK
-
-
-def DetectAndTransliterate(input_text, pass_through=None, ignore=None):
-  """Transliterates text to SLP1, after guessing what script it is."""
+def TransliterateFrom(input_text, input_scheme, pass_through=None):
+  """Transliterates text to SLP1, after being told what script it is."""
   input_text = _IsoToIast(input_text)
 
   def ForKannada(text):
     text = KannadaToDevanagari(text)
     text = _FixBadDevanagari(text)
     text = text.replace('s', 'ऽ')
-    return _TransliterateDevanagari(text, ignore)
+    return _TransliterateDevanagari(text)
 
-  transliteration_scheme = DetectTransliterationScheme(input_text)
   actions = {
       TRANSLITERATION_SCHEME.Kannada: ForKannada,
       TRANSLITERATION_SCHEME.Devanagari:
-      lambda text: _TransliterateDevanagari(text, ignore),
+      lambda text: _TransliterateDevanagari(text),
       TRANSLITERATION_SCHEME.IAST:
-      lambda text: transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE,
-                                                text, ignore, pass_through),
+      lambda text: transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE, text, pass_through),
       TRANSLITERATION_SCHEME.ITRANS:
-      lambda text: transliterator.Transliterate(_ITRANS_TO_SLP1_STATE_MACHINE,
-                                                text, ignore, pass_through),
+      lambda text: transliterator.Transliterate(_ITRANS_TO_SLP1_STATE_MACHINE, text, pass_through),
       TRANSLITERATION_SCHEME.HK:
-      lambda text: transliterator.Transliterate(_HK_TO_SLP1_STATE_MACHINE, text,
-                                                ignore, pass_through)}
-  return actions[transliteration_scheme](input_text)
+      lambda text: transliterator.Transliterate(_HK_TO_SLP1_STATE_MACHINE, text, pass_through)}
+  return actions[input_scheme](input_text)
 
 
 _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE = transliterator.MakeStateMachine(
@@ -215,9 +181,8 @@ _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE = transliterator.MakeStateMachine(
 
 
 def _CleanSLP1ToDevanagari(text):
-  (text, unparsed) = transliterator.Transliterate(
-      _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE, text, ignore=None,
-      pass_through=_DEFAULT_PASS_THROUGH)
+  (text, unparsed) = transliterator.Transliterate(_SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE, text,
+                                                  pass_through=_DEFAULT_PASS_THROUGH)
   assert not unparsed, (text, unparsed)
   assert isinstance(text, unicode), text
   return devanagari.UnMangle(text)
@@ -225,7 +190,6 @@ def _CleanSLP1ToDevanagari(text):
 
 def TransliterateForOutput(text):
   iast = transliterator.Transliterate(_SLP1_TO_IAST_STATE_MACHINE, text,
-                                      ignore=None,
                                       pass_through=_DEFAULT_PASS_THROUGH)[0]
   deva = _CleanSLP1ToDevanagari(text)
   return '%s (%s)' % (iast, deva)
@@ -234,11 +198,9 @@ def TransliterateForOutput(text):
 def AddDevanagariToIast(iast):
   """Given IAST text, include the Devanagari transliteration in brackets."""
   stray = ' ()/'      # Non-IAST characters that appear in metre names
-  slp_text = transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE, iast,
-                                          ignore=None, pass_through=stray)[0]
-  (deva, unparsed) = transliterator.Transliterate(
-      _SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE, slp_text, ignore=None,
-      pass_through=stray)
+  slp_text = transliterator.Transliterate(_IAST_TO_SLP1_STATE_MACHINE, iast, pass_through=stray)[0]
+  (deva, unparsed) = transliterator.Transliterate(_SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE,
+                                                  slp_text, pass_through=stray)
   assert not unparsed, (deva, unparsed)
   assert isinstance(deva, unicode), deva
   deva = devanagari.UnMangle(deva)
@@ -247,5 +209,4 @@ def AddDevanagariToIast(iast):
 
 def TransliterateForTable(text):
   return transliterator.Transliterate(_SLP1_TO_IAST_STATE_MACHINE, text,
-                                      ignore=None,
                                       pass_through=_DEFAULT_PASS_THROUGH)[0]

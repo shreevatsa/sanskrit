@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """Data structures that store matching metres for known patterns."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import itertools
 import re
@@ -155,7 +152,7 @@ def _AddSamavrttaRegex(metre_name, pada_regex):
   pada_regex = _CleanUpSimpleRegex(pada_regex)
   _AddFullRegex(''.join('(%s)' % s for s in [pada_regex] * 4), metre_name)
   _AddHalfRegex(''.join('(%s)' % s for s in [pada_regex] * 2), metre_name, {1, 2})
-  known_pada_regexes.append((re.compile('^' + pada_regex + '$'), metre_name))
+  _AddPadaRegex(pada_regex, metre_name, {1, 2, 3, 4})
 
 
 def _AddMetreRegex(metre_name, pada_regexes, simple=True):

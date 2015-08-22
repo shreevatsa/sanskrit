@@ -3,80 +3,25 @@
 
 """Reads from a GRETIL UTF-8 encoded HTML file."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import argparse
 import codecs
-import datetime
-import itertools
 import json
 import logging
 import os.path
-import re
 import tempfile
 
-import handle_input
-import print_utils
-import simple_identifier
+from IPython.core.debugger import Tracer
+assert Tracer  # to slience Pyflakes
+
+from print_utils import Print
+import read.split_gretil
+import identifier_pipeline
 
 
-def Print(x):
-  return print_utils.Print(x)
-
-
-def Timestamp():
-  return datetime.datetime.strftime(datetime.datetime.now(),
-                                    '%Y-%m-%d.%H:%M:%S')
-
-
-def SplitIntoVerses(input_lines):
-  """Try to return a list of verses, from the lines."""
-  lines_new = []
-  last_seen_verse_number = -1
-  for line in input_lines:
-    match = re.match(r'^MSS_(\d+)-\d+', line)
-    if match:
-      current_verse_number = match.group(1)
-      if current_verse_number != last_seen_verse_number:
-        last_seen_verse_number = current_verse_number
-        lines_new.append('')
-      # line = line[len(match.group(0)):]
-    lines_new.append(line)
-
-  verses_found = []
-  for key, group in itertools.groupby(lines_new, bool):
-    if key:
-      verses_found.append(list(group))
-  return verses_found
-
-
-def IgnoreLine(text):
-  # Line enclosed in round brackets
-  if re.match('^[(].*[)]$', text):
-    return True
-  if text.startswith(r'\footnote'):
-    return True
-  return False
-
-
-def AcceptVerse(v):
-  """Checks that the verse is not in one of a number of known bad patterns."""
-  if len(v) == 1:
-    line = v[0]
-    assert isinstance(line, unicode)
-    if line in ['{ūttarameghaḥ}', 'iti śubhaṃ bhūyāt |']:
-      return False
-    if line.startswith('iti'):
-      return False
-    if line.startswith('atha'):
-      return False
-  return True
-
-
-if __name__ == '__main__':
+def get_args():
+  """Setting up argument parser and parsing passed arguments."""
   argument_parser = argparse.ArgumentParser(description='Read a GRETIL file, '
                                             'identify verses and their metres, '
                                             'and generate statistics.')
@@ -97,9 +42,10 @@ if __name__ == '__main__':
   argument_parser.add_argument('--break_at_error', action='store_true',
                                help='Whether to break as soon as one imperfect'
                                ' verse is found.')
-  args = argument_parser.parse_args()
-  input_file_name = args.input_file
+  return argument_parser.parse_args()
 
+
+def set_up_logger(input_file_name):
   logger = logging.getLogger()
   log_file = tempfile.NamedTemporaryFile(prefix='read_gretil_%s_' %
                                          os.path.basename(input_file_name),
@@ -107,43 +53,38 @@ if __name__ == '__main__':
   Print('Logging to %s' % log_file.name)
   handler = logging.FileHandler(log_file.name)
   handler.setFormatter(logging.Formatter(
-      '%(levelname)s	%(asctime)s %(filename)s:%(lineno)d] %(message)s'))
+      '%(levelname)s\t%(asctime)s %(filename)s:%(lineno)d] %(message)s'))
   logger.addHandler(handler)
   logger.setLevel(logging.DEBUG)
 
-  lines = []
-  seen_separators = 0
-  for l in codecs.open(input_file_name, 'r', 'utf-8'):
-    assert isinstance(l, unicode)
-    l = handle_input.RemoveHTML(l)
-    l = l.strip()
-    if IgnoreLine(l):
-      continue
-    if seen_separators < 2 and re.search('<![-]{50,}->', l):
-      seen_separators += 1
-    elif seen_separators == 2 and not l.startswith('<'):
-      (l, n) = handle_input.RemoveVerseNumber(l)
-      lines.append(l)
-      if n:
-        lines.append('')
+if __name__ == '__main__':
+  args = get_args()
+  input_file_name = args.input_file
+  set_up_logger(input_file_name)
 
-  verses = SplitIntoVerses(lines)
-  verses = [verse for verse in verses if AcceptVerse(verse)]
+  text = codecs.open(input_file_name, 'r', 'utf-8').read()
+  custom_splitter = read.split_gretil.mss_splitter if 'msubhs_u.htm' in input_file_name else None
+  (verses, text) = read.split_gretil.split(text, custom_splitter=custom_splitter)
+  # blocks = list(read.split_gretil.blocks_of_verses_in_text(verses, text))
+  Print('There are %d verses.' % len(verses))
 
-  identifier = simple_identifier.SimpleIdentifier()
+  identifier = identifier_pipeline.IdentifierPipeline()
   table = {}
   for (verse_number, verse) in enumerate(verses):
-    verse = [verse_line.strip() for verse_line in verse]
-    ok_and_results = identifier.IdentifyFromLines(verse)
+    verse_number += 1
+    Print('\nVerse %d is:' % verse_number)
+    Print('\n    '.join(('    ' + verse).splitlines()))
+    Print('End Verse %d' % verse_number)
+    ok_and_results = identifier.IdentifyFromText(verse)
     if not ok_and_results:      # None for lines that contain no syllables
       continue
     (perfect, results) = ok_and_results
     if not results:
       table['unknown'] = table.get('unknown', 0) + 1
       if args.print_unidentified_verses != 'none':
-        Print('Verse %4d:' % (verse_number + 1))
+        Print('Verse %4d:' % verse_number)
         if args.print_unidentified_verses == 'full':
-          Print('\n'.join(verse))
+          Print(verse)
           Print(identifier.AllDebugOutput())
           Print('')
       continue
@@ -154,14 +95,14 @@ if __name__ == '__main__':
     metre_name = results[0]
     if args.print_identified_verses != 'none':
       Print('Verse %4d is%sin %s' % (
-          verse_number + 1,
+          verse_number,
           ' ' if perfect else ' probably ',
           metre_name))
       if args.print_identified_verses == 'full':
-        Print('\n'.join(verse))
+        Print(verse)
     table[metre_name] = table.get(metre_name, 0) + 1
     if not perfect and args.break_at_error:
-      Print('\n'.join(verse))
+      Print(verse)
       Print(identifier.AllDebugOutput())
       Print('')
       break
