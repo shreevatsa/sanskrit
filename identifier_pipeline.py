@@ -6,7 +6,7 @@ import logging
 
 from data import metrical_data
 import display
-import identifier
+from identify import identifier
 from read import read
 import scan
 from utils.utils import call_with_log_capture

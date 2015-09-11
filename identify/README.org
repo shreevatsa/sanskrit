@@ -1,0 +1,19 @@
+* Identify
+
+  Given a list of "pattern lines", like
+
+     #+BEGIN_EXAMPLE
+     ['GGGLGLG',
+      'GLGGGGGLGLGGLGL',
+      'GGGGGLGG',
+      'LGGGGGGLLGGLGL']
+     #+END_EXAMPLE
+
+   we can divide it into several "parts":
+
+   - the whole verse
+   - halves of verses, by lines
+   - halves of verses, by number of syllables
+   - quarters of verses, by lines
+   - quarters of verses, by number of syllables
+   - individual lines in the verses
