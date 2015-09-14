@@ -6,15 +6,21 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import re
 
-from poor_enums import Enum
 from transliteration import devanagari
 from transliteration.transliteration_data import KANNADA_CONSONANTS
 
-TRANSLITERATION_SCHEME = Enum(HK=0,
-                              IAST=1,
-                              ITRANS=2,
-                              Devanagari=3,
-                              Kannada=4)
+def Enum(**enums):
+  return type(str('Enum'), (), enums)
+
+TRANSLITERATION_SCHEME = type(str('Enum'),
+                              (),
+                              {
+                                'HK': 0,
+                                'IAST': 1,
+                                'ITRANS': 2,
+                                'Devanagari': 3,
+                                'Kannada': 4
+                              })
 
 
 def detect_transliteration_scheme(text):
