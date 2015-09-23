@@ -1,4 +1,4 @@
-* Identify
+* Overview
 
   Given a list of "pattern lines", like
 
@@ -12,8 +12,61 @@
    we can divide it into several "parts":
 
    - the whole verse
-   - halves of verses, by lines
-   - halves of verses, by number of syllables
-   - quarters of verses, by lines
-   - quarters of verses, by number of syllables
-   - individual lines in the verses
+   - halves of the verse, by number of syllables
+   - quarters of the verse, by number of syllables
+   - halves of the verse, by lines
+   - quarters of the verse, by lines
+   - individual lines in the verse
+
+   (These can overlap.)
+
+   We try matching each part against our "database" of known (corresponding or other) parts of metres.
+
+* Data
+
+  The data contains *patterns* and *regexes*.
+
+  A "pattern" is a sequence over the alphabet {L, G}.
+  A "regex" is any regular expression for matching patterns.
+
+  Pattern data:
+    Dict of
+      pattern -> List of (metre_name, part_type)
+
+  Regex data:
+    List of
+      regex -> List of (metre_name, part_type)
+
+  Pattern data can be looked up by pattern, regex data needs to be iterated over.
+
+** Part types
+
+  A part_type can be any of:
+  - Whole verse
+  - Half-{1,2,[1,2]}-by-{syllables,lines}
+  - Quarter-{some subset of {1,2,3,4}}-by-{syllables,lines}
+
+  In other words, we can characterize a part_type by a triple (X, Y, Z) where
+  X <- {whole, half, quarter}. (Say 0, 1, 2 respectively.)
+  Y is a subset of [1..2^X].
+  Z <- {syllables, lines}
+
+* Matching
+
+  We take the input and break it into all possible parts (A, B, C, P) where
+  A <- {whole, half, quarter}
+  B <- [1..2^X] (it is the index)
+  C <- {syllables, lines}
+  P is the actual pattern corresponding to (A, B, C)
+
+  We then compare this (A, B, C, P) against each possible ((pattern/regex) -> (X, Y, Z)).
+
+  A "match" is when P matches the (pattern/regex).
+  An "anuloma match" is when A = X, C = Z, and B <- Y.
+  A "pratiloma match" is when not all of these hold.
+
+** Optimization and optimality
+
+   It is more efficient to look for "anuloma matches" first.
+
+   TODO: Among pratiloma matches, it would be good to find out which ones are more common (in a given input corpus I guess).
