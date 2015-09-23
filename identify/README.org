@@ -42,14 +42,15 @@
 ** Part types
 
   A part_type can be any of:
-  - Whole verse
-  - Half-{1,2,[1,2]}-by-{syllables,lines}
-  - Quarter-{some subset of {1,2,3,4}}-by-{syllables,lines}
+  - Whole verse-{ideal, or acceptable variant}
+  - Half-{1,2,[1,2]}-by-{syllables,lines}-{ideal, or acceptable variant}
+  - Quarter-{some subset of {1,2,3,4}}-by-{syllables,lines}-{ideal, or acceptable variant}
 
-  In other words, we can characterize a part_type by a triple (X, Y, Z) where
-  X <- {whole, half, quarter}. (Say 0, 1, 2 respectively.)
-  Y is a subset of [1..2^X].
+  In other words, we can characterize a part_type by a triple (X, Y, Z, W) where
+  X <- {whole, half, quarter} (Say 0, 1, 2 respectively.)
+  Y is a subset of [1..2^X]
   Z <- {syllables, lines}
+  W <- {ideal, acceptable}
 
 * Matching
 
@@ -59,7 +60,8 @@
   C <- {syllables, lines}
   P is the actual pattern corresponding to (A, B, C)
 
-  We then compare this (A, B, C, P) against each possible ((pattern/regex) -> (X, Y, Z)).
+  We then compare this (A, B, C, P) against each possible datum ((pattern/regex) -> (X, Y, Z, W)).
+  W of course does not matter, and may even be considered part of the metre name.
 
   A "match" is when P matches the (pattern/regex).
   An "anuloma match" is when A = X, C = Z, and B <- Y.
@@ -70,3 +72,47 @@
    It is more efficient to look for "anuloma matches" first.
 
    TODO: Among pratiloma matches, it would be good to find out which ones are more common (in a given input corpus I guess).
+
+** How many verses is the input?
+
+   Based on A v/s X, we can have several categories out of the 3x3 possibilities for (A, X).
+   -> Assuming input is whole verse (X/A = 1):
+      A = whole, X = whole
+      A = half, X = half
+      A = quarter, X = quarter
+   -> Assuming input is half a verse (X/A = 1/2):
+      A = whole, X = half
+      A = half, X = X = quarter
+   -> Assuming input is a quarter verse (X/A = 1/4):
+      A = whole, X = quarter
+   -> Assuming input is two verses (X/A = 2):
+      A = half, X = whole
+      A = quarter, X = half
+   -> Assuming input is four verses (X/A = 4):
+      A = quarter, X = whole
+   (All 9 possibilities have been covered.)
+
+   This can be an option: treat input as {quarter, half, whole, 2, 4} of a verse.
+
+** Scoring
+
+   Fix a metre_name. We want to give a closeness score for that metre.
+
+   A perfect score would be if W = perfect, and A = X = whole, C = Z, B <- Y
+
+   Else, for each X/A category, and for each C (syllables/lines),
+
+   whole > 2 half > 1 half > 4 quarters > 3 quarters > 2 quarters > 1 quarter.
+
+   But what about B being not in Y, e.g. first half matches second half, or second quarter matches third?
+
+   Ad-hoc:
+   B being in Y has score 1.0.
+   B not in Y has score 0.9.
+
+* Result
+
+  For each X/A category,
+    the results are (score, metre_name, match_description) tuples, ordered by score.
+
+* Generating data
