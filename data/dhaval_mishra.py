@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Large list of metres, input by Dr. Dhaval Patel.
-   Probably based on scraping the site by Anand Mishra at
+   Based on Marcis Gasuns scraping the site by Anand Mishra at
    http://sanskrit.sai.uni-heidelberg.de/Chanda/HTML/
 """
 
