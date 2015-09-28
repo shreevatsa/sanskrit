@@ -1,3 +1,16 @@
+# -*- coding: utf-8; -*-
+
+* The problem
+
+  If we had a 1-1 mapping from vṛtta names to patterns, and if input always perfectly matched one of them, the problem is very simple indeed.
+
+  We have to deal with:
+  - data in which same name can correspond to multiple metres, or the same pattern can have multiple names (so much so that nothing is definitive, we can only say "source X calls this Y")
+  - allowed variation (pādānta-laghu, etc.)
+  - input that is frequently off (typos, etc.)
+  - incorrect line breaks in input
+  - mātrā metres
+
 * Overview
 
   Given a list of "pattern lines", like
