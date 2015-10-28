@@ -8,7 +8,7 @@
   In practice, our problem is *not* that simple.
 
   We have to deal with:
-  - data in which same name can correspond to multiple metres, or the same pattern can have multiple names (so much so that nothing is definitive, we can only say "source X calls this Y")
+  - data in which the same name may be given to multiple metres, or the same pattern can have multiple names (so much so that nothing is definitive, we can only say "source X calls this Y")
   - allowed variation (pādānta-laghu, etc.)
   - input that is frequently off (typos, etc.)
   - incorrect line breaks in input
@@ -47,26 +47,27 @@
 
   Pattern data:
     Dict of
-      pattern -> List of (metre_name, part_type)
+      pattern -> List of (metre_info, part_type)
 
   Regex data:
     List of
-      regex -> List of (metre_name, part_type)
+      regex -> List of (metre_info, part_type)
+
+  A metre_info is a tuple (metre_name, provenance (source where that name comes from), [list of deviations]).
 
   Pattern data can be looked up by pattern, regex data needs to be iterated over.
 
 ** Part types
 
   A part_type can be any of:
-  - Whole verse-{ideal, or acceptable variant}
-  - Half-{1,2,[1,2]}-by-{syllables,lines}-{ideal, or acceptable variant}
-  - Quarter-{some subset of {1,2,3,4}}-by-{syllables,lines}-{ideal, or acceptable variant}
+  - Whole verse
+  - Half-{1,2,[1,2]}-by-{syllables,lines}
+  - Quarter-{some subset of {1,2,3,4}}-by-{syllables,lines}
 
-  In other words, we can characterize a part_type by a triple (X, Y, Z, W) where
+  In other words, we can characterize a part_type by a triple (X, Y, Z) where
   X <- {whole, half, quarter} (Say 0, 1, 2 respectively.)
   Y is a subset of [1..2^X]
   Z <- {syllables, lines}
-  W <- {ideal, acceptable}
 
 * Matching
 
