@@ -3,7 +3,7 @@
 * The problem
 
   If we had a 1-1 mapping from vṛtta names to patterns, and if input always perfectly matched one of them, the problem is very simple indeed.
-  We merely have to take the exact pattern from the input, look it up in a definitive table mapping patterns to metre names, and return the metre.
+  We merely have to take the exact pattern from the input, look it up in a definitive table that maps patterns to metre names, and return the metre.
 
   In practice, our problem is *not* that simple.
 
@@ -14,7 +14,7 @@
   - incorrect line breaks in input
   - mātrā metres
 
-* Overview
+* Overview of our approach
 
   Given a list of "pattern lines", like
 
@@ -77,8 +77,7 @@
   C <- {syllables, lines}
   P is the actual pattern corresponding to (A, B, C)
 
-  We then compare this (A, B, C, P) against each possible datum ((pattern/regex) -> (X, Y, Z, W)).
-  W of course does not matter, and may even be considered part of the metre name.
+  We then compare this (A, B, C, P) against each possible datum ((pattern/regex) -> (X, Y, Z)).
 
   A "match" is when P matches the (pattern/regex).
   An "anuloma match" is when A = X, C = Z, and B <- Y.
@@ -115,7 +114,7 @@
 
    Fix a metre_name. We want to give a closeness score for that metre.
 
-   A perfect score would be if W = perfect, and A = X = whole, C = Z, B <- Y
+   A perfect score would be if A = X = whole, C = Z, B <- Y
 
    Else, for each X/A category, and for each C (syllables/lines),
 
