@@ -67,6 +67,7 @@ The issue is:
                                                             if result_display_names else None),
                               'result_display_names': result_display_names,
                               'debug_read': identifier.DebugRead(),
+                              'debug_scan': identifier.DebugScan(),
                               'debug_identify': identifier.DebugIdentify(),
                               'metre_blocks': metre_blocks,
                               'bug_title': bug_title,

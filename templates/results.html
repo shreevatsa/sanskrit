@@ -32,16 +32,16 @@ abbr {border-bottom: 1px dotted black; color:red;}
 <hr/>
 <p><i>Debugging output:</i></p>
 <details>
-<summary>Reading the input</summary>
-<pre>
-{{ debug_read }}
-</pre>
+      <summary>Reading the input</summary>
+      <pre>{{ debug_read }}</pre>
 </details>
 <details>
-<summary>Identifying the metre</summary>
-<pre>
-{{ debug_identify }}
-</pre>
+      <summary>Scanning the input</summary>
+      <pre>{{ debug_scan }}</pre>
+</details>
+<details>
+      <summary>Identifying the metre</summary>
+      <pre>{{ debug_identify }}</pre>
 </details>
 
 {% if metre_blocks %}
