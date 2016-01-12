@@ -21,4 +21,5 @@ application = webapp2.WSGIApplication([
     ('/', views.main.MainPage),
     webapp2.Route(r'/identify', handler=views.identify.IdentifyPage, defaults={'identifier':common_identifier}),
     ('/split', views.show_split.ShowBlocks),
+    ('/statistics', views.main.StatsPage),
 ], debug=True)

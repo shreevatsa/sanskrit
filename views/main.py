@@ -14,3 +14,7 @@ class MainPage(webapp2.RequestHandler):
                                         {
                                             'default_identify_input': '',
                                         }))
+
+class StatsPage(webapp2.RequestHandler):
+  def get(self):
+    self.response.write(template.render('templates/statistics.html', {}))
