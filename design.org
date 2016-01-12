@@ -1,0 +1,66 @@
+# -*- coding: utf-8; -*-
+
+Reminders to myself, for use when redesigning.
+
+* Focus on data, not control flow.
+
+** Brooks
+   #+BEGIN_QUOTE
+   "Show me your code and conceal your data structures, and I shall continue to be mystified. Show me your data structures, and I won't usually need your code; it'll be obvious."
+   #+END_QUOTE
+   -- Eric S. Raymond in /The Cathedral and the Bazaar/, paraphrasing Fred Brooks in /The Mythical Man-Month/ (1975)
+
+** Start with the design decisions, not the flowchart.
+
+   [Parnas 1971] "On the Criteria To Be Used in Decomposing Systems into Modules"
+
+   The natural temptation when breaking your project into components is to make each task a separate component. That is, to start from a flowchart and break it thus.
+
+   Parnas instead points out that the better approach is based on *information hiding*, specifically the hiding of data structures and other design decisions.
+
+   "it is almost always incorrect to begin the decomposition of a system into modules on the basis of a flowchart. We propose instead that one begins with a list of difficult design decisions or design decisions which are likely to change. Each module is then designed to hide such a decision from the others."
+
+* Goal: easy to test ⇒ better design
+
+  Tests clarify your thinking.
+
+  But more than that, writing your code such that it is easy to test generally leads to better code.
+
+* TODO Example tests
+
+A "specification" / "tests" for what all it should do.
+
+** Recognise
+
+*** verse in [exact metre] ⇒ metre name
+
+*** verse in [metre with sama padanta laghu] ⇒ metre name, with green
+
+*** verse in [metre with vishama padanta laghu] ⇒ metre name, with red
+
+*** verse in [metre with errors] ⇒ metre name, with red
+
+*** verse in [Indravajra] ⇒ Indravajra, also Upajati
+
+*** verse in Upajati ⇒ Upajati (maybe mention Indravajra and Upendravajra?)
+
+*** verse in arya ⇒ arya
+
+*** verse in stotra metres ⇒ recognise pattern. E.g. 4444 , 3434, 3333, ...
+    Look in Stotra-samhita
+
+** Transliteration
+
+*** input transliteration should not matter
+
+*** input transliteration, with a few digits, |, ||, etc. in another script shouldn't matter
+
+** Error-detection
+
+*** Given verse and specified metre, show what syllables fit
+    "Specified metre" could here include Arya, Anushtup, stotra metre, etc.
+
+** Information about a metre
+
+*** Given a metre (or possibly verse in that metre), show metre's general info, statistics, recitation, etc.
+    Again, metre here should include Upajati, Anushtup, Arya, etc.
