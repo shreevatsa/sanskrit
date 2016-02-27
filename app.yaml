@@ -9,6 +9,13 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /NotoSansDevanagariRegularUnhintedDownloaded\.ttf
+  mime_type: font/ttf
+  static_files: NotoSansDevanagariRegularUnhintedDownloaded.ttf
+  upload: NotoSansDevanagariRegularUnhintedDownloaded\.ttf
+  http_headers:
+    Access-Control-Allow-Origin: "*"
+
 - url: .*
   script: request_handler.application
 
