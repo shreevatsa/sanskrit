@@ -9,7 +9,7 @@ import unicodedata
 
 import data.ganesh
 import data.curated
-import data.dhaval
+import data.dhaval_mishra
 import data.dhaval_vrttaratnakara
 from print_utils import Print
 

@@ -64,11 +64,14 @@ The design of the program is as follows.
 
 *** The raw input
 
-     For the web form, whatever is typed into the textarea. Consider the examples above.
+     This is whatever is typed into the textarea (for the web interface) or given as input to `IdentifierPipeline`.
+     Consider the examples above.
 
 *** The input in slp1
 
-     Whatever the input script (transliteration scheme) used, the input is cleaned up and "read" into a limited Sanskrit alphabet (slp1). For instance, the examples above are read as the following:
+     Whatever the input script (transliteration scheme) used,
+     the input is cleaned up and "read" into a limited Sanskrit alphabet (slp1).
+     For instance, the examples above are read as the following:
      #+BEGIN_EXAMPLE
      kAzWAdagnirjAyatemaTyamAnAd
      BUmistoyaMKanyamAnAdadAti
@@ -115,7 +118,7 @@ The design of the program is as follows.
 
    Finally, we compare this metrical signature (or "pattern lines") against a database of known patterns.
 
-   For example, in our database have the information that *Śālinī* is a /sama-vṛtta/ metre consisting of 4 lines (/pāda/-s / quarters) each having the pattern
+   For example, in our database we have the information that *Śālinī* is a /sama-vṛtta/ metre consisting of 4 lines (/pāda/-s / quarters) each having the pattern
 
    #+BEGIN_EXAMPLE
    GGGG—GLGGLGG
@@ -125,19 +128,11 @@ The design of the program is as follows.
 
    Note that in the second example, even though no line matches a line of Śālinī, the program is still clever enough to detect a match.
 
-   This is because apart from the full verse, we also try matching:
-
-   - each "half" (half of the the syllables),
-
-   - each "quarter",
-
-   - each line of the input. This is why we take verse *lines* as input, rather than a single blob of text as a string.
+   Look at the README inside the ~identify~ directory for more details on the matching heuristics used.
 
    Thus the code can detect partial matches: if there are metrical errors in the verse, but some parts of it are in some metre, then that metre still has a chance of being recognized.
 
-   We might also multiple results when we have multiple metres guessed, such as when different lines are in different metres.
-
-   TODO: Describe the matching heuristics in more detail here.
+   We might also have multiple results when we have multiple metres guessed, such as when different lines are in different metres.
 
 ** Display
 

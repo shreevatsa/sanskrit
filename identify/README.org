@@ -1,0 +1,134 @@
+# -*- coding: utf-8; -*-
+
+* The problem
+
+  If we had a 1-1 mapping from vṛtta names to patterns, and if input always perfectly matched one of them, the problem is very simple indeed.
+  We merely have to take the exact pattern from the input, look it up in a definitive table that maps patterns to metre names, and return the metre.
+
+  In practice, our problem is *not* that simple.
+
+  We have to deal with:
+  - data in which the same name may be given to multiple metres, or the same pattern can have multiple names (so much so that nothing is definitive, we can only say "source X calls this Y")
+  - allowed variation (pādānta-laghu, etc.)
+  - input that is frequently off (typos, etc.)
+  - incorrect line breaks in input
+  - mātrā metres
+
+* Overview of our approach
+
+  Given a list of "pattern lines", like
+
+     #+BEGIN_EXAMPLE
+     ['GGGLGLG',
+      'GLGGGGGLGLGGLGL',
+      'GGGGGLGG',
+      'LGGGGGGLLGGLGL']
+     #+END_EXAMPLE
+
+   we can divide it into several "parts":
+
+   - the whole verse
+   - halves of the verse, by number of syllables
+   - quarters of the verse, by number of syllables
+   - halves of the verse, by lines
+   - quarters of the verse, by lines
+   - individual lines in the verse
+
+   (These can overlap.)
+
+   We try matching each part against our "database" of known (corresponding or other) parts of metres.
+
+* Data
+
+  The data contains *patterns* and *regexes*.
+
+  A "pattern" is a sequence over the alphabet {L, G}.
+  A "regex" is any regular expression for matching patterns.
+
+  Pattern data:
+    Dict of
+      pattern -> List of (metre_info, part_type)
+
+  Regex data:
+    List of
+      regex -> List of (metre_info, part_type)
+
+  A metre_info is a tuple (metre_name, provenance (source where that name comes from), [list of deviations]).
+
+  Pattern data can be looked up by pattern, regex data needs to be iterated over.
+
+** Part types
+
+  A part_type can be any of:
+  - Whole verse
+  - Half-{1,2,[1,2]}-by-{syllables,lines}
+  - Quarter-{some subset of {1,2,3,4}}-by-{syllables,lines}
+
+  In other words, we can characterize a part_type by a triple (X, Y, Z) where
+  X <- {whole, half, quarter} (Say 0, 1, 2 respectively.)
+  Y is a subset of [1..2^X]
+  Z <- {syllables, lines}
+
+* Matching
+
+  We take the input and break it into all possible parts (A, B, C, P) where
+  A <- {whole, half, quarter}
+  B <- [1..2^X] (it is the index)
+  C <- {syllables, lines}
+  P is the actual pattern corresponding to (A, B, C)
+
+  We then compare this (A, B, C, P) against each possible datum ((pattern/regex) -> (X, Y, Z)).
+
+  A "match" is when P matches the (pattern/regex).
+  An "anuloma match" is when A = X, C = Z, and B <- Y.
+  A "pratiloma match" is when not all of these hold.
+
+** Optimization and optimality
+
+   It is more efficient to look for "anuloma matches" first.
+
+   TODO: Among pratiloma matches, it would be good to find out which ones are more common (in a given input corpus I guess).
+
+** How many verses is the input?
+
+   Based on A v/s X, we can have several categories out of the 3x3 possibilities for (A, X).
+   -> Assuming input is whole verse (X/A = 1):
+      A = whole, X = whole
+      A = half, X = half
+      A = quarter, X = quarter
+   -> Assuming input is half a verse (X/A = 1/2):
+      A = whole, X = half
+      A = half, X = X = quarter
+   -> Assuming input is a quarter verse (X/A = 1/4):
+      A = whole, X = quarter
+   -> Assuming input is two verses (X/A = 2):
+      A = half, X = whole
+      A = quarter, X = half
+   -> Assuming input is four verses (X/A = 4):
+      A = quarter, X = whole
+   (All 9 possibilities have been covered.)
+
+   This can be an option: treat input as {quarter, half, whole, 2, 4} of a verse.
+
+** Scoring
+
+   Fix a metre_name. We want to give a closeness score for that metre.
+
+   A perfect score would be if A = X = whole, C = Z, B <- Y
+
+   Else, for each X/A category, and for each C (syllables/lines),
+
+   whole > 2 half > 1 half > 4 quarters > 3 quarters > 2 quarters > 1 quarter.
+
+   But what about B being not in Y, e.g. first half matches second half, or second quarter matches third?
+
+   Ad-hoc:
+   B being in Y has score 1.0.
+   B not in Y has score 0.9.
+
+* Result
+
+  For each X/A category,
+    the results are (score, metre_name, match_description) tuples, ordered by score.
+
+* Generating data

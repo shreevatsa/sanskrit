@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from google.appengine.ext.webapp import template
 
+# The name *has* to be `register`, for `register_template_library` to work elsewhere.
 register = template.create_template_register() # pylint: disable=invalid-name
 
 @register.filter

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Large list of metres, input by Dr. Dhaval Patel.
+   Based on Marcis Gasuns scraping the site by Anand Mishra at
+   http://sanskrit.sai.uni-heidelberg.de/Chanda/HTML/
 """
 
 from __future__ import absolute_import, division, print_function, unicode_literals

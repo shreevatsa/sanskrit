@@ -35,7 +35,7 @@ data = [# TODO(shreevatsa): AnushtupShloka
         ('Hariṇī', 'LLLLLG—GGGG—LGLLGLG'),
         ('Pṛthvī', 'LGLLLGLG—LLLGLGGLG'),
 
-        ('Kokilalam (Nardaṭakam)', 'L L L L G L G L L L G — L L G L L G'),
+        ('Kokilakam (Nardaṭakam)', 'L L L L G L G L L L G — L L G L L G'),
         ('Mallikāmālā (Matta-kokilā)', 'GL GLL GL GLL GL GLL GL G'),
 
         ('Śārdūlavikrīḍitam', 'GGGLLGLGLLLG—GGLGGLG'),
