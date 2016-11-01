@@ -1,0 +1,15 @@
+# -*- coding: utf-8 -*-
+
+* Goal
+
+Version 2 of the site. Will probably be a victim of "second system syndrome".
+
+* Desiderata
+
+Mixture of low-level and high-level goals.
+
+- Want to write it in Javascript, so that it can run "anywhere" (either user's browser, or on server with NodeJS)
+
+- User enters (presumed) verse, chooses
+  (a) whether it's a quarter verse (1 pāda), half verse (2 pāda-s), rarely 3 pāda-s, full verse (4 pāda-s), or multiple full verses. (Or "unknown, autodetect")
+  (b) what the
