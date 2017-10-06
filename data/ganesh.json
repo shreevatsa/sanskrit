@@ -1,0 +1,59 @@
+{
+    "comment": ["Metres listed by Shatavadhani Dr. R. Ganesh as the most notable ones.",
+              " See https://www.youtube.com/playlist?list=PLABJEFgj0PWVXr2ERGu2xtoSXrNdBs5xS",
+              " and at around 10:00 in this video: https://www.youtube.com/watch?v=zLRJYk0mAOU"
+             ],
+    "metres": [
+        ["AnushtupShloka", "TODO01"],
+        ["Arya", "TODO02"],
+        ["Upajāti", {
+            "pattern": ".GLGGLLGLG.",
+            "comment": "Mention the 'slight yati' after 5 syllables."
+        }],
+        ["Vaṃśastha (Vaṃśasthavila)", "LGLGGLLGLGLG"],
+        ["Indravaṃśā", "GGLGGLLGLGLG"],
+
+        ["Rathoddhatā", "GLGLLLGLGLG"],
+        ["Svāgatā", "GLGLLLGLLGG"],
+        ["Drutavilambitam", "LLLGLLGLLGLG"],
+        ["Mañjubhāṣiṇī", "LLGLGLLLGLGLG"],
+        ["Śālinī", "GGGG—GLGGLGG"],
+        ["Praharṣiṇī", "GGGLLLLGLGLGG"],
+
+        ["Bhujaṅgaprayātam", "LGG LGG LGG LGG"],
+        ["Toṭakam", "LLG LLG LLG LLG"],
+        ["Sragviṇī", "GLG GLG GLG GLG"],
+
+        ["Pramitākṣarā", "LLGLGLLLGLLG"],
+        ["Vasantatilakā", "GGLGLLLGLLGLGG"],
+        ["Mālinī", "LLLLLLGG—GLGGLGG"],
+
+        ["Cārucāmaram", "GL GL GL GL GL GL GL G"],
+        ["Pañcacāmaram", "LG LG LG LG LG LG LG LG"],
+
+        ["Mandākrāntā", "GGGG—LLLLLG—GLGGLGG"],
+        ["Śikhariṇī", "LGGGGG–LLLLLGG—LLLG"],
+        ["Hariṇī", "LLLLLG—GGGG—LGLLGLG"],
+        ["Pṛthvī", "LGLLLGLG—LLLGLGGLG"],
+
+        ["Kokilakam (Nardaṭakam)", "L L L L G L G L L L G — L L G L L G"],
+        ["Mallikāmālā (Matta-kokilā)", "GL GLL GL GLL GL GLL GL G"],
+
+        ["Śārdūlavikrīḍitam", "GGGLLGLGLLLG—GGLGGLG"],
+        ["Sragdharā", "GGGGLGG—LLLLLLG—GLGGLGG"],
+        ["Viyoginī", ["LLG LLGLGLG",
+                      "LLGGLLGLGLG"]],
+        ["Aupacchandasikam", ["LLG LLGLGLGG",
+                              "LLGGLLGLGLGG"]],
+        ["Aparavaktrā", ["LLLLLLG—LGLG",
+                         "LLLLG—LLGLGLG"]],
+        ["Puṣpitāgrā", ["LLLL LLGLGLGG",
+                        "LLLLGLLGLGLGG"]],
+        ["Udgatā", ["LL  G L  G L LL GL",
+                    "LL LL L  G L  G LG",
+                    " G LL L LL L  G LLG",
+                    "LL  G L  G L LL  GLGLG"]],
+        ["Aśvadhāṭī", "GGLGLLL–GGLGLLL–GGLGLLLG"],
+        ["Śivatāṇḍava", "LGLL LGLL LGLL LGLL LGLL LGLL LG"]
+       ]
+}

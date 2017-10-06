@@ -59,7 +59,7 @@ def _RemoveChars(input_string, chars):
 
 def _CleanUpPattern(pattern):
   pattern = _RemoveChars(pattern, [unicodedata.lookup('SPACE'), unicodedata.lookup('EM DASH'), unicodedata.lookup('EN DASH')])
-  assert re.match(r'^[LG]*$', pattern), pattern
+  assert re.match(r'^[LG.]*$', pattern), pattern
   return pattern
 
 
@@ -79,8 +79,8 @@ def _AddPatternForMetre(metre_name, pada_patterns):
       Print(pattern_for_metre[metre_name])
       Print('   vs   ')
       Print(pada_patterns)
-      assert False
-    # Print('Not adding duplicate as already present: %s' % metre_name)
+      # assert False
+      Print('Not overwriting as already present: %s' % metre_name)
     return
   pattern_for_metre[metre_name] = pada_patterns
 
@@ -139,10 +139,10 @@ def _AddVishamavrttaPattern(metre_name, pada_patterns):
   """Given the four pāda-s of a viṣama-vṛtta, add the metre."""
   assert len(pada_patterns) == 4
   pada_patterns = [_CleanUpPattern(p) for p in pada_patterns]
-  for p in pada_patterns: assert re.match(r'^[LG]*$', p)
+  for p in pada_patterns: assert re.match(r'^[LG.]*$', p)
   (pa, pb, pc, pd) = pada_patterns
-  assert pb.endswith('G')
-  assert pd.endswith('G')
+  # assert pb.endswith('G')
+  # assert pd.endswith('G')
   _AddPatternForMetre(metre_name, [pa, pb, pc, pd])
 
   patterns_a = [pa]
@@ -390,8 +390,8 @@ def InitializeData():
 
   vrtta_data = (jsonToPy('data/ganesh.json')
                 + jsonToPy('data/curated.json')
-                + data.dhaval_vrttaratnakara.data_vrttaratnakara
-                + data.dhaval_mishra.dhaval_vrtta_data
+                + jsonToPy('data/vrttaratnakara.json')
+                + jsonToPy('data/mishra.json')
                 )
 
   assert not all_data
