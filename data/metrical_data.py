@@ -25,6 +25,26 @@ known_pada_regexes = []
 pattern_for_metre = {}
 all_data = {}
 
+import sys
+if sys.version_info.major == 3:
+  unicode = str
+
+
+def jsonToPy(filename):
+  """Reads JSON from a file, and puts it into a similar data structure as before."""
+  ret = []
+  import json
+  data = json.load(open(filename))
+  assert data.keys() <= {'comment', 'metres'}
+  for metre_name, metre_value in data['metres']:
+    if isinstance(metre_value, dict):
+      assert metre_value.keys() <= {'pattern', 'comment', 'instance'}, metre_value.keys()
+      metre_value = metre_value['pattern']
+    if isinstance(metre_value, unicode) and metre_value.startswith('TODO'):
+      continue
+    ret.append((metre_name, metre_value))
+  return ret
+
 
 def GetPattern(metre):
   return pattern_for_metre.get(metre)
@@ -45,6 +65,9 @@ def _CleanUpPattern(pattern):
 
 def _CleanUpSimpleRegex(regex):
   regex = _RemoveChars(regex, [unicodedata.lookup('SPACE'), unicodedata.lookup('EM DASH'), unicodedata.lookup('EN DASH')])
+  # TODO(shreevatsa): Make this work. Why does this regex have to be simple?
+  # regex = regex.replace('4', '(LLLL|GLL|LGL|LLG|GG)')
+  regex = regex.replace('4', '')
   assert re.match(r'^[LG.]*$', regex), regex
   return regex
 
@@ -83,7 +106,7 @@ def _AddPadaPattern(pada_pattern, metre_name, which_padas):
 def _AddSamavrttaPattern(metre_name, each_pada_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = _CleanUpPattern(each_pada_pattern)
-  assert re.match(r'^[LG]*G$', clean), (each_pada_pattern, metre_name)
+  # assert re.match(r'^[LG]*G$', clean), (each_pada_pattern, metre_name)
   _AddPatternForMetre(metre_name, [clean] * 4)
 
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
@@ -365,10 +388,10 @@ def InitializeData():
   _AddAryaFamilyRegex()
   _AddKarambajati()
 
-  vrtta_data = (data.ganesh.data
-                + data.curated.curated_vrtta_data
+  vrtta_data = (jsonToPy('data/ganesh.json')
+                + jsonToPy('data/curated.json')
                 + data.dhaval_vrttaratnakara.data_vrttaratnakara
-                # + data.dhaval.dhaval_vrtta_data
+                + data.dhaval_mishra.dhaval_vrtta_data
                 )
 
   assert not all_data
@@ -410,8 +433,11 @@ def HtmlDescription(name):
     return '[%s is given by the regex %s]' % (name, description)
   assert regex_or_pattern == 'pattern'
   if samatva == 'sama':
+    if name == 'Śālinī':
+      return ('%s is a sama-vṛtta. It contains 4 <i>pāda</i>s, each of which' +
+              '  has the pattern %s.<br>As there are 44 syllables in a verse (11 per line), this metre belongs to the <b>Triṣṭubh</b> family.') % (name, description)
     return ('%s is a sama-vṛtta. It contains 4 <i>pāda</i>s, each of which' +
-            '  has the pattern %s') % (name, description)
+             '  has the pattern %s.') % (name, description)
   elif samatva == 'ardhasama':
     assert isinstance(description, list)
     assert len(description) == 2
@@ -431,3 +457,9 @@ def HtmlDescription(name):
             '%s<br/>' +
             '%s') % (name, description[0], description[1],
                      description[2], description[3])
+
+def FurtherHtmlDescription(name):
+  if name == 'Śālinī':
+    return ('<p>You can listen to some words about %s and its recitation in the video below:</p>' % name +
+              '<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/k0c_1eVIWHI?rel=0" frameborder="0" allowfullscreen></iframe>')
+  return ''

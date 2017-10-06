@@ -22,7 +22,7 @@ class Identifier(object):
   def __init__(self, metrical_data):
     self._Reset()
     self.metrical_data = metrical_data
-    logging.debug('Identifier is initialized. It knows %d full regexes, %d full patterns, %d half regexes, %d half patterns, %d pada regexes, %d pada patterns',
+    logging.info('Identifier is initialized. It knows %d full regexes, %d full patterns, %d half regexes, %d half patterns, %d pada regexes, %d pada patterns',
                   len(self.metrical_data.known_full_regexes), len(self.metrical_data.known_full_patterns),
                   len(self.metrical_data.known_half_regexes), len(self.metrical_data.known_half_patterns),
                   len(self.metrical_data.known_pada_regexes), len(self.metrical_data.known_pada_patterns))

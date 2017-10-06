@@ -57,6 +57,7 @@ abbr {border-bottom: 1px dotted black; color:red;}
     {% for line in metre_block.block %}
       {{ line }}
     {% endfor %}
+    <p>{{ metre_block.further_description }}</p>
   {% endfor %}
 {% endif %}
 

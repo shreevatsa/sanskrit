@@ -8,6 +8,7 @@ from google.appengine.ext.webapp import template
 import webapp2
 
 from data.metrical_data import HtmlDescription as MetreHtmlDescription
+from data.metrical_data import FurtherHtmlDescription
 from transliteration import transliterate
 
 def _display_name(metre_name):
@@ -44,6 +45,7 @@ class IdentifyPage(webapp2.RequestHandler):
             'metre_description' : MetreHtmlDescription(name),
             'metre_name': _display_name(name),
             'block': table,
+            'further_description': FurtherHtmlDescription(name),
         }
         metre_blocks.append(metre_block)
 
