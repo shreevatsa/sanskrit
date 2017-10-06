@@ -2,15 +2,13 @@
 """Data structures that store matching metres for known patterns."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+try: unicode
+except NameError: unicode = str
 
 import itertools
 import re
 import unicodedata
 
-import data.ganesh
-import data.curated
-import data.dhaval_mishra
-import data.dhaval_vrttaratnakara
 from print_utils import Print
 
 known_full_patterns = {}
@@ -25,10 +23,7 @@ known_pada_regexes = []
 pattern_for_metre = {}
 all_data = {}
 
-import sys
-if sys.version_info.major == 3:
-  unicode = str
-
+video_for_metre = {}
 
 def jsonToPy(filename):
   """Reads JSON from a file, and puts it into a similar data structure as before."""

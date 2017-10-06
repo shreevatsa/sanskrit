@@ -1,6 +1,8 @@
 """Utils for printing Unicode strings, lists, dicts, etc."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+try: unicode
+except NameError: unicode = str
 
 def ToUnicode(x):
   """Convert x to unicode, whatever it is."""
