@@ -1,14 +1,48 @@
 {
     "comment": ["Metres listed by Shatavadhani Dr. R. Ganesh as the most notable ones.",
               " See https://www.youtube.com/playlist?list=PLABJEFgj0PWVXr2ERGu2xtoSXrNdBs5xS",
-              " and at around 10:00 in this video: https://www.youtube.com/watch?v=zLRJYk0mAOU"
+              " Also: ~6:09 to 20:40 in https://www.youtube.com/watch?v=XZ_UeTV0NWg"
              ],
     "metres": [
-        ["AnushtupShloka", "TODO01"],
-        ["Arya", "TODO02"],
+        ["Anuṣṭup (Śloka)", {
+            "regex": "TODO01",
+            "comment": "This is the most popular metre in Sanskrit literature.",
+            "videos": ["https://www.youtube.com/watch?v=bnsA9XWBXPI&list=PLABJEFgj0PWVXr2ERGu2xtoSXrNdBs5xS&index=1"],
+            "examples": ["cetaso 'stu prasādāya / satām prācetaso muniḥ // pṛthivyām padya-nirmāṇa-/vidyāyāḥ prathamam padam //",
+                         "namas-tuṅga-śiraś-cumbi-/candra-cāmara-cārave // trailokya-nagarārambha-/mūla-stambhāya śambhave //",
+                         "sujanaṃ vyajanam manye / cāru-vaṃśa-samudbhavam // ātmānaṃ tu paribhrāmya / para-tāpa-nivārakam //"
+                        ]
+        }],
+        ["Āryā", {
+            "regex": ["22 4 22", "4 22 121 22 .", "22 4 22", "4 22 L 22 ."],
+            "comment": "The four pādas have 12, 18, 12, and 15 mātrās respectively.",
+            "examples": ["āparitoṣād viduṣāṃ / na sādhu manye prayogavijñānaṃ // balavadapi śikṣitānām / ātmany apratyayaṃ cetaḥ",
+                         "nītijñā niyatijñā / vādajñā api bhavanti vedajñāḥ // brahmajñā api labhyā // svājñāna-jñānino viralāḥ"
+                        ]
+        }],
+        ["Gīti", {
+            "regex": ["22 4 22", "4 22 121 22 ."],
+            "comment": "The four pādas have 12, 18, 12, and 18 mātrās respectively.",
+            "examples": ["nindatu vā nandatu vā / mandamanīṣā niśamya kṛtim etām // harṣaṃ vā marṣaṃ vā / sarṣapamātram api naiva vindema",
+                         "kalamañjula-vāganumita-/ galapañjara-gataśukagrahautkaṇṭhyāt // amba radanāmbaraṃ te / bimbaphalaṃ śambarāriṇā nyastam"
+                        ]
+        }],
+        ["Upagīti", {
+            "regex": ["22 4 22", "4 22 L 22 ."],
+            "comment": "The four pādas have 12, 15, 12, and 15 mātrās respectively."
+        }],
+        ["Udgīti", {
+            "regex": ["22 4 22", "4 22 L 22 .", "22 4 22", "4 22 121 22."],
+            "comment": "The four pādas have 12, 18, 12, and 15 mātrās respectively."
+        }],
+        ["Āryāgīti", {
+            "regex": ["22 4 22", "4 22 121 22 (4|2L)"],
+            "comment": "The four pādas have 12, 20, 12, and 20 mātrās respectively."
+        }],
+
         ["Upajāti", {
             "pattern": ".GLGGLLGLG.",
-            "comment": "Mention the 'slight yati' after 5 syllables."
+            "comment": "There is sometimes a 'slight yati' after 5 syllables."
         }],
         ["Vaṃśastha (Vaṃśasthavila)", "LGLGGLLGLGLG"],
         ["Indravaṃśā", "GGLGGLLGLGLG"],
@@ -17,7 +51,10 @@
         ["Svāgatā", "GLGLLLGLLGG"],
         ["Drutavilambitam", "LLLGLLGLLGLG"],
         ["Mañjubhāṣiṇī", "LLGLGLLLGLGLG"],
-        ["Śālinī", "GGGG—GLGGLGG"],
+        ["Śālinī", {
+            "pattern": "GGGG—GLGGLGG",
+            "video": "k0c_1eVIWHI"
+        }],
         ["Praharṣiṇī", "GGGLLLLGLGLGG"],
 
         ["Bhujaṅgaprayātam", "LGG LGG LGG LGG"],
