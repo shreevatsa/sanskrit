@@ -1,6 +1,8 @@
 """Given lines in SLP1, converts them to patterns of laghus and gurus."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+try: xrange
+except NameError: xrange = range
 
 import re
 import slp1

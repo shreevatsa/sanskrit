@@ -37,7 +37,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 def MakeStateMachine(table):
   """Makes SM from a dict like {'a':'अ', 'A':'आ', 'ai':'ऐ', 'au':'औ'}."""
   root = {}
-  for (key, value) in table.iteritems():
+  for (key, value) in table.items():
     # Follow characters of 'key' down the table
     where = root
     for c in key:
