@@ -1,0 +1,20 @@
+* Scan and syllabize (or syllabize and scan)
+
+- If input is "namastubhyam", syllabize as ~[(na, 1), (ma, 2), (stu, 2), (bhyam, 2)]~.
+- If input is "namas tubhyam" syllabize as ~[(na, 1), (mas, 2), (tu, 2), (bhyam, 2)]~.
+- If input is "na ma st ubh yam", it's acceptable to put the "st" with either previous or next. Maybe leave it a separate group? (Though it influences the scanning.)
+
+What we now do: ~[(nam, 1), (ast, 2), (ubhy, 2), (am, 1)]~
+
+If we syllabize like that, how do we scan? Maybe we should further break each syllable into an onset-nucleus-coda, e.g.
+- "namastubhyam" becomes ~[(n, a, -), (m, a, -), (st, u, -), (bhy, a, m)]~ which are given weights 1, 2, 2, 2.
+- "namas tubhyam" becomes ~[(n, a, -), (m, a, s), ' ', (t, u, -), (bhy, a, m)]~ which are given weights 1, 2, 0, 2, 2.
+- "nama st ubhyam" becomes ~[(n, a, -), (m, a, -), ' ', (st, -, -), ' ', (-, u, -), (bhy, a, m)]~ which are given weights 1, 2, 0, 0, 0, 2, 2.
+- "nam ast ubh yam" becomes ~[(n, a, m), ' ', (-, a, st), ' ', (-, u, bh), ' ', (y, a, m)]~ which are given weights 1, 0, 2, 0, 2, 0, 2.
+
+Basically the weight of a "syllable" would be determined as:
+- if it has no vowels, then 0.
+- if it is the _last_ syllable (in the verse, or in the half... who determines this?) and there are consonants after the vowel, then 2.
+- Else, count the number of consonants between this vowel and the next vowel (which may not be in the immediately next group!).
+  If this number >=2, then 2.
+  Else (if this number <=1), then 1.

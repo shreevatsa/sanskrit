@@ -4,6 +4,8 @@
 """Reads from a GRETIL UTF-8 encoded HTML file."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+try: unicode
+except NameError: unicode = str
 
 import argparse
 import codecs

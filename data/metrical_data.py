@@ -2,16 +2,66 @@
 """Data structures that store matching metres for known patterns."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+try: unicode
+except NameError: unicode = str
 
 import itertools
 import re
 import unicodedata
 
-import data.ganesh
-import data.curated
-import data.dhaval_mishra
-import data.dhaval_vrttaratnakara
 from print_utils import Print
+
+"""
+What is a metre? When are two metres the same?
+
+Shorturl for a (fully-specified) vṛtta metre
+- The "short url" form of each pattern in the list, separated by '.'s
+- A '-1' etc. appended, in case of multiple metres? No, don't bother. They can all share the same url.
+
+Shorturl for other (mātrā and regex-based) metre:
+- m-<name> (because there aren't so many of them, we'll hand-curate it. This includes Anushtup, the Arya family, etc.)
+
+A metre has:
+ - an id
+ - a shorturl
+ - a name or names (this is not one-to-one with the metres)
+ - a pattern (concatenation of the patterns/regexes for its four(always?) padas)
+ - some (sets of) yati-sthanas (see: https://github.com/shreevatsa/sanskrit/issues/68)
+ - additional data: e.g. video link, further description, examples, and so on.
+
+So we can use, to identify or distinguish metres, not the name (ideally) and
+instead either the pattern, or pattern+yatis.
+In other words: the *minimum* requirement for two metres to be the same is that
+they have the same pattern. Otherwise they are not the same metre, even if they
+have the same name.
+
+A more precise procedure:
+ - Maintain a "perfect index": index of perfect patterns (without G->L variants) or regexes: P1P2P3P4 -> [ids]
+ - Each time a metre is encounted from a data source, compute its pattern.
+ - Check whether any existing metre has the same pattern (loop through perfect_index[p]).
+   - If (pattern and) yatis match, combine the names (and additional data).
+   - If (pattern and) names match, combine the yatis (and additional data).
+   - Else, do nothing (we will add it as a new metre).
+ - Else, add it as a new metre.
+
+Adding a new metre:
+ - Append it (will all its data) to a list. Note index (call it `id`).
+ - Populate indexes: perfect, full, ardha1-2, pada1-4: they all map pattern -> [ids]
+"""
+
+def to_short_url(pattern):
+    assert re.match(r'^[LG]*$', pattern), pattern
+    h = hex(int('1' + pattern.replace('L', '0').replace('G', '1'), 2))
+    assert h.startswith('0x')
+    if h.endswith('L'): h = h[:-1]
+    return h[2:]
+
+def from_short_url(shorturl):
+    assert shorturl[0] != '0', shorturl
+    b = bin(int(shorturl, 16))
+    assert b.startswith('0b1')
+    return b[3:].replace('0', 'L').replace('1', 'G')
+
 
 known_full_patterns = {}
 known_full_regexes = []
@@ -24,6 +74,23 @@ known_pada_regexes = []
 
 pattern_for_metre = {}
 all_data = {}
+
+video_for_metre = {}
+
+def jsonToPy(filename):
+  """Reads JSON from a file, and puts it into a similar data structure as before."""
+  ret = []
+  import json
+  data = json.load(open(filename))
+  assert data.keys() <= {'comment', 'metres'}
+  for metre_name, metre_value in data['metres']:
+    if isinstance(metre_value, dict):
+      assert metre_value.keys() <= {'pattern', 'comment', 'instance'}, metre_value.keys()
+      metre_value = metre_value['pattern']
+    if isinstance(metre_value, unicode) and metre_value.startswith('TODO'):
+      continue
+    ret.append((metre_name, metre_value))
+  return ret
 
 
 def GetPattern(metre):
@@ -39,12 +106,15 @@ def _RemoveChars(input_string, chars):
 
 def _CleanUpPattern(pattern):
   pattern = _RemoveChars(pattern, [unicodedata.lookup('SPACE'), unicodedata.lookup('EM DASH'), unicodedata.lookup('EN DASH')])
-  assert re.match(r'^[LG]*$', pattern), pattern
+  assert re.match(r'^[LG.]*$', pattern), pattern
   return pattern
 
 
 def _CleanUpSimpleRegex(regex):
   regex = _RemoveChars(regex, [unicodedata.lookup('SPACE'), unicodedata.lookup('EM DASH'), unicodedata.lookup('EN DASH')])
+  # TODO(shreevatsa): Make this work. Why does this regex have to be simple?
+  # regex = regex.replace('4', '(LLLL|GLL|LGL|LLG|GG)')
+  regex = regex.replace('4', '')
   assert re.match(r'^[LG.]*$', regex), regex
   return regex
 
@@ -52,12 +122,12 @@ def _CleanUpSimpleRegex(regex):
 def _AddPatternForMetre(metre_name, pada_patterns):
   if metre_name in pattern_for_metre:
     if pattern_for_metre[metre_name] != pada_patterns:
-      Print('Mismatch for %s' % metre_name)
-      Print(pattern_for_metre[metre_name])
-      Print('   vs   ')
-      Print(pada_patterns)
-      assert False
-    # Print('Not adding duplicate as already present: %s' % metre_name)
+      # Print('Mismatch for %s' % metre_name)
+      # Print(pattern_for_metre[metre_name])
+      # Print('   vs   ')
+      # Print(pada_patterns)
+      # assert False
+      Print('Not overwriting as already present: %s' % metre_name)
     return
   pattern_for_metre[metre_name] = pada_patterns
 
@@ -65,10 +135,10 @@ def _AddPatternForMetre(metre_name, pada_patterns):
 def _AddFullPattern(full_pattern, metre_name):
   if full_pattern in known_full_patterns:
     # TODO(shreevatsa): Figure out what exactly to do in this case
-    Print('Error: full pattern already present')
-    Print(metre_name)
-    Print(full_pattern)
-    Print(known_full_patterns[full_pattern])
+    # Print('Error: full pattern already present')
+    # Print(metre_name)
+    # Print(full_pattern)
+    # Print(known_full_patterns[full_pattern])
     return False
   assert full_pattern not in known_full_patterns
   known_full_patterns[full_pattern] = {metre_name: True}
@@ -83,7 +153,7 @@ def _AddPadaPattern(pada_pattern, metre_name, which_padas):
 def _AddSamavrttaPattern(metre_name, each_pada_pattern):
   """Given a sama-vṛtta metre's pattern, add it to the data structures."""
   clean = _CleanUpPattern(each_pada_pattern)
-  assert re.match(r'^[LG]*G$', clean), (each_pada_pattern, metre_name)
+  # assert re.match(r'^[LG]*G$', clean), (each_pada_pattern, metre_name)
   _AddPatternForMetre(metre_name, [clean] * 4)
 
   patterns = [clean[:-1] + 'G', clean[:-1] + 'L']
@@ -98,10 +168,10 @@ def _AddArdhasamavrttaPattern(metre_name, odd_and_even_pada_patterns):
   clean_odd = _CleanUpPattern(odd_pada_pattern)
   assert re.match(r'^[LG]*$', clean_odd)
   clean_even = _CleanUpPattern(even_pada_pattern)
-  if clean_even.endswith('L'):
-    Print('Not adding %s for now, as %s ends with laghu' % (metre_name, clean_even))
-    return
-  assert re.match(r'^[LG]*G$', clean_even), (metre_name, clean_even)
+  # if clean_even.endswith('L'):
+  #   Print('Not adding %s for now, as %s ends with laghu' % (metre_name, clean_even))
+  #   return
+  # assert re.match(r'^[LG]*G$', clean_even), (metre_name, clean_even)
   _AddPatternForMetre(metre_name, [clean_odd, clean_even] * 2)
 
   patterns_odd = [clean_odd[:-1] + 'G', clean_odd[:-1] + 'L']
@@ -116,10 +186,10 @@ def _AddVishamavrttaPattern(metre_name, pada_patterns):
   """Given the four pāda-s of a viṣama-vṛtta, add the metre."""
   assert len(pada_patterns) == 4
   pada_patterns = [_CleanUpPattern(p) for p in pada_patterns]
-  for p in pada_patterns: assert re.match(r'^[LG]*$', p)
+  for p in pada_patterns: assert re.match(r'^[LG.]*$', p)
   (pa, pb, pc, pd) = pada_patterns
-  assert pb.endswith('G')
-  assert pd.endswith('G')
+  # assert pb.endswith('G')
+  # assert pd.endswith('G')
   _AddPatternForMetre(metre_name, [pa, pb, pc, pd])
 
   patterns_a = [pa]
@@ -269,107 +339,17 @@ def _AddGiti(pada_patterns):
   _AddMetreRegex('Gīti', pada_patterns, simple=False)
 
 
-def _AddKarambajati():
-  """Examples of Upajāti of Vaṃśastham and Indravaṃśā."""
-  # _AddSamavrttaPattern('Vaṃśastham (Vaṃśasthavila)', 'LGLGGLLGLGLG')
-  # _AddSamavrttaPattern('Indravaṃśā', 'G G L G G L L G L G L G')
-  # Also add all their Upajāti mixtures, with the above two 0000 and 1111
-  _AddSamavrttaRegex('Vaṃśastham/Indravaṃśā', '. G L G G L L G L G L .')
-  # # 0001
-  # AddExactVrtta('Śīlāturā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['LGLGGLLGLGLG',
-  #                'LGLGGLLGLGLG',
-  #                'LGLGGLLGLGLG',
-  #                'GGLGGLLGLGLG'])
-  # # 0010
-  # AddExactVrtta('Vaidhātrī (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 0011
-  # AddExactVrtta('Indumā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 0100
-  # AddExactVrtta('Ramaṇā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 0101
-  # AddExactVrtta('Upameyā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'] * 2)
-  # # 0110
-  # AddExactVrtta('Manahāsā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 0111
-  # AddExactVrtta('Varāsikā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 1000
-  # AddExactVrtta('Kumārī (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 1001
-  # AddExactVrtta('Saurabheyī (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 1010
-  # AddExactVrtta('Śiśirā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'] * 2)
-  # # 1011
-  # AddExactVrtta('Ratākhyānakī (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 1100
-  # AddExactVrtta('Śaṅkhacūḍā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-  # # 1101
-  # AddExactVrtta('Puṣṭidā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G'])
-  # # 1110
-  # AddExactVrtta('Vāsantikā (Upajāti of Vaṃśastham and Indravaṃśā)',
-  #               ['G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'G G L G G L L G L G L G',
-  #                'L G L G G L L G L G L G'])
-
-
 def InitializeData():
   """Add all known metres to the data structures."""
   _AddAnustup()
   _AddAnustupExamples()
 
-  _AddAryaFamilyRegex()
-  _AddKarambajati()
+  sources = sum((jsonToPy(filename)
+                   for filename in ['data/ganesh.json', 'data/curated.json', 'data/vrttaratnakara.json', 'data/mishra.json']),
+                [])
 
-  vrtta_data = (data.ganesh.data
-                + data.curated.curated_vrtta_data
-                + data.dhaval_vrttaratnakara.data_vrttaratnakara
-                # + data.dhaval.dhaval_vrtta_data
-                )
+  _AddAryaFamilyRegex()
+  vrtta_data = sources
 
   assert not all_data
   for (name, description) in vrtta_data:
@@ -410,8 +390,11 @@ def HtmlDescription(name):
     return '[%s is given by the regex %s]' % (name, description)
   assert regex_or_pattern == 'pattern'
   if samatva == 'sama':
+    if name == 'Śālinī':
+      return ('%s is a sama-vṛtta. It contains 4 <i>pāda</i>s, each of which' +
+              '  has the pattern %s.<br>As there are 44 syllables in a verse (11 per line), this metre belongs to the <b>Triṣṭubh</b> family.') % (name, description)
     return ('%s is a sama-vṛtta. It contains 4 <i>pāda</i>s, each of which' +
-            '  has the pattern %s') % (name, description)
+             '  has the pattern %s.') % (name, description)
   elif samatva == 'ardhasama':
     assert isinstance(description, list)
     assert len(description) == 2
@@ -431,3 +414,9 @@ def HtmlDescription(name):
             '%s<br/>' +
             '%s') % (name, description[0], description[1],
                      description[2], description[3])
+
+def FurtherHtmlDescription(name):
+  if name == 'Śālinī':
+    return ('<p>You can listen to some words about %s and its recitation in the video below:</p>' % name +
+              '<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/k0c_1eVIWHI?rel=0" frameborder="0" allowfullscreen></iframe>')
+  return ''

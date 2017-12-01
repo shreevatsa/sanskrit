@@ -22,6 +22,10 @@ class KnownValues(unittest.TestCase):
                      ('-hello', 'ohell-'))
     self.assertEqual(display._Align('abcdabcd', 'abcd'),
                      ('abcdabcd', 'abcd----'))
+    self.assertEqual(display._Align('abcab', 'acb'),
+                     ('abcab', 'a-c-b'))
+    self.assertEqual(display._Align('abcab', 'acbd'),
+                     ('abcab-', 'a-c-bd'))
 
 
 if __name__ == '__main__':

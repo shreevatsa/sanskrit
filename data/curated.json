@@ -1,0 +1,21 @@
+{
+    "comment": ["Data for well-known metres, other than those by Dr. Ganesh"],
+    "metres": [
+        ["Aupacchandasikam (Vasantamālikā) (Upodgatā)", ["LLG LLGLGLGG",
+                                                         "LLGGLLGLGLGG"]],
+        ["Matta-mayūram", {
+            "pattern": "G G G G – G L L G G – L L G G",
+            "instance": "Kalidasa: Raghuv. 9.75"
+        }],
+        ["Kṣamā (Candrikā, Utpalinī)", "LLLLLLGGLGGLG"],
+        ["Prabhā (Mandākinī)", "LLLLLLGLGGLG"],
+        ["Madhyakṣāmā (Haṃsaśyenī, Kuṭila, Cūḍāpīḍam)", "GGGGLLLLLLGGGG"],
+        ["Rucirā", "L G L G L L L L G L G L G"],
+        ["Nārācam", {
+            "pattern": "L L L L L L G L G G L G G L G G L G",
+            "instance": "Kalidasa: end of Raghuv. 12"
+        }],
+        ["Madirā", "G L L  G L L  G L L  G L L  G L L  G L L  G L L  G"],
+        ["Pādākulakam (and many other names)", "4444"]
+    ]
+}

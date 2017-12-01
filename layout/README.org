@@ -1,0 +1,161 @@
+* Table of contents                                                     :TOC:
+ - [[#goal][Goal]]
+ - [[#api--interface--input-output-format][API / interface / input-output format]]
+     - [[#input-format][Input format]]
+ - [[#tests][Tests]]
+     - [[#test-case-1][Test case 1]]
+     - [[#test-case-2][Test case 2]]
+     - [[#test-case-3][Test case 3]]
+     - [[#test-case-4][Test case 4]]
+     - [[#test-case-5][Test case 5]]
+     - [[#test-case-6][Test case 6]]
+     - [[#test-case-7][Test case 7]]
+     - [[#test-case-8][Test case 8]]
+     - [[#test-case-9][Test case 9]]
+     - [[#test-case-10][Test case 10]]
+     - [[#test-case-11][Test case 11]]
+     - [[#test-case-12][Test case 12]]
+     - [[#test-case-13][Test case 13]]
+
+* Goal
+Take some text, which is believed to be in metre X, and display it in such a way to help readers of X.
+
+Let's start with Anuṣṭup (Śloka).
+
+* API / interface / input-output format
+
+** Input format
+Most liberal would be: a single string (which contains linebreaks in it). It would be our responsibility to transliterate and scan and syllabize, before layout.
+
+Most conservative might be: a list of lines, each of which is a list of ~(text, weight)~ pairs, where each ~text~ corresponds to a syllable (or punctuation) and the ~weight~ is 1 or 2 (or 0).
+This way we've shunted the transliteration and scanning and syllabizing to the caller. (We don't have to care what the "text" is.)
+
+Getting from former to latter:
+
+- Take the input and break it into lines.
+- For each line, transliterate it into minimal (original_text, slp1_text) blocks. Things not in SLP1 (punctuation including spaces) are left as-is.
+- Scan this SLP1 input (respecting boundaries formed by the "other" characters) into L and G syllables.
+- Simultaneously (from the SLP1 input itself) form the syllables (as is traditional, e.g. ends with vowel including anusvāra/visarga?)
+- This way, we have a list of ~(text, weight)~ pairs, where weight is 0, 1, or 2.
+
+
+* Tests
+We haven't yet figured out whether it should take input in SLP1 (or maybe even already-syllabized input), so consider the following as tests for a wrapper.
+
+** Test case 1
+A verse is perfectly in metre, already input as 8 syllables on a line.
+
+Expected output: Line breaks exactly as in input.
+
+Each syllable's weight is given, along with the ones expected from the metre.
+
+** Test case 2
+A verse perfectly in metre, already input as 8 syllables on each line. Some lines contain punctuation at beginning/end.
+E.g.
+#+BEGIN_EXAMPLE
+na-nA-na-na na-nA-nA-nA ?
+“na-na nA-nA na nA-na nA !”
+nA na, nA nA, na nA: nA nA
+na na nA nA? na nA -- na nA
+#+END_EXAMPLE
+
+Expected output: punctuation and line breaks from input are preserved.
+
+** Test case 3
+A verse perfectly in metre, but on 2 lines of 16 syllables each. Spaces after 8 syllables.
+
+Expected output: Split into 4 lines. The spaces become newlines.
+
+#+BEGIN_EXAMPLE
+sujanaṃ vyajanam manye cāru-vaṃśa-samudbhavam /
+ātmānaṃ tu paribhrāmya para-tāpa-nivārakam //
+#+END_EXAMPLE
+
+should become
+
+#+BEGIN_EXAMPLE
+sujanaṃ vyajanam manye
+cāru-vaṃśa-samudbhavam /
+ātmānaṃ tu paribhrāmya
+para-tāpa-nivārakam //
+#+END_EXAMPLE
+
+** Test case 4
+A verse perfectly in metre, but on 2 lines of 16 syllables each. Spaces *or* hyphens after 8 syllables.
+
+Expected output: Split into 4 lines, with spaces gone but hyphens retained.
+
+#+BEGIN_EXAMPLE
+cetaso 'stu prasādāya satām prācetaso muniḥ /
+pṛthivyām padya-nirmāṇa-vidyāyāḥ prathamam padam //
+#+END_EXAMPLE
+
+should become
+
+#+BEGIN_EXAMPLE
+cetaso 'stu prasādāya
+satām prācetaso muniḥ /
+pṛthivyām padya-nirmāṇa-
+vidyāyāḥ prathamam padam //
+#+END_EXAMPLE
+
+** Test case 5
+A verse perfectly in metre, but on 2 lines of 16 syllables each. No spaces or hyphens after 8 syllables.
+
+Hyphens inserted (only if space or hyphen not already present) after the last vowel (_including_ anusvAra / visarga).
+
+#+BEGIN_EXAMPLE
+namas tuṅga-śiraś-cumbicandra-cāmara-cārave /
+trailokya-nagarārambhamūla-stambhāya śambhave //
+#+END_EXAMPLE
+
+should become
+#+BEGIN_EXAMPLE
+namas-tuṅga-śiraś-cumbi-
+candra-cāmara-cārave /
+trailokya-nagarārambha-
+mūla-stambhāya śambhave //
+#+END_EXAMPLE
+
+** Test case 6
+4 lines of 8 syllables each, but not perfectly in metre.
+
+Expected output: The "bad" syllables are highlighted, retaining the line breaks. (? Or should we do longest common subsequence here, ignoring the line breaks?)
+
+** Test case 7
+Pādānta laghu is accepted, on both even and odd lines. (Already present in a few examples above.)
+
+** Test case 8
+2 lines of 16 syllables each, but not perfectly in metre.
+
+Expected output: Identify LCS between the line and ~....LGG.....LGL.~ and use that to highlight "bad" syllables.
+Add line breaks before every 8 expected syllables (i.e. "extra" syllables come at end of line).
+
+** Test case 9
+1 line of 32 syllables.
+
+Expected output: as above.
+
+** Test case 10
+Totally 32 syllables, but given as 4 lines with 7, 9, 8, 8 syllables. Or two lines with 15, 17 syllables.
+
+Expected output:
+
+- *If* splitting into exactly 8 syllables per line fits meter, then use it. (This is the main point of this code!)
+- Else, respect the line breaks and highlight the bad syllables.
+
+** Test case 11
+32 syllables given as 3 lines with 11, 11, 10 syllables.
+
+Expected output:
+Ignore the line breaks.
+(Although this is probably upajāti.)
+
+** Test case 12
+4 or 2 lines with total number of syllables not 32.
+
+Expected output:
+Respect line breaks, show bad output.
+
+** Test case 13
+1 or 3 or >=5 lines. Ignore the line breaks.
