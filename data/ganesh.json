@@ -14,7 +14,7 @@
                         ]
         }],
         ["Āryā", {
-            "regex": ["22 4 22", "4 22 121 22 .", "22 4 22", "4 22 L 22 ."],
+            "regex": ["22 4 22", "4 22 121 22 .", "22 4 22", "4 22 1 22 ."],
             "comment": "The four pādas have 12, 18, 12, and 15 mātrās respectively.",
             "examples": ["āparitoṣād viduṣāṃ / na sādhu manye prayogavijñānaṃ // balavadapi śikṣitānām / ātmany apratyayaṃ cetaḥ",
                          "nītijñā niyatijñā / vādajñā api bhavanti vedajñāḥ // brahmajñā api labhyā // svājñāna-jñānino viralāḥ"
