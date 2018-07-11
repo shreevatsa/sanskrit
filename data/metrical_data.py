@@ -86,6 +86,9 @@ def jsonToPy(filename):
   for metre_name, metre_value in data['metres']:
     if isinstance(metre_value, dict):
       assert metre_value.keys() <= {'pattern', 'comment', 'instance'}, metre_value.keys()
+      if 'pattern' not in metre_value.keys():
+        print('Skipping this: ', metre_value.keys(), ' in ', metre_value)
+        continue
       metre_value = metre_value['pattern']
     if isinstance(metre_value, unicode) and metre_value.startswith('TODO'):
       continue
@@ -99,6 +102,7 @@ def GetPattern(metre):
 
 def _RemoveChars(input_string, chars):
   """Wrapper function because string.translate != unicode.translate."""
+  # print('input_string is ', input_string.encode('utf-8'))
   for char in chars:
     input_string = input_string.replace(char, '')
   return input_string

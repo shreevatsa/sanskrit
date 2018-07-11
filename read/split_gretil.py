@@ -80,6 +80,7 @@ def split(text, custom_splitter=None):
             not read.filters.is_abbreviation_block(verse)]
 
   verses = map(read.filters.clean_leading_br, verses)
+  # verses = map(read.filters.clean_trailing_br, verses) # Added newly...
   verses = map(read.filters.clean_leading_parenthesized_line, verses)
 
   # Print('These are verses:')

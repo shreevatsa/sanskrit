@@ -39,7 +39,6 @@
             "regex": ["22 4 22", "4 22 121 22 (4|2L)"],
             "comment": "The four pādas have 12, 20, 12, and 20 mātrās respectively."
         }],
-
         ["Upajāti", {
             "pattern": ".GLGGLLGLG.",
             "comment": "There is sometimes a 'slight yati' after 5 syllables."

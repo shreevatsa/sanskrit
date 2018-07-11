@@ -220,6 +220,17 @@ def clean_leading_br(text):
     return text
 
 
+def remove_trailing_br_from_line(line):
+  if line.endswith('<BR>'):
+    line = line[:-len('<BR>')]
+  return line
+
+def clean_trailing_br(text):
+  lines = text.split('\n')
+  lines = '\n'.join(remove_trailing_br_from_line(line) for line in lines)
+  return lines
+
+
 def clean_leading_parenthesized_line(text):
   lines = text.split('\n')
   if len(lines) == 5 and is_parenthesized_line(lines[0]):

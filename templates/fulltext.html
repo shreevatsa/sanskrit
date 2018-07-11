@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<style>
+abbr {border-bottom: 1px dotted black; color:red;}
+.sylL { }
+.sylG { font-weight:bold; }
+.syl- { }
+.metreName { font-size: 150%; text-align: center; }
+
+
+body {
+  /* font-size: 150%; */
+}
+
+.wrapperForCentering {
+  display: grid;
+  justify-content: center;
+}
+
+.original {
+    white-space: pre-wrap; /* Means preserve spaces and line-breaks, but allow wrapping (additional line breaks) instead of overfull boxes. */
+    margin: 0 auto;
+}
+.scansion, .scansion2 {
+    white-space: pre-wrap; /* Means preserve spaces and line-breaks, but allow wrapping (additional line breaks) instead of overfull boxes. */
+}
+
+.scansion {
+    word-spacing: 0.5em;
+    width: 200%;
+}
+
+.L, .G {
+    display: inline-grid; 
+    border-width: 1px;
+    border-style: ridge;
+    border-color: #fff;
+}
+
+.scansion2 .L {
+    color: blue;
+    font-weight: lighter;
+}
+.scansion2 .G {
+    color: darkred;
+    font-weight: bolder;
+}
+
+.scansion2 .L, .scansion2 .G {
+    background: #CCC;
+}
+
+.syl {
+    grid-row: 2;
+    font-size: larger;
+}
+.scan {
+    grid-row: 1;
+    text-align: center;
+}
+</style>
+
+    <title>A full work (multiple verses)</title>
+  </head>
+  <body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="/static/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="/static/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="/static/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="/static/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+<div class="container">
+    <h1 align="center">Metrical analysis of a full work</h1>
+
+<script>
+function populateFileContents(f) {
+  console.log('In populateFileContents');
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    const element = document.getElementById('fulltext');
+    element.value = event.target.result; 
+    // TODO: Make this scroll slowly.
+    element.scrollTop = element.scrollHeight * 0.3 - element.offsetHeight;
+    element.style.overflowY = 'scroll';
+  };
+  reader.readAsText(f);
+}
+
+function submitFullText(button) {
+  button.setAttribute('disabled', '');
+  var text = document.getElementById('fulltext').value;
+  jQuery.post('/fulltextAPI', {'fulltext': text}, handleAPIResponse(button));
+  console.log('Sent request to /fulltextAPI, waiting for response');
+}
+
+async function jQueryPostResponse(url, dict) {
+  const result = await $.ajax({
+    url: url,
+    type: 'POST',
+    data: dict,
+  });
+  return result;
+}
+
+// Async because it calls backend for alignment. (In principle we could move this Dynamic Programming code to frontend.)
+async function makeMetricalAnalysis(res) {
+    // TODO: Replace all this with something that generates the full UI component.
+    let v = document.createElement('div');
+
+    const metreName = res.result.metre_name;
+    const isPerfect = res.result.is_perfect;
+    const verseLines = res.verse;
+    let ret = '';
+
+    if (metreName) {
+	ret = `<div class="metreName alert ` + (res.result.is_perfect ? 'alert-success' : 'alert-danger') + `" role="alert">` + (isPerfect ? '' : 'possibly ') + metreName + `</div>`;
+    } else {
+	ret = `<div class="metreName alert alert-danger" role="alert">Unknown metre</div>`;
+    }
+    let resp = await jQueryPostResponse('/alignmentAPI', {verse_text: verseLines, metre_name: metreName});
+    // for (let verseLine of verseLines) {
+    // 	ret += ''; // makeMetricalAnalysisLine(verseLine);
+    // }
+    let alignment = resp.alignment;
+    let table = resp.table;
+    if (table) {
+	for (let line of table) {
+	    ret += line;
+	}
+    } else {
+	    ret += verseLines;
+    }
+    v.innerHTML = ret;
+    v.style.border = '2px solid grey';
+    v.style.margin = '20px';
+    return v;
+}
+
+const handleAPIResponse = (button) => async (response) => {
+  button.removeAttribute('disabled');
+  console.log('Got response');
+  console.log({num_verses: response.num_verses});
+  console.log(response.table);
+  const sink = document.getElementById('versesSink');
+  const verses = response.verses;
+  for (let verse_number in verses) {
+     let res = verses[verse_number];
+     let v = await makeMetricalAnalysis(res);
+     sink.appendChild(v);
+  }
+};
+
+
+</script>
+
+<form>
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="customFile" onchange="populateFileContents(this.files[0])">
+    <label class="custom-file-label" for="customFile">Choose file</label>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">A complete text (multiple verses)</label>
+    <textarea class="form-control" id="fulltext" name="fulltext" id="exampleFormControlTextarea1" rows="6" cols="80"></textarea>
+  </div>
+  <button type="button" class="btn btn-primary mb-2" onclick="submitFullText(this)">Submit</button>
+</form>
+
+<div id="versesSink"></div>
+</div>
+
+<div class="wrapperForCentering">
+<div class="scansion2">
+    <span>
+    <s-l text="a" class="L"><span class="syl">a</span><span class="scan">L</span></s-l><!--
+  --><s-l text="ti" class="L"><span class="syl">ti</span><span class="scan">L</span></s-l><!--
+  --><s-g text="ve" class="G"><span class="syl">ve</span><span class="scan">G</span></s-g><!--
+  --><s-l text="la" class="L"><span class="syl">la</span><span class="scan">L</span></s-l><!--
+  --><s-l text="ta" class="L"><span class="syl">ta</span><span class="scan">L</span></s-l><!--
+  --><s-g text="yā" class="G"><span class="syl">yā</span><span class="scan">G</span></s-g> <s-l text="ta" class="L"><span class="syl">ta</span><span class="scan">L</span></s-l><s-l text="va" class="L"><span class="syl">va</span><span class="scan">L</span></s-l> <s-g text="dur" class="G"><span class="syl">dur</span><span class="scan">G</span></s-g><s-l text="vi" class="L"><span class="syl">vi</span><span class="scan">L</span></s-l><s-l text="ṣa" class="L"><span class="syl">ṣa</span><span class="scan">L</span></s-l><s-g text="hair" class="G"><span class="syl">hair</span><span class="scan">G</span></s-g></span>
+  <span><s-l text="a" class="L"><span class="syl">a</span><span class="scan">L</span></s-l><s-l text="nu" class="L"><span class="syl">nu</span><span class="scan">L</span></s-l><s-g text="vē" class="G"><span class="syl">vē</span><span class="scan">G</span></s-g><s-l text="la" class="L"><span class="syl">la</span><span class="scan">L</span></s-l><s-l text="kṛ" class="L"><span class="syl">kṛ</span><span class="scan">L</span></s-l><s-g text="tair" class="G"><span class="syl">tair</span><span class="scan">G</span></s-g><s-l text="a" class="L"><span class="syl">a</span><span class="scan">L</span></s-l><s-l text="pa" class="L"><span class="syl">pa</span><span class="scan">L</span></s-l><s-g text="rā" class="G"><span class="syl">rā</span><span class="scan">G</span></s-g><s-l text="dha" class="L"><span class="syl">dha</span><span class="scan">L</span></s-l><s-l text="śa" class="L"><span class="syl">śa</span><span class="scan">L</span></s-l><s-g text="taiḥ" class="G"><span class="syl">taiḥ</span><span class="scan">G</span></s-g></span>
+</div>
+</div>
+
+</body>
+</html>
