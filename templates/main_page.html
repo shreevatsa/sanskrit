@@ -1,16 +1,52 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf8">
-  <meta name="viewport" content="width=device-width, initial-scale=2.0">
-  <title>Sanskrit metres</title>
-  <style type="text/css">
-    h1 { text-align: center; }
-  </style>
-</head>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<body>
-<h1>Sanskrit metres</h1>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<style>
+h1 {text-align: center; }
+h2 { margin-top: 1em; }
+</style>
+
+    <title>Sanskrit metres</title>
+  </head>
+  <body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="/static/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="/static/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="/static/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="/static/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+<div class="container">
+    <h1 align="center">Sanskrit metres</h1>
+
+<h2>Metre identifier</h2>
+
+<p>
+Type a Sanskrit verse into the box below and click the button.<br/>
+(The input can be in either Devanagari, IAST, Harvard-Kyoto, or ITRANS format.)<br/>
+(You can use <a href="http://shreevatsa.appspot.com/sanskrit/transliterate.html">this tool</a>, or <a href="http://www.learnsanskrit.org/tools/sanscript">&ldquo;Sanscript&rdquo;</a>, to verify your transliteration.)
+</p>
+
+<div>
+  {% include "input_form.html" %}
+</div>
+
+Click <a href="http://1i.sanskritmetres.appspot.com/">here for older versions of this site</a>.
+
+<h2>Resources for learning more about Sanskrit metres</h2>
+See <a href="https://www.youtube.com/playlist?list=PLABJEFgj0PWVXr2ERGu2xtoSXrNdBs5xS">this playlist</a>. There is also some incidental mention at around 10:00 in <a href="https://www.youtube.com/watch?v=zLRJYk0mAOU">this video</a>.
+
+<h2>The most important Sanskrit metres</h2>
+<p>
+As evident from the tables <a href="/statistics">here</a>, a few Sanskrit metres account for
+most of the Sanskrit literature. (To be continued&hellip;.)
+</p>
 
 <h2>Introduction</h2>
 <p>
@@ -22,38 +58,15 @@ Source code at
 <a href="https://github.com/shreevatsa/sanskrit/">https://github.com/shreevatsa/sanskrit/</a>
 </p>
 
-<h2>Metre identifier</h2>
-<p>
-Type a Sanskrit verse into the box below and click the button.<br/>
-(The input can be in either Devanagari, IAST, Harvard-Kyoto, or ITRANS format.)<br/>
-For now, you can use <a href="http://shreevatsa.appspot.com/sanskrit/transliterate.html">this tool I wrote many years ago</a>, or <a href="http://www.learnsanskrit.org/tools/sanscript">&ldquo;Sanscript&rdquo;</a>, to verify your transliteration. (Will soon add transliteration to this page itself&hellip;)
-</p>
+<form>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">A complete text (multiple verses)</label>
+    <textarea class="form-control" id="fulltext" name="fulltext" id="exampleFormControlTextarea1" rows="6" cols="80"></textarea>
+  </div>
+  <button type="button" class="btn btn-primary mb-2" onclick="submitFullText(this)">Submit</button>
+</form>
 
-<div>
-  {% include "input_form.html" %}
 </div>
-
-<div>The code is going through some rewrites currently, so it may be unstable at the moment. This is version 1i. Older versions are still available at
-  <ul>
-    <li><a href="http://1h.sanskritmetres.appspot.com/">http://1h.sanskritmetres.appspot.com</a></li>
-    <li><a href="http://1g.sanskritmetres.appspot.com/">http://1g.sanskritmetres.appspot.com</a></li>
-    <li><a href="http://1f.sanskritmetres.appspot.com/">http://1f.sanskritmetres.appspot.com</a></li>
-    <li><a href="http://1e.sanskritmetres.appspot.com/">http://1e.sanskritmetres.appspot.com</a></li>
-    <li><a href="http://1d.sanskritmetres.appspot.com/">http://1d.sanskritmetres.appspot.com</a></li>
-    <li><a href="http://1b.sanskritmetres.appspot.com/">http://1b.sanskritmetres.appspot.com</a></li>
-    <li><a href="http://1a.sanskritmetres.appspot.com/">http://1a.sanskritmetres.appspot.com</a></li>
-    <li><a href="http://1.sanskritmetres.appspot.com/">http://1.sanskritmetres.appspot.com</a></li>
-  </ul>
-</div>
-
-<h2>Resources for learning more about Sanskrit metres</h2>
-See <a href="https://www.youtube.com/playlist?list=PLABJEFgj0PWVXr2ERGu2xtoSXrNdBs5xS">this playlist</a>. There is also some incidental mention at around 10:00 in <a href="https://www.youtube.com/watch?v=zLRJYk0mAOU">this video</a>.
-
-<h2>The most important Sanskrit metres</h2>
-<p>
-As evident from the tables <a href="/statistics">here</a>, a few Sanskrit metres account for
-most of the Sanskrit literature. (To be continued&hellip;.)
-</p>
 
 </body>
 </html>

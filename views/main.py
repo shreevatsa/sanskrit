@@ -48,10 +48,9 @@ class AlignmentAPI(webapp2.RequestHandler):
       assert type(verse_text) == type('unicode literal')
       metre_name = self.request.get('metre_name')
       Print('Type of metre_name is ' + ('bytes' if type(metre_name) else 'unicode'))
-      Print(type(metre_name))
       if isinstance(metre_name, bytes):
           metre_name = metre_name.decode('utf-8')
-      print('Type of metre_name is ', type(metre_name))
+      print('Type of metre_name is now ', type(metre_name))
       (alignment, table) = find_alignment(verse_text, metre_name)
       ret = {'alignment': alignment, 'table': table}
       self.response.content_type = b'application/json'

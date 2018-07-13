@@ -420,7 +420,13 @@ def HtmlDescription(name):
                      description[2], description[3])
 
 def FurtherHtmlDescription(name):
-  if name == 'Śālinī':
-    return ('<p>You can listen to some words about %s and its recitation in the video below:</p>' % name +
-              '<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/k0c_1eVIWHI?rel=0" frameborder="0" allowfullscreen></iframe>')
+  videos = {
+    'Śālinī': 'k0c_1eVIWHI',
+    'pṛthvī': 'aWHxHvKmEIw',
+    'Puṣpitāgrā': '5TQUcuf2flw',
+    'Vasantatilakā': 'I8g4BGdza_M',
+  }
+  if name in videos:
+    return ('<p>You can listen to some words about %s and its recitation below:</p>' % name +
+              '<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/%s?rel=0" frameborder="0" allowfullscreen></iframe>' % videos[name])
   return ''

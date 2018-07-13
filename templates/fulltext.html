@@ -12,7 +12,12 @@ abbr {border-bottom: 1px dotted black; color:red;}
 .sylL { }
 .sylG { font-weight:bold; }
 .syl- { }
-.metreName { font-size: 150%; text-align: center; }
+.metreName { 
+   font-size: 150%; 
+   text-align: center; 
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
 
 
 body {
@@ -28,7 +33,7 @@ body {
     white-space: pre-wrap; /* Means preserve spaces and line-breaks, but allow wrapping (additional line breaks) instead of overfull boxes. */
     margin: 0 auto;
 }
-.scansion, .scansion2 {
+.scansion, .scansion2, .lhsOrig {
     white-space: pre-wrap; /* Means preserve spaces and line-breaks, but allow wrapping (additional line breaks) instead of overfull boxes. */
 }
 
@@ -114,34 +119,58 @@ async function jQueryPostResponse(url, dict) {
 async function makeMetricalAnalysis(res) {
     // TODO: Replace all this with something that generates the full UI component.
     let v = document.createElement('div');
+    v.style.display = 'grid';
+    v.style.border = '2px solid grey';
+    v.style.margin = '20px';
 
     const metreName = res.result.metre_name;
     const isPerfect = res.result.is_perfect;
     const verseLines = res.verse;
-    let ret = '';
 
+    let metreNameDiv = document.createElement('div');
+    v.appendChild(metreNameDiv);
     if (metreName) {
-	ret = `<div class="metreName alert ` + (res.result.is_perfect ? 'alert-success' : 'alert-danger') + `" role="alert">` + (isPerfect ? '' : 'possibly ') + metreName + `</div>`;
+	metreNameDiv.outerHTML = `<div class="metreName alert ` + (res.result.is_perfect ? 'alert-success' : 'alert-danger') + `" role="alert">` + (isPerfect ? '' : 'possibly ') + metreName + `</div>`;
     } else {
-	ret = `<div class="metreName alert alert-danger" role="alert">Unknown metre</div>`;
+	metreNameDiv.outerHTML = `<div class="metreName alert alert-danger" role="alert">Unknown metre</div>`;
     }
+
+    // The LHS: Just from the input
+    let lhs = document.createElement('div');
+    lhs.classList.add('lhsOrig');
+    lhs.innerHTML = verseLines;
+    lhs.style.gridRow = 2;
+    lhs.style.gridColumn = 1;
+    v.appendChild(lhs);
+
     let resp = await jQueryPostResponse('/alignmentAPI', {verse_text: verseLines, metre_name: metreName});
-    // for (let verseLine of verseLines) {
-    // 	ret += ''; // makeMetricalAnalysisLine(verseLine);
-    // }
     let alignment = resp.alignment;
     let table = resp.table;
+    let rhs = document.createElement('div');
+    rhs.style.gridRow = 2;
+    rhs.style.gridColumn = 2;
     if (table) {
 	for (let line of table) {
-	    ret += line;
+	    rhs.innerHTML += line;
 	}
-    } else {
-	    ret += verseLines;
     }
-    v.innerHTML = ret;
-    v.style.border = '2px solid grey';
-    v.style.margin = '20px';
+    v.appendChild(rhs);
     return v;
+}
+
+// From https://gist.github.com/umidjons/9614157
+function sortProperties(obj) {
+  // convert object into array
+	var sortable=[];
+	for(var key in obj)
+		if(obj.hasOwnProperty(key))
+			sortable.push([key, obj[key]]); // each item is an array in format [key, value]
+	// sort items by value
+	sortable.sort(function(a, b)
+	{
+	  return b[1][0]-a[1][0]; // compare numbers
+	});
+	return sortable; // array in format [ [ key1, val1 ], [ key2, val2 ], ... ]
 }
 
 const handleAPIResponse = (button) => async (response) => {
@@ -149,6 +178,23 @@ const handleAPIResponse = (button) => async (response) => {
   console.log('Got response');
   console.log({num_verses: response.num_verses});
   console.log(response.table);
+    const statsTable = document.getElementById('statsTable');
+    let table = sortProperties(response.table);
+    for (let [key, value] of table) {
+	console.log(key + ' => ' + value);
+	let e = document.createElement('tr');
+	let k = document.createElement('td');
+	k.textContent = key;
+	k.style.padding = '2pt';
+	e.appendChild(k);
+	let v = document.createElement('td');
+	v.textContent = `${value[0]} (${value[1]})`;
+	v.style.padding = '2pt';
+	e.appendChild(v);
+	statsTable.appendChild(e);
+    }
+
+
   const sink = document.getElementById('versesSink');
   const verses = response.verses;
   for (let verse_number in verses) {
@@ -172,6 +218,8 @@ const handleAPIResponse = (button) => async (response) => {
   </div>
   <button type="button" class="btn btn-primary mb-2" onclick="submitFullText(this)">Submit</button>
 </form>
+
+<div id="statsTable"></div>
 
 <div id="versesSink"></div>
 </div>
