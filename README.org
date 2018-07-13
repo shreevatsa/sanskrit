@@ -1,3 +1,8 @@
+NOTE (July 2018):  Please be warned: this code is undergoing some
+major changes over the next few weeks, so it may not be reliable.
+Please check back in August (or whenever this notice is removed).
+
+
 * Table of contents                                                     :TOC:
  - [[#what][What]]
      - [[#examples][Examples]]
