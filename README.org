@@ -1,6 +1,5 @@
-NOTE (July 2018):  Please be warned: this code is undergoing some
-major changes over the next few weeks, so it may not be reliable.
-Please check back in August (or whenever this notice is removed).
+NOTE (July 2018): The description below is out-of-date at the
+moment. It can only be used to get an approximate idea.
 
 
 * Table of contents                                                     :TOC:

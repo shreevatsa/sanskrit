@@ -23,9 +23,14 @@ h2 { margin-top: 1em; }
     <script src="/static/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 <div class="container">
+
     <h1 align="center">Sanskrit metres</h1>
 
 <h2>Metre identifier</h2>
+
+<div class="alert alert-danger" role="alert">
+NOTE (July 2018): This code still has a few bugs, which are being actively worked on. Give it a try, and let me know of any bugs you find. You can also try older versions.
+</div>
 
 <p>
 Type a Sanskrit verse into the box below and click the button.<br/>
@@ -57,14 +62,6 @@ This is intended to be a website dealing with Sanskrit metres.
 Source code at
 <a href="https://github.com/shreevatsa/sanskrit/">https://github.com/shreevatsa/sanskrit/</a>
 </p>
-
-<form>
-  <div class="form-group">
-    <label for="exampleFormControlTextarea1">A complete text (multiple verses)</label>
-    <textarea class="form-control" id="fulltext" name="fulltext" id="exampleFormControlTextarea1" rows="6" cols="80"></textarea>
-  </div>
-  <button type="button" class="btn btn-primary mb-2" onclick="submitFullText(this)">Submit</button>
-</form>
 
 </div>
 
