@@ -4,7 +4,6 @@
    http://sanskrit.sai.uni-heidelberg.de/Chanda/HTML/
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 dhaval_vrtta_data = [
     ('anīcakam', 'LGLLLLLLLLLG'),

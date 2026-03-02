@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """Data structures that store matching metres for known patterns."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-try: unicode
-except NameError: unicode = str
-
 import itertools
 import re
 import unicodedata
@@ -85,12 +81,12 @@ def jsonToPy(filename):
   assert data.keys() <= {'comment', 'metres'}
   for metre_name, metre_value in data['metres']:
     if isinstance(metre_value, dict):
-      assert metre_value.keys() <= {'pattern', 'comment', 'instance'}, metre_value.keys()
+      assert metre_value.keys() <= {'pattern', 'comment', 'instance', 'regex', 'video', 'videos', 'examples'}, metre_value.keys()
       if 'pattern' not in metre_value.keys():
         print('Skipping this: ', metre_value.keys(), ' in ', metre_value)
         continue
       metre_value = metre_value['pattern']
-    if isinstance(metre_value, unicode) and metre_value.startswith('TODO'):
+    if isinstance(metre_value, str) and metre_value.startswith('TODO'):
       continue
     ret.append((metre_name, metre_value))
   return ret

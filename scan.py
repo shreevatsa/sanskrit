@@ -1,9 +1,5 @@
 """Given lines in SLP1, converts them to patterns of laghus and gurus."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-try: xrange
-except NameError: xrange = range
-
 import re
 import slp1
 
@@ -18,7 +14,7 @@ def ScanVerse(lines):
 
 def _MoveInitialConsonants(verse_lines):
   """Move initial consonants of each line to the end of the previous line."""
-  for i in xrange(len(verse_lines)):
+  for i in range(len(verse_lines)):
     (consonants, verse_lines[i]) = _StripInitialConsonants(verse_lines[i])
     if i > 0 and verse_lines[i - 1]:
       verse_lines[i - 1] += consonants

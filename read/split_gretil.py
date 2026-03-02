@@ -2,7 +2,6 @@
 
 """Split a GRETIL htm file into separate verses."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import re
 
@@ -79,9 +78,9 @@ def split(text, custom_splitter=None):
             not read.filters.is_work_header_line(verse) and
             not read.filters.is_abbreviation_block(verse)]
 
-  verses = map(read.filters.clean_leading_br, verses)
-  # verses = map(read.filters.clean_trailing_br, verses) # Added newly...
-  verses = map(read.filters.clean_leading_parenthesized_line, verses)
+  verses = list(map(read.filters.clean_leading_br, verses))
+  # verses = list(map(read.filters.clean_trailing_br, verses)) # Added newly...
+  verses = list(map(read.filters.clean_leading_parenthesized_line, verses))
 
   # Print('These are verses:')
   # for (i, verse) in enumerate(verses):

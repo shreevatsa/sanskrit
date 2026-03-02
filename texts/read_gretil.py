@@ -3,10 +3,6 @@
 
 """Reads from a GRETIL UTF-8 encoded HTML file."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-try: unicode
-except NameError: unicode = str
-
 import argparse
 import codecs
 import json
@@ -31,7 +27,7 @@ def get_args():
   argument_parser = argparse.ArgumentParser(description='Read a GRETIL file, '
                                             'identify verses and their metres, '
                                             'and generate statistics.')
-  argument_parser.add_argument('input_file', type=unicode,
+  argument_parser.add_argument('input_file', type=str,
                                help='A file containing list of verses')
   argument_parser.add_argument('--print_identified_verses',
                                choices=['none', 'brief', 'full'],

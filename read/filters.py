@@ -2,10 +2,6 @@
 
 """Cleanup transformations: simple functions which take text and return text."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-try: unicode
-except NameError: unicode = str
-
 from collections import Counter
 from functools import wraps
 import logging
@@ -65,9 +61,9 @@ def debug_rejected_characters(orig_line, rejects):
   """Debug output about rejected characters, with their unicode codepoints and names."""
   def _unicode_notation(char):
     """The U+92ef etc. notation for a character."""
-    assert isinstance(char, unicode)
+    assert isinstance(char, str)
     return '[U+%04x]' % ord(char)
-  assert isinstance(orig_line, unicode)
+  assert isinstance(orig_line, str)
   if not rejects:
     return
   line_read_as = ''.join(_unicode_notation(c) if c in rejects else c for c in orig_line)
@@ -146,7 +142,7 @@ def _print_rejection(reason, if_different=False):
       else:
         must_print = bool(ret)
       if must_print:
-        print(('\nRejecting/changing verse (%s): {{{\n%s\n}}}\n' % (reason, text)).encode('utf-8'))
+        print('\nRejecting/changing verse (%s): {{{\n%s\n}}}\n' % (reason, text))
       return ret
     return real
   return decorated

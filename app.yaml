@@ -1,8 +1,5 @@
-application: sanskritmetres
-version: 2
-runtime: python27
-api_version: 1
-threadsafe: yes
+runtime: python312
+entrypoint: gunicorn -b :$PORT request_handler:app
 
 handlers:
 - url: /favicon\.ico
@@ -13,9 +10,4 @@ handlers:
   static_dir: static
 
 - url: .*
-  script: request_handler.application
-
-libraries:
-- name: webapp2
-  # version: "2.5.2"
-  version: latest
+  script: auto

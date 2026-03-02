@@ -2,10 +2,6 @@
 
 """Transliteration data."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-try: unicode
-except NameError: unicode = str
-
 import slp1
 from transliteration.detect import TRANSLITERATION_SCHEME
 from transliteration import devanagari
@@ -181,7 +177,7 @@ def _CleanSLP1ToDevanagari(text):
   (text, unparsed) = transliterator.Transliterate(_SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE, text,
                                                   pass_through=_DEFAULT_PASS_THROUGH)
   assert not unparsed, (text, unparsed)
-  assert isinstance(text, unicode), text
+  assert isinstance(text, str), text
   return devanagari.UnMangle(text)
 
 
@@ -199,7 +195,7 @@ def AddDevanagariToIast(iast):
   (deva, unparsed) = transliterator.Transliterate(_SLP1_TO_MANGLED_DEVANAGARI_STATE_MACHINE,
                                                   slp_text, pass_through=stray)
   assert not unparsed, (deva, unparsed)
-  assert isinstance(deva, unicode), deva
+  assert isinstance(deva, str), deva
   deva = devanagari.UnMangle(deva)
   return '%s (%s)' % (iast, deva)
 

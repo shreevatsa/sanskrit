@@ -1,6 +1,5 @@
 """Align a verse to a given metre."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import slp1
 from transliteration import transliterate

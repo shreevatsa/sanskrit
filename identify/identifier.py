@@ -5,7 +5,6 @@ The input is a list of "pattern" lines, where a "pattern" is a sequence over the
 alphabet {'L', 'G'}. The output is a list of metre names (strings).
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import collections
 import logging

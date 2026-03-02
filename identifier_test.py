@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """Data structures that store matching metres for known patterns."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import unittest
 

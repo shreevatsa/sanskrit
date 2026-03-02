@@ -1,28 +1,30 @@
 """The web interface."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import webapp2
-from google.appengine.ext.webapp import template
+from flask import Flask
 
 import identifier_pipeline
-import views.identify
-import views.main
-import views.show_split
 
+app = Flask(__name__)
+
+# Register the custom template filter
+@app.template_filter('pre_fixed')
+def pre_fixed(content):
+    return content
 
 common_identifier = identifier_pipeline.IdentifierPipeline()
 
+# Import and register route blueprints/views
+import views.main
+import views.identify
+import views.show_split
 
-template.register_template_library('templates.filters')
+app.add_url_rule('/', view_func=views.main.main_page)
+app.add_url_rule('/identify', view_func=views.identify.identify_page, methods=['GET', 'POST'], defaults={'identifier': common_identifier})
+app.add_url_rule('/split', view_func=views.show_split.show_blocks, methods=['GET', 'POST'])
+app.add_url_rule('/statistics', view_func=views.main.stats_page)
+app.add_url_rule('/fulltextAPI', view_func=views.main.fulltext_data, methods=['GET', 'POST'])
+app.add_url_rule('/fulltext', view_func=views.main.fulltext_page)
+app.add_url_rule('/alignmentAPI', view_func=views.main.alignment_api, methods=['POST'])
 
-# Handles all requests to sanskritmetres.appspot.com
-application = webapp2.WSGIApplication([
-    ('/', views.main.MainPage),
-    webapp2.Route(r'/identify', handler=views.identify.IdentifyPage, defaults={'identifier':common_identifier}),
-    ('/split', views.show_split.ShowBlocks),
-    ('/statistics', views.main.StatsPage),
-    ('/fulltextAPI', views.main.FullTextData),
-    ('/fulltext', views.main.FullTextPage),
-    ('/alignmentAPI', views.main.AlignmentAPI),
-], debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)

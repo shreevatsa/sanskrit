@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Data for well-known metres, other than those by Dr. Ganesh"""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 # TODO(shreevatsa): pādānta-lagu whitelist: metres until Vasantatilakā, -Śālinī
 curated_vrtta_data = [
